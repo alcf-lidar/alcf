@@ -5,8 +5,8 @@ Automatic Lidar and Ceilometer Processing Framework (ALCF)
 
 ALCF is an open source command line tool for processing of automatic
 lidar and ceilometer (ALC) data and intercomparison with atmospheric models
-such as general circulation models (GCMs) and numerical weather prediction models
-(NWP) with a lidar simulator using the [COPS](https://github.com/CFMIP/COSPv2.0)
+such as general circulation models (GCMs), numerical weather prediction models
+(NWP) and reanalyses with a lidar simulator using the [COPS](https://github.com/CFMIP/COSPv2.0)
 instrument simulator framework. ALCs are vertically pointing atmospheric
 lidars, measuring cloud and aerosol backscatter.
 The primary focus of ALCF are atmospheric studies of cloud using ALC
@@ -52,7 +52,8 @@ pip install alcf
 
 ### Installation from source (optional)
 
-<!-- A pre-compiled binary package is provided via PIP. --> If you want to compile
+<!-- A pre-compiled binary package is provided via PIP. -->
+If you want to compile
 ACLF yourself, you will need to install the
 [PGI Fortran compiler](https://www.pgroup.com/products/community.htm).
 
@@ -117,7 +118,7 @@ Commands
 Supported models
 ----------------
 
-The following models are supported:
+The following GCM, NWP models and reanalyses are supported:
 
 - CMIP5
 - MERRA2
