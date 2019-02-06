@@ -1,16 +1,19 @@
-ALCF: Automatic Lidar and Ceilometer Processing
-==================================================
+Automatic Lidar and Ceilometer Processing Framework (ALCF)
+==========================================================
+
+**Development status:** In development
 
 ALCF is an open source command line tool for processing of automatic
 lidar and ceilometer (ALC) data and intercomparison with atmospheric models
 such as general circulation models (GCMs) and numerical weather prediction models
-(NWP) with a lidar simulator using the [COPS](https://github.com/CFMIP/COSPv2.0) instrument simulator framework. ALCs are vertically pointing atmospheric
+(NWP) with a lidar simulator using the [COPS](https://github.com/CFMIP/COSPv2.0)
+instrument simulator framework. ALCs are vertically pointing atmospheric
 lidars, measuring cloud and aerosol backscatter.
 The primary focus of ALCF are atmospheric studies of cloud using ALC
 observations and model cloud validation.
 
 ALCF can read input data from multiple ceilometers and atmopsheric lidars
-(such as Vaisala CL51, Lufft CHM 15k, SigmaSpace MiniMPL), convert them
+(such as Vaisala CL51, Lufft CHM 15k, Sigma Space MiniMPL), convert them
 to NetCDF, resample, calibrate, remove noise, detect cloud layers and cloud
 base height. Atmospheric model data can be processed with the lidar simulator
 to get backscatter profiles at the same location as the observations,
@@ -24,10 +27,12 @@ support for a new format can be added by writing a short read function in
 Python or converting the ALC and model data to the ALCF NetCDF format
 (described below).
 
+<!--
 The scientific part of ALCF is documented in the following paper:
 
 Kuma et al. (2019): Ground-based lidar simulator framework for comparing models
 and observations
+-->
 
 Requirements
 ------------
@@ -37,15 +42,17 @@ ALCF is written in Python and Fortran. Installation on Linux is recommended.
 Installation
 ------------
 
+<!--
 Installation with PIP (Linux):
 
 ```sh
 pip install alcf
 ```
+-->
 
 ### Installation from source (optional)
 
-A pre-compiled binary package is provided via PIP. If you want to compile
+<!-- A pre-compiled binary package is provided via PIP. --> If you want to compile
 ACLF yourself, you will need to install the
 [PGI Fortran compiler](https://www.pgroup.com/products/community.htm).
 
@@ -97,6 +104,8 @@ Commands
 
 ### convert
 
+### model
+
 ### simulate
 
 ### process
@@ -121,7 +130,7 @@ The following ALCs are supported:
 
 - Vaisala CL31, CL51
 - Lufft CHM 15k
-- SigmaSpace MiniMPL
+- Sigma Space MiniMPL
 
 License
 -------
