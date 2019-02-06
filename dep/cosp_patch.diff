@@ -1,0 +1,40 @@
+diff --git a/Makefile b/Makefile
+index 5e9e43f..58ad72d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,25 +2,25 @@
+ ########################################################################
+ #              Adapt these variables to your environment
+ ########################################################################
+-F90      = ifort
++F90      = pgf90
+ #F90FLAGS = -C -check -fpp
+ #F90FLAGS = -check bounds
+ #F90FLAGS = -pg
+-F90FLAGS = -O2
+-NCDF_INC = /data/cr2/hadac/software/cosp/include
+-NCDF_LIB = /data/cr2/hadac/software/cosp/lib
++F90FLAGS = -O2 -fPIC
++NCDF_INC = ../opt/netcdf/include
++NCDF_LIB = ../opt/netcdf/lib
+ 
+-CMOR_INC = /data/cr2/hadac/software/cmor/include
+-CMOR_LIB = /data/cr2/hadac/software/cmor/lib
++CMOR_INC = ../opt/cmor/include
++CMOR_LIB = ../opt/cmor/lib
+ 
+ INC = /data/cr2/hadac/software/include
+ LIB = /data/cr2/hadac/software/lib
+ 
+-UDUNITS_LIB = /data/cr2/hadac/software/cosp/lib
+-UDUNITS_INC = /data/cr2/hadac/software/cosp/include
++UDUNITS_LIB = ../opt/udunits/lib
++UDUNITS_INC = ../opt/udunits/include
+ 
+-UUID_LIB = /data/cr2/hadac/software/cosp/lib
+-UUID_INC = /data/cr2/hadac/software/cosp/include
++UUID_LIB = ../opt/uuid/lib
++UUID_INC = ../opt/uuid/include
+ 
+ 
+ # Non-optional simulators. You should not need to change this
