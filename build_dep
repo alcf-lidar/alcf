@@ -1,10 +1,30 @@
 #!/bin/sh
+export CC=pgcc
+export FC=pgf90
 cd build
 tar xf netcdf-v4.6.2.tar.gz
 tar xf netcdf-fortran-v4.4.5.tar.gz
 tar xf uuid-1.6.2.tar.gz
+tar xf hdf5-1.10.4.tar.gz
 unzip -o cosp-master.zip
 cd COSPv1-master
 patch < ../../cosp_patch.diff
 cd ..
-
+includedir="$(pwd)/../opt/include"
+libdir="$(pwd)/../opt/lib"
+prefix="$(pwd)/../opt"
+jobs=10
+cd uuid-1.6.2
+./configure --prefix="$prefix" --includedir="$includedir" --libdir="$libdir"
+make -j $jobs
+make install
+cd ..
+cd hdf5-1.10.4
+ ./configure --prefix="$prefix" --includedir="$includedir" --libdir="$libdir"
+make -j $jobs
+make install
+cd ..
+cd netcdf-c-4.6.2
+./configure --prefix="$prefix" --includedir="$includedir" --libdir="$libdir"
+make -j $jobs
+make install
