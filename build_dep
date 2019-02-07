@@ -1,9 +1,10 @@
 #!/bin/sh
-mkdir -p build
 cd build
-tar xf ../dep/netcdf-c-4.6.2.tar.gz
-tar xf ../dep/netcdf-fortran-4.4.5.tar.gz
-tar xf ../dep/uuid-1.6.2.tar.gz
-tar xf ../dep/cmor-3.4.0.tar.gz
-git clone https://github.com/peterkuma/COSPv1 cosp
+tar xf netcdf-v4.6.2.tar.gz
+tar xf netcdf-fortran-v4.4.5.tar.gz
+tar xf uuid-1.6.2.tar.gz
+unzip -o cosp-master.zip
+cd COSPv1-master
+patch < ../../cosp_patch.diff
+cd ..
 
