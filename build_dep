@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 export CC=pgcc
 export FC=pgf90
 cd build
@@ -8,7 +9,6 @@ tar xf uuid-1.6.2.tar.gz
 tar xf hdf5-1.10.4.tar.gz
 tar xf cmor-2.9.1.tar.xz
 unzip -o cosp-master.zip
-mv COSPv1-master cosp
 prefix="$(pwd)/opt"
 includedir="$prefix/include"
 libdir="$prefix/lib"
@@ -30,16 +30,20 @@ cd netcdf-c-4.6.2
 ./configure --prefix="$prefix"
 make -j $jobs
 make -j $jobs install
+cd ..
 cd netcdf-fortran-4.4.5
 ./configure --prefix="$prefix"
 make -j $jobs
 make -j $jobs install
+cd ..
 cd cmor-2.9.1
 patch < ../../cmor_patch.diff
 ./configure --prefix="$prefix"
 make -j $jobs
 make -j $jobs install
-cd cosp
+cd ..
+cd COSPv1-master
 patch < ../../cosp_patch.diff
 make
 cd ..
+echo "Finished building dependencies"
