@@ -1,14 +1,6 @@
 #!/bin/sh
 export CC=pgcc
 export FC=pgf90
-cd build
-tar xf netcdf-v4.6.2.tar.gz
-tar xf netcdf-fortran-v4.4.5.tar.gz
-tar xf uuid-1.6.2.tar.gz
-tar xf hdf5-1.10.4.tar.gz
-tar xf cmor-2.9.1.tar.xz
-unzip -o cosp-master.zip
-mv COSPv1-master cosp
 prefix="$(pwd)/opt"
 includedir="$prefix/include"
 libdir="$prefix/lib"
@@ -16,6 +8,15 @@ export LDFLAGS="-L"$libdir""
 export CFLAGS="-I$includedir"
 export LD_LIBRARY_PATH="$libdir"
 jobs=10
+cd build
+tar xf udunits-2.2.26.tar.gz
+tar xf netcdf-v4.6.2.tar.gz
+tar xf netcdf-fortran-v4.4.5.tar.gz
+tar xf uuid-1.6.2.tar.gz
+tar xf hdf5-1.10.4.tar.gz
+tar xf cmor-2.9.1.tar.xz
+unzip -o cosp-master.zip
+mv COSPv1-master cosp
 cd uuid-1.6.2
 ./configure --prefix="$prefix"
 make -j $jobs
@@ -26,10 +27,16 @@ cd hdf5-1.10.4
 make -j $jobs
 make -j $jobs install
 cd ..
+cd udunits-2.2.26
+./configure --prefix="$prefix"
+make -j $jobs
+make -j $jobs install
+cd ..
 cd netcdf-c-4.6.2
 ./configure --prefix="$prefix"
 make -j $jobs
 make -j $jobs install
+cd ..
 cd netcdf-fortran-4.4.5
 ./configure --prefix="$prefix"
 make -j $jobs
@@ -43,3 +50,4 @@ cd cosp
 patch < ../../cosp_patch.diff
 make
 cd ..
+echo "Finished building dependencies"
