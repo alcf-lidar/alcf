@@ -1,5 +1,6 @@
 #!/bin/sh
 set -e
+cd build
 export CC=pgcc
 export FC=pgf90
 prefix="$(pwd)/opt"
@@ -9,7 +10,6 @@ export LDFLAGS="-L"$libdir""
 export CFLAGS="-I$includedir"
 export LD_LIBRARY_PATH="$libdir"
 jobs=10
-cd build
 tar xf udunits-2.2.26.tar.gz
 tar xf netcdf-v4.6.2.tar.gz
 tar xf netcdf-fortran-v4.4.5.tar.gz
