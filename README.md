@@ -22,10 +22,9 @@ cloud detection algorithm is used on both observed lidar profiles and simulated
 lidar profiles, so that cloud statistics such as cloud occurrence can be
 compared between the model and observations.
 
-A number of common ALCs and model formats (CMIP5, AMPS) are supported and
+A number of common ALCs and model formats (CMIP5, MERRA2, AMPS) are supported and
 support for a new format can be added by writing a short read function in
-Python or converting the ALC and model data to the ALCF NetCDF format
-(described below).
+Python or converting the ALC and model data to the CMIP5 standard.
 
 <!--
 The scientific part of ALCF is documented in the following paper:
@@ -50,14 +49,22 @@ pip install alcf
 ```
 -->
 
-### Installation from source (optional)
+### Installation from source
 
 <!-- A pre-compiled binary package is provided via PIP. -->
 If you want to compile
 ACLF yourself, you will need to install the
-[PGI Fortran compiler](https://www.pgroup.com/products/community.htm).
+[PGI compiler](https://www.pgroup.com/products/community.htm).
 
 Once you have install PGI, make sure the command `pgf95` works in the console.
+
+Download and build dependencies:
+
+```sh
+./download_dep
+./build_dep
+make
+```
 
 To install in system directories:
 
