@@ -1,13 +1,11 @@
-diff --git a/Makefile b/Makefile
-index 5e9e43f..58ad72d 100644
---- a/Makefile
-+++ b/Makefile
+--- cosp/Makefile	2018-05-23 03:45:33.000000000 +1200
++++ cosp-new/Makefile	2019-02-07 14:25:43.743043376 +1300
 @@ -2,25 +2,25 @@
  ########################################################################
  #              Adapt these variables to your environment
  ########################################################################
 -F90      = ifort
-+F90      = pgf90
++F90      = pgf95
  #F90FLAGS = -C -check -fpp
  #F90FLAGS = -check bounds
  #F90FLAGS = -pg
@@ -15,26 +13,37 @@ index 5e9e43f..58ad72d 100644
 -NCDF_INC = /data/cr2/hadac/software/cosp/include
 -NCDF_LIB = /data/cr2/hadac/software/cosp/lib
 +F90FLAGS = -O2 -fPIC
-+NCDF_INC = ../opt/netcdf/include
-+NCDF_LIB = ../opt/netcdf/lib
++NCDF_INC = ../opt/include
++NCDF_LIB = ../opt/lib
  
 -CMOR_INC = /data/cr2/hadac/software/cmor/include
 -CMOR_LIB = /data/cr2/hadac/software/cmor/lib
-+CMOR_INC = ../opt/cmor/include
-+CMOR_LIB = ../opt/cmor/lib
++CMOR_INC = ../opt/include
++CMOR_LIB = ../opt/lib
  
- INC = /data/cr2/hadac/software/include
- LIB = /data/cr2/hadac/software/lib
+-INC = /data/cr2/hadac/software/include
+-LIB = /data/cr2/hadac/software/lib
++INC = ../opt/include
++LIB = ../opt/lib
  
 -UDUNITS_LIB = /data/cr2/hadac/software/cosp/lib
 -UDUNITS_INC = /data/cr2/hadac/software/cosp/include
-+UDUNITS_LIB = ../opt/udunits/lib
-+UDUNITS_INC = ../opt/udunits/include
++UDUNITS_LIB = ../opt/lib
++UDUNITS_INC = ../opt/include
  
 -UUID_LIB = /data/cr2/hadac/software/cosp/lib
 -UUID_INC = /data/cr2/hadac/software/cosp/include
-+UUID_LIB = ../opt/uuid/lib
-+UUID_INC = ../opt/uuid/include
++UUID_LIB = ../opt/lib
++UUID_INC = ../opt/include
  
  
  # Non-optional simulators. You should not need to change this
+@@ -59,7 +59,7 @@
+ $(PROG): $(OBJS)
+ 	$(F90) $(F90FLAGS) $(PROG).F90 $(OBJS) \
+ 	-L${CMOR_LIB} -L. -lcmor -I$(CMOR_INC) \
+-	-I$(NCDF_INC) -L${NCDF_LIB} -lnetcdff \
++	-I$(NCDF_INC) -L${NCDF_LIB} -lnetcdff -lnetcdf -luuid \
+ 	-L${UDUNITS_LIB} -Wl,-rpath=${UDUNITS_LIB} -ludunits2 -lexpat -I${UDUNITS_INC} \
+ 	-L${UUID_LIB} -Wl,-rpath=${UUID_LIB} -luuid -I$(UUID_INC) \
+ 	-o $(PROG)
