@@ -6,25 +6,40 @@ tar xf netcdf-v4.6.2.tar.gz
 tar xf netcdf-fortran-v4.4.5.tar.gz
 tar xf uuid-1.6.2.tar.gz
 tar xf hdf5-1.10.4.tar.gz
+tar xf cmor-2.9.1.tar.xz
 unzip -o cosp-master.zip
-cd COSPv1-master
-patch < ../../cosp_patch.diff
-cd ..
-includedir="$(pwd)/../opt/include"
-libdir="$(pwd)/../opt/lib"
-prefix="$(pwd)/../opt"
+mv COSPv1-master cosp
+prefix="$(pwd)/opt"
+includedir="$prefix/include"
+libdir="$prefix/lib"
+export LDFLAGS="-L"$libdir""
+export CFLAGS="-I$includedir"
+export LD_LIBRARY_PATH="$libdir"
 jobs=10
 cd uuid-1.6.2
-./configure --prefix="$prefix" --includedir="$includedir" --libdir="$libdir"
+./configure --prefix="$prefix"
 make -j $jobs
-make install
+make -j $jobs install
 cd ..
 cd hdf5-1.10.4
- ./configure --prefix="$prefix" --includedir="$includedir" --libdir="$libdir"
+ ./configure --prefix="$prefix"
 make -j $jobs
-make install
+make -j $jobs install
 cd ..
 cd netcdf-c-4.6.2
-./configure --prefix="$prefix" --includedir="$includedir" --libdir="$libdir"
+./configure --prefix="$prefix"
 make -j $jobs
-make install
+make -j $jobs install
+cd netcdf-fortran-4.4.5
+./configure --prefix="$prefix"
+make -j $jobs
+make -j $jobs install
+cd cmor-2.9.1
+patch < ../../cmor_patch.diff
+./configure --prefix="$prefix"
+make -j $jobs
+make -j $jobs install
+cd cosp
+patch < ../../cosp_patch.diff
+make
+cd ..
