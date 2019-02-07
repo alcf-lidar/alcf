@@ -10,7 +10,7 @@ setup(
 	author='Peter Kuma',
 	author_email='peter.kuma@fastmail.com',
 	license='MIT',
-	scripts=['bin/alcf'],
+	scripts=['bin/alcf', 'bin/cosp_alcf'],
 	packages=['alcf'],
 	zip_safe=False,
 	package_data={'alcf': [
