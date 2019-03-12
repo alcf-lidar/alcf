@@ -1,5 +1,5 @@
-Automatic Lidar and Ceilometer Processing Framework (ALCF)
-==========================================================
+Automatic Lidar and Ceilometer Framework (ALCF)
+===============================================
 
 **Development status:** In development
 
@@ -56,7 +56,7 @@ If you want to compile
 ACLF yourself, you will need to install the
 [PGI compiler](https://www.pgroup.com/products/community.htm).
 
-Once you have install PGI, make sure the command `pgf95` works in the console.
+Once you have installed PGI, make sure the command `pgf95` works in the console.
 
 Download and build dependencies:
 
@@ -92,19 +92,22 @@ alcf model <type> point: { <lon> <lat> } time: { <start> <end> } <input> <output
 alcf model <type> track: <track> <input> <output>
 
 # Simulate lidar
-alcf simulate <config> <model> <output>
+alcf simulate <type> <input> <output> [<options>]
+
+# Resample lidar data
+alcf resample <type> <input> <output>
 
 # Process lidar data
-alcf process <lidar> <output>
-
-# Plot lidar data
-alcf plot lidar <lidar> <output>
+alcf lidar <input> <output>
 
 # Calculate statistics
-alcf stats <lidar> <output>
+alcf stats <input> <output>
+
+# Plot lidar data
+alcf plot lidar <input> <output>
 
 # Plot statistics
-alcf plot stats <stats>
+alcf plot stats <input> <output>
 ```
 
 Commands
@@ -116,11 +119,15 @@ Commands
 
 ### simulate
 
-### process
+### resample
+
+### lidar
+
+### stats
 
 ### plot
 
-### stats
+### plot_stats
 
 Supported models
 ----------------

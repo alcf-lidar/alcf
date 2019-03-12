@@ -58,7 +58,7 @@ contains
 	subroutine nc_get_var_0d_real(ncid, name, var)
 		integer, intent(in) :: ncid
 		character(len=*), intent(in) :: name
-		real, intent(out) :: var
+		real(8), intent(out) :: var
 
 		integer, dimension(:), allocatable :: dims
 		integer :: varid
@@ -70,7 +70,7 @@ contains
 	subroutine nc_get_var_1d_real(ncid, name, var, start, count)
 		integer, intent(in) :: ncid
 		character(len=*), intent(in) :: name
-		real, dimension(:), allocatable, intent(out) :: var
+		real(8), dimension(:), allocatable, intent(out) :: var
 		integer, dimension(:), intent(in), optional :: start, count
 
 		integer, dimension(:), allocatable :: dims
@@ -86,7 +86,7 @@ contains
 	subroutine nc_get_var_2d_real(ncid, name, var, start, count)
 		integer, intent(in) :: ncid
 		character(len=*), intent(in) :: name
-		real, dimension(:, :), allocatable, intent(out) :: var
+		real(8), dimension(:, :), allocatable, intent(out) :: var
 		integer, dimension(:), intent(in), optional :: start, count
 
 		integer, dimension(:), allocatable :: dims
@@ -102,7 +102,7 @@ contains
 	subroutine nc_get_var_3d_real(ncid, name, var, start, count)
 		integer, intent(in) :: ncid
 		character(len=*), intent(in) :: name
-		real, dimension(:, :, :), allocatable, intent(out) :: var
+		real(8), dimension(:, :, :), allocatable, intent(out) :: var
 		integer, dimension(:), intent(in), optional :: start, count
 
 		integer, dimension(:), allocatable :: dims
@@ -118,7 +118,7 @@ contains
 	subroutine nc_get_var_4d_real(ncid, name, var, start, count)
 		integer, intent(in) :: ncid
 		character(len=*), intent(in) :: name
-		real, dimension(:, :, :, :), allocatable, intent(out) :: var
+		real(8), dimension(:, :, :, :), allocatable, intent(out) :: var
 		integer, dimension(:), intent(in), optional :: start, count
 
 		integer, dimension(:), allocatable :: dims
@@ -167,7 +167,7 @@ contains
 	subroutine nc_put_var_1d_real(ncid, name, var, dimids)
 		integer, intent(in) :: ncid
 		character(len=*), intent(in) :: name
-		real, dimension(:), intent(in) :: var
+		real(8), dimension(:), intent(in) :: var
 		integer, dimension(1), intent(in), optional :: dimids
 
 		integer :: varid
@@ -194,7 +194,7 @@ contains
 	subroutine nc_put_var_2d_real(ncid, name, var, dimids)
 		integer, intent(in) :: ncid
 		character(len=*), intent(in) :: name
-		real, dimension(:, :), intent(in) :: var
+		real(8), dimension(:, :), intent(in) :: var
 		integer, dimension(2), intent(in), optional :: dimids
 
 		character(len=NF90_MAX_NAME) :: dimname
@@ -231,7 +231,7 @@ contains
 	subroutine nc_put_var_3d_real(ncid, name, var, dimids)
 		integer, intent(in) :: ncid
 		character(len=*), intent(in) :: name
-		real, dimension(:, :, :), intent(in) :: var
+		real(8), dimension(:, :, :), intent(in) :: var
 		integer, dimension(3), intent(in), optional :: dimids
 
 		character(len=NF90_MAX_NAME) :: dimname
@@ -268,7 +268,7 @@ contains
 	subroutine nc_put_var_4d_real(ncid, name, var, dimids)
 		integer, intent(in) :: ncid
 		character(len=*), intent(in) :: name
-		real, dimension(:,:,:,:), intent(in) :: var
+		real(8), dimension(:,:,:,:), intent(in) :: var
 		integer, dimension(4), intent(in), optional :: dimids
 
 		character(len=NF90_MAX_NAME) :: dimname

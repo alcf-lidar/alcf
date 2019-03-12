@@ -30,7 +30,7 @@ all: $(TARGETS)
 alcf/opt/bin/cosp_alcf: src/main.o $(OBJS)
 	$(FC) -o $@ $^ $(LIBS)
 
-src/main.o: src/main.f03 src/nc_utils.o
+src/main.o: src/main.f03 src/nc_utils.o src/cosp_run.o
 
 %.o: %.f03
 	$(FC) -c -module $(dir $@) -o $@ $<

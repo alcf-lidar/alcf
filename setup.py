@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from setuptools import setup
+from setuptools import setup, find_packages
 import os.path
 
 setup(
@@ -11,13 +11,13 @@ setup(
 	author_email='peter.kuma@fastmail.com',
 	license='MIT',
 	scripts=['bin/alcf', 'bin/cosp_alcf'],
-	packages=['alcf'],
+	packages=find_packages(),
 	zip_safe=False,
-	package_data={'alcf': [
-		os.path.join('..',p,f)
-		for p,_,fs in os.walk('alcf/opt')
-		for f in fs
-	]},
+	# package_data={'alcf': [
+	# 	os.path.join('..',p,f)
+	#  	for p,_,fs in os.walk('alcf/opt')
+	#  	for f in fs
+	# ]},
 	install_requires=['netCDF4>=1.2.9'],
 	keywords=['alc', 'ceilometer', 'lidar', 'atmospheric', 'model', 'nwp', 'gcm', 'cosp', 'actsim', 'vaisala', 'cl51', 'cl31', 'lufft', 'chm-15k', 'amsp', 'cmip5'],
 	url='https://github.com/peterkuma/alcf',
