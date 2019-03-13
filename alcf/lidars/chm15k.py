@@ -2,6 +2,7 @@ import numpy as np
 import ds_format as ds
 
 wavelength = 1064
+calibration_coeff = 1.0
 
 VARS = {
 	'backscatter': ['time', 'range', 'beta_raw'],

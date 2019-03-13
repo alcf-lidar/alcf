@@ -47,16 +47,23 @@ Options:
 	Default: "default".
 - calibration: Backscatter calibration algorithm. Available algorithms:
 	"default". Default: "default".
+- hres: Horizontal resolution (seconds). Default: 300.
+- vres: Vertical resolution (m). Default: 50.
 
 Algorithm options:
 
 - Cloud detection:
-	- default:
-		- cloud_threshold: Cloud detection threshold. Default: ?.
+    - default:
+        - cloud_threshold: Cloud detection threshold.
+            Default: 20e-6 sr^-1.m^-1.
 
 - Calibration:
-	- default:
-		- calibration_coeff: Calibration coefficient. Default: ?.
+    - default:
+        - calibration_coeff: Calibration coefficient. Default: ?.
+
+- Noise removal:
+    - default:
+        - noise_removal_
 	"""
 	lidar = LIDARS.get(type_)
 	if lidar is None:
@@ -73,6 +80,8 @@ Algorithm options:
 	calibration_mod = CALIBRATION.get(calibration)
 	if calibration is None:
 		raise ValueError('Invalid calibration algorithm: %s' % calibration)
+
+	calibration_coeff = lidar.calibration_coeff
 
 	if os.path.isdir(input_):
 		files = os.listdir(input_)

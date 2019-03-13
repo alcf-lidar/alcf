@@ -31,8 +31,8 @@ Types:
 
 Time format:
 
-"YYYY-MM-DD[THH:MM[:SS]]", where YYYY is year, MM is month, DD is day, HH is hour,
-MM is minute, SS is second. Example: 2000-01-01T00:00:00.
+"YYYY-MM-DD[THH:MM[:SS]]", where YYYY is year, MM is month, DD is day,
+HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
 
 Track:
 

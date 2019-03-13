@@ -138,6 +138,8 @@ def run(type_, input_, output,
 	"""
 alcf simulate
 
+Simulate lidar measurements from model data.
+
 Usage:
 
 	alcf simulate <type> <input> <output> [<options>]
