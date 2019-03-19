@@ -1,5 +1,4 @@
 import convert
-import resample
 import model
 import simulate
 import lidar
@@ -9,7 +8,6 @@ import plot_stats
 
 CMDS = {
 	'convert': convert.run,
-	'resample': resample.run,
 	'model': model.run,
 	'simulate': simulate.run,
 	'lidar': lidar.run,

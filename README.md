@@ -94,9 +94,6 @@ alcf model <type> track: <track> <input> <output>
 # Simulate lidar
 alcf simulate <type> <input> <output> [<options>]
 
-# Resample lidar data
-alcf resample <type> <input> <output>
-
 # Process lidar data
 alcf lidar <input> <output>
 
@@ -118,8 +115,6 @@ Commands
 ### model
 
 ### simulate
-
-### resample
 
 ### lidar
 

@@ -14,7 +14,7 @@ Calculate cloud occurrence statistics.
 
 Usage:
 
-    alcf stats [time: { <start> <end> }] <input> <output>
+    alcf stats <input> <output> [time: { <start> <end> }]
 
 - input: input filename or directory
 - output: output filename or directory
@@ -36,6 +36,6 @@ HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
 				continue
 			if time_jd is not None:
 				d = ds.read(file, ['time'])
-				
+
 			else:
 				d = ds.read(file, VARIABLES)

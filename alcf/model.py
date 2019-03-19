@@ -13,7 +13,8 @@ Extract model data at a point or along a track.
 
 Usage:
 
-    alcf model <type> point: { <lon> <lat> } time: { <start> <end> } <input> <output>
+    alcf model <type> point: { <lon> <lat> } time: { <start> <end> } <input>
+    	<output>
     alcf model <type> track: <track> <input> <output>
 
 - type: input data type (see Types below)
@@ -27,6 +28,7 @@ Usage:
 
 Types:
 
+- amps: Antarctic Mesoscale Prediction System (AMPS)
 - cmip5: CMIP5 models
 
 Time format:
