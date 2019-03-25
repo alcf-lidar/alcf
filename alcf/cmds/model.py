@@ -5,6 +5,27 @@ import aquarius_time as aq
 import ds_format as ds
 from alcf.models import MODELS
 
+def model(type_, input_, point=None, time=None, track=None):
+	model = MODELS.get(type_)
+	if model is None:
+		raise ValueError('Invalid type: %s' % type_)
+	if point is not None and time is not None:
+		lon = np.array([point[0], point[0]], dtype=np.float64)
+		lat = np.array([point[1], point[1]], dtype=np.float64)
+		time = np.array([time[0], time[1]], dtype=np.float64)
+		track = {
+			'lon': lon,
+			'lat': lat,
+			'time': time,
+		}
+	elif track is not None:
+		pass
+	else:
+		raise ValueError('point and time or track is required')
+
+	d = model.read(input_, track)
+	return d
+
 def run(type_, input_, output, point=None, time=None, track=None):
 	"""
 alcf model
@@ -16,6 +37,8 @@ Usage:
     alcf model <type> point: { <lon> <lat> } time: { <start> <end> } <input>
     	<output>
     alcf model <type> track: <track> <input> <output>
+
+Arguments:
 
 - type: input data type (see Types below)
 - input: input directory
@@ -57,24 +80,3 @@ Track file is a NetCDF file containing 1D variables lon, lat, and time.
 	else:
 		d = model(type_, input_, point, time=time1, track=track)
 		ds.to_netcdf(output, d)
-
-def model(type_, input_, point=None, time=None, track=None):
-	model = MODELS.get(type_)
-	if model is None:
-		raise ValueError('Invalid type: %s' % type_)
-	if point is not None and time is not None:
-		lon = np.array([point[0], point[0]], dtype=np.float64)
-		lat = np.array([point[1], point[1]], dtype=np.float64)
-		time = np.array([time[0], time[1]], dtype=np.float64)
-		track = {
-			'lon': lon,
-			'lat': lat,
-			'time': time,
-		}
-	elif track is not None:
-		pass
-	else:
-		raise ValueError('point and time or track is required')
-
-	d = model.read(input_, track)
-	return d

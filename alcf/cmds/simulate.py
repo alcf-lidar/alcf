@@ -3,7 +3,7 @@ import copy
 import tempfile
 from string import Template
 import subprocess
-from lidars import LIDARS
+from alcf.lidars import LIDARS
 
 CONFIG_TEMPLATE = """
 &config_nml
@@ -143,6 +143,8 @@ Simulate lidar measurements from model data.
 Usage:
 
 	alcf simulate <type> <input> <output> [<options>]
+
+Arguments:
 
 - type: type of lidar to simulate
 - input: input filename or directory (the output of "alcf model")

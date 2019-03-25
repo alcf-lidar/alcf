@@ -1,7 +1,7 @@
 Automatic Lidar and Ceilometer Framework (ALCF)
 ===============================================
 
-**Development status:** In development
+**Development status:** in development
 
 ALCF is an open source command line tool for processing of automatic
 lidar and ceilometer (ALC) data and intercomparison with atmospheric models
@@ -93,7 +93,11 @@ alcf model <type> track: <track> <input> <output>
 
 # Simulate lidar
 alcf simulate <type> <input> <output> [<options>]
+```
 
+TODO:
+
+```sh
 # Process lidar data
 alcf lidar <input> <output>
 
@@ -116,6 +120,8 @@ Commands
 
 ### simulate
 
+TODO:
+
 ### lidar
 
 ### stats
@@ -129,9 +135,12 @@ Supported models
 
 The following GCM, NWP models and reanalyses are supported:
 
+- AMPS
+
+TODO:
+
 - CMIP5
 - MERRA2
-- AMPS
 
 Supported ALCs
 --------------
@@ -140,6 +149,9 @@ The following ALCs are supported:
 
 - Vaisala CL31, CL51
 - Lufft CHM 15k
+
+TODO:
+
 - Sigma Space MiniMPL
 
 License
