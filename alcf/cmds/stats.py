@@ -1,5 +1,5 @@
 import os
-from misc import parse_time
+from alcf.misc import parse_time
 
 VARIABLES = [
 	'cloud_mask',
@@ -15,6 +15,8 @@ Calculate cloud occurrence statistics.
 Usage:
 
     alcf stats <input> <output> [time: { <start> <end> }]
+
+Arguments:
 
 - input: input filename or directory
 - output: output filename or directory

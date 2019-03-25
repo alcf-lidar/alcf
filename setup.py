@@ -18,7 +18,9 @@ setup(
 	#  	for p,_,fs in os.walk('alcf/opt')
 	#  	for f in fs
 	# ]},
-	install_requires=['netCDF4>=1.2.9'],
+	install_requires=[
+		'netCDF4>=1.2.9',
+	],
 	keywords=['alc', 'ceilometer', 'lidar', 'atmospheric', 'model', 'nwp', 'gcm', 'cosp', 'actsim', 'vaisala', 'cl51', 'cl31', 'lufft', 'chm-15k', 'amsp', 'cmip5'],
 	url='https://github.com/peterkuma/alcf',
 	classifiers=[
