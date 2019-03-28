@@ -93,14 +93,14 @@ alcf model <type> track: <track> <input> <output>
 
 # Simulate lidar
 alcf cosp <type> <input> <output> [<options>]
+
+# Process lidar data
+alcf lidar <input> <output> [<options>] [<algorithm_options>]
 ```
 
 TODO:
 
 ```sh
-# Process lidar data
-alcf lidar <input> <output>
-
 # Calculate statistics
 alcf stats <input> <output>
 
