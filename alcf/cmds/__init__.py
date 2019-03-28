@@ -1,6 +1,6 @@
 import convert
 import model
-import simulate
+import cosp
 import lidar
 import stats
 import plot
@@ -9,7 +9,7 @@ import plot_stats
 CMDS = {
 	'convert': convert.run,
 	'model': model.run,
-	'simulate': simulate.run,
+	'cosp': cosp.run,
 	'lidar': lidar.run,
 	'stats': stats.run,
 	'plot': plot.run,

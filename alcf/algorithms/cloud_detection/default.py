@@ -7,11 +7,13 @@ from scipy.stats import norm
 from scipy.optimize import minimize_scalar
 from alcf import misc
 
-def cloud_detection(d, cloud_threshold=20e-6, **options):
-	backscatter = d['backscatter']
-	# backscatter_sd = d.get('backscatter_sd')
-	# zfull = d['zfull']
-	cloud_mask = (backscatter >= cloud_threshold).astype(np.byte)
+def cloud_detection(d, cloud_threshold=20e-6, cloud_nsd=3, **options):
+	b = d['backscatter']
+	b_sd = d.get('backscatter_sd')
+	if b_sd is not None:
+		cloud_mask = (b - cloud_nsd*b_sd >= cloud_threshold).astype(np.byte)
+	else:
+		cloud_mask = (backscatter >= cloud_threshold).astype(np.byte)
 	d['cloud_mask'] = cloud_mask
 	d['.']['cloud_mask'] = {
 		'.dims': d['.']['backscatter']['.dims'],

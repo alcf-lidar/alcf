@@ -92,7 +92,7 @@ alcf model <type> point: { <lon> <lat> } time: { <start> <end> } <input> <output
 alcf model <type> track: <track> <input> <output>
 
 # Simulate lidar
-alcf simulate <type> <input> <output> [<options>]
+alcf cosp <type> <input> <output> [<options>]
 ```
 
 TODO:
@@ -120,9 +120,9 @@ Commands
 
 ### simulate
 
-TODO:
-
 ### lidar
+
+TODO:
 
 ### stats
 
