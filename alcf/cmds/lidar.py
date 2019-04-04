@@ -2,9 +2,10 @@ import os
 import ds_format as ds
 import aquarius_time as aq
 from alcf.lidars import LIDARS
-from alcf.algorithms.cloud_detection import CLOUD_DETECTION
-from alcf.algorithms.noise_removal import NOISE_REMOVAL
 from alcf.algorithms.calibration import CALIBRATION
+from alcf.algorithms.noise_removal import NOISE_REMOVAL
+from alcf.algorithms.cloud_detection import CLOUD_DETECTION
+from alcf.algorithms.cloud_base_detection import CLOUD_BASE_DETECTION
 from alcf.algorithms import tsampling, zsampling
 from alcf import misc
 
@@ -12,7 +13,7 @@ VARIABLES = [
 	'backscatter',
 	'time',
 	'zfull',
-	'range',
+	# 'range',
 ]
 
 def run(type_, input_, output,
@@ -21,6 +22,7 @@ def run(type_, input_, output,
 	zres=50,
 	zlim=[0., 15000.],
 	cloud_detection='default',
+	cloud_base_detection='default',
 	noise_removal='default',
 	calibration='default',
 	output_sampling=86400,
@@ -36,6 +38,7 @@ Process lidar data. The processing is done in the following order:
 - time resampling
 - height resampling
 - cloud detection
+- cloud base detection
 
 Usage:
 
@@ -60,6 +63,8 @@ Options:
 
 - cloud_detection: Cloud detection algorithm. Available algorithms: "default".
 	Default: "default".
+- cloud_base_detection: Cloud base detection algorithm. Available algorithms:
+	"default". Default: "default".
 - noise_removal: Noise removal algorithm. Available algorithms: "default".
 	Default: "default".
 - calibration: Backscatter calibration algorithm. Available algorithms:
@@ -73,11 +78,15 @@ Options:
 Algorithm options:
 
 - Cloud detection:
-    - default:
+    - default: cloud detection based on backscatter threshold
         - cloud_threshold: Cloud detection threshold.
             Default: 20e-6 sr^-1.m^-1.
         - cloud_nsd: Number of noise standard deviations to subtract.
         	Default: 3.
+
+- Cloud base detection:
+	- default: cloud base detection based cloud mask produced by the cloud
+		detection algorithm
 
 - Calibration:
     - default:
@@ -99,6 +108,8 @@ Algorithm options:
 		noise_removal_mod = NOISE_REMOVAL.get(noise_removal)
 		if noise_removal_mod is None:
 			raise ValueError('Invalid noise removal algorithm: %s' % noise_removal)
+	else:
+		noise_removal_mod = None
 
 	calibration_mod = CALIBRATION.get(calibration)
 	if calibration_mod is None:
@@ -107,6 +118,10 @@ Algorithm options:
 	cloud_detection_mod = CLOUD_DETECTION.get(cloud_detection)
 	if cloud_detection_mod is None:
 		raise ValueError('Invalid cloud detection algorithm: %s' % cloud_detection)
+
+	cloud_base_detection_mod = CLOUD_BASE_DETECTION.get(cloud_base_detection)
+	if cloud_base_detection_mod is None:
+		raise ValueError('Invalid cloud base detection algorithm: %s' % cloud_base_detection)
 
 	calibration_coeff = lidar.calibration_coeff
 
@@ -130,6 +145,7 @@ Algorithm options:
 		state['tsampling'] = state.get('tsampling', {})
 		state['zsampling'] = state.get('zsampling', {})
 		state['cloud_detection'] = state.get('cloud_detection', {})
+		state['cloud_base_detection'] = state.get('cloud_base_detection', {})
 		state['output'] = state.get('output', {})
 
 		if noise_removal_mod is not None:
@@ -142,6 +158,8 @@ Algorithm options:
 			dd = zsampling.stream(dd, state['zsampling'], zres=zres, zlim=zlim)
 		if cloud_detection_mod is not None:
 			dd = cloud_detection_mod.stream(dd, state['cloud_detection'], **options)
+		if cloud_base_detection_mod is not None:
+			dd = cloud_base_detection_mod.stream(dd, state['cloud_base_detection'], **options)
 
 		dd = output_stream(dd, state['output'], output_sampling=output_sampling)
 		return dd

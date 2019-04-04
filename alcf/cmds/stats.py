@@ -1,4 +1,7 @@
 import os
+import ds_format as ds
+from alcf.algorithms import interp
+from alcf.algorithms import stats
 from alcf.misc import parse_time
 
 VARIABLES = [
@@ -29,15 +32,18 @@ Time format:
 HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
 	"""
 	time_jd = parse_time(time) if time is not None else None
+	state = {}
+	options = {}
 
 	if os.path.isdir(input_):
 		files = os.listdir(input_)
-		for file in files:
+		for file in sorted(files):
 			filename = os.path.join(input_, file)
-			if not os.path.isfile():
+			if not os.path.isfile(filename):
 				continue
-			if time_jd is not None:
-				d = ds.read(file, ['time'])
-
-			else:
-				d = ds.read(file, VARIABLES)
+			d = ds.read(filename, VARIABLES)
+			print('<- %s' % filename)
+			dd = stats.stream([d], state, **options)
+	dd = stats.stream([None], state, **options)
+	print('-> %s' % output)
+	ds.to_netcdf(output, dd[0])

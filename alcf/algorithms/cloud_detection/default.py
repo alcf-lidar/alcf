@@ -13,7 +13,7 @@ def cloud_detection(d, cloud_threshold=20e-6, cloud_nsd=3, **options):
 	if b_sd is not None:
 		cloud_mask = (b - cloud_nsd*b_sd >= cloud_threshold).astype(np.byte)
 	else:
-		cloud_mask = (backscatter >= cloud_threshold).astype(np.byte)
+		cloud_mask = (b >= cloud_threshold).astype(np.byte)
 	d['cloud_mask'] = cloud_mask
 	d['.']['cloud_mask'] = {
 		'.dims': d['.']['backscatter']['.dims'],
