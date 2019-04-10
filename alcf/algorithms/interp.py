@@ -22,7 +22,7 @@ def interp(xhalf, y, xhalf2):
 			y2[i2] += y[i]*dx
 			dx2 += dx
 			i += 1
-		if i < n-1:
+		if i < n-1 and xhalf[i] < xhalf2[i2+1]:
 			dx = xhalf2[i2+1] - max(xhalf2[i2], xhalf[i])
 			if dx < 0:
 				raise ValueError(i, i2)

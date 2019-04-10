@@ -1,6 +1,7 @@
 import ds_format as ds
 import os
 import numpy as np
+from alcf.models import META
 
 VARIABLES = [
 	'lon',
@@ -17,64 +18,6 @@ VARIABLES = [
 ]
 
 GRACE_TIME = 1/24.
-
-DESCR = {
-	'clw': {
-		'.dims': ['time', 'level'],
-		'standard_name': 'mass_fraction_of_cloud_liquid_water_in_air',
-		'units': '1',
-	},
-	'cli': {
-		'.dims': ['time', 'level'],
-		'standard_name': 'mass_fraction_of_cloud_ice_in_air',
-		'units': '1',
-	},
-	'ps': {
-		'.dims': ['time'],
-		'standard_name': 'surface_air_pressure',
-		'units': 'Pa',
-	},
-	'pfull': {
-		'.dims': ['time', 'level'],
-		'standard_name': 'air_pressure',
-		'units': 'Pa',
-	},
-	'zg': {
-		'.dims': ['time', 'level'],
-		'standard_name': 'geopotential_height',
-		'units': 'm',
-	},
-	'time': {
-		'.dims': ['time'],
-		'standard_name': 'time',
-		'units': 'days since -4712-01-01T12:00',
-	},
-	'lon': {
-		'.dims': ['time'],
-		'standard_name': 'longitude',
-		'units': 'degrees_east',
-	},
-	'lat': {
-		'.dims': ['time'],
-		'standard_name': 'latitude',
-		'units': 'degrees_north',
-	},
-	'ta': {
-		'.dims': ['time', 'level'],
-		'standard_name': 'air_temperature',
-		'units': 'K',
-	},
-	'clt': {
-		'.dims': ['time', 'level'],
-		'standard_name': 'cloud_area_fraction',
-		'units': '%',
-	},
-	'orog': {
-		'.dims': ['time'],
-		'standard_name': 'surface_altitude',
-		'units': 'm',
-	},
-}
 
 def read(dirname, track):
 	dd_index = ds.readdir(dirname, variables=['time', 'lat', 'lon'], jd=True)
@@ -119,7 +62,7 @@ def read(dirname, track):
 				'lat': np.array([lat[j]]),
 				'lon': np.array([lon[k]]),
 				'time': np.array([t]),
-				'.': DESCR,
+				'.': META,
 			}
 			dd.append(d_new)
 	d = ds.op.merge(dd, 'time')

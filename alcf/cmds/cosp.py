@@ -179,7 +179,7 @@ Options:
 		ncolumns=ncolumns,
 		nlevels=nlevels,
 		overlap=overlap_flag,
-		wavelength=lidar.wavelength,
+		wavelength=lidar.WAVELENGTH,
 	)
 
 	if os.path.isfile(input_):

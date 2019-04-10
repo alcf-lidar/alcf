@@ -18,7 +18,8 @@ def aggregate(dd, state, period):
 		return dd
 	dd0 = []
 	dd1 = []
-	t1 = dd[0]['time'][0]
+	t1 = np.floor(dd[0]['time'][0] - 0.5) + 0.5
+	t1 += np.floor((dd[0]['time'][0] - t1)/period)*period
 	t2 = t1 + period
 	for i, d in enumerate(dd):
 		if d is None:
@@ -27,21 +28,27 @@ def aggregate(dd, state, period):
 			dd0.append(None)
 			break
 		j0 = 0
-		for j, t in enumerate(d['time']):
+		j = 0
+		while j < len(d['time']):
+			t = d['time'][j]
 			if t >= t2:
 				idx = np.arange(j0, j)
-				d_copy = copy.copy(d)
-				ds.select(d_copy, {'time': idx})
-				dd1.append(d_copy)
-				d1 = ds.merge(dd1, 'time')
-				dd0.append(d1)
+				if len(idx) > 0:
+					d_copy = copy.copy(d)
+					ds.select(d_copy, {'time': idx})
+					dd1.append(d_copy)
+				if len(dd1) > 0:
+					d1 = ds.merge(dd1, 'time')
+					dd0.append(d1)
 				j0 = j
 				t2 = t + period
 				dd1 = []
-		idx = np.arange(j0, j + 1)
-		d_copy = copy.copy(d)
-		ds.select(d_copy, {'time': idx})
-		dd1.append(d_copy)
+			j += 1
+		idx = np.arange(j0, len(d['time']))
+		if len(idx) > 0:
+			d_copy = copy.copy(d)
+			ds.select(d_copy, {'time': idx})
+			dd1.append(d_copy)
 	state['dd'] = dd1
 	return dd0
 

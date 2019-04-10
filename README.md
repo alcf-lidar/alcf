@@ -96,6 +96,14 @@ alcf cosp <type> <input> <output> [<options>]
 
 # Process lidar data
 alcf lidar <input> <output> [<options>] [<algorithm_options>]
+
+# Calculate statistics from lidar time series
+alcf stats <input> <output> [<options>]
+
+TODO:
+
+# Calculate comparison statistics from multiple lidar time series
+alcf compare <input-1> <input-2> [<input-n>...] <output>
 ```
 
 TODO:
@@ -122,9 +130,11 @@ Commands
 
 ### lidar
 
+### stats
+
 TODO:
 
-### stats
+### compare
 
 ### plot
 
@@ -140,6 +150,7 @@ The following GCM, NWP models and reanalyses are supported:
 
 TODO:
 
+- NZCSM
 - CMIP5
 - ERA-Interim
 - ERA5
@@ -215,6 +226,8 @@ variables:
 - ta
 - zfull
 - zhalf
+
+### NZCSM
 
 License
 -------

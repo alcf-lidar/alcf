@@ -26,8 +26,8 @@ def zsampling(d, zres=None, zlim=None):
 	if zlim is not None and zres is not None:
 		zhalf2_1 = np.arange(zlim[0], zlim[-1] + zres, zres)
 		zfull2_1 = (zhalf2_1[1:] + zhalf2_1[:-1])*0.5
-		zhalf2 = np.tile(zhalf2_1, (2, 1))
-		zfull2 = np.tile(zfull2_1, (2, 1))
+		zhalf2 = np.tile(zhalf2_1, (n, 1))
+		zfull2 = np.tile(zfull2_1, (n, 1))
 		m2 = len(zfull2_1)
 		dims2 = (n, m2, l) if len(b.shape) == 3 else (n, m2)
 		b2 = np.zeros(dims2, dtype=np.float64)

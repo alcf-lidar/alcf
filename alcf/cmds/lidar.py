@@ -123,7 +123,7 @@ Algorithm options:
 	if cloud_base_detection_mod is None:
 		raise ValueError('Invalid cloud base detection algorithm: %s' % cloud_base_detection)
 
-	calibration_coeff = lidar.calibration_coeff
+	calibration_coeff = lidar.CALIBRATION_COEFF
 
 	def write(d, output):
 		filename = os.path.join(output, '%s.nc' % aq.to_iso(d['time'][0]))
@@ -147,20 +147,18 @@ Algorithm options:
 		state['cloud_detection'] = state.get('cloud_detection', {})
 		state['cloud_base_detection'] = state.get('cloud_base_detection', {})
 		state['output'] = state.get('output', {})
-
 		if noise_removal_mod is not None:
 			dd = noise_removal_mod.stream(dd, state['noise_removal'], **options)
 		if calibration_mod is not None:
 			dd = calibration_mod.stream(dd, state['calibration'], **options)
-		if tres is not None or tlim is not None:
-			dd = tsampling.stream(dd, state['tsampling'], tres=tres/24./60./60., tlim=tlim)
 		if zres is not None or zlim is not None:
 			dd = zsampling.stream(dd, state['zsampling'], zres=zres, zlim=zlim)
+		if tres is not None or tlim is not None:
+			dd = tsampling.stream(dd, state['tsampling'], tres=tres/24./60./60., tlim=tlim)
 		if cloud_detection_mod is not None:
 			dd = cloud_detection_mod.stream(dd, state['cloud_detection'], **options)
 		if cloud_base_detection_mod is not None:
 			dd = cloud_base_detection_mod.stream(dd, state['cloud_base_detection'], **options)
-
 		dd = output_stream(dd, state['output'], output_sampling=output_sampling)
 		return dd
 
