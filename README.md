@@ -122,7 +122,7 @@ alcf plot stats <input> <output>
 Commands
 --------
 
-### convert
+### converting
 
 ### model
 
@@ -147,13 +147,12 @@ The following GCM, NWP models and reanalyses are supported:
 
 - AMPS
 - MERRA2
+- NZCSM
 
 TODO:
 
-- NZCSM
 - CMIP5
-- ERA-Interim
-- ERA5
+- JRA-55
 
 Supported ALCs
 --------------
@@ -202,15 +201,11 @@ the 3-hourly instantaneous 3D assimilated fields on model levels. You can
 find the product files by searching for "M2I3NVASM" on NASA EarthData,
 or directly on the [NASA EOSDIS FTP server](https://goldsmr5.gesdisc.eosdis.nasa.gov/data/MERRA2/M2I3NVASM.5.12.4/).
 
-### ERA5
-
-TODO
-
-### ERA-Interim
-
-TODO
+### NZCSM
 
 ### CMIP5
+
+TODO
 
 CMIP5 model output can be downloaded from the [CMIP5 Earth System Grid (ESG) archive](https://esgf-node.llnl.gov/search/cmip5/). ALCF requires the following CMIP5
 variables:
@@ -227,7 +222,9 @@ variables:
 - zfull
 - zhalf
 
-### NZCSM
+### JRA-55
+
+TODO
 
 License
 -------
