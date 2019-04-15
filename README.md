@@ -69,12 +69,14 @@ make
 To install in system directories:
 
 ```sh
+pip install https://github.com/peterkuma/ds-python https://github.com/peterkuma/aquarius-time
 python setup.py install
 ```
 
 To install in user directories (make sure `~/.local/bin` is in the environmental variable `PATH`):
 
 ```sh
+pip install --user https://github.com/peterkuma/ds-python https://github.com/peterkuma/aquarius-time
 python setup.py install --user
 ```
 
