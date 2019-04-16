@@ -65,7 +65,7 @@ Download and build dependencies
 [OSSP uuid](http://www.ossp.org/pkg/lib/uuid/),
 [HDF5](https://www.hdfgroup.org/solutions/hdf5),
 [CMOR](https://pcmdi.github.io/cmor-site/),
-[COSP](https://github.com/peterkuma/COSPv1)):
+[COSP](https://github.com/peterkuma/COSPv1)) with the following commands:
 
 ```sh
 ./download_dep
