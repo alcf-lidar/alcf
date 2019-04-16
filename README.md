@@ -58,7 +58,14 @@ ACLF yourself, you will need to install the
 
 Once you have installed PGI, make sure the command `pgf95` works in the console.
 
-Download and build dependencies:
+Download and build dependencies
+([UDUNITS](https://www.unidata.ucar.edu/software/udunits/),
+[NetCDF](https://www.unidata.ucar.edu/software/netcdf/),
+[NetCDF-Fortran](https://www.unidata.ucar.edu/software/netcdf/docs-fortran/),
+[OSSP uuid](http://www.ossp.org/pkg/lib/uuid/),
+[HDF5](https://www.hdfgroup.org/solutions/hdf5),
+[CMOR](https://pcmdi.github.io/cmor-site/),
+[COSP](https://github.com/peterkuma/COSPv1)):
 
 ```sh
 ./download_dep
