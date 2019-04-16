@@ -13,7 +13,7 @@ The primary focus of ALCF are atmospheric studies of cloud using ALC
 observations and model cloud validation.
 
 ALCF can read input data from multiple ceilometers and atmopsheric lidars
-(such as Vaisala CL51, Lufft CHM 15k, Sigma Space MiniMPL), convert them
+(such as [Vaisala CL51](https://www.vaisala.com/en/products/instruments-sensors-and-other-measurement-devices/weather-stations-and-sensors/cl51), [Lufft CHM 15k](https://www.lufft.com/products/cloud-height-snow-depth-sensors-288/ceilometer-chm-15k-nimbus-2300/), [Sigma Space MiniMPL](http://www.sigmaspace.com/blog-post/new-lidar-product-minimpl-launched-sigma-space)), convert them
 to NetCDF, resample, calibrate, remove noise, detect cloud layers and cloud
 base height. Atmospheric model data can be processed with the lidar simulator
 to get backscatter profiles at the same location as the observations,
@@ -124,7 +124,9 @@ alcf plot stats <input> <output>
 Commands
 --------
 
-### converting
+### convert
+
+### calibrate
 
 ### model
 
