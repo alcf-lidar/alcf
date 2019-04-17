@@ -19,6 +19,7 @@ VARIABLES = [
 	'time',
 	'backscatter',
 	'zfull',
+	'lr',
 ]
 
 # COLORS_GREY = [
@@ -86,12 +87,8 @@ def plot_backscatter(d): #tt, z, bf, grey=False, xlim=None, ylim=None, track=Non
 	plt.gca().xaxis.set_major_formatter(formatter)
 	plt.gca().xaxis.set_major_locator(locator)
 
-def plot_lr(d, eta=None):
-	lr = np.zeros(len(d['time']))
-	for i in range(len(d['time'])):
-	 	lr[i] = np.sum(d['backscatter'][i,:]*np.diff([0] + list(d['zfull'])))
-	lr = 2.*eta/lr
-	plt.plot(d['time'], lr, lw=0.8, color='#0087ed')
+def plot_lr(d):
+	plt.plot(d['time'], d['lr'], lw=0.8, color='#0087ed')
 	locator = AutoDateLocator()
 	plt.gca().xaxis.set_major_locator(locator)
 	plt.grid(lw=0.1, color='black')
@@ -153,14 +150,13 @@ def plot_lr(d, eta=None):
 # 	for s in segments:
 # 		plt.plot(time[s[0]:s[1]], cbh[s[0]:s[1]]*1e-3, color='red')
 
-def plot(d, output,
+def plot(plot_type, d, output,
 	# ylim=[0, 7],
 	# backscatter_sum=False,
 	title='',
 	# track=None,
 	width=None,
 	height=None,
-	eta=None,
 	lr=False,
 ):
 
@@ -228,31 +224,34 @@ def plot(d, output,
 	# plt.rc('lines', linewidth=1)
 	if width is not None and height is not None:
 		fig = plt.figure(figsize=[width, height])
-	gs = GridSpec(2, 1, height_ratios=[0.7, 0.3], hspace=0.3)
-	plt.subplot(gs[0])
-	plot_backscatter(d
-		# grey=(type_ == 'particle_type'),
-		# xlim=[t1, t2],
-		# ylim=ylim,
-		# track=d_track,
-	)
-	# # plot_cbh(tt, cbh)
-	# if type_ == 'particle_type':
-	# 	plot_particle_type()
-	plt.subplot(gs[1])
-	if lr:
-		plot_lr(d, eta=eta)
-	#plot_lr(t, 2.0*0.7/b_int, xlim=[t1, t2])
-	# plt.suptitle(title, y=0.91)
-	plt.savefig(output, bbox_inches='tight', dpi=300)
-	# plt.clf()
-	# plt.close()
-	# plt.close(fig)
 
-def run(input_, output,
+	if plot_type == 'backscatter':
+		if lr:
+			gs = GridSpec(2, 1, height_ratios=[0.7, 0.3], hspace=0.3)
+			plt.subplot(gs[0])
+		plot_backscatter(d
+			# grey=(type_ == 'particle_type'),
+			# xlim=[t1, t2],
+			# ylim=ylim,
+			# track=d_track,
+		)
+		# # plot_cbh(tt, cbh)
+		# if type_ == 'particle_type':
+		# 	plot_particle_type()
+		if lr:
+			plt.subplot(gs[1])
+			plot_lr(d)
+		#plot_lr(t, 2.0*0.7/b_int, xlim=[t1, t2])
+		# plt.suptitle(title, y=0.91)
+		plt.savefig(output, bbox_inches='tight', dpi=300)
+		# plt.clf()
+		# plt.close()
+		# plt.close(fig)
+	else:
+		raise ValueError('Unsupported plot type "%s"' % plot_type)
+
+def run(plot_type, input_, output,
 	lr=False,
-	eta=0.7,
-	output_sampling=86400,
 	width=12,
 	height=6,
 	dpi=300,
@@ -264,52 +263,30 @@ Plot lidar data.
 
 Usage:
 
-	alcf plot <type> <input> <output> [time: { <start> <end> }] [options]
+	alcf plot <plot_type> <input> <output> [options]
 
 Arguments:
 
+- plot_type: plot type (see Plot types below)
 - input: input filename or directory
 - output: output filename or directory
-- start: start time (see Time format below)
-- end: end time (see Time format below)
 - options: see Options below
 
-Types:
+Plot types:
 
-- chm15k: Lufft CHM 15k
-- cl51: Vaisala CL51
-- mpl: Sigma Space MiniMPL
-- cosp: COSP simulated lidar
+- backscatter: plot backscatter
 
 Options:
 
 - lr: Plot lidar ratio (LR), Default: false.
-- eta: Multiple-scattering factor to assume in LR calculation. Default: 0.7.
-- output_sampling: Output sampling period (seconds). Default: 86400.
 - width: Plot width (inches). Default: 10.
 - height: Plot height (inches). Default: 5.
 - dpi: DPI. Default: 300.
 	"""
-	#plt.figure(figsize=(width, height))
-	#plt.savefig(output, bbox_inches='tight', dpi=dpi)
-
-	# lidar = LIDARS.get(type_)
-	# if lidar is None:
-	# 	raise ValueError('Invalid type: %s' % type_)
-
-	def stream(dd, state, output_sampling):
-		state['aggregate_state'] = state.get('aggregate_state', {})
-		state['plot_state'] = state.get('plot_state', {})
-		dd = misc.aggregate(dd, state['aggregate_state'],
-			period=output_sampling/60./60./24.)
-		misc.stream(dd, state['plot_state'], plot)
-
 	opts = {
-		# 'output_sampling': output_sampling,
 		'width': width,
 		'height': height,
 		'lr': lr,
-		'eta': eta,
 	}
 
 	state = {}
@@ -323,15 +300,12 @@ Options:
 			)
 			print('<- %s' % filename)
 			d = ds.read(filename, VARIABLES)
-			plot(d, output_filename, **opts)
+			plot(plot_type, d, output_filename, **opts)
 			print('-> %s' % output_filename)
-			# stream([d], state, **opts)
 	else:
 		filename = _input
 		output_filename = output_
 		print('<- %s' % filename)
 		d = ds.read(filename, VARIABLES)
-		plot(d, output_filename, **opts)
+		plot(plot_type, d, output_filename, **opts)
 		print('-> %s' % output_filename)
-		# stream([d], state, opts)
-	# stream([None], opts)

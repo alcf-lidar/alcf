@@ -6,7 +6,7 @@ from alcf.algorithms.calibration import CALIBRATION
 from alcf.algorithms.noise_removal import NOISE_REMOVAL
 from alcf.algorithms.cloud_detection import CLOUD_DETECTION
 from alcf.algorithms.cloud_base_detection import CLOUD_BASE_DETECTION
-from alcf.algorithms import tsampling, zsampling
+from alcf.algorithms import tsampling, zsampling, lidar_ratio
 from alcf import misc
 
 VARIABLES = [
@@ -26,6 +26,7 @@ def run(type_, input_, output,
 	noise_removal='default',
 	calibration='default',
 	output_sampling=86400,
+	eta=0.7,
 	**options
 ):
 	"""
@@ -61,6 +62,8 @@ Types:
 
 Options:
 
+- eta: Multiple-scattering factor to assume in lidar ratio calculation.
+Default: 0.7.
 - cloud_detection: Cloud detection algorithm. Available algorithms: "default".
 	Default: "default".
 - cloud_base_detection: Cloud base detection algorithm. Available algorithms:
@@ -146,6 +149,7 @@ Algorithm options:
 		state['zsampling'] = state.get('zsampling', {})
 		state['cloud_detection'] = state.get('cloud_detection', {})
 		state['cloud_base_detection'] = state.get('cloud_base_detection', {})
+		state['lidar_ratio'] = state.get('lidar_ratio', {})
 		state['output'] = state.get('output', {})
 		if noise_removal_mod is not None:
 			dd = noise_removal_mod.stream(dd, state['noise_removal'], **options)
@@ -159,6 +163,7 @@ Algorithm options:
 			dd = cloud_detection_mod.stream(dd, state['cloud_detection'], **options)
 		if cloud_base_detection_mod is not None:
 			dd = cloud_base_detection_mod.stream(dd, state['cloud_base_detection'], **options)
+		dd = lidar_ratio.stream(dd, state['lidar_ratio'], eta=eta)
 		dd = output_stream(dd, state['output'], output_sampling=output_sampling)
 		return dd
 

@@ -109,20 +109,17 @@ alcf lidar <input> <output> [<options>] [<algorithm_options>]
 # Calculate statistics from lidar time series
 alcf stats <input> <output> [<options>]
 
+# Plot lidar backscatter
+
+alcf plot backscatter <input> <output>
+
 TODO:
 
 # Calculate comparison statistics from multiple lidar time series
 alcf compare <input-1> <input-2> [<input-n>...] <output>
-```
 
-TODO:
-
-```sh
 # Calculate statistics
 alcf stats <input> <output>
-
-# Plot lidar data
-alcf plot lidar <input> <output>
 
 # Plot statistics
 alcf plot stats <input> <output>
@@ -253,19 +250,7 @@ or directly on the [NASA EOSDIS FTP server](https://goldsmr5.gesdisc.eosdis.nasa
 TODO
 
 CMIP5 model output can be downloaded from the [CMIP5 Earth System Grid (ESG) archive](https://esgf-node.llnl.gov/search/cmip5/). ALCF requires the following CMIP5
-variables:
-
-- cls
-- clc
-- clwc
-- clws
-- clic
-- clis
-- pfull
-- ps
-- ta
-- zfull
-- zhalf
+variables: cls, clc, clwc, clws, clic, clis, pfull, ps, ta, zfull, zhalf.
 
 ### JRA-55
 

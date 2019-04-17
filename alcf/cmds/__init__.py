@@ -5,6 +5,7 @@ import lidar
 import stats
 import compare
 import plot
+import calibrate
 #import plot_stats
 
 CMDS = {
@@ -15,5 +16,6 @@ CMDS = {
 	'stats': stats.run,
 	'compare': compare.run,
 	'plot': plot.run,
+	'calibrate': calibrate.run,
 	#'plot_stats': plot_stats.run,
 }
