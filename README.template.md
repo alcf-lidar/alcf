@@ -76,15 +76,13 @@ make
 To install in system directories:
 
 ```sh
-pip install https://github.com/peterkuma/ds-python https://github.com/peterkuma/aquarius-time
-python setup.py install
+pip install https://github.com/peterkuma/ds-python/archive/master.zip https://github.com/peterkuma/aquarius-time/archive/master.zip https://github.com/peterkuma/alcf/archive/master.zip
 ```
 
 To install in user directories (make sure `~/.local/bin` is in the environmental variable `PATH`):
 
 ```sh
-pip install --user https://github.com/peterkuma/ds-python https://github.com/peterkuma/aquarius-time
-python setup.py install --user
+pip install --user https://github.com/peterkuma/ds-python/archive/master.zip https://github.com/peterkuma/aquarius-time/archive/master.zip https://github.com/peterkuma/alcf/archive/master.zip
 ```
 
 Usage
