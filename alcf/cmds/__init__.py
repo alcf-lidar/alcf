@@ -1,6 +1,6 @@
 import convert
 import model
-import cosp
+import simulate
 import lidar
 import stats
 import compare
@@ -11,7 +11,7 @@ import calibrate
 CMDS = {
 	'convert': convert.run,
 	'model': model.run,
-	'cosp': cosp.run,
+	'simulate': simulate.run,
 	'lidar': lidar.run,
 	'stats': stats.run,
 	'compare': compare.run,

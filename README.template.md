@@ -101,7 +101,7 @@ alcf model <type> point: { <lon> <lat> } time: { <start> <end> } <input> <output
 alcf model <type> track: <track> <input> <output>
 
 # Simulate lidar
-alcf cosp <type> <input> <output> [<options>]
+alcf simulate <type> <input> <output> [<options>]
 
 # Process lidar data
 alcf lidar <input> <output> [<options>] [<algorithm_options>]
@@ -128,14 +128,16 @@ alcf plot stats <input> <output>
 Commands
 --------
 
-- [convert](#convert)
-- [calibrate](#calibrate)
-- [model](#model)
-- [simulate](#simulate)
-- [lidar](#lidar)
-- [stats](#stats)
-- [plot](#plot)
-- [compate](#compare)
+| Command | Description |
+| --- | --- |
+| [convert](#convert) | Convert input instrument or model data to ALCF standard NetCDF. |
+| [calibrate](#calibrate) | Calibrate ALC. |
+| [model](#model) | Extract model data at a point or along a track. |
+| [simulate](#simulate) | Simulate lidar measurements from model data using COSP. |
+| [lidar](#lidar) | Process lidar data. |
+| [stats](#stats) | Calculate cloud occurrence statistics. |
+| [plot](#plot) | Plot lidar data. |
+| [compare](#compare) | |
 
 ### convert
 
