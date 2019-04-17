@@ -128,13 +128,13 @@ Commands
 | Command | Description |
 | --- | --- |
 | [convert](#convert) | Convert input instrument or model data to ALCF standard NetCDF. |
-| [calibrate](#calibrate) | Calibrate ALC. |
+| [calibrate](#calibrate) | Calibrate ALC. (TODO) |
 | [model](#model) | Extract model data at a point or along a track. |
 | [simulate](#simulate) | Simulate lidar measurements from model data using COSP. |
 | [lidar](#lidar) | Process lidar data. |
 | [stats](#stats) | Calculate cloud occurrence statistics. |
 | [plot](#plot) | Plot lidar data. |
-| [compare](#compare) | |
+| [compare](#compare) | TODO |
 
 The commands are usually run in the following order.
 
@@ -144,7 +144,7 @@ ALC observations processing:
     already),
 2. `alcf lidar` – produce uncalibrated resampled data,
 3. `alcf plot lidar` – plot uncalibrated backscatter profiles,
-4. `alcf calibrate` – calculate calibration coefficient based on opaque
+4. `alcf calibrate` (TODO) – calculate calibration coefficient based on opaque
     stratocumulus intervals identified in step 3.,
 5. `alcf lidar` – produce calibrated resampled data,
 6. `alcf plot lidar` – plot calibrated backscatter profiles
@@ -158,10 +158,10 @@ Model output processing:
     ship track,
 2. `alcf simulate` – simulate backscatter based on data from step 1.,
 3. `alcf lidar` – resample simulated backscatter data from step 2.,
-5. `alcf plot lidar` – plot simulated backscatter profiles from step 3.,
-6. `alcf stats` – calculate summary statistics from resampled simulated
+4. `alcf plot lidar` – plot simulated backscatter profiles from step 3.,
+5. `alcf stats` – calculate summary statistics from resampled simulated
     backscatter data from step 3.,
-7. `alcf plot stats` (TODO) – plot statistics from step 6.
+6. `alcf plot stats` (TODO) – plot statistics from step 5.
 
 NetCDF data files generated in each step can be previewed in
 [Panoply](https://www.giss.nasa.gov/tools/panoply/).
@@ -171,6 +171,8 @@ NetCDF data files generated in each step can be previewed in
 {{{cmd_convert}}}
 
 ### calibrate
+
+TODO
 
 {{{cmd_calibrate}}}
 
