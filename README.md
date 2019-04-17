@@ -53,9 +53,11 @@ Installation on other operating systems may be possible.
 ### Installation from source (Linux)
 
 <!-- A pre-compiled binary package is provided via PIP. -->
-If you want to compile
-ACLF yourself, you will need to install the
-[PGI compiler](https://www.pgroup.com/products/community.htm).
+
+Install the following required software:
+
+- [PGI compiler](https://www.pgroup.com/products/community.htm)
+- Python 2.7 (usually pre-installed on all Linux distributions)
 
 Once you have installed PGI, make sure the command `pgf95` works in the console.
 
