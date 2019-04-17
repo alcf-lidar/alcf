@@ -11,10 +11,10 @@ def get_vars():
 
 if __name__ == '__main__':
 	print('<- README.template.md')
-	with open('README.template.md') as f:
-		template = f.read()
+	with open('README.template.md', 'rb') as f:
+		template = f.read().decode('utf-8')
 	vars = get_vars()
 	output = pystache.render(template, vars)
-	with open('README.md', 'w') as f:
-		f.write(output)
+	with open('README.md', 'wb') as f:
+		f.write(output.encode('utf-8'))
 		print('-> README.md')
