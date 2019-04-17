@@ -165,9 +165,9 @@ Supported models
 
 The following GCM, NWP models and reanalyses are supported:
 
-- AMPS
-- MERRA2
-- NZCSM
+- [AMPS](http://www2.mmm.ucar.edu/rt/amps/)
+- [MERRA2](https://duckduckgo.com/?q=merra-2&t=ffab&ia=web)
+- [NZCSM](https://www.nesi.org.nz/case-studies/improving-new-zealands-weather-forecasting-ability)
 
 TODO:
 

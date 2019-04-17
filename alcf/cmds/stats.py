@@ -21,10 +21,10 @@ Usage:
 
 Arguments:
 
-- input: input filename or directory
-- output: output filename or directory
-- start: start time (see Time format below)
-- end: end time (see Time format below)
+- `input`: input filename or directory
+- `output`: output filename or directory
+- `start`: start time (see Time format below)
+- `end`: end time (see Time format below)
 
 Time format:
 

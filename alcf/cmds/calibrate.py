@@ -19,9 +19,9 @@ Usage:
 
     alcf calibrate { <start> <end> }... <input>
 
-- start: interval start (see Time format below)
-- end: interval end (see Time format below)
-- input: input directory (output of uncalibrated alcf lidar)
+- `start`: interval start (see Time format below)
+- `end`: interval end (see Time format below)
+- `input`: input directory (output of uncalibrated alcf lidar)
 
 Time format:
 

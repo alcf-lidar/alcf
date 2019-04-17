@@ -267,21 +267,21 @@ Usage:
 
 Arguments:
 
-- plot_type: plot type (see Plot types below)
-- input: input filename or directory
-- output: output filename or directory
-- options: see Options below
+- `plot_type`: plot type (see Plot types below)
+- `input`: input filename or directory
+- `output`: output filename or directory
+- `options`: see Options below
 
 Plot types:
 
-- backscatter: plot backscatter
+- `backscatter`: plot backscatter
 
 Options:
 
-- lr: Plot lidar ratio (LR), Default: false.
-- width: Plot width (inches). Default: 10.
-- height: Plot height (inches). Default: 5.
-- dpi: DPI. Default: 300.
+- `lr`: Plot lidar ratio (LR), Default: false.
+- `width`: Plot width (inches). Default: 10.
+- `height`: Plot height (inches). Default: 5.
+- `dpi`: DPI. Default: 300.
 	"""
 	opts = {
 		'width': width,

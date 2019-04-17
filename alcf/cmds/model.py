@@ -40,21 +40,21 @@ Usage:
 
 Arguments:
 
-- type: input data type (see Types below)
-- input: input directory
-- output: output directory
-- lon: point longitude
-- lat: point latitutde
-- start: start time (see Time format below)
-- end: end time (see Time format below)
-- track: track NetCDF file (see Track below)
+- `type`: input data type (see Types below)
+- `input`: input directory
+- `output`: output directory
+- `lon`: point longitude
+- `lat`: point latitutde
+- `start`: start time (see Time format below)
+- `end`: end time (see Time format below)
+- `track`: track NetCDF file (see Track below)
 
 Types:
 
-- amps: Antarctic Mesoscale Prediction System (AMPS)
-- merra2: Modern-Era Retrospective Analysis for Research and Applications,
+- `amps`: Antarctic Mesoscale Prediction System (AMPS)
+- `merra2`: Modern-Era Retrospective Analysis for Research and Applications,
 	Version 2 (MERRA-2)
-- nzcsm: New Zealand Convection Scale Model (NZCSM)
+- `nzcsm`: New Zealand Convection Scale Model (NZCSM)
 
 Time format:
 
