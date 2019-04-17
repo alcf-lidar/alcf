@@ -15,9 +15,7 @@ alcf stats
 
 Calculate cloud occurrence statistics.
 
-Usage:
-
-    alcf stats <input> <output> [time: { <start> <end> }]
+Usage: `alcf stats <input> <output> [time: { <start> <end> }]`
 
 Arguments:
 

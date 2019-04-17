@@ -197,9 +197,7 @@ Calibrate ALC. Supported methods:
 - O'Connor et al. (2004) - calibrate based on lidar ratio (LR) of fully
 opaque stratocumulus clouds.
 
-Usage:
-
-    alcf calibrate { <start> <end> }... <input>
+Usage: `alcf calibrate { <start> <end> }... <input>`
 
 - `start`: interval start (see Time format below)
 - `end`: interval end (see Time format below)
@@ -296,9 +294,7 @@ Process lidar data. The processing is done in the following order:
 - cloud detection
 - cloud base detection
 
-Usage:
-
-    alcf lidar <type> <lidar> <output> [options] [algorithm_options]
+Usage: `alcf lidar <type> <lidar> <output> [options] [algorithm_options]`
 
 Arguments:
 
@@ -363,9 +359,7 @@ alcf stats
 
 Calculate cloud occurrence statistics.
 
-Usage:
-
-    alcf stats <input> <output> [time: { <start> <end> }]
+Usage: `alcf stats <input> <output> [time: { <start> <end> }]`
 
 Arguments:
 
@@ -387,9 +381,7 @@ alcf plot
 
 Plot lidar data.
 
-Usage:
-
-	alcf plot <plot_type> <input> <output> [options]
+Usage: `alcf plot <plot_type> <input> <output> [options]`
 
 Arguments:
 

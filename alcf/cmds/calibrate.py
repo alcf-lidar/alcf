@@ -15,9 +15,7 @@ Calibrate ALC. Supported methods:
 - O'Connor et al. (2004) - calibrate based on lidar ratio (LR) of fully
 opaque stratocumulus clouds.
 
-Usage:
-
-    alcf calibrate { <start> <end> }... <input>
+Usage: `alcf calibrate { <start> <end> }... <input>`
 
 - `start`: interval start (see Time format below)
 - `end`: interval end (see Time format below)

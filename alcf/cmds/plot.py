@@ -261,9 +261,7 @@ alcf plot
 
 Plot lidar data.
 
-Usage:
-
-	alcf plot <plot_type> <input> <output> [options]
+Usage: `alcf plot <plot_type> <input> <output> [options]`
 
 Arguments:
 
