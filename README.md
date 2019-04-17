@@ -61,7 +61,10 @@ Install the following required software:
 
 Once you have installed PGI, make sure the command `pgf95` works in the console.
 
-Download and build dependencies
+Download and unpack the [latest ALCF version](https://github.com/peterkuma/alcf/archive/master.zip),
+and run commands below in the unpacked directory.
+
+To download and build dependencies
 ([UDUNITS](https://www.unidata.ucar.edu/software/udunits/),
 [NetCDF](https://www.unidata.ucar.edu/software/netcdf/),
 [NetCDF-Fortran](https://www.unidata.ucar.edu/software/netcdf/docs-fortran/),
@@ -79,13 +82,15 @@ make
 To install in system directories:
 
 ```sh
-pip install https://github.com/peterkuma/ds-python/archive/master.zip https://github.com/peterkuma/aquarius-time/archive/master.zip https://github.com/peterkuma/alcf/archive/master.zip
+pip install https://github.com/peterkuma/ds-python/archive/master.zip https://github.com/peterkuma/aquarius-time/archive/master.zip
+python setup.py install
 ```
 
 To install in user directories (make sure `~/.local/bin` is in the environmental variable `PATH`):
 
 ```sh
-pip install --user https://github.com/peterkuma/ds-python/archive/master.zip https://github.com/peterkuma/aquarius-time/archive/master.zip https://github.com/peterkuma/alcf/archive/master.zip
+pip install --user https://github.com/peterkuma/ds-python/archive/master.zip https://github.com/peterkuma/aquarius-time/archive/master.zip
+python setup.py install --user
 ```
 
 Usage
