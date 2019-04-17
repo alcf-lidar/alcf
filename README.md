@@ -37,22 +37,12 @@ and observations
 Installation
 ------------
 
-<!--
-Installation with PIP (Linux):
-
-```sh
-pip install alcf
-```
--->
-
 ### Requirements
 
 ALCF is written in Python and Fortran. Installation on Linux is recommended.
 Installation on other operating systems may be possible.
 
-### Installation from source (Linux)
-
-<!-- A pre-compiled binary package is provided via PIP. -->
+### Installation on Linux
 
 Install the following required software:
 
@@ -71,7 +61,7 @@ To download and build dependencies
 [OSSP uuid](http://www.ossp.org/pkg/lib/uuid/),
 [HDF5](https://www.hdfgroup.org/solutions/hdf5),
 [CMOR](https://pcmdi.github.io/cmor-site/),
-[COSP](https://github.com/peterkuma/COSPv1)) with the following commands:
+[COSP](https://github.com/peterkuma/COSPv1)):
 
 ```sh
 ./download_dep
