@@ -11,9 +11,7 @@ VARIABLES = [
 
 def run(input_, output, time=None):
 	"""
-alcf stats
-
-Calculate cloud occurrence statistics.
+alcf stats - calculate cloud occurrence statistics
 
 Usage: `alcf stats <input> <output> [time: { <start> <end> }]`
 

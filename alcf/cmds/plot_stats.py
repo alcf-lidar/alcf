@@ -11,13 +11,9 @@ def run(type_, input_, output,
 	dpi=300
 ):
 	"""
-alcf plot_stats
+alcf plot_stats - plot lidar statistics
 
-Plot lidar statistics.
-
-Usage:
-
-	alcf plot <type> <input> <output> [options]
+Usage: `alcf plot <type> <input> <output> [options]`
 
 - type: type of lidar (see Types below)
 - input: input filename or directory

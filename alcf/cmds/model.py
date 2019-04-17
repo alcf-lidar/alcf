@@ -28,9 +28,7 @@ def model(type_, input_, point=None, time=None, track=None):
 
 def run(type_, input_, output, point=None, time=None, track=None):
 	"""
-alcf model
-
-Extract model data at a point or along a track.
+alcf model - extract model data at a point or along a track
 
 Usage:
 

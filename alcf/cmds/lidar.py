@@ -30,9 +30,9 @@ def run(type_, input_, output,
 	**options
 ):
 	"""
-alcf lidar
+alcf lidar - process lidar data
 
-Process lidar data. The processing is done in the following order:
+The processing is done in the following order:
 
 - noise removal
 - calibration

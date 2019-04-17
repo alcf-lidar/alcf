@@ -190,9 +190,9 @@ to corresponding .nc files in `output`.
 TODO
 
 
-alcf calibrate
+alcf calibrate - calibrate ALC backscatter
 
-Calibrate ALC. Supported methods:
+Supported methods:
 
 - O'Connor et al. (2004) - calibrate based on lidar ratio (LR) of fully
 opaque stratocumulus clouds.
@@ -212,9 +212,7 @@ HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
 ### model
 
 
-alcf model
-
-Extract model data at a point or along a track.
+alcf model - extract model data at a point or along a track
 
 Usage:
 
@@ -253,9 +251,7 @@ Track file is a NetCDF file containing 1D variables lon, lat, and time.
 ### simulate
 
 
-alcf simulate
-
-Simulate lidar measurements from model data using COSP.
+alcf simulate - simulate lidar measurements from model data using COSP
 
 Usage: `alcf simulate <type> <input> <output> [<options>]`
 
@@ -283,9 +279,9 @@ Options:
 ### lidar
 
 
-alcf lidar
+alcf lidar - process lidar data
 
-Process lidar data. The processing is done in the following order:
+The processing is done in the following order:
 
 - noise removal
 - calibration
@@ -355,9 +351,7 @@ Algorithm options:
 ### stats
 
 
-alcf stats
-
-Calculate cloud occurrence statistics.
+alcf stats - calculate cloud occurrence statistics
 
 Usage: `alcf stats <input> <output> [time: { <start> <end> }]`
 
@@ -377,9 +371,7 @@ HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
 ### plot
 
 
-alcf plot
-
-Plot lidar data.
+alcf plot - plot lidar data
 
 Usage: `alcf plot <plot_type> <input> <output> [options]`
 

@@ -136,9 +136,7 @@ def run(type_, input_, output,
 	overlap='maximum-random',
 ):
 	"""
-alcf simulate
-
-Simulate lidar measurements from model data using COSP.
+alcf simulate - simulate lidar measurements from model data using COSP
 
 Usage: `alcf simulate <type> <input> <output> [<options>]`
 

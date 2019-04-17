@@ -257,9 +257,7 @@ def run(plot_type, input_, output,
 	dpi=300,
 ):
 	"""
-alcf plot
-
-Plot lidar data.
+alcf plot - plot lidar data
 
 Usage: `alcf plot <plot_type> <input> <output> [options]`
 

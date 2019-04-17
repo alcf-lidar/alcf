@@ -8,9 +8,9 @@ VARIABLES = [
 
 def run(*args):
 	"""
-alcf calibrate
+alcf calibrate - calibrate ALC backscatter
 
-Calibrate ALC. Supported methods:
+Supported methods:
 
 - O'Connor et al. (2004) - calibrate based on lidar ratio (LR) of fully
 opaque stratocumulus clouds.
