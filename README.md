@@ -128,6 +128,15 @@ alcf plot stats <input> <output>
 Commands
 --------
 
+- [convert](#convert)
+- [calibrate](#calibrate)
+- [model](#model)
+- [simulate](#simulate)
+- [lidar](#lidar)
+- [stats](#stats)
+- [plot](#plot)
+- [compate](#compare)
+
 ### convert
 
 
@@ -345,9 +354,9 @@ Options:
 - `dpi`: DPI. Default: 300.
 	
 
-TODO:
-
 ### compare
+
+TODO
 
 Supported models
 ----------------
