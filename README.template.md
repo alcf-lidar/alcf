@@ -33,10 +33,6 @@ Kuma et al. (2019): Ground-based lidar simulator framework for comparing models
 and observations
 -->
 
-Requirements
-------------
-
-ALCF is written in Python and Fortran. Installation on Linux is recommended.
 
 Installation
 ------------
@@ -49,7 +45,12 @@ pip install alcf
 ```
 -->
 
-### Installation from source
+### Requirements
+
+ALCF is written in Python and Fortran. Installation on Linux is recommended.
+Installation on other operating systems may be possible.
+
+### Installation from source (Linux)
 
 <!-- A pre-compiled binary package is provided via PIP. -->
 If you want to compile
