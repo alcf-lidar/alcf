@@ -162,9 +162,9 @@ Usage:
 
     alcf calibrate { <start> <end> }... <input>
 
-- start: interval start (see Time format below)
-- end: interval end (see Time format below)
-- input: input directory (output of uncalibrated alcf lidar)
+- `start`: interval start (see Time format below)
+- `end`: interval end (see Time format below)
+- `input`: input directory (output of uncalibrated alcf lidar)
 
 Time format:
 
@@ -187,21 +187,21 @@ Usage:
 
 Arguments:
 
-- type: input data type (see Types below)
-- input: input directory
-- output: output directory
-- lon: point longitude
-- lat: point latitutde
-- start: start time (see Time format below)
-- end: end time (see Time format below)
-- track: track NetCDF file (see Track below)
+- `type`: input data type (see Types below)
+- `input`: input directory
+- `output`: output directory
+- `lon`: point longitude
+- `lat`: point latitutde
+- `start`: start time (see Time format below)
+- `end`: end time (see Time format below)
+- `track`: track NetCDF file (see Track below)
 
 Types:
 
-- amps: Antarctic Mesoscale Prediction System (AMPS)
-- merra2: Modern-Era Retrospective Analysis for Research and Applications,
+- `amps`: Antarctic Mesoscale Prediction System (AMPS)
+- `merra2`: Modern-Era Retrospective Analysis for Research and Applications,
 	Version 2 (MERRA-2)
-- nzcsm: New Zealand Convection Scale Model (NZCSM)
+- `nzcsm`: New Zealand Convection Scale Model (NZCSM)
 
 Time format:
 
@@ -237,57 +237,57 @@ Usage:
 
 Arguments:
 
-- type: lidar type (see Types below)
-- lidar: input lidar data directory or filename
-- output: output filename or directory
-- options: see Options below
-- algorithm_options: see Algorithm options below
+- `type`: lidar type (see Types below)
+- `lidar`: input lidar data directory or filename
+- `output`: output filename or directory
+- `options`: see Options below
+- `algorithm_options`: see Algorithm options below
 
 Types:
 
-- chm15k: Lufft CHM 15k
-- cl51: Vaisala CL51
-- mpl: Sigma Space MiniMPL
-- cosp: COSP simulated lidar
+- `chm15k`: Lufft CHM 15k
+- `cl51`: Vaisala CL51
+- `mpl`: Sigma Space MiniMPL
+- `cosp`: COSP simulated lidar
 
 Options:
 
-- eta: Multiple-scattering factor to assume in lidar ratio calculation.
+- `eta`: Multiple-scattering factor to assume in lidar ratio calculation.
 Default: 0.7.
-- cloud_detection: Cloud detection algorithm. Available algorithms: "default".
+- `cloud_detection`: Cloud detection algorithm. Available algorithms: "default".
 	Default: "default".
-- cloud_base_detection: Cloud base detection algorithm. Available algorithms:
+- `cloud_base_detection`: Cloud base detection algorithm. Available algorithms:
 	"default". Default: "default".
-- noise_removal: Noise removal algorithm. Available algorithms: "default".
+- `noise_removal`: Noise removal algorithm. Available algorithms: "default".
 	Default: "default".
-- calibration: Backscatter calibration algorithm. Available algorithms:
+- `calibration`: Backscatter calibration algorithm. Available algorithms:
 	"default". Default: "default".
-- tres: Time resolution (seconds). Default: 60.
-- tlim: { <low> <high> }: Time limits (see Time format below). Default: none.
-- zres: Height resolution (m). Default: 50.
-- zlim: { <low> <high> }: Height limits (m). Default: { 0 15000 }.
-- output_sampling: Output sampling period (seconds). Default: 86400.
+- `tres`: Time resolution (seconds). Default: 60.
+- `tlim`: { <low> <high> }: Time limits (see Time format below). Default: none.
+- `zres`: Height resolution (m). Default: 50.
+- `zlim`: { <low> <high> }: Height limits (m). Default: { 0 15000 }.
+- `output_sampling`: Output sampling period (seconds). Default: 86400.
 
 Algorithm options:
 
 - Cloud detection:
-    - default: cloud detection based on backscatter threshold
-        - cloud_threshold: Cloud detection threshold.
+    - `default`: cloud detection based on backscatter threshold
+        - `cloud_threshold`: Cloud detection threshold.
             Default: 20e-6 sr^-1.m^-1.
-        - cloud_nsd: Number of noise standard deviations to subtract.
+        - `cloud_nsd`: Number of noise standard deviations to subtract.
         	Default: 3.
 
 - Cloud base detection:
-	- default: cloud base detection based cloud mask produced by the cloud
+	- `default`: cloud base detection based cloud mask produced by the cloud
 		detection algorithm
 
 - Calibration:
-    - default:
-        - calibration_coeff: Calibration coefficient. Default: ?.
+    - `default`:
+        - `calibration_coeff`: Calibration coefficient. Default: ?.
 
 - Noise removal:
-    - default:
-        - noise_removal_sampling: Sampling period for noise removal (seconds).
+    - `default`:
+        - `noise_removal_sampling`: Sampling period for noise removal (seconds).
         	Default: 300.
 	
 
@@ -304,10 +304,10 @@ Usage:
 
 Arguments:
 
-- input: input filename or directory
-- output: output filename or directory
-- start: start time (see Time format below)
-- end: end time (see Time format below)
+- `input`: input filename or directory
+- `output`: output filename or directory
+- `start`: start time (see Time format below)
+- `end`: end time (see Time format below)
 
 Time format:
 
@@ -328,21 +328,21 @@ Usage:
 
 Arguments:
 
-- plot_type: plot type (see Plot types below)
-- input: input filename or directory
-- output: output filename or directory
-- options: see Options below
+- `plot_type`: plot type (see Plot types below)
+- `input`: input filename or directory
+- `output`: output filename or directory
+- `options`: see Options below
 
 Plot types:
 
-- backscatter: plot backscatter
+- `backscatter`: plot backscatter
 
 Options:
 
-- lr: Plot lidar ratio (LR), Default: false.
-- width: Plot width (inches). Default: 10.
-- height: Plot height (inches). Default: 5.
-- dpi: DPI. Default: 300.
+- `lr`: Plot lidar ratio (LR), Default: false.
+- `width`: Plot width (inches). Default: 10.
+- `height`: Plot height (inches). Default: 5.
+- `dpi`: DPI. Default: 300.
 	
 
 TODO:
@@ -354,9 +354,9 @@ Supported models
 
 The following GCM, NWP models and reanalyses are supported:
 
-- AMPS
-- MERRA2
-- NZCSM
+- [AMPS](http://www2.mmm.ucar.edu/rt/amps/)
+- [MERRA2](https://duckduckgo.com/?q=merra-2&t=ffab&ia=web)
+- [NZCSM](https://www.nesi.org.nz/case-studies/improving-new-zealands-weather-forecasting-ability)
 
 TODO:
 
