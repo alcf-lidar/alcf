@@ -149,7 +149,6 @@ Usage: `alcf convert <type> <input> <output>`
 Types:
 
 - `cl51`: Vaisala CL51
-- `mpl`: SigmaSpace MiniMPL
 
 If `input` is a directory, all .DAT files in `input` are converted
 to corresponding .nc files in `output`.

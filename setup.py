@@ -20,6 +20,7 @@ setup(
 	#]},
 	install_requires=[
 		'netCDF4>=1.2.9',
+		'cl2nc',
 	],
 	keywords=['alc', 'ceilometer', 'lidar', 'atmospheric', 'model', 'nwp', 'gcm', 'cosp', 'actsim', 'vaisala', 'cl51', 'cl31', 'lufft', 'chm-15k', 'amsp', 'cmip5'],
 	url='https://github.com/peterkuma/alcf',
