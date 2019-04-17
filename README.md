@@ -130,10 +130,11 @@ Commands
 
 ### convert
 
+```
 
 alcf convert - convert input instrument or model data to ALCF standard NetCDF
 
-Usage: `alcf convert &lt;type&gt; &lt;input&gt; &lt;output&gt;`
+Usage: `alcf convert <type> <input> <output>`
 
 - `type`: input data type (see Types below)
 - `input`: input filename or dirname
@@ -147,20 +148,22 @@ Types:
 If `input` is a directory, all .DAT files in `input` are converted
 to corresponding .nc files in `output`.
 	
+```
 
 ### calibrate
 
+```
 
 alcf calibrate
 
 Calibrate ALC. Supported methods:
 
-- O&#x27;Connor et al. (2004) - calibrate based on lidar ratio (LR) of fully
+- O'Connor et al. (2004) - calibrate based on lidar ratio (LR) of fully
 opaque stratocumulus clouds.
 
 Usage:
 
-    alcf calibrate { &lt;start&gt; &lt;end&gt; }... &lt;input&gt;
+    alcf calibrate { <start> <end> }... <input>
 
 - start: interval start (see Time format below)
 - end: interval end (see Time format below)
@@ -168,12 +171,14 @@ Usage:
 
 Time format:
 
-&quot;YYYY-MM-DD[THH:MM[:SS]]&quot;, where YYYY is year, MM is month, DD is day,
+"YYYY-MM-DD[THH:MM[:SS]]", where YYYY is year, MM is month, DD is day,
 HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
 	
+```
 
 ### model
 
+```
 
 alcf model
 
@@ -181,9 +186,9 @@ Extract model data at a point or along a track.
 
 Usage:
 
-    alcf model &lt;type&gt; point: { &lt;lon&gt; &lt;lat&gt; } time: { &lt;start&gt; &lt;end&gt; } &lt;input&gt;
-    	&lt;output&gt;
-    alcf model &lt;type&gt; track: &lt;track&gt; &lt;input&gt; &lt;output&gt;
+    alcf model <type> point: { <lon> <lat> } time: { <start> <end> } <input>
+    	<output>
+    alcf model <type> track: <track> <input> <output>
 
 Arguments:
 
@@ -205,20 +210,24 @@ Types:
 
 Time format:
 
-&quot;YYYY-MM-DD[THH:MM[:SS]]&quot;, where YYYY is year, MM is month, DD is day,
+"YYYY-MM-DD[THH:MM[:SS]]", where YYYY is year, MM is month, DD is day,
 HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
 
 Track:
 
 Track file is a NetCDF file containing 1D variables lon, lat, and time.
 	
+```
 
 ### simulate
 
+```
 
+```
 
 ### lidar
 
+```
 
 alcf lidar
 
@@ -233,7 +242,7 @@ Process lidar data. The processing is done in the following order:
 
 Usage:
 
-    alcf lidar &lt;type&gt; &lt;lidar&gt; &lt;output&gt; [options] [algorithm_options]
+    alcf lidar <type> <lidar> <output> [options] [algorithm_options]
 
 Arguments:
 
@@ -254,18 +263,18 @@ Options:
 
 - eta: Multiple-scattering factor to assume in lidar ratio calculation.
 Default: 0.7.
-- cloud_detection: Cloud detection algorithm. Available algorithms: &quot;default&quot;.
-	Default: &quot;default&quot;.
+- cloud_detection: Cloud detection algorithm. Available algorithms: "default".
+	Default: "default".
 - cloud_base_detection: Cloud base detection algorithm. Available algorithms:
-	&quot;default&quot;. Default: &quot;default&quot;.
-- noise_removal: Noise removal algorithm. Available algorithms: &quot;default&quot;.
-	Default: &quot;default&quot;.
+	"default". Default: "default".
+- noise_removal: Noise removal algorithm. Available algorithms: "default".
+	Default: "default".
 - calibration: Backscatter calibration algorithm. Available algorithms:
-	&quot;default&quot;. Default: &quot;default&quot;.
+	"default". Default: "default".
 - tres: Time resolution (seconds). Default: 60.
-- tlim: { &lt;low&gt; &lt;high&gt; }: Time limits (see Time format below). Default: none.
+- tlim: { <low> <high> }: Time limits (see Time format below). Default: none.
 - zres: Height resolution (m). Default: 50.
-- zlim: { &lt;low&gt; &lt;high&gt; }: Height limits (m). Default: { 0 15000 }.
+- zlim: { <low> <high> }: Height limits (m). Default: { 0 15000 }.
 - output_sampling: Output sampling period (seconds). Default: 86400.
 
 Algorithm options:
@@ -290,9 +299,11 @@ Algorithm options:
         - noise_removal_sampling: Sampling period for noise removal (seconds).
         	Default: 300.
 	
+```
 
 ### stats
 
+```
 
 alcf stats
 
@@ -300,7 +311,7 @@ Calculate cloud occurrence statistics.
 
 Usage:
 
-    alcf stats &lt;input&gt; &lt;output&gt; [time: { &lt;start&gt; &lt;end&gt; }]
+    alcf stats <input> <output> [time: { <start> <end> }]
 
 Arguments:
 
@@ -311,12 +322,14 @@ Arguments:
 
 Time format:
 
-&quot;YYYY-MM-DD[THH:MM[:SS]]&quot;, where YYYY is year, MM is month, DD is day,
+"YYYY-MM-DD[THH:MM[:SS]]", where YYYY is year, MM is month, DD is day,
 HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
 	
+```
 
 ### plot
 
+```
 
 alcf plot
 
@@ -324,7 +337,7 @@ Plot lidar data.
 
 Usage:
 
-	alcf plot &lt;plot_type&gt; &lt;input&gt; &lt;output&gt; [options]
+	alcf plot <plot_type> <input> <output> [options]
 
 Arguments:
 
@@ -344,6 +357,7 @@ Options:
 - height: Plot height (inches). Default: 5.
 - dpi: DPI. Default: 300.
 	
+```
 
 TODO:
 
