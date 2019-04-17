@@ -265,6 +265,11 @@ or directly on the [NASA EOSDIS FTP server](https://goldsmr5.gesdisc.eosdis.nasa
 
 ### NZCSM
 
+New Zealand Convective Scale Model (NZCSM) is a NWP model based on the
+UK Met Office Unified Model. The following model output variables are needed
+to run the lidar simulator: hybridt32, latitude, longitude, model_press,
+model_qcf, model_qcl, theta_lev_temp, time0.
+
 ### CMIP5
 
 TODO

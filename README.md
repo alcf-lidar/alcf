@@ -157,7 +157,7 @@ Types:
 
 If `input` is a directory, all .DAT files in `input` are converted
 to corresponding .nc files in `output`.
-
+	
 
 ### calibrate
 
@@ -181,7 +181,7 @@ Time format:
 
 "YYYY-MM-DD[THH:MM[:SS]]", where YYYY is year, MM is month, DD is day,
 HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
-
+	
 
 ### model
 
@@ -222,7 +222,7 @@ HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
 Track:
 
 Track file is a NetCDF file containing 1D variables lon, lat, and time.
-
+	
 
 ### simulate
 
@@ -252,7 +252,7 @@ Options:
 - `overlap`: Cloud overlap assumption in the SCOPS subcolumn generator.
   "maximum" for maximum overlap, "random" for random overlap, or
   "maximum-random" for maximum-random overlap. Default: "maximum-random".
-
+	
 
 ### lidar
 
@@ -326,7 +326,7 @@ Algorithm options:
     - `default`:
         - `noise_removal_sampling`: Sampling period for noise removal (seconds).
         	Default: 300.
-
+	
 
 ### stats
 
@@ -350,7 +350,7 @@ Time format:
 
 "YYYY-MM-DD[THH:MM[:SS]]", where YYYY is year, MM is month, DD is day,
 HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
-
+	
 
 ### plot
 
@@ -380,7 +380,7 @@ Options:
 - `width`: Plot width (inches). Default: 10.
 - `height`: Plot height (inches). Default: 5.
 - `dpi`: DPI. Default: 300.
-
+	
 
 ### compare
 
@@ -479,6 +479,11 @@ find the product files by searching for "M2I3NVASM" on NASA EarthData,
 or directly on the [NASA EOSDIS FTP server](https://goldsmr5.gesdisc.eosdis.nasa.gov/data/MERRA2/M2I3NVASM.5.12.4/).
 
 ### NZCSM
+
+New Zealand Convective Scale Model (NZCSM) is a NWP model based on the
+UK Met Office Unified Model. The following model output variables are needed
+to run the lidar simulator: hybridt32, latitude, longitude, model_press,
+model_qcf, model_qcl, theta_lev_temp, time0.
 
 ### CMIP5
 
