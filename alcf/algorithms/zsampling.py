@@ -23,36 +23,28 @@ def zsampling(d, zres=None, zlim=None):
 		else np.zeros(m, dtype=np.float64)
 	if m == 0:
 		return
-	if zlim is not None and zres is not None:
-		zhalf2_1 = np.arange(zlim[0], zlim[-1] + zres, zres)
-		zfull2_1 = (zhalf2_1[1:] + zhalf2_1[:-1])*0.5
-		zhalf2 = np.tile(zhalf2_1, (n, 1))
-		zfull2 = np.tile(zfull2_1, (n, 1))
-		m2 = len(zfull2_1)
-		dims2 = (n, m2, l) if len(b.shape) == 3 else (n, m2)
-		b2 = np.zeros(dims2, dtype=np.float64)
-		b_sd2 = np.zeros(dims2, dtype=np.float64)
-		# r2 = np.zeros(m2, dtype=np.float64)
-		if l == 0:
-			for i in range(n):
-				b2[i,:] = interp(zhalf[i,:], b[i,:], zhalf2[i,:])
-				b_sd2[i,:] = interp(zhalf[i,:], b_sd[i,:], zhalf2[i,:])
-		else:
-			for i in range(n):
-				for j in range(l):
-					b2[i,:,j] = interp(zhalf[i,:], b[i,:,j], zhalf2[i,:])
-					b_sd2[i,:,j] = interp(zhalf[i,:], b_sd[i,:,j], zhalf2[i,:])
+	zhalf2 = np.arange(zlim[0], zlim[-1] + zres, zres)
+	zfull2 = (zhalf2[1:] + zhalf2[:-1])*0.5
+	m2 = len(zfull2)
+	dims2 = (n, m2, l) if len(b.shape) == 3 else (n, m2)
+	b2 = np.zeros(dims2, dtype=np.float64)
+	b_sd2 = np.zeros(dims2, dtype=np.float64)
+	# r2 = np.zeros(m2, dtype=np.float64)
+	if l == 0:
+		for i in range(n):
+			b2[i,:] = interp(zhalf[i,:], b[i,:], zhalf2)
+			b_sd2[i,:] = interp(zhalf[i,:], b_sd[i,:], zhalf2)
 	else:
-		r2 = r
-		zfull2 = zfull
-		b2 = b
-		b_sd2 = b_sd
+		for i in range(n):
+			for j in range(l):
+				b2[i,:,j] = interp(zhalf[i,:], b[i,:,j], zhalf2)
+				b_sd2[i,:,j] = interp(zhalf[i,:], b_sd[i,:,j], zhalf2)
 	# d['range'] = r2
 	d['zfull'] = zfull2
 	d['backscatter'] = b2
 	if 'backscatter_sd' in d:
 		d['backscatter_sd'] = b_sd2
-	d['.']['zfull']['.dims'] = ['time', 'level']
+	d['.']['zfull']['.dims'] = ['level']
 
 def stream(dd, state, zres=None, zlim=None, **options):
 	return misc.stream(dd, state, zsampling, zres=zres, zlim=zlim)

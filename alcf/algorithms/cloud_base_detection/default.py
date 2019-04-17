@@ -23,9 +23,9 @@ def cloud_base_detection(d, **options):
 			kk = np.where(x)[0]
 			if len(kk) > 0:
 				if len(dims) == 2:
-					cbh[i,j] = d['zfull'][i,kk[0]]
+					cbh[i,j] = d['zfull'][kk[0]]
 				else:
-					cbh[i] = d['zfull'][i,kk[0]]
+					cbh[i] = d['zfull'][kk[0]]
 			else:
 				if len(dims) == 2:
 					cbh[i,j] = np.inf
