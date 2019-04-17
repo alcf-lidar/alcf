@@ -101,7 +101,7 @@ alcf model <type> point: { <lon> <lat> } time: { <start> <end> } <input> <output
 alcf model <type> track: <track> <input> <output>
 
 # Simulate lidar
-alcf cosp <type> <input> <output> [<options>]
+alcf simulate <type> <input> <output> [<options>]
 
 # Process lidar data
 alcf lidar <input> <output> [<options>] [<algorithm_options>]
@@ -128,14 +128,16 @@ alcf plot stats <input> <output>
 Commands
 --------
 
-- [convert](#convert)
-- [calibrate](#calibrate)
-- [model](#model)
-- [simulate](#simulate)
-- [lidar](#lidar)
-- [stats](#stats)
-- [plot](#plot)
-- [compate](#compare)
+| Command | Description |
+| --- | --- |
+| [convert](#convert) | Convert input instrument or model data to ALCF standard NetCDF. |
+| [calibrate](#calibrate) | Calibrate ALC. |
+| [model](#model) | Extract model data at a point or along a track. |
+| [simulate](#simulate) | Simulate lidar measurements from model data using COSP. |
+| [lidar](#lidar) | Process lidar data. |
+| [stats](#stats) | Calculate cloud occurrence statistics. |
+| [plot](#plot) | Plot lidar data. |
+| [compare](#compare) | |
 
 ### convert
 
@@ -155,7 +157,7 @@ Types:
 
 If `input` is a directory, all .DAT files in `input` are converted
 to corresponding .nc files in `output`.
-	
+
 
 ### calibrate
 
@@ -179,7 +181,7 @@ Time format:
 
 "YYYY-MM-DD[THH:MM[:SS]]", where YYYY is year, MM is month, DD is day,
 HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
-	
+
 
 ### model
 
@@ -220,10 +222,36 @@ HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
 Track:
 
 Track file is a NetCDF file containing 1D variables lon, lat, and time.
-	
+
 
 ### simulate
 
+
+alcf simulate
+
+Simulate lidar measurements from model data using COSP.
+
+Usage: `alcf simulate <type> <input> <output> [<options>]`
+
+Arguments:
+
+- `type`: type of lidar to simulate
+- `input`: input filename or directory (the output of "alcf model")
+- `output`: output filename or directory
+- `options`: see Options below
+
+Types:
+
+- `chm15k`: Lufft CHM 15k
+- `cl51`: Vaisala CL51
+- `mpl`: Sigma Space MiniMPL
+
+Options:
+
+- `ncolumns`: Number of SCOPS subcolumns to generate. Default: 10.
+- `overlap`: Cloud overlap assumption in the SCOPS subcolumn generator.
+  "maximum" for maximum overlap, "random" for random overlap, or
+  "maximum-random" for maximum-random overlap. Default: "maximum-random".
 
 
 ### lidar
@@ -298,7 +326,7 @@ Algorithm options:
     - `default`:
         - `noise_removal_sampling`: Sampling period for noise removal (seconds).
         	Default: 300.
-	
+
 
 ### stats
 
@@ -322,7 +350,7 @@ Time format:
 
 "YYYY-MM-DD[THH:MM[:SS]]", where YYYY is year, MM is month, DD is day,
 HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
-	
+
 
 ### plot
 
@@ -352,7 +380,7 @@ Options:
 - `width`: Plot width (inches). Default: 10.
 - `height`: Plot height (inches). Default: 5.
 - `dpi`: DPI. Default: 300.
-	
+
 
 ### compare
 
