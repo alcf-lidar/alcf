@@ -130,220 +130,31 @@ Commands
 
 ### convert
 
-
-alcf convert - convert input instrument or model data to ALCF standard NetCDF
-
-Usage: `alcf convert &lt;type&gt; &lt;input&gt; &lt;output&gt;`
-
-- `type`: input data type (see Types below)
-- `input`: input filename or dirname
-- `output`: output filename or dirname
-
-Types:
-
-- `cl51`: Vaisala CL51
-- `mpl`: SigmaSpace MiniMPL
-
-If `input` is a directory, all .DAT files in `input` are converted
-to corresponding .nc files in `output`.
-	
+{{cmd_convert}}
 
 ### calibrate
 
-
-alcf calibrate
-
-Calibrate ALC. Supported methods:
-
-- O&#x27;Connor et al. (2004) - calibrate based on lidar ratio (LR) of fully
-opaque stratocumulus clouds.
-
-Usage:
-
-    alcf calibrate { &lt;start&gt; &lt;end&gt; }... &lt;input&gt;
-
-- start: interval start (see Time format below)
-- end: interval end (see Time format below)
-- input: input directory (output of uncalibrated alcf lidar)
-
-Time format:
-
-&quot;YYYY-MM-DD[THH:MM[:SS]]&quot;, where YYYY is year, MM is month, DD is day,
-HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
-	
+{{cmd_calibrate}}
 
 ### model
 
-
-alcf model
-
-Extract model data at a point or along a track.
-
-Usage:
-
-    alcf model &lt;type&gt; point: { &lt;lon&gt; &lt;lat&gt; } time: { &lt;start&gt; &lt;end&gt; } &lt;input&gt;
-    	&lt;output&gt;
-    alcf model &lt;type&gt; track: &lt;track&gt; &lt;input&gt; &lt;output&gt;
-
-Arguments:
-
-- type: input data type (see Types below)
-- input: input directory
-- output: output directory
-- lon: point longitude
-- lat: point latitutde
-- start: start time (see Time format below)
-- end: end time (see Time format below)
-- track: track NetCDF file (see Track below)
-
-Types:
-
-- amps: Antarctic Mesoscale Prediction System (AMPS)
-- merra2: Modern-Era Retrospective Analysis for Research and Applications,
-	Version 2 (MERRA-2)
-- nzcsm: New Zealand Convection Scale Model (NZCSM)
-
-Time format:
-
-&quot;YYYY-MM-DD[THH:MM[:SS]]&quot;, where YYYY is year, MM is month, DD is day,
-HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
-
-Track:
-
-Track file is a NetCDF file containing 1D variables lon, lat, and time.
-	
+{{cmd_model}}
 
 ### simulate
 
-
+{{cmd_simulate}}
 
 ### lidar
 
-
-alcf lidar
-
-Process lidar data. The processing is done in the following order:
-
-- noise removal
-- calibration
-- time resampling
-- height resampling
-- cloud detection
-- cloud base detection
-
-Usage:
-
-    alcf lidar &lt;type&gt; &lt;lidar&gt; &lt;output&gt; [options] [algorithm_options]
-
-Arguments:
-
-- type: lidar type (see Types below)
-- lidar: input lidar data directory or filename
-- output: output filename or directory
-- options: see Options below
-- algorithm_options: see Algorithm options below
-
-Types:
-
-- chm15k: Lufft CHM 15k
-- cl51: Vaisala CL51
-- mpl: Sigma Space MiniMPL
-- cosp: COSP simulated lidar
-
-Options:
-
-- eta: Multiple-scattering factor to assume in lidar ratio calculation.
-Default: 0.7.
-- cloud_detection: Cloud detection algorithm. Available algorithms: &quot;default&quot;.
-	Default: &quot;default&quot;.
-- cloud_base_detection: Cloud base detection algorithm. Available algorithms:
-	&quot;default&quot;. Default: &quot;default&quot;.
-- noise_removal: Noise removal algorithm. Available algorithms: &quot;default&quot;.
-	Default: &quot;default&quot;.
-- calibration: Backscatter calibration algorithm. Available algorithms:
-	&quot;default&quot;. Default: &quot;default&quot;.
-- tres: Time resolution (seconds). Default: 60.
-- tlim: { &lt;low&gt; &lt;high&gt; }: Time limits (see Time format below). Default: none.
-- zres: Height resolution (m). Default: 50.
-- zlim: { &lt;low&gt; &lt;high&gt; }: Height limits (m). Default: { 0 15000 }.
-- output_sampling: Output sampling period (seconds). Default: 86400.
-
-Algorithm options:
-
-- Cloud detection:
-    - default: cloud detection based on backscatter threshold
-        - cloud_threshold: Cloud detection threshold.
-            Default: 20e-6 sr^-1.m^-1.
-        - cloud_nsd: Number of noise standard deviations to subtract.
-        	Default: 3.
-
-- Cloud base detection:
-	- default: cloud base detection based cloud mask produced by the cloud
-		detection algorithm
-
-- Calibration:
-    - default:
-        - calibration_coeff: Calibration coefficient. Default: ?.
-
-- Noise removal:
-    - default:
-        - noise_removal_sampling: Sampling period for noise removal (seconds).
-        	Default: 300.
-	
+{{cmd_lidar}}
 
 ### stats
 
-
-alcf stats
-
-Calculate cloud occurrence statistics.
-
-Usage:
-
-    alcf stats &lt;input&gt; &lt;output&gt; [time: { &lt;start&gt; &lt;end&gt; }]
-
-Arguments:
-
-- input: input filename or directory
-- output: output filename or directory
-- start: start time (see Time format below)
-- end: end time (see Time format below)
-
-Time format:
-
-&quot;YYYY-MM-DD[THH:MM[:SS]]&quot;, where YYYY is year, MM is month, DD is day,
-HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
-	
+{{cmd_stats}}
 
 ### plot
 
-
-alcf plot
-
-Plot lidar data.
-
-Usage:
-
-	alcf plot &lt;plot_type&gt; &lt;input&gt; &lt;output&gt; [options]
-
-Arguments:
-
-- plot_type: plot type (see Plot types below)
-- input: input filename or directory
-- output: output filename or directory
-- options: see Options below
-
-Plot types:
-
-- backscatter: plot backscatter
-
-Options:
-
-- lr: Plot lidar ratio (LR), Default: false.
-- width: Plot width (inches). Default: 10.
-- height: Plot height (inches). Default: 5.
-- dpi: DPI. Default: 300.
-	
+{{cmd_plot}}
 
 TODO:
 
