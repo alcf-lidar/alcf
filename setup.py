@@ -13,11 +13,11 @@ setup(
 	scripts=['bin/alcf', 'bin/cosp_alcf'],
 	packages=find_packages(),
 	zip_safe=False,
-	#package_data={'alcf': [
-	#	os.path.join('..',p,f)
-	#	for p,_,fs in os.walk('alcf/opt')
-	# 	for f in fs
-	#]},
+	package_data={'alcf': [
+		os.path.join('..',p,f)
+		for p,_,fs in os.walk('alcf/opt')
+	 	for f in fs
+	]},
 	install_requires=[
 		'netCDF4>=1.2.9',
 		'cl2nc',
