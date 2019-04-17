@@ -130,45 +130,31 @@ Commands
 
 ### convert
 
-```
 {{{cmd_convert}}}
-```
 
 ### calibrate
 
-```
 {{{cmd_calibrate}}}
-```
 
 ### model
 
-```
 {{{cmd_model}}}
-```
 
 ### simulate
 
-```
 {{{cmd_simulate}}}
-```
 
 ### lidar
 
-```
 {{{cmd_lidar}}}
-```
 
 ### stats
 
-```
 {{{cmd_stats}}}
-```
 
 ### plot
 
-```
 {{{cmd_plot}}}
-```
 
 TODO:
 

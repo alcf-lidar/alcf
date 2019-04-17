@@ -130,7 +130,6 @@ Commands
 
 ### convert
 
-```
 
 alcf convert - convert input instrument or model data to ALCF standard NetCDF
 
@@ -148,11 +147,9 @@ Types:
 If `input` is a directory, all .DAT files in `input` are converted
 to corresponding .nc files in `output`.
 	
-```
 
 ### calibrate
 
-```
 
 alcf calibrate
 
@@ -174,11 +171,9 @@ Time format:
 "YYYY-MM-DD[THH:MM[:SS]]", where YYYY is year, MM is month, DD is day,
 HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
 	
-```
 
 ### model
 
-```
 
 alcf model
 
@@ -217,17 +212,13 @@ Track:
 
 Track file is a NetCDF file containing 1D variables lon, lat, and time.
 	
-```
 
 ### simulate
 
-```
 
-```
 
 ### lidar
 
-```
 
 alcf lidar
 
@@ -299,11 +290,9 @@ Algorithm options:
         - noise_removal_sampling: Sampling period for noise removal (seconds).
         	Default: 300.
 	
-```
 
 ### stats
 
-```
 
 alcf stats
 
@@ -325,11 +314,9 @@ Time format:
 "YYYY-MM-DD[THH:MM[:SS]]", where YYYY is year, MM is month, DD is day,
 HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
 	
-```
 
 ### plot
 
-```
 
 alcf plot
 
@@ -357,7 +344,6 @@ Options:
 - height: Plot height (inches). Default: 5.
 - dpi: DPI. Default: 300.
 	
-```
 
 TODO:
 
