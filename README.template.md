@@ -125,33 +125,6 @@ alcf plot stats <input> <output>
 Commands
 --------
 
-The commands are usually run in the following order:
-
-- ALC observations processing:
-    1. alcf convert – convert raw ALC data to NetCDF (only if not in NetCDF
-        already),
-    2. alcf lidar – produce uncalibrated resampled data,
-    3. alcf plot lidar – plot uncalibrated backscatter profiles,
-    4. alcf calibrate – calculate calibration coefficient based on opaque
-        stratocumulus intervals identified in step 3.,
-    5. alcf lidar – produce calibrated resampled data,
-    6. alcf plot lidar – plot calibrated backscatter profiles
-    7. alcf stats – calculate summary statistics from calibrated resampled
-        lidar data from step 5.
-    8. alcf plot stats (TODO) – plot statistics from step 7.
-- Model output processing:
-    1. alcf model – extract model data at a geographical point or along a
-        ship track,
-    2. alcf simulate – simulate backscatter based on data from step 1.,
-    3. alcf lidar – resample simulated backscatter data from step 2.,
-    5. alcf plot lidar – plot simulated backscatter profiles from step 3.,
-    6. alcf stats – calculate summary statistics from resampled simulated
-        backscatter data from step 3.,
-    7. alcf plot stats (TODO) – plot statistics from step 6.
-
-NetCDF data files generated in each step can be previewed in
-[Panoply](https://www.giss.nasa.gov/tools/panoply/).
-
 | Command | Description |
 | --- | --- |
 | [convert](#convert) | Convert input instrument or model data to ALCF standard NetCDF. |
@@ -162,6 +135,36 @@ NetCDF data files generated in each step can be previewed in
 | [stats](#stats) | Calculate cloud occurrence statistics. |
 | [plot](#plot) | Plot lidar data. |
 | [compare](#compare) | |
+
+The commands are usually run in the following order.
+
+ALC observations processing:
+
+1. `alcf convert` – convert raw ALC data to NetCDF (only if not in NetCDF
+    already),
+2. `alcf lidar` – produce uncalibrated resampled data,
+3. `alcf plot lidar` – plot uncalibrated backscatter profiles,
+4. `alcf calibrate` – calculate calibration coefficient based on opaque
+    stratocumulus intervals identified in step 3.,
+5. `alcf lidar` – produce calibrated resampled data,
+6. `alcf plot lidar` – plot calibrated backscatter profiles
+7. `alcf stats` – calculate summary statistics from calibrated resampled
+    lidar data from step 5.
+8. `alcf plot stats` (TODO) – plot statistics from step 7.
+
+Model output processing:
+
+1. `alcf model` – extract model data at a geographical point or along a
+    ship track,
+2. `alcf simulate` – simulate backscatter based on data from step 1.,
+3. `alcf lidar` – resample simulated backscatter data from step 2.,
+5. `alcf plot lidar` – plot simulated backscatter profiles from step 3.,
+6. `alcf stats` – calculate summary statistics from resampled simulated
+    backscatter data from step 3.,
+7. `alcf plot stats` (TODO) – plot statistics from step 6.
+
+NetCDF data files generated in each step can be previewed in
+[Panoply](https://www.giss.nasa.gov/tools/panoply/).
 
 ### convert
 
