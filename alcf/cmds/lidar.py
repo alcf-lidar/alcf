@@ -71,9 +71,9 @@ Default: 0.7.
 - `calibration`: Backscatter calibration algorithm. Available algorithms:
 	"default". Default: "default".
 - `tres`: Time resolution (seconds). Default: 60.
-- `tlim`: { <low> <high> }: Time limits (see Time format below). Default: none.
+- `tlim`: `{ <low> <high> }`: Time limits (see Time format below). Default: none.
 - `zres`: Height resolution (m). Default: 50.
-- `zlim`: { <low> <high> }: Height limits (m). Default: { 0 15000 }.
+- `zlim`: `{ <low> <high> }`: Height limits (m). Default: { 0 15000 }.
 - `output_sampling`: Output sampling period (seconds). Default: 86400.
 
 Algorithm options:
