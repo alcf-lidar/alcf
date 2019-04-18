@@ -312,6 +312,13 @@ variables: cls, clc, clwc, clws, clic, clis, pfull, ps, ta, zfull, zhalf.
 
 TODO
 
+See also
+--------
+
+[ccplot](https://ccplot.org),
+[cl2nc](https://github.com/peterkuma/cl2nc),
+[mpl2nc](https://github.com/peterkuma/mpl2nc)
+
 License
 -------
 
