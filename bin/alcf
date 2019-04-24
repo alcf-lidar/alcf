@@ -46,7 +46,7 @@ Commands:
 	except TypeError as e:
 		t, v, tb = sys.exc_info()
 		if e.message.startswith('run() '):
-			sys.stderr.write(func.__doc__.strip() + '\n')
+			sys.stderr.write(func.__doc__.replace('`', '').strip() + '\n')
 			return 1
 		else:
 			raise t, v, tb
