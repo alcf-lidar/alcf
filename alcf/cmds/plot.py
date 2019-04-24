@@ -36,36 +36,45 @@ VARIABLES = [
 # 	s_lat = '%d$^\circ$N' % lat if lat > 0 else '%d$^\circ$S' % -lat
 # 	return s_lat + ' ' + s_lon
 
-def plot_backscatter(d): #tt, z, bf, grey=False, xlim=None, ylim=None, track=None):
+def plot_profile(plot_type, d, subcolumn=0): #tt, z, bf, grey=False, xlim=None, ylim=None, track=None):
 	# if grey:
 	# 	cmap = ListedColormap(COLORS_GREY[1:-1])
 	# 	levels = np.arange(10, 60, 10)
 	# 	under = COLORS_GREY[0]
 	# 	over = COLORS_GREY[-1]
 	# else:
-	cmap = 'nipy_spectral'
-	levels = np.arange(20, 201, 20)
-	under = '#ffffff'
-	over = '#990000'
-	# print(d['time'].shape, d['zfull'].shape, d['backscatter'].shape)
+	if plot_type == 'backscatter':
+		cmap = 'nipy_spectral'
+		levels = np.arange(20, 201, 20)
+		under = '#ffffff'
+		over = '#990000'
+		# print(d['time'].shape, d['zfull'].shape, d['backscatter'].shape)
 
-	# time_dt = aq.to_datetime(d['time'])
-	cf = plt.contourf(d['time'], d['zfull']*1e-3, d['backscatter'].T*1e6,
-		cmap=cmap,
-		levels=levels,
-		extend='both',
-	)
-	cf.cmap.set_under(under)
-	cf.cmap.set_over(over)
-	cf.set_clim(10, 200)
-	# plt.grid(color='k', lw=0.1, alpha=0.5)
-	plt.colorbar(
-		# orientation='horizontal',
-		pad=0.02,
-		label=u'Backscatter (×10$^{-6}$ m$^{-1}$sr$^{-1}$)',
-		fraction=0.07,
-		aspect=30,
-	)
+		# time_dt = aq.to_datetime(d['time'])
+		if len(d['backscatter'].shape) == 3:
+			b = d['backscatter'][:,:,subcolumn]
+		else:
+			b = d['backscatter']
+		cf = plt.contourf(d['time'], d['zfull']*1e-3, b.T*1e6,
+			cmap=cmap,
+			levels=levels,
+			extend='both',
+		)
+		cf.cmap.set_under(under)
+		cf.cmap.set_over(over)
+		cf.set_clim(10, 200)
+		# plt.grid(color='k', lw=0.1, alpha=0.5)
+		plt.colorbar(
+			# orientation='horizontal',
+			pad=0.02,
+			label=u'Backscatter (×10$^{-6}$ m$^{-1}$sr$^{-1}$)',
+			fraction=0.07,
+			aspect=30,
+		)
+	elif plot_type == 'mask':
+		pass
+	else:
+		raise ValueError('Invalid plot type "%s"' % plot_type)
 	# if ylim is not None:
 	# 	plt.ylim(ylim[0], ylim[1])
 	# if xlim is not None:
@@ -158,6 +167,7 @@ def plot(plot_type, d, output,
 	width=None,
 	height=None,
 	lr=False,
+	**kwargs
 ):
 
 	# t1 = aq.from_datetime(time_start)
@@ -229,7 +239,7 @@ def plot(plot_type, d, output,
 		if lr:
 			gs = GridSpec(2, 1, height_ratios=[0.7, 0.3], hspace=0.3)
 			plt.subplot(gs[0])
-		plot_backscatter(d
+		plot_profile(plot_type, d, **kwargs
 			# grey=(type_ == 'particle_type'),
 			# xlim=[t1, t2],
 			# ylim=ylim,
@@ -243,15 +253,18 @@ def plot(plot_type, d, output,
 			plot_lr(d)
 		#plot_lr(t, 2.0*0.7/b_int, xlim=[t1, t2])
 		# plt.suptitle(title, y=0.91)
-		plt.savefig(output, bbox_inches='tight', dpi=300)
-		# plt.clf()
-		# plt.close()
-		# plt.close(fig)
+	elif plot_type == 'mask':
+		plot_profile(plot_type, d, **kwargs)
 	else:
-		raise ValueError('Unsupported plot type "%s"' % plot_type)
+		raise ValueError('Invalid plot type "%s"' % plot_type)
+	plt.savefig(output, bbox_inches='tight', dpi=300)
+	# plt.clf()
+	# plt.close()
+	# plt.close(fig)
 
 def run(plot_type, input_, output,
 	lr=False,
+	subcolumn=0,
 	width=12,
 	height=6,
 	dpi=300,
@@ -259,7 +272,7 @@ def run(plot_type, input_, output,
 	"""
 alcf plot - plot lidar data
 
-Usage: `alcf plot <plot_type> <input> <output> [options]`
+Usage: `alcf plot <plot_type> <input> <output> [options] [plot_options]`
 
 Arguments:
 
@@ -267,22 +280,31 @@ Arguments:
 - `input`: input filename or directory
 - `output`: output filename or directory
 - `options`: see Options below
+- `plot_options`: Plot type specific options. See Plot options below.
 
 Plot types:
 
 - `backscatter`: plot backscatter
+- `mask` plot cloud mask
+- `stats` plot statistics
 
 Options:
 
-- `lr`: Plot lidar ratio (LR), Default: false.
+- `subcolumn`: Model subcolumn to plot. Default: 0.
 - `width`: Plot width (inches). Default: 10.
 - `height`: Plot height (inches). Default: 5.
 - `dpi`: DPI. Default: 300.
+
+Plot options:
+
+- `backscatter`:
+	- `lr`: Plot lidar ratio (LR), Default: false.
 	"""
 	opts = {
 		'width': width,
 		'height': height,
 		'lr': lr,
+		'subcolumn': subcolumn,
 	}
 
 	state = {}
