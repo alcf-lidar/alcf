@@ -2,13 +2,24 @@ import numpy as np
 from alcf import misc
 
 def lidar_ratio(d, eta=1.):
-	lr = np.zeros(len(d['time']))
-	for i in range(len(d['time'])):
-	 	lr[i] = np.sum(d['backscatter'][i,:]*np.diff([0] + list(d['zfull'])))
+	dz = np.diff([0] + list(d['zfull']))
+	if len(d['backscatter'].shape) == 3:
+		n, m, l = d['backscatter'].shape
+		lr = np.zeros((len(d['time']), l), dtype=np.float64)
+		dims = ['time', 'column']
+		for j in range(l):
+			for i in range(len(d['time'])):
+		 		lr[i,j] = np.sum(d['backscatter'][i,:,j]*dz)
+	else:
+		n, m = d['backscatter'].shape
+		lr = np.zeros(n, dtype=np.float64)
+		dims = ['time']
+		for i in range(n):
+		 	lr[i] = np.sum(d['backscatter'][i,:]*dz)
 	lr = 2.*eta/lr
 	d['lr'] = lr
 	d['.']['lr'] = {
-		'.dims': ['time'],
+		'.dims': dims,
 		'long_name': 'lidar_ratio',
 		'units': 'sr',
 	}
