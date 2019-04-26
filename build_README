@@ -1,11 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import pystache
 from alcf.cmds import CMDS
 
 def get_vars():
 	vars = {}
-	for k, cmd in CMDS.iteritems():
+	for k, cmd in CMDS.items():
 		vars['cmd_%s' % k] = cmd.__doc__
 	return vars
 

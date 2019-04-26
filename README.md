@@ -75,14 +75,14 @@ make
 To install in system directories:
 
 ```sh
-pip install https://github.com/peterkuma/ds-python/archive/master.zip https://github.com/peterkuma/aquarius-time/archive/master.zip https://github.com/peterkuma/pst/archive/master.zip 
+pip install https://github.com/peterkuma/ds-python/archive/master.zip https://github.com/peterkuma/aquarius-time/archive/master.zip https://github.com/peterkuma/pst/archive/master.zip
 python setup.py install
 ```
 
 To install in user directories (make sure `~/.local/bin` is in the environmental variable `PATH`):
 
 ```sh
-pip install --user https://github.com/peterkuma/ds-python/archive/master.zip https://github.com/peterkuma/aquarius-time/archive/master.zip https://github.com/peterkuma/pst/archive/master.zip 
+pip install --user https://github.com/peterkuma/ds-python/archive/master.zip https://github.com/peterkuma/aquarius-time/archive/master.zip https://github.com/peterkuma/pst/archive/master.zip
 python setup.py install --user
 ```
 
@@ -109,19 +109,21 @@ alcf lidar <input> <output> [<options>] [<algorithm_options>]
 alcf stats <input> <output> [<options>]
 
 # Plot lidar backscatter
-
 alcf plot backscatter <input> <output> [<options>]
-
-TODO:
-
-# Calculate comparison statistics from multiple lidar time series
-alcf compare <input-1> <input-2> [<input-n>...] <output>
 
 # Calculate statistics
 alcf stats <input> <output>
 
 # Plot statistics
-alcf plot stats <input> <output>
+alcf plot stats <input>... <output> [options]
+
+# TODO:
+
+# Plot lidar mask
+alcf plot mask <input> <output> [<options>]
+
+# Calculate comparison statistics from multiple lidar time series
+alcf compare <input-1> <input-2> [<input-n>...] <output>
 ```
 
 Commands
@@ -152,7 +154,7 @@ ALC observations processing:
 6. `alcf plot lidar` – plot calibrated backscatter profiles
 7. `alcf stats` – calculate summary statistics from calibrated resampled
     lidar data from step 5.
-8. `alcf plot stats` (TODO) – plot statistics from step 7.
+8. `alcf plot stats` – plot statistics from step 7.
 
 Model output processing:
 
@@ -163,7 +165,7 @@ Model output processing:
 4. `alcf plot lidar` – plot simulated backscatter profiles from step 3.,
 5. `alcf stats` – calculate summary statistics from resampled simulated
     backscatter data from step 3.,
-6. `alcf plot stats` (TODO) – plot statistics from step 5.
+6. `alcf plot stats` – plot statistics from step 5.
 
 NetCDF data files generated in each step can be previewed in
 [Panoply](https://www.giss.nasa.gov/tools/panoply/).
@@ -375,7 +377,7 @@ HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
 
 alcf plot - plot lidar data
 
-Usage: `alcf plot <plot_type> <input> <output> [options]`
+Usage: `alcf plot <plot_type> <input> <output> [options] [plot_options]`
 
 Arguments:
 
@@ -383,17 +385,32 @@ Arguments:
 - `input`: input filename or directory
 - `output`: output filename or directory
 - `options`: see Options below
+- `plot_options`: Plot type specific options. See Plot options below.
 
 Plot types:
 
 - `backscatter`: plot backscatter
+- `mask` plot cloud mask
+- `stats` plot statistics
 
 Options:
 
-- `lr`: Plot lidar ratio (LR), Default: false.
-- `width`: Plot width (inches). Default: 10.
+- `subcolumn`: Model subcolumn to plot. Default: 0.
+- `width`: Plot width (inches). Default: 5 if `plot_type` is `stats` else 10.
 - `height`: Plot height (inches). Default: 5.
 - `dpi`: DPI. Default: 300.
+- `grid`: Plot grid (`true` or `false`). Default: false.
+
+Plot options:
+
+- `backscatter`:
+	- `lr`: Plot lidar ratio (LR), Default: false.
+- `stats`:
+    - `xlim`: x axis limits (%). Default: { 0 100 }.
+    - `ylim`: y axis limits (km). Default: { 0 15 }.
+    - `colors`: Line colors. Default: { #0084c8 #dc0000 #009100 #ffc022 #ba00ff }
+    - `lw`: Line width. Default: 1.
+    - `labels`: Line labels. Default: `none`.
 	
 
 ### compare
@@ -510,16 +527,15 @@ variables: cls, clc, clwc, clws, clic, clis, pfull, ps, ta, zfull, zhalf.
 
 TODO
 
-See also
---------
-
-[ccplot](https://ccplot.org),
-[cl2nc](https://github.com/peterkuma/cl2nc),
-[mpl2nc](https://github.com/peterkuma/mpl2nc),
-[mrr2c](https://github.com/peterkuma/mrr2c)
-
 License
 -------
 
 This software is available under the terms of the MIT license
 (see [LICENSE.md](LICENSE.md)).
+
+See also
+--------
+
+[ccplot](https://ccplot.org),
+[cl2nc](https://github.com/peterkuma/cl2nc),
+[mpl2nc](https://github.com/peterkuma/mpl2nc)

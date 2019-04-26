@@ -75,14 +75,14 @@ make
 To install in system directories:
 
 ```sh
-pip install https://github.com/peterkuma/ds-python/archive/master.zip https://github.com/peterkuma/aquarius-time/archive/master.zip https://github.com/peterkuma/pst/archive/master.zip 
+pip install https://github.com/peterkuma/ds-python/archive/master.zip https://github.com/peterkuma/aquarius-time/archive/master.zip https://github.com/peterkuma/pst/archive/master.zip
 python setup.py install
 ```
 
 To install in user directories (make sure `~/.local/bin` is in the environmental variable `PATH`):
 
 ```sh
-pip install --user https://github.com/peterkuma/ds-python/archive/master.zip https://github.com/peterkuma/aquarius-time/archive/master.zip https://github.com/peterkuma/pst/archive/master.zip 
+pip install --user https://github.com/peterkuma/ds-python/archive/master.zip https://github.com/peterkuma/aquarius-time/archive/master.zip https://github.com/peterkuma/pst/archive/master.zip
 python setup.py install --user
 ```
 
@@ -109,19 +109,21 @@ alcf lidar <input> <output> [<options>] [<algorithm_options>]
 alcf stats <input> <output> [<options>]
 
 # Plot lidar backscatter
-
 alcf plot backscatter <input> <output> [<options>]
-
-TODO:
-
-# Calculate comparison statistics from multiple lidar time series
-alcf compare <input-1> <input-2> [<input-n>...] <output>
 
 # Calculate statistics
 alcf stats <input> <output>
 
 # Plot statistics
-alcf plot stats <input> <output>
+alcf plot stats <input>... <output> [options]
+
+# TODO:
+
+# Plot lidar mask
+alcf plot mask <input> <output> [<options>]
+
+# Calculate comparison statistics from multiple lidar time series
+alcf compare <input-1> <input-2> [<input-n>...] <output>
 ```
 
 Commands
@@ -152,7 +154,7 @@ ALC observations processing:
 6. `alcf plot lidar` – plot calibrated backscatter profiles
 7. `alcf stats` – calculate summary statistics from calibrated resampled
     lidar data from step 5.
-8. `alcf plot stats` (TODO) – plot statistics from step 7.
+8. `alcf plot stats` – plot statistics from step 7.
 
 Model output processing:
 
@@ -163,7 +165,7 @@ Model output processing:
 4. `alcf plot lidar` – plot simulated backscatter profiles from step 3.,
 5. `alcf stats` – calculate summary statistics from resampled simulated
     backscatter data from step 3.,
-6. `alcf plot stats` (TODO) – plot statistics from step 5.
+6. `alcf plot stats` – plot statistics from step 5.
 
 NetCDF data files generated in each step can be previewed in
 [Panoply](https://www.giss.nasa.gov/tools/panoply/).
@@ -312,15 +314,15 @@ variables: cls, clc, clwc, clws, clic, clis, pfull, ps, ta, zfull, zhalf.
 
 TODO
 
+License
+-------
+
+This software is available under the terms of the MIT license
+(see [LICENSE.md](LICENSE.md)).
+
 See also
 --------
 
 [ccplot](https://ccplot.org),
 [cl2nc](https://github.com/peterkuma/cl2nc),
 [mpl2nc](https://github.com/peterkuma/mpl2nc)
-
-License
--------
-
-This software is available under the terms of the MIT license
-(see [LICENSE.md](LICENSE.md)).
