@@ -50,7 +50,7 @@ here at the moment.
 Install the following required software:
 
 - [PGI compiler](https://www.pgroup.com/products/community.htm)
-- Python 2.7 (usually pre-installed on all Linux distributions)
+- Python 3 (usually pre-installed on Linux distributions)
 
 Once you have installed PGI, make sure the command `pgf95` works in the console.
 
@@ -75,15 +75,15 @@ make
 To install in system directories:
 
 ```sh
-pip install https://github.com/peterkuma/ds-python/archive/master.zip https://github.com/peterkuma/aquarius-time/archive/master.zip https://github.com/peterkuma/pst/archive/master.zip
-python setup.py install
+pip3 install https://github.com/peterkuma/ds-python/archive/master.zip https://github.com/peterkuma/aquarius-time/archive/master.zip https://github.com/peterkuma/pst/archive/master.zip
+python3 setup.py install
 ```
 
 To install in user directories (make sure `~/.local/bin` is in the environmental variable `PATH`):
 
 ```sh
-pip install --user https://github.com/peterkuma/ds-python/archive/master.zip https://github.com/peterkuma/aquarius-time/archive/master.zip https://github.com/peterkuma/pst/archive/master.zip
-python setup.py install --user
+pip3 install --user https://github.com/peterkuma/ds-python/archive/master.zip https://github.com/peterkuma/aquarius-time/archive/master.zip https://github.com/peterkuma/pst/archive/master.zip
+python3 setup.py install --user
 ```
 
 Usage
