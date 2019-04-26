@@ -25,8 +25,8 @@ def read(dirname, track):
 	for d_index in dd_index:
 		time = d_index['time0']
 		lon = d_index['longitude']
- 		lon = np.where(lon < 0., 360. + lon, lon)
- 		lat = d_index['latitude']
+		lon = np.where(lon < 0., 360. + lon, lon)
+		lat = d_index['latitude']
 		filename = d_index['filename']
 		ii = np.where((time >= start_time - GRACE_TIME) & (time <= end_time + GRACE_TIME))[0]
 		for i in ii:
@@ -39,30 +39,30 @@ def read(dirname, track):
 			d = ds.read(filename, variables=VARIABLES, sel={'time0': i, 'rlat': j, 'rlon': k})
 			if not set(VARIABLES).issubset(d.keys()):
 				continue
-	 		clw = d['model_qcl']
-	 		cli = d['model_qcf']
-	 		clt = 100.*np.ones(len(clw), dtype=np.float64)
+			clw = d['model_qcl']
+			cli = d['model_qcf']
+			clt = 100.*np.ones(len(clw), dtype=np.float64)
 			ps = 2*d['model_press'][0] - d['model_press'][1]
-	 		orog = max(0., 2*d['hybridt32'][0] - d['hybridt32'][1])
-	 		pfull = d['model_press']
-	 		zg = d['hybridt32']
-	 		ta = d['theta_lev_temp']
-	 		newshape4 = (1, len(clw))
-	 		newshape3 = (1,)
-	 		d_new = {
-	 			'clw': clw.reshape(newshape4),
-	 			'cli': cli.reshape(newshape4),
-	 			'ta': ta.reshape(newshape4),
-	 			'clt': clt.reshape(newshape4),
-	 			'pfull': pfull.reshape(newshape4),
+			orog = max(0., 2*d['hybridt32'][0] - d['hybridt32'][1])
+			pfull = d['model_press']
+			zg = d['hybridt32']
+			ta = d['theta_lev_temp']
+			newshape4 = (1, len(clw))
+			newshape3 = (1,)
+			d_new = {
+				'clw': clw.reshape(newshape4),
+				'cli': cli.reshape(newshape4),
+				'ta': ta.reshape(newshape4),
+				'clt': clt.reshape(newshape4),
+				'pfull': pfull.reshape(newshape4),
 				'zg': zg.reshape(newshape4),
 				'ps': [ps],
 				'orog': [orog],
-	 			'lon': np.array([lon[j,k]]),
-	 			'lat': np.array([lat[j,k]]),
-	 			'time': np.array([time[i]]),
-	 			'.': META,
-	 		}
-	 		dd.append(d_new)
+				'lon': np.array([lon[j,k]]),
+				'lat': np.array([lat[j,k]]),
+				'time': np.array([time[i]]),
+				'.': META,
+			}
+			dd.append(d_new)
 	d = ds.op.merge(dd, 'time')
 	return d

@@ -1,1 +1,1 @@
-from interp import interp
+from .interp import interp

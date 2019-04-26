@@ -1,5 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
+import os
 import sys
 import pst
 from alcf.cmds import CMDS
@@ -44,16 +45,15 @@ Commands:
 	try:
 		func(*args, **kwargs)
 	except TypeError as e:
-		t, v, tb = sys.exc_info()
-		if e.message.startswith('run() '):
+		if str(e).startswith('run() '):
 			sys.stderr.write(func.__doc__.replace('`', '').strip() + '\n')
 			return 1
 		else:
-			raise t, v, tb
+			raise e
 	return 0
 
 if __name__ == '__main__':
-	argv = pst.decode(' '.join(sys.argv))
+	argv = pst.decode([os.fsencode(y) for y in sys.argv], as_unicode=True)
 	args = [x for x in argv if type(x) is not dict]
 	kwargs = {k: v for x in argv if type(x) is dict for k, v in x.items()}
 

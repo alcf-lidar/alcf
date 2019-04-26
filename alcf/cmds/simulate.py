@@ -166,7 +166,7 @@ Options:
 
 	overlap_flag = OVERLAP.get(overlap)
 	if overlap_flag is None:
-		raise ValueError('Invalid overlap: %s' + `overlap`)
+		raise ValueError('Invalid overlap: %s' % overlap)
 
 	nlevels = 60
 

@@ -56,10 +56,10 @@ META = {
 	},
 }
 
-import cmip5
-import merra2
-import amps
-import nzcsm
+from . import cmip5
+from . import merra2
+from . import amps
+from . import nzcsm
 
 MODELS = {
 	'amps': amps,

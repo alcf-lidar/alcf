@@ -1,7 +1,7 @@
-import chm15k
-import cl51
-import mpl
-import cosp
+from . import chm15k
+from . import cl51
+from . import mpl
+from . import cosp
 
 LIDARS = {
 	'chm15k': chm15k,

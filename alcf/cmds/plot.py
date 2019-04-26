@@ -3,7 +3,6 @@
 import os
 import sys
 import numpy as np
-import lidar_toolbox as lidar
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
@@ -15,11 +14,21 @@ import ds_format as ds
 from alcf import misc
 from alcf.lidars import LIDARS
 
+COLORS = [
+	'#0084c8',
+	'#dc0000',
+	'#009100',
+	'#ffc022',
+	'#ba00ff',
+]
+
 VARIABLES = [
 	'time',
 	'backscatter',
 	'zfull',
 	'lr',
+	'cloud_occurrence',
+	'n',
 ]
 
 # COLORS_GREY = [
@@ -159,6 +168,38 @@ def plot_lr(d):
 # 	for s in segments:
 # 		plt.plot(time[s[0]:s[1]], cbh[s[0]:s[1]]*1e-3, color='red')
 
+def plot_stats(dd,
+	colors=COLORS,
+	lw=None,
+	labels=None,
+	subcolumn=0,
+	xlim=None,
+	ylim=None,
+	**kwargs
+):
+	for i, d in enumerate(dd):
+		zfull = d['zfull']
+		cloud_occurrence = d['cloud_occurrence'][:,subcolumn] \
+			if len(d['cloud_occurrence'].shape) == 2 \
+			else d['cloud_occurrence']
+		n = d['n']
+		plt.plot(cloud_occurrence, 1e-3*zfull,
+			color=colors[i],
+			lw=lw,
+			label=(labels[i] if labels is not None else None),
+		)
+	plt.xlim(xlim[0], xlim[1])
+	plt.ylim(ylim[0], ylim[1])
+	plt.xlabel('Cloud occurrence (%)')
+	plt.ylabel('Height (km)')
+
+	if labels is not None:
+		legend = plt.legend()
+		f = legend.get_frame()
+		f.set_facecolor('k')
+		f.set_linewidth(0)
+		f.set_alpha(0.1)
+
 def plot(plot_type, d, output,
 	# ylim=[0, 7],
 	# backscatter_sum=False,
@@ -167,6 +208,7 @@ def plot(plot_type, d, output,
 	width=None,
 	height=None,
 	lr=False,
+	grid=False,
 	**kwargs
 ):
 
@@ -255,19 +297,30 @@ def plot(plot_type, d, output,
 		# plt.suptitle(title, y=0.91)
 	elif plot_type == 'mask':
 		plot_profile(plot_type, d, **kwargs)
+	elif plot_type == 'stats':
+		plot_stats(d, **kwargs)
 	else:
 		raise ValueError('Invalid plot type "%s"' % plot_type)
+
+	if grid:
+		plt.grid(lw=0.5, color='k', alpha=0.3)
 	plt.savefig(output, bbox_inches='tight', dpi=300)
 	# plt.clf()
 	# plt.close()
 	# plt.close(fig)
 
-def run(plot_type, input_, output,
+def run(plot_type, *args,
 	lr=False,
 	subcolumn=0,
-	width=12,
-	height=6,
+	width=None,
+	height=None,
 	dpi=300,
+	grid=False,
+	colors=COLORS,
+	lw=1,
+	labels=None,
+	xlim=[0., 100.],
+	ylim=[0., 15.],
 ):
 	"""
 alcf plot - plot lidar data
@@ -291,39 +344,67 @@ Plot types:
 Options:
 
 - `subcolumn`: Model subcolumn to plot. Default: 0.
-- `width`: Plot width (inches). Default: 10.
+- `width`: Plot width (inches). Default: 5 if `plot_type` is `stats` else 10.
 - `height`: Plot height (inches). Default: 5.
 - `dpi`: DPI. Default: 300.
+- `grid`: Plot grid (`true` or `false`). Default: false.
 
 Plot options:
 
 - `backscatter`:
 	- `lr`: Plot lidar ratio (LR), Default: false.
+- `stats`:
+    - `xlim`: x axis limits (%). Default: { 0 100 }.
+    - `ylim`: y axis limits (km). Default: { 0 15 }.
+    - `colors`: Line colors. Default: { #0084c8 #dc0000 #009100 #ffc022 #ba00ff }
+    - `lw`: Line width. Default: 1.
+    - `labels`: Line labels. Default: `none`.
 	"""
+	input_ = args[:-1]
+	output = args[-1]
+
+	if plot_type == 'stats':
+		width = width if width is not None else 5
+		height = 5
+	else:
+		width = width if width is not None else 10
+		height = 5
+
 	opts = {
 		'width': width,
 		'height': height,
 		'lr': lr,
 		'subcolumn': subcolumn,
+		'grid': grid,
+		'colors': colors,
+		'lw': lw,
+		'labels': labels,
+		'xlim': xlim,
+		'ylim': ylim,
 	}
 
 	state = {}
-	if os.path.isdir(input_):
-		files = sorted(os.listdir(input_))
-		for file in files:
-			filename = os.path.join(input_, file)
-			output_filename = os.path.join(
-				output,
-				os.path.splitext(file)[0] + '.png'
-			)
-			print('<- %s' % filename)
-			d = ds.read(filename, VARIABLES)
-			plot(plot_type, d, output_filename, **opts)
-			print('-> %s' % output_filename)
+	if plot_type == 'stats':
+		dd = []
+		for file in input_:
+			print('<- %s' % file)
+			dd += [ds.read(file, VARIABLES)]
+		plot(plot_type, dd, output, **opts)
+		print('-> %s' % output)
 	else:
-		filename = _input
-		output_filename = output_
-		print('<- %s' % filename)
-		d = ds.read(filename, VARIABLES)
-		plot(plot_type, d, output_filename, **opts)
-		print('-> %s' % output_filename)
+		for input1 in input_:
+			if os.path.isdir(input1):
+				for file in files:
+					filename = os.path.join(input_, file)
+					output_filename = os.path.join(
+						output,
+						os.path.splitext(file)[0] + '.png'
+					)
+					print('<- %s' % filename)
+					d = ds.read(filename, VARIABLES)
+					plot(plot_type, d, output_filename, **opts)
+					print('-> %s' % output_filename)
+			else:
+				print('<- %s' % input_)
+				d = ds.read(input_, VARIABLES)
+				plot(plot_type, d, output, **opts)

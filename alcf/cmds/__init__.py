@@ -1,11 +1,11 @@
-import convert
-import model
-import simulate
-import lidar
-import stats
-import compare
-import plot
-import calibrate
+from . import convert
+from . import model
+from . import simulate
+from . import lidar
+from . import stats
+from . import compare
+from . import plot
+from . import calibrate
 
 CMDS = {
 	'convert': convert.run,
