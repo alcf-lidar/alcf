@@ -119,9 +119,6 @@ alcf plot stats <input>... <output> [options]
 
 # TODO:
 
-# Plot lidar mask
-alcf plot mask <input> <output> [<options>]
-
 # Calculate comparison statistics from multiple lidar time series
 alcf compare <input-1> <input-2> [<input-n>...] <output>
 ```
