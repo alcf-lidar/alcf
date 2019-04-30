@@ -2,7 +2,7 @@ import os
 import numpy as np
 import ds_format as ds
 import aquarius_time as aq
-from alcf.algorithms import tsampling, zsampling
+from alcf.algorithms import tsample, zsample
 from alcf import misc
 
 VARIABLES = [

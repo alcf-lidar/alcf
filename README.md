@@ -323,7 +323,7 @@ Default: 0.7.
 	Default: "default".
 - `calibration`: Backscatter calibration algorithm. Available algorithms:
 	"default". Default: "default".
-- `tres`: Time resolution (seconds). Default: 60.
+- `tres`: Time resolution (seconds). Default: 300.
 - `tlim`: `{ <low> <high> }`: Time limits (see Time format below). Default: none.
 - `zres`: Height resolution (m). Default: 50.
 - `zlim`: `{ <low> <high> }`: Height limits (m). Default: { 0 15000 }.
@@ -397,7 +397,7 @@ Options:
 
 - `subcolumn`: Model subcolumn to plot. Default: 0.
 - `width`: Plot width (inches). Default: 5 if `plot_type` is `stats` else 10.
-- `height`: Plot height (inches). Default: 5.
+- `height`: Plot height (inches). Default: 5 if `plot_type` is `stats` else 4.
 - `dpi`: DPI. Default: 300.
 - `grid`: Plot grid (`true` or `false`). Default: false.
 
@@ -405,6 +405,9 @@ Plot options:
 
 - `backscatter`:
 	- `lr`: Plot lidar ratio (LR), Default: false.
+	- `sigma`: Suppress backscatter less than a number of standard deviations
+		from the mean backscatter (real). Default: 3.
+	- `plot_cloud_mask`: Plot cloud mask. Default: false.
 - `stats`:
     - `xlim`: x axis limits (%). Default: { 0 100 }.
     - `ylim`: y axis limits (km). Default: { 0 15 }.
