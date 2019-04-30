@@ -2,7 +2,7 @@ import numpy as np
 from alcf import misc
 from alcf.algorithms import interp
 
-def zsampling(d, zres=None, zlim=None):
+def zsample(d, zres=None, zlim=None):
 	b = d['backscatter']
 	if len(b.shape) == 3:
 		n, m, l = b.shape
@@ -47,4 +47,4 @@ def zsampling(d, zres=None, zlim=None):
 	d['.']['zfull']['.dims'] = ['level']
 
 def stream(dd, state, zres=None, zlim=None, **options):
-	return misc.stream(dd, state, zsampling, zres=zres, zlim=zlim)
+	return misc.stream(dd, state, zsample, zres=zres, zlim=zlim)

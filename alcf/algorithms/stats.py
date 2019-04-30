@@ -1,7 +1,7 @@
 import numpy as np
 
 def stats_map(d, stats):
-	stats['zfull'] = stats.get('zfull', d['zfull'][0,:])
+	stats['zfull'] = stats.get('zfull', d['zfull'])
 	stats['n'] = stats.get('n', 0)
 	if len(d['cloud_mask'].shape) == 3:
 		n, m, l = d['cloud_mask'].shape
@@ -15,8 +15,6 @@ def stats_map(d, stats):
 		np.zeros(dims, dtype=np.float64)
 	)
 	for i in range(n):
-		if not np.all(d['zfull'][i,:] == stats['zfull']):
-			raise ValueError('Irregular vertical zfull - interpolate with "alcf lidar ... zres: <zres>" first')
 		if l > 0:
 			stats['cloud_occurrence'][:,:] += d['cloud_mask'][i,:,:]
 		else:

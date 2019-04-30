@@ -7,12 +7,14 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 from matplotlib.dates import date2num, AutoDateFormatter, AutoDateLocator
-from matplotlib.colors import ListedColormap, Normalize
+from matplotlib.colors import ListedColormap, Normalize, BoundaryNorm
 import scipy.ndimage as ndimage
 import aquarius_time as aq
 import ds_format as ds
 from alcf import misc
 from alcf.lidars import LIDARS
+
+mpl.use('Agg')
 
 COLORS = [
 	'#0084c8',
@@ -25,10 +27,12 @@ COLORS = [
 VARIABLES = [
 	'time',
 	'backscatter',
+	'backscatter_sd',
 	'zfull',
 	'lr',
 	'cloud_occurrence',
 	'n',
+	'cloud_mask',
 ]
 
 # COLORS_GREY = [
@@ -45,49 +49,53 @@ VARIABLES = [
 # 	s_lat = '%d$^\circ$N' % lat if lat > 0 else '%d$^\circ$S' % -lat
 # 	return s_lat + ' ' + s_lon
 
-def plot_profile(plot_type, d, subcolumn=0): #tt, z, bf, grey=False, xlim=None, ylim=None, track=None):
-	# if grey:
-	# 	cmap = ListedColormap(COLORS_GREY[1:-1])
-	# 	levels = np.arange(10, 60, 10)
-	# 	under = COLORS_GREY[0]
-	# 	over = COLORS_GREY[-1]
-	# else:
+def plot_profile(plot_type, d, subcolumn=0, sigma=0., **opts):
 	if plot_type == 'backscatter':
-		cmap = 'nipy_spectral'
+		cmap = 'viridis'
 		levels = np.arange(20, 201, 20)
-		under = '#ffffff'
-		over = '#990000'
-		# print(d['time'].shape, d['zfull'].shape, d['backscatter'].shape)
-
-		# time_dt = aq.to_datetime(d['time'])
+		norm = Normalize(20, 200)
+		under = '#222222'
+		#over = '#990000'
 		if len(d['backscatter'].shape) == 3:
 			b = d['backscatter'][:,:,subcolumn]
+			cloud_mask = d['cloud_mask'][:,:,subcolumn]
+			b_sd = d['backscatter_sd'][:,:,subcolumn] if 'backscatter_sd' in d \
+				else np.zeros(b.shape, dtype=np.float64)
 		else:
 			b = d['backscatter']
-		cf = plt.contourf(d['time'], d['zfull']*1e-3, b.T*1e6,
+			cloud_mask = d['cloud_mask']
+			b_sd = d['backscatter_sd'] if 'backscatter_sd' in d \
+				else np.zeros(b.shape, dtype=np.float64)
+		t1 = d['time'][0] - 0.5*(d['time'][1] - d['time'][0])
+		t2 = d['time'][-1] + 0.5*(d['time'][-1] - d['time'][-2])
+		z1 = d['zfull'][0] - 0.5*(d['zfull'][1] - d['zfull'][0])
+		z2 = d['zfull'][-1] + 0.5*(d['zfull'][-1] - d['zfull'][-2])
+
+		if sigma > 0.:
+			b[b < (b - sigma*b_sd)] = 0.
+		im = plt.imshow((b - sigma*b_sd).T*1e6,
+			extent=(t1, t2, z1*1e-3, z2*1e-3),
+			aspect='auto',
+			origin='bottom',
+			norm=norm,
 			cmap=cmap,
-			levels=levels,
-			extend='both',
 		)
-		cf.cmap.set_under(under)
-		cf.cmap.set_over(over)
-		cf.set_clim(10, 200)
-		# plt.grid(color='k', lw=0.1, alpha=0.5)
+		im.cmap.set_under(under)
+		# im.cmap.set_over(over)
 		plt.colorbar(
-			# orientation='horizontal',
 			pad=0.02,
 			label=u'Backscatter (×10$^{-6}$ m$^{-1}$sr$^{-1}$)',
 			fraction=0.07,
 			aspect=30,
 		)
-	elif plot_type == 'mask':
-		pass
-	else:
-		raise ValueError('Invalid plot type "%s"' % plot_type)
-	# if ylim is not None:
-	# 	plt.ylim(ylim[0], ylim[1])
-	# if xlim is not None:
-	# 	plt.xlim(xlim[0], xlim[1])
+		if opts.get('cloud_mask'):
+			cf = plt.contour(d['time'], d['zfull']*1e-3, cloud_mask.T,
+				colors='red',
+				linewidths=0.3,
+				linestyles='dashed',
+				levels=[-1., 0.5, 2.],
+			)
+		# plt.grid(color='k', lw=0.1, alpha=0.5)
 	plt.xlabel('Time (UTC)')
 	plt.ylabel('Height (km)')
 
@@ -98,7 +106,7 @@ def plot_profile(plot_type, d, subcolumn=0): #tt, z, bf, grey=False, xlim=None, 
 # 			s = format_lonlat(lon, lat)
 # 			return aq.to_datetime(t).strftime('%m-%d %H:%M\n' + s)
 # 		else:
-			return aq.to_datetime(t).strftime('%d/%m\n%H:%M')
+		return aq.to_datetime(t).strftime('%d/%m\n%H:%M')
 
 	formatter = plt.FuncFormatter(formatter_f)
 	locator = AutoDateLocator()
@@ -209,6 +217,7 @@ def plot(plot_type, d, output,
 	height=None,
 	lr=False,
 	grid=False,
+	dpi=300,
 	**kwargs
 ):
 
@@ -272,7 +281,7 @@ def plot(plot_type, d, output,
 	# else:
 	# 	tt = t
 
-	# plt.rc('font', family='Open Sans')
+	plt.rc('font', family='Open Sans')
 	# plt.rc('lines', linewidth=1)
 	if width is not None and height is not None:
 		fig = plt.figure(figsize=[width, height])
@@ -304,7 +313,7 @@ def plot(plot_type, d, output,
 
 	if grid:
 		plt.grid(lw=0.5, color='k', alpha=0.3)
-	plt.savefig(output, bbox_inches='tight', dpi=300)
+	plt.savefig(output, bbox_inches='tight', dpi=dpi)
 	# plt.clf()
 	# plt.close()
 	# plt.close(fig)
@@ -321,6 +330,8 @@ def run(plot_type, *args,
 	labels=None,
 	xlim=[0., 100.],
 	ylim=[0., 15.],
+	sigma=3.,
+	cloud_mask=False,
 ):
 	"""
 alcf plot - plot lidar data
@@ -345,7 +356,7 @@ Options:
 
 - `subcolumn`: Model subcolumn to plot. Default: 0.
 - `width`: Plot width (inches). Default: 5 if `plot_type` is `stats` else 10.
-- `height`: Plot height (inches). Default: 5.
+- `height`: Plot height (inches). Default: 5 if `plot_type` is `stats` else 4.
 - `dpi`: DPI. Default: 300.
 - `grid`: Plot grid (`true` or `false`). Default: false.
 
@@ -353,6 +364,9 @@ Plot options:
 
 - `backscatter`:
 	- `lr`: Plot lidar ratio (LR), Default: false.
+	- `sigma`: Suppress backscatter less than a number of standard deviations
+		from the mean backscatter (real). Default: 3.
+	- `plot_cloud_mask`: Plot cloud mask. Default: false.
 - `stats`:
     - `xlim`: x axis limits (%). Default: { 0 100 }.
     - `ylim`: y axis limits (km). Default: { 0 15 }.
@@ -365,10 +379,10 @@ Plot options:
 
 	if plot_type == 'stats':
 		width = width if width is not None else 5
-		height = 5
+		height = height if height is not None else 5
 	else:
-		width = width if width is not None else 10
-		height = 5
+		width = width if width is not None else 8
+		height = height if height is not None else 4
 
 	opts = {
 		'width': width,
@@ -381,6 +395,8 @@ Plot options:
 		'labels': labels,
 		'xlim': xlim,
 		'ylim': ylim,
+		'sigma': sigma,
+		'cloud_mask': cloud_mask,
 	}
 
 	state = {}
@@ -394,11 +410,11 @@ Plot options:
 	else:
 		for input1 in input_:
 			if os.path.isdir(input1):
-				for file in files:
-					filename = os.path.join(input_, file)
+				for file_ in sorted(os.listdir(input1)):
+					filename = os.path.join(input1, file_)
 					output_filename = os.path.join(
 						output,
-						os.path.splitext(file)[0] + '.png'
+						os.path.splitext(file_)[0] + '.png'
 					)
 					print('<- %s' % filename)
 					d = ds.read(filename, VARIABLES)

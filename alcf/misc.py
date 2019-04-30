@@ -1,6 +1,7 @@
 import copy
 import numpy as np
 import ds_format as ds
+import aquarius_time as aq
 
 def parse_time(time):
 	if len(time) != 2:
@@ -18,8 +19,7 @@ def aggregate(dd, state, period):
 		return dd
 	dd0 = []
 	dd1 = []
-	t1 = np.floor(dd[0]['time'][0] - 0.5) + 0.5
-	t1 += np.floor((dd[0]['time'][0] - t1)/period)*period
+	t1 = dd[0]['time'][0] - ((dd[0]['time'][0] + 0.5) % period)
 	t2 = t1 + period
 	for i, d in enumerate(dd):
 		if d is None:

@@ -1,4 +1,5 @@
 import os
+import numpy as np
 import ds_format as ds
 import aquarius_time as aq
 from alcf.lidars import LIDARS
@@ -6,7 +7,7 @@ from alcf.algorithms.calibration import CALIBRATION
 from alcf.algorithms.noise_removal import NOISE_REMOVAL
 from alcf.algorithms.cloud_detection import CLOUD_DETECTION
 from alcf.algorithms.cloud_base_detection import CLOUD_BASE_DETECTION
-from alcf.algorithms import tsampling, zsampling, lidar_ratio
+from alcf.algorithms import tsample, zsample, output_sample, lidar_ratio
 from alcf import misc
 
 VARIABLES = [
@@ -70,7 +71,7 @@ Default: 0.7.
 	Default: "default".
 - `calibration`: Backscatter calibration algorithm. Available algorithms:
 	"default". Default: "default".
-- `tres`: Time resolution (seconds). Default: 60.
+- `tres`: Time resolution (seconds). Default: 300.
 - `tlim`: `{ <low> <high> }`: Time limits (see Time format below). Default: none.
 - `zres`: Height resolution (m). Default: 50.
 - `zlim`: `{ <low> <high> }`: Height limits (m). Default: { 0 15000 }.
@@ -127,24 +128,31 @@ Algorithm options:
 	calibration_coeff = lidar.CALIBRATION_COEFF
 
 	def write(d, output):
-		filename = os.path.join(output, '%s.nc' % aq.to_iso(d['time'][0]))
+		if len(d['time']) == 0:
+			return
+		t1 = d['time'][0]
+		if len(d['time'] > 1):
+			t1 -= 0.5*(d['time'][1] - d['time'][0])
+		t1 = np.round(t1*86400.)/86400.
+		filename = os.path.join(output, '%s.nc' % aq.to_iso(t1))
 		ds.to_netcdf(filename, d)
 		print('-> %s' % filename)
 		return []
 
 	def output_stream(dd, state, output_sampling=None, **options):
-		if output_sampling is not None:
-			state['aggregate_state'] = state.get('aggregate_state', {})
-			dd = misc.aggregate(dd, state['aggregate_state'],
-				output_sampling/60./60./24.
-			)
+		# if output_sampling is not None:
+		# 	state['aggregate_state'] = state.get('aggregate_state', {})
+		# 	dd = misc.aggregate(dd, state['aggregate_state'],
+		# 		output_sampling/60./60./24.
+		# 	)
 		return misc.stream(dd, state, write, output=output)
 
 	def process(dd, state, **options):
 		state['noise_removal'] = state.get('noise_removal', {})
 		state['calibration'] = state.get('calibration', {})
-		state['tsampling'] = state.get('tsampling', {})
-		state['zsampling'] = state.get('zsampling', {})
+		state['tsample'] = state.get('tsample', {})
+		state['zsample'] = state.get('zsample', {})
+		state['output_sample'] = state.get('output_sample', {})
 		state['cloud_detection'] = state.get('cloud_detection', {})
 		state['cloud_base_detection'] = state.get('cloud_base_detection', {})
 		state['lidar_ratio'] = state.get('lidar_ratio', {})
@@ -154,15 +162,23 @@ Algorithm options:
 		if calibration_mod is not None:
 			dd = calibration_mod.stream(dd, state['calibration'], **options)
 		if zres is not None or zlim is not None:
-			dd = zsampling.stream(dd, state['zsampling'], zres=zres, zlim=zlim)
+			dd = zsample.stream(dd, state['zsample'], zres=zres, zlim=zlim)
 		if tres is not None or tlim is not None:
-			dd = tsampling.stream(dd, state['tsampling'], tres=tres/24./60./60., tlim=tlim)
+			dd = tsample.stream(dd, state['tsample'],
+				tres=tres/86400.,
+				tlim=tlim
+			)
+		if output_sampling is not None:
+			dd = output_sample.stream(dd, state['output_sample'],
+				tres=tres/86400.,
+				output_sampling=output_sampling/86400.,
+			)
 		if cloud_detection_mod is not None:
 			dd = cloud_detection_mod.stream(dd, state['cloud_detection'], **options)
 		if cloud_base_detection_mod is not None:
 			dd = cloud_base_detection_mod.stream(dd, state['cloud_base_detection'], **options)
 		dd = lidar_ratio.stream(dd, state['lidar_ratio'], eta=eta)
-		dd = output_stream(dd, state['output'], output_sampling=output_sampling)
+		dd = output_stream(dd, state['output']) #, output_sampling=output_sampling)
 		return dd
 
 	options['output'] = output
