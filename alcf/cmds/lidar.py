@@ -66,14 +66,14 @@ Options:
 
 - `eta`: Multiple-scattering factor to assume in lidar ratio calculation.
 Default: 0.7.
-- `cloud_detection`: Cloud detection algorithm. Available algorithms: "default".
-	Default: "default".
-- `cloud_base_detection`: Cloud base detection algorithm. Available algorithms:
-	"default". Default: "default".
-- `noise_removal`: Noise removal algorithm. Available algorithms: "default".
-	Default: "default".
-- `calibration`: Backscatter calibration algorithm. Available algorithms:
-	"default". Default: "default".
+- `cloud_detection`: Cloud detection algorithm.
+    Available algorithms: `default`, `none`. Default: `default`.
+- `cloud_base_detection`: Cloud base detection algorithm.
+    Available algorithms: `default`, `none`. Default: `default`.
+- `noise_removal`: Noise removal algorithm.
+    Available algorithms: `default`, `none`.  Default: `default`.
+- `calibration`: Backscatter calibration algorithm.
+    Available algorithms: `default`, `none`. Default: `default`.
 - `tres`: Time resolution (seconds). Default: 300 (5 min).
 - `tlim`: `{ <low> <high> }`: Time limits (see Time format below). Default: none.
 - `zres`: Height resolution (m). Default: 50.
@@ -89,19 +89,23 @@ Algorithm options:
             Default: 20e-6 sr^-1.m^-1.
         - `cloud_nsd`: Number of noise standard deviations to subtract.
         	Default: 3.
+	- `none`: disable cloud detection
 
 - Cloud base detection:
 	- `default`: cloud base detection based cloud mask produced by the cloud
 		detection algorithm
+	- `none`: disable cloud base detection
 
 - Calibration:
     - `default`: multiply backscatter by calibration coefficient
         - `calibration_coeff`: Calibration coefficient. Default: ?.
+	- `none`: disable calibration
 
 - Noise removal:
     - `default`:
         - `noise_removal_sampling`: Sampling period for noise removal (seconds).
         	Default: 300.
+    - `none`: disable noise removal
 	"""
 	# if time is not None:
 	# 	start, end = misc.parse_time(time)
@@ -110,24 +114,30 @@ Algorithm options:
 	if lidar is None:
 		raise ValueError('Invalid type: %s' % type_)
 
-	if type_ != 'cosp':
+	noise_removal_mod = None
+	calibration_mod = None
+	cloud_detection_mod = None
+	cloud_base_detection_mod = None
+
+	if type_ != 'cosp' and noise_removal is not None:
 		noise_removal_mod = NOISE_REMOVAL.get(noise_removal)
 		if noise_removal_mod is None:
 			raise ValueError('Invalid noise removal algorithm: %s' % noise_removal)
-	else:
-		noise_removal_mod = None
 
-	calibration_mod = CALIBRATION.get(calibration)
-	if calibration_mod is None:
-		raise ValueError('Invalid calibration algorithm: %s' % calibration)
+	if calibration is not None:
+		calibration_mod = CALIBRATION.get(calibration)
+		if calibration_mod is None:
+			raise ValueError('Invalid calibration algorithm: %s' % calibration)
 
-	cloud_detection_mod = CLOUD_DETECTION.get(cloud_detection)
-	if cloud_detection_mod is None:
-		raise ValueError('Invalid cloud detection algorithm: %s' % cloud_detection)
+	if cloud_detection is not None:
+		cloud_detection_mod = CLOUD_DETECTION.get(cloud_detection)
+		if cloud_detection_mod is None:
+			raise ValueError('Invalid cloud detection algorithm: %s' % cloud_detection)
 
-	cloud_base_detection_mod = CLOUD_BASE_DETECTION.get(cloud_base_detection)
-	if cloud_base_detection_mod is None:
-		raise ValueError('Invalid cloud base detection algorithm: %s' % cloud_base_detection)
+	if cloud_base_detection is not None:
+		cloud_base_detection_mod = CLOUD_BASE_DETECTION.get(cloud_base_detection)
+		if cloud_base_detection_mod is None:
+			raise ValueError('Invalid cloud base detection algorithm: %s' % cloud_base_detection)
 
 	calibration_coeff = lidar.CALIBRATION_COEFF
 

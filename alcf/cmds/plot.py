@@ -49,7 +49,7 @@ VARIABLES = [
 # 	s_lat = '%d$^\circ$N' % lat if lat > 0 else '%d$^\circ$S' % -lat
 # 	return s_lat + ' ' + s_lon
 
-def plot_profile(plot_type, d, cb_ax, subcolumn=0, sigma=0., **opts):
+def plot_profile(plot_type, d, cax, subcolumn=0, sigma=0., ylim=None, **opts):
 	if plot_type == 'backscatter':
 		cmap = 'viridis'
 		levels = np.arange(20, 201, 20)
@@ -83,7 +83,7 @@ def plot_profile(plot_type, d, cb_ax, subcolumn=0, sigma=0., **opts):
 		im.cmap.set_under(under)
 		# im.cmap.set_over(over)
 		plt.colorbar(
-			cax=cb_ax,
+			cax=cax,
 			label=u'Backscatter (×10$^{-6}$ m$^{-1}$sr$^{-1}$)',
 		)
 		if opts.get('cloud_mask'):
@@ -96,6 +96,8 @@ def plot_profile(plot_type, d, cb_ax, subcolumn=0, sigma=0., **opts):
 		# plt.grid(color='k', lw=0.1, alpha=0.5)
 	plt.xlabel('Time (UTC)')
 	plt.ylabel('Height (km)')
+
+	plt.ylim(ylim[0], ylim[1])
 
 	def formatter_f(t, pos):
 # 		if track is not None:
@@ -298,13 +300,16 @@ def plot(plot_type, d, output,
 				hspace=0.4,
 				wspace=0.05,
 			)
-			cb_ax = plt.subplot(gs[1])
+			cax = plt.subplot(gs[1])
 			ax = plt.subplot(gs[0])
 		else:
 			gs = GridSpec(1, 2,
-				width_ratios=[0.7, 0.3],
+				width_ratios=[0.985, 0.015],
+				wspace=0.05,
 			)
-		plot_profile(plot_type, d, cb_ax, **kwargs
+			cax = plt.subplot(gs[1])
+			ax = plt.subplot(gs[0])
+		plot_profile(plot_type, d, cax, **kwargs
 			# grey=(type_ == 'particle_type'),
 			# xlim=[t1, t2],
 			# ylim=ylim,
