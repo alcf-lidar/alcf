@@ -49,7 +49,7 @@ VARIABLES = [
 # 	s_lat = '%d$^\circ$N' % lat if lat > 0 else '%d$^\circ$S' % -lat
 # 	return s_lat + ' ' + s_lon
 
-def plot_profile(plot_type, d, subcolumn=0, sigma=0., **opts):
+def plot_profile(plot_type, d, cb_ax, subcolumn=0, sigma=0., **opts):
 	if plot_type == 'backscatter':
 		cmap = 'viridis'
 		levels = np.arange(20, 201, 20)
@@ -83,10 +83,8 @@ def plot_profile(plot_type, d, subcolumn=0, sigma=0., **opts):
 		im.cmap.set_under(under)
 		# im.cmap.set_over(over)
 		plt.colorbar(
-			pad=0.02,
+			cax=cb_ax,
 			label=u'Backscatter (×10$^{-6}$ m$^{-1}$sr$^{-1}$)',
-			fraction=0.07,
-			aspect=30,
 		)
 		if opts.get('cloud_mask'):
 			cf = plt.contour(d['time'], d['zfull']*1e-3, cloud_mask.T,
@@ -114,7 +112,7 @@ def plot_profile(plot_type, d, subcolumn=0, sigma=0., **opts):
 	plt.gca().xaxis.set_major_locator(locator)
 
 def plot_lr(d):
-	plt.plot(d['time'], d['lr'], lw=0.8, color='#0087ed')
+	plt.plot(d['time'], d['lr'], lw=0.7, color='#0087ed')
 	locator = AutoDateLocator()
 	plt.gca().xaxis.set_major_locator(locator)
 	plt.grid(lw=0.1, color='black')
@@ -124,6 +122,7 @@ def plot_lr(d):
 	plt.gca().xaxis.set_major_formatter(formatter)
 	# if xlim is not None:
 	# 	plt.xlim(xlim[0], xlim[1])
+	plt.xlim(np.min(d['time']), np.max(d['time']))
 	plt.ylim(0, 50)
 	plt.ylabel('Lidar ratio (sr)')
 	plt.xlabel('Time (UTC)')
@@ -281,16 +280,31 @@ def plot(plot_type, d, output,
 	# else:
 	# 	tt = t
 
-	plt.rc('font', family='Open Sans')
-	# plt.rc('lines', linewidth=1)
+	mpl.rcParams['font.family'] = 'Open Sans'
+	mpl.rcParams['axes.linewidth'] = 0.5
+	mpl.rcParams['xtick.major.size'] = 3
+	mpl.rcParams['xtick.major.width'] = 0.5
+	mpl.rcParams['ytick.major.size'] = 3
+	mpl.rcParams['ytick.major.width'] = 0.5
+
 	if width is not None and height is not None:
 		fig = plt.figure(figsize=[width, height])
 
 	if plot_type == 'backscatter':
 		if lr:
-			gs = GridSpec(2, 1, height_ratios=[0.7, 0.3], hspace=0.3)
-			plt.subplot(gs[0])
-		plot_profile(plot_type, d, **kwargs
+			gs = GridSpec(2, 2,
+				width_ratios=[0.985, 0.015],
+				height_ratios=[0.7, 0.3],
+				hspace=0.4,
+				wspace=0.05,
+			)
+			cb_ax = plt.subplot(gs[1])
+			ax = plt.subplot(gs[0])
+		else:
+			gs = GridSpec(1, 2,
+				width_ratios=[0.7, 0.3],
+			)
+		plot_profile(plot_type, d, cb_ax, **kwargs
 			# grey=(type_ == 'particle_type'),
 			# xlim=[t1, t2],
 			# ylim=ylim,
@@ -300,12 +314,10 @@ def plot(plot_type, d, output,
 		# if type_ == 'particle_type':
 		# 	plot_particle_type()
 		if lr:
-			plt.subplot(gs[1])
+			plt.subplot(gs[2])
 			plot_lr(d)
 		#plot_lr(t, 2.0*0.7/b_int, xlim=[t1, t2])
 		# plt.suptitle(title, y=0.91)
-	elif plot_type == 'mask':
-		plot_profile(plot_type, d, **kwargs)
 	elif plot_type == 'stats':
 		plot_stats(d, **kwargs)
 	else:
@@ -381,8 +393,8 @@ Plot options:
 		width = width if width is not None else 5
 		height = height if height is not None else 5
 	else:
-		width = width if width is not None else 8
-		height = height if height is not None else 4
+		width = width if width is not None else 10
+		height = height if height is not None else 6
 
 	opts = {
 		'width': width,

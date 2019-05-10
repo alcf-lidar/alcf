@@ -1,4 +1,5 @@
 import os
+import sys
 import ds_format as ds
 from alcf.algorithms import interp
 from alcf.algorithms import stats
@@ -7,13 +8,14 @@ from alcf.misc import parse_time
 VARIABLES = [
 	'cloud_mask',
 	'zfull',
+	'time',
 ]
 
-def run(input_, output, time=None):
+def run(input_, output, tlim=None):
 	"""
 alcf stats - calculate cloud occurrence statistics
 
-Usage: `alcf stats <input> <output> [time: { <start> <end> }]`
+Usage: `alcf stats <input> <output> [tlim: { <start> <end> }]`
 
 Arguments:
 
@@ -27,9 +29,11 @@ Time format:
 "YYYY-MM-DD[THH:MM[:SS]]", where YYYY is year, MM is month, DD is day,
 HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
 	"""
-	time_jd = parse_time(time) if time is not None else None
+	tlim_jd = parse_time(tlim) if tlim is not None else None
 	state = {}
-	options = {}
+	options = {
+		'tlim': tlim_jd,
+	}
 
 	if os.path.isdir(input_):
 		files = os.listdir(input_)

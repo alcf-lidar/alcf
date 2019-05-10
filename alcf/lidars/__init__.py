@@ -6,6 +6,7 @@ from . import cosp
 LIDARS = {
 	'chm15k': chm15k,
 	'cl51': cl51,
+	'cl31': cl51,
 	'mpl': mpl,
 	'cosp': cosp,
 }

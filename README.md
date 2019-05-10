@@ -304,6 +304,7 @@ Arguments:
 Types:
 
 - `chm15k`: Lufft CHM 15k
+- `cl31`: Vaisala CL31
 - `cl51`: Vaisala CL51
 - `mpl`: Sigma Space MiniMPL
 - `cosp`: COSP simulated lidar
@@ -320,11 +321,12 @@ Default: 0.7.
 	Default: "default".
 - `calibration`: Backscatter calibration algorithm. Available algorithms:
 	"default". Default: "default".
-- `tres`: Time resolution (seconds). Default: 300.
+- `tres`: Time resolution (seconds). Default: 300 (5 min).
 - `tlim`: `{ <low> <high> }`: Time limits (see Time format below). Default: none.
 - `zres`: Height resolution (m). Default: 50.
 - `zlim`: `{ <low> <high> }`: Height limits (m). Default: { 0 15000 }.
-- `output_sampling`: Output sampling period (seconds). Default: 86400.
+- `output_sampling`: Output sampling period (seconds).
+    Default: 86400 (24 hours).
 
 Algorithm options:
 
@@ -340,7 +342,7 @@ Algorithm options:
 		detection algorithm
 
 - Calibration:
-    - `default`:
+    - `default`: multiply backscatter by calibration coefficient
         - `calibration_coeff`: Calibration coefficient. Default: ?.
 
 - Noise removal:
@@ -354,7 +356,7 @@ Algorithm options:
 
 alcf stats - calculate cloud occurrence statistics
 
-Usage: `alcf stats <input> <output> [time: { <start> <end> }]`
+Usage: `alcf stats <input> <output> [tlim: { <start> <end> }]`
 
 Arguments:
 

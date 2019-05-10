@@ -1,6 +1,6 @@
 import numpy as np
 
-def stats_map(d, stats):
+def stats_map(d, stats, tlim=None, **kwargs):
 	stats['zfull'] = stats.get('zfull', d['zfull'])
 	stats['n'] = stats.get('n', 0)
 	if len(d['cloud_mask'].shape) == 3:
@@ -14,14 +14,22 @@ def stats_map(d, stats):
 		'cloud_occurrence',
 		np.zeros(dims, dtype=np.float64)
 	)
+	if tlim is not None:
+		mask = (d['time'] >= tlim[0]) & (d['time'] < tlim[1])
+	else:
+		mask = np.zeros(n, dtype=np.bool)
+	if not np.any(mask):
+		return
 	for i in range(n):
+		if not mask[i]:
+			continue
 		if l > 0:
 			stats['cloud_occurrence'][:,:] += d['cloud_mask'][i,:,:]
 		else:
 			stats['cloud_occurrence'][:] += d['cloud_mask'][i,:]
 		stats['n'] += 1
 
-def stats_reduce(stats):
+def stats_reduce(stats, **kwargs):
 	return {
 		'cloud_occurrence': 100.*stats['cloud_occurrence']/stats['n'],
 		'zfull': stats['zfull'],
@@ -51,6 +59,6 @@ def stream(dd, state, **options):
 	state['stats'] = state.get('stats', {})
 	for d in dd:
 		if d is None:
-			return [stats_reduce(state['stats'])]
-		stats_map(d, state['stats'])
+			return [stats_reduce(state['stats'], **options)]
+		stats_map(d, state['stats'], **options)
 	return []
