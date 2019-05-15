@@ -447,7 +447,7 @@ Plot options:
     - `vlim`: `{ <min> <max }`. Value limits (%) or `none` for auto. If `none`
         and `vlog` is `none`, `min` is set to 1e-3 if less or equal to zero.
         Default: `none`.
-    - 'vlog': use logarithmic scale for values. Default: `false`.
+    - `vlog`: use logarithmic scale for values. Default: `false`.
     - `xlim`: `{ <min> <max> }`. x axis limits (10^6 m-1.sr-1) or non for auto.
         Default: `none`.
     - `zlim`: `{ <min> <max> }`. y axis limits (km) or none for auto.

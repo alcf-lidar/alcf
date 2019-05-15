@@ -71,24 +71,25 @@ Options:
 - `cloud_base_detection`: Cloud base detection algorithm.
     Available algorithms: `default`, `none`. Default: `default`.
 - `eta`: Multiple-scattering factor to assume in lidar ratio calculation.
-Default: 0.7.
+    Default: `0.7`.
 - `noise_removal`: Noise removal algorithm.
     Available algorithms: `default`, `none`.  Default: `default`.
 - `output_sampling`: Output sampling period (seconds).
-    Default: 86400 (24 hours).
-- `tlim`: `{ <low> <high> }`: Time limits (see Time format below). Default: none.
-- `tres`: Time resolution (seconds). Default: 300 (5 min).
-- `zlim`: `{ <low> <high> }`: Height limits (m). Default: { 0 15000 }.
-- `zres`: Height resolution (m). Default: 50.
+    Default: `86400` (24 hours).
+- `tlim`: `{ <low> <high> }`: Time limits (see Time format below).
+    Default: `none`.
+- `tres`: Time resolution (seconds). Default: `300` (5 min).
+- `zlim`: `{ <low> <high> }`: Height limits (m). Default: `{ 0 15000 }`.
+- `zres`: Height resolution (m). Default: `50`.
 
 Algorithm options:
 
 - Cloud detection:
     - `default`: cloud detection based on backscatter threshold
         - `cloud_nsd`: Number of noise standard deviations to subtract.
-        	Default: 3.
+        	Default: `3`.
         - `cloud_threshold`: Cloud detection threshold.
-            Default: 20e-6 sr^-1.m^-1.
+            Default: `20e-6` sr^-1.m^-1.
 	- `none`: disable cloud detection
 
 - Cloud base detection:
