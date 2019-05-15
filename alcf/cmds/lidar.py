@@ -44,7 +44,7 @@ The processing is done in the following order:
 - cloud detection
 - cloud base detection
 
-Usage: `alcf lidar <type> <lidar> <output> [options] [algorithm_options]`
+Usage: `alcf lidar <type> <lidar> <output> [<options>] [<algorithm_options>]`
 
 Arguments:
 

@@ -291,7 +291,7 @@ The processing is done in the following order:
 - cloud detection
 - cloud base detection
 
-Usage: `alcf lidar <type> <lidar> <output> [options] [algorithm_options]`
+Usage: `alcf lidar <type> <lidar> <output> [<options>] [<algorithm_options>]`
 
 Arguments:
 
@@ -313,14 +313,14 @@ Options:
 
 - `eta`: Multiple-scattering factor to assume in lidar ratio calculation.
 Default: 0.7.
-- `cloud_detection`: Cloud detection algorithm. Available algorithms: "default".
-	Default: "default".
-- `cloud_base_detection`: Cloud base detection algorithm. Available algorithms:
-	"default". Default: "default".
-- `noise_removal`: Noise removal algorithm. Available algorithms: "default".
-	Default: "default".
-- `calibration`: Backscatter calibration algorithm. Available algorithms:
-	"default". Default: "default".
+- `cloud_detection`: Cloud detection algorithm.
+    Available algorithms: `default`, `none`. Default: `default`.
+- `cloud_base_detection`: Cloud base detection algorithm.
+    Available algorithms: `default`, `none`. Default: `default`.
+- `noise_removal`: Noise removal algorithm.
+    Available algorithms: `default`, `none`.  Default: `default`.
+- `calibration`: Backscatter calibration algorithm.
+    Available algorithms: `default`, `none`. Default: `default`.
 - `tres`: Time resolution (seconds). Default: 300 (5 min).
 - `tlim`: `{ <low> <high> }`: Time limits (see Time format below). Default: none.
 - `zres`: Height resolution (m). Default: 50.
@@ -336,19 +336,23 @@ Algorithm options:
             Default: 20e-6 sr^-1.m^-1.
         - `cloud_nsd`: Number of noise standard deviations to subtract.
         	Default: 3.
+	- `none`: disable cloud detection
 
 - Cloud base detection:
 	- `default`: cloud base detection based cloud mask produced by the cloud
 		detection algorithm
+	- `none`: disable cloud base detection
 
 - Calibration:
     - `default`: multiply backscatter by calibration coefficient
         - `calibration_coeff`: Calibration coefficient. Default: ?.
+	- `none`: disable calibration
 
 - Noise removal:
     - `default`:
         - `noise_removal_sampling`: Sampling period for noise removal (seconds).
         	Default: 300.
+    - `none`: disable noise removal
 	
 
 ### stats
@@ -356,14 +360,19 @@ Algorithm options:
 
 alcf stats - calculate cloud occurrence statistics
 
-Usage: `alcf stats <input> <output> [tlim: { <start> <end> }]`
+Usage: `alcf stats <input> <output> [<options>]
 
 Arguments:
 
 - `input`: input filename or directory
 - `output`: output filename or directory
-- `start`: start time (see Time format below)
-- `end`: end time (see Time format below)
+
+Options:
+
+- `tlim`: Time limits `{<start> <end> }` (see Time format below).
+	Default: `none`.
+- `blim`: backscatter histogram limits (1e-6 m-1.sr-1). Default: `{ 0 100 }`.
+- `bres`: backscatter histogram resolution (1e-6 m-1.sr-1). Default: `10`.
 
 Time format:
 
@@ -376,7 +385,7 @@ HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
 
 alcf plot - plot lidar data
 
-Usage: `alcf plot <plot_type> <input> <output> [options] [plot_options]`
+Usage: `alcf plot <plot_type> <input> <output> [<options>] [<plot_options>]`
 
 Arguments:
 
@@ -389,14 +398,16 @@ Arguments:
 Plot types:
 
 - `backscatter`: plot backscatter
-- `mask` plot cloud mask
-- `stats` plot statistics
+- `backscatter_hist`: plot backscatter histogram
+- `cloud_occurrence`: plot cloud occurrence
 
 Options:
 
 - `subcolumn`: Model subcolumn to plot. Default: 0.
-- `width`: Plot width (inches). Default: 5 if `plot_type` is `stats` else 10.
-- `height`: Plot height (inches). Default: 5 if `plot_type` is `stats` else 4.
+- `width`: Plot width (inches).
+    Default: 5 if `plot_type` is `cloud_occurrence` else 10.
+- `height`: Plot height (inches).
+    Default: 5 if `plot_type` is `cloud_occurrence` else 4.
 - `dpi`: DPI. Default: 300.
 - `grid`: Plot grid (`true` or `false`). Default: false.
 
@@ -407,9 +418,18 @@ Plot options:
 	- `sigma`: Suppress backscatter less than a number of standard deviations
 		from the mean backscatter (real). Default: 3.
 	- `plot_cloud_mask`: Plot cloud mask. Default: false.
-- `stats`:
-    - `xlim`: x axis limits (%). Default: { 0 100 }.
-    - `ylim`: y axis limits (km). Default: { 0 15 }.
+- `backscatter_hist`:
+    - `xlim`: x axis limits `{ <min> <max> }` (10^6 m-1.sr-1) or non for auto.
+        Default: none.
+    - `zlim`: y axis limits `{ <min> <max> }` (km) or none for auto.
+        Default: none.
+    - `vlim`: value limits `{ <min> <max }` (%) or none for auto. If none and
+        vlog is none, `min` is set to 1e-3 if less or equal to zero.
+        Default: none.
+    - 'vlog': use logarithmic scale for values. Default false.
+- `cloud_occurrence`:
+    - `xlim`: x axis limits `{ <min> <max> }` (%). Default: { 0 100 }.
+    - `ylim`: y axis limits `{ <min> <max> }` (km). Default: { 0 15 }.
     - `colors`: Line colors. Default: { #0084c8 #dc0000 #009100 #ffc022 #ba00ff }
     - `lw`: Line width. Default: 1.
     - `labels`: Line labels. Default: `none`.

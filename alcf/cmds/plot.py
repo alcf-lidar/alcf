@@ -7,7 +7,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 from matplotlib.dates import date2num, AutoDateFormatter, AutoDateLocator
-from matplotlib.colors import ListedColormap, Normalize, BoundaryNorm
+from matplotlib.colors import ListedColormap, Normalize, BoundaryNorm, LogNorm
 import scipy.ndimage as ndimage
 import aquarius_time as aq
 import ds_format as ds
@@ -33,6 +33,8 @@ VARIABLES = [
 	'cloud_occurrence',
 	'n',
 	'cloud_mask',
+	'backscatter_hist',
+	'backscatter_full',
 ]
 
 # COLORS_GREY = [
@@ -177,13 +179,13 @@ def plot_lr(d):
 # 	for s in segments:
 # 		plt.plot(time[s[0]:s[1]], cbh[s[0]:s[1]]*1e-3, color='red')
 
-def plot_stats(dd,
+def plot_cloud_occurrence(dd,
 	colors=COLORS,
 	lw=None,
 	labels=None,
 	subcolumn=0,
-	xlim=None,
-	ylim=None,
+	xlim=[0., 100.],
+	ylim=[0., 15.],
 	**kwargs
 ):
 	for i, d in enumerate(dd):
@@ -208,6 +210,57 @@ def plot_stats(dd,
 		f.set_facecolor('k')
 		f.set_linewidth(0)
 		f.set_alpha(0.1)
+
+def plot_backscatter_hist(d,
+	subcolumn=0,
+	xlim=None,
+	ylim=None,
+	vlim=None,
+	vlog=False,
+	**kwargs
+):
+	if vlim is None:
+		vlim = [
+			np.min(d['backscatter_hist'])*1e2,
+			np.max(d['backscatter_hist'])*1e2
+		]
+
+	if vlog is False:
+		norm = Normalize(vlim[0], vlim[1])
+	else:
+		if vlim[0] <= 0: vlim[0] = 1e-3
+		norm = LogNorm(vlim[0], vlim[1])
+
+	under = '#222222'
+	im = plt.imshow(
+		d['backscatter_hist'].T*1e2
+			if len(d['backscatter_hist'].shape) == 2
+			else d['backscatter_hist'][:,:,subcolumn].T*1e2,
+		origin='lower',
+		aspect='auto',
+		extent=(
+			(1.5*d['backscatter_full'][0] - 0.5*d['backscatter_full'][1])*1e6,
+			(1.5*d['backscatter_full'][-1] - 0.5*d['backscatter_full'][-2])*1e6,
+			(1.5*d['zfull'][0] - 0.5*d['zfull'][1])*1e-3,
+			(1.5*d['zfull'][-1] - 0.5*d['zfull'][-2])*1e-3,
+		),
+		norm=norm,
+	)
+	im.cmap.set_under(under)
+	plt.gca().set_facecolor(under)
+	plt.colorbar(
+		label='Occurrence (%)',
+		pad=0.03,
+		fraction=0.03,
+		aspect='auto',
+		extend='both',
+	)
+	if xlim is not None:
+		plt.xlim(xlim)
+	if ylim is not None:
+		plt.ylim(ylim)
+	plt.xlabel('Total attenuated backscatter coefficient (×10$^{-6}$ m$^{-1}$sr$^{-1}$)')
+	plt.ylabel('Height (km)')
 
 def plot(plot_type, d, output,
 	# ylim=[0, 7],
@@ -323,8 +376,10 @@ def plot(plot_type, d, output,
 			plot_lr(d)
 		#plot_lr(t, 2.0*0.7/b_int, xlim=[t1, t2])
 		# plt.suptitle(title, y=0.91)
-	elif plot_type == 'stats':
-		plot_stats(d, **kwargs)
+	elif plot_type == 'cloud_occurrence':
+		plot_cloud_occurrence(d, **kwargs)
+	elif plot_type == 'backscatter_hist':
+		plot_backscatter_hist(d, **kwargs)
 	else:
 		raise ValueError('Invalid plot type "%s"' % plot_type)
 
@@ -345,15 +400,17 @@ def run(plot_type, *args,
 	colors=COLORS,
 	lw=1,
 	labels=None,
-	xlim=[0., 100.],
-	ylim=[0., 15.],
+	xlim=None,
+	ylim=None,
+	vlim=None,
+	vlog=None,
 	sigma=3.,
 	cloud_mask=False,
 ):
 	"""
 alcf plot - plot lidar data
 
-Usage: `alcf plot <plot_type> <input> <output> [options] [plot_options]`
+Usage: `alcf plot <plot_type> <input> <output> [<options>] [<plot_options>]`
 
 Arguments:
 
@@ -366,14 +423,16 @@ Arguments:
 Plot types:
 
 - `backscatter`: plot backscatter
-- `mask` plot cloud mask
-- `stats` plot statistics
+- `backscatter_hist`: plot backscatter histogram
+- `cloud_occurrence`: plot cloud occurrence
 
 Options:
 
 - `subcolumn`: Model subcolumn to plot. Default: 0.
-- `width`: Plot width (inches). Default: 5 if `plot_type` is `stats` else 10.
-- `height`: Plot height (inches). Default: 5 if `plot_type` is `stats` else 4.
+- `width`: Plot width (inches).
+    Default: 5 if `plot_type` is `cloud_occurrence` else 10.
+- `height`: Plot height (inches).
+    Default: 5 if `plot_type` is `cloud_occurrence` else 4.
 - `dpi`: DPI. Default: 300.
 - `grid`: Plot grid (`true` or `false`). Default: false.
 
@@ -384,9 +443,18 @@ Plot options:
 	- `sigma`: Suppress backscatter less than a number of standard deviations
 		from the mean backscatter (real). Default: 3.
 	- `plot_cloud_mask`: Plot cloud mask. Default: false.
-- `stats`:
-    - `xlim`: x axis limits (%). Default: { 0 100 }.
-    - `ylim`: y axis limits (km). Default: { 0 15 }.
+- `backscatter_hist`:
+    - `xlim`: x axis limits `{ <min> <max> }` (10^6 m-1.sr-1) or non for auto.
+        Default: none.
+    - `zlim`: y axis limits `{ <min> <max> }` (km) or none for auto.
+        Default: none.
+    - `vlim`: value limits `{ <min> <max }` (%) or none for auto. If none and
+        vlog is none, `min` is set to 1e-3 if less or equal to zero.
+        Default: none.
+    - 'vlog': use logarithmic scale for values. Default false.
+- `cloud_occurrence`:
+    - `xlim`: x axis limits `{ <min> <max> }` (%). Default: { 0 100 }.
+    - `ylim`: y axis limits `{ <min> <max> }` (km). Default: { 0 15 }.
     - `colors`: Line colors. Default: { #0084c8 #dc0000 #009100 #ffc022 #ba00ff }
     - `lw`: Line width. Default: 1.
     - `labels`: Line labels. Default: `none`.
@@ -394,7 +462,8 @@ Plot options:
 	input_ = args[:-1]
 	output = args[-1]
 
-	if plot_type == 'stats':
+
+	if plot_type in ('backscatter_hist', 'cloud_occurrence'):
 		width = width if width is not None else 5
 		height = height if height is not None else 5
 	else:
@@ -402,27 +471,33 @@ Plot options:
 		height = height if height is not None else 6
 
 	opts = {
-		'width': width,
-		'height': height,
 		'lr': lr,
 		'subcolumn': subcolumn,
 		'grid': grid,
 		'colors': colors,
 		'lw': lw,
 		'labels': labels,
-		'xlim': xlim,
-		'ylim': ylim,
 		'sigma': sigma,
 		'cloud_mask': cloud_mask,
 	}
 
+	if xlim is not None: opts['xlim'] = xlim
+	if ylim is not None: opts['ylim'] = ylim
+	if vlim is not None: opts['vlim'] = vlim
+	if vlog is not None: opts['vlog'] = vlog
+
 	state = {}
-	if plot_type == 'stats':
+	if plot_type == 'cloud_occurrence':
 		dd = []
 		for file in input_:
 			print('<- %s' % file)
 			dd += [ds.read(file, VARIABLES)]
 		plot(plot_type, dd, output, **opts)
+		print('-> %s' % output)
+	if plot_type == 'backscatter_hist':
+		print('<- %s' % input_[0])
+		d = ds.read(input_[0], VARIABLES)
+		plot(plot_type, d, output, **opts)
 		print('-> %s' % output)
 	else:
 		for input1 in input_:
