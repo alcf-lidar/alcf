@@ -17,6 +17,8 @@ def run(input_, output,
 	tlim=None,
 	blim=[0., 100.],
 	bres=10.,
+	zlim=[0., 15.],
+	zres=100.,
 ):
 	"""
 alcf stats - calculate cloud occurrence statistics
@@ -30,10 +32,12 @@ Arguments:
 
 Options:
 
-- `tlim`: Time limits `{<start> <end> }` (see Time format below).
-	Default: `none`.
 - `blim`: backscatter histogram limits (1e-6 m-1.sr-1). Default: `{ 0 100 }`.
 - `bres`: backscatter histogram resolution (1e-6 m-1.sr-1). Default: `10`.
+- `tlim`: Time limits `{<start> <end> }` (see Time format below).
+	Default: `none`.
+- `zlim`: `{ <low> <high> }`: Height limits (m). Default: `{ 0 15000 }`.
+- `zres`: Height resolution (m). Default: `50`.
 
 Time format:
 

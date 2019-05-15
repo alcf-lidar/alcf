@@ -62,7 +62,7 @@ Usage: `alcf compare <input_1> <input_2> [<input_n>...] <output>`
 
 Arguments:
 
-- input-*: input lidar data directory
+- input_*: input lidar data directory
 - output: output filename
 	"""
 	args = [arg1, arg2, arg3] + list(args)

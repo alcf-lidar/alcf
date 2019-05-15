@@ -428,36 +428,36 @@ Plot types:
 
 Options:
 
-- `subcolumn`: Model subcolumn to plot. Default: 0.
-- `width`: Plot width (inches).
-    Default: 5 if `plot_type` is `cloud_occurrence` else 10.
+- `dpi`: Resolution in dots per inch (DPI). Default: `300`.
+- `grid`: Plot grid (`true` or `false`). Default: `false`.
 - `height`: Plot height (inches).
-    Default: 5 if `plot_type` is `cloud_occurrence` else 4.
-- `dpi`: DPI. Default: 300.
-- `grid`: Plot grid (`true` or `false`). Default: false.
+    Default: `5` if `plot_type` is `cloud_occurrence` else `4`.
+- `subcolumn`: Model subcolumn to plot. Default: `0`.
+- `width`: Plot width (inches).
+    Default: `5` if `plot_type` is `cloud_occurrence` else `10`.
 
 Plot options:
 
 - `backscatter`:
-	- `lr`: Plot lidar ratio (LR), Default: false.
+	- `lr`: Plot lidar ratio (LR), Default: `false`.
+	- `plot_cloud_mask`: Plot cloud mask. Default: `false`.
 	- `sigma`: Suppress backscatter less than a number of standard deviations
-		from the mean backscatter (real). Default: 3.
-	- `plot_cloud_mask`: Plot cloud mask. Default: false.
+		from the mean backscatter (real). Default: `3`.
 - `backscatter_hist`:
-    - `xlim`: x axis limits `{ <min> <max> }` (10^6 m-1.sr-1) or non for auto.
-        Default: none.
-    - `zlim`: y axis limits `{ <min> <max> }` (km) or none for auto.
-        Default: none.
-    - `vlim`: value limits `{ <min> <max }` (%) or none for auto. If none and
-        vlog is none, `min` is set to 1e-3 if less or equal to zero.
-        Default: none.
-    - 'vlog': use logarithmic scale for values. Default false.
+    - `vlim`: `{ <min> <max }`. Value limits (%) or `none` for auto. If `none`
+        and `vlog` is `none`, `min` is set to 1e-3 if less or equal to zero.
+        Default: `none`.
+    - 'vlog': use logarithmic scale for values. Default: `false`.
+    - `xlim`: `{ <min> <max> }`. x axis limits (10^6 m-1.sr-1) or non for auto.
+        Default: `none`.
+    - `zlim`: `{ <min> <max> }`. y axis limits (km) or none for auto.
+        Default: `none`.
 - `cloud_occurrence`:
-    - `xlim`: x axis limits `{ <min> <max> }` (%). Default: { 0 100 }.
-    - `ylim`: y axis limits `{ <min> <max> }` (km). Default: { 0 15 }.
     - `colors`: Line colors. Default: { #0084c8 #dc0000 #009100 #ffc022 #ba00ff }
-    - `lw`: Line width. Default: 1.
     - `labels`: Line labels. Default: `none`.
+    - `lw`: Line width. Default: `1`.
+    - `xlim`: x axis limits `{ <min> <max> }` (%). Default: `{ 0 100 }`.
+    - `ylim`: y axis limits `{ <min> <max> }` (km). Default: `{ 0 15 }`.
 	"""
 	input_ = args[:-1]
 	output = args[-1]
