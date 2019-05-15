@@ -453,7 +453,7 @@ Plot options:
     - `zlim`: `{ <min> <max> }`. y axis limits (km) or none for auto.
         Default: `none`.
 - `cloud_occurrence`:
-    - `colors`: Line colors. Default: { #0084c8 #dc0000 #009100 #ffc022 #ba00ff }
+    - `colors`: Line colors. Default: `{ #0084c8 #dc0000 #009100 #ffc022 #ba00ff }`
     - `labels`: Line labels. Default: `none`.
     - `lw`: Line width. Default: `1`.
     - `xlim`: x axis limits `{ <min> <max> }` (%). Default: `{ 0 100 }`.

@@ -23,7 +23,7 @@ def run(input_, output,
 	"""
 alcf stats - calculate cloud occurrence statistics
 
-Usage: `alcf stats <input> <output> [<options>]
+Usage: `alcf stats <input> <output> [<options>]`
 
 Arguments:
 

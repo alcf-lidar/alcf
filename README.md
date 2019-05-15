@@ -335,8 +335,8 @@ Algorithm options:
     - `default`: cloud detection based on backscatter threshold
         - `cloud_nsd`: Number of noise standard deviations to subtract.
         	Default: `3`.
-        - `cloud_threshold`: Cloud detection threshold.
-            Default: `20e-6` sr^-1.m^-1.
+        - `cloud_threshold`: Cloud detection threshold (sr^-1.m^-1).
+            Default: `20e-6`.
 	- `none`: disable cloud detection
 
 - Cloud base detection:
@@ -361,7 +361,7 @@ Algorithm options:
 
 alcf stats - calculate cloud occurrence statistics
 
-Usage: `alcf stats <input> <output> [<options>]
+Usage: `alcf stats <input> <output> [<options>]`
 
 Arguments:
 
@@ -431,7 +431,7 @@ Plot options:
     - `zlim`: `{ <min> <max> }`. y axis limits (km) or none for auto.
         Default: `none`.
 - `cloud_occurrence`:
-    - `colors`: Line colors. Default: { #0084c8 #dc0000 #009100 #ffc022 #ba00ff }
+    - `colors`: Line colors. Default: `{ #0084c8 #dc0000 #009100 #ffc022 #ba00ff }`
     - `labels`: Line labels. Default: `none`.
     - `lw`: Line width. Default: `1`.
     - `xlim`: x axis limits `{ <min> <max> }` (%). Default: `{ 0 100 }`.
