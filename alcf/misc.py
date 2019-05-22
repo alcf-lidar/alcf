@@ -61,3 +61,10 @@ def stream(dd, state, f, **options):
 		f(d, **options)
 	state['dd'] = []
 	return dd[:(i+1)]
+
+def half(xfull):
+	xhalf = np.zeros(len(xfull) + 1, dtype=xfull.dtype)
+	xhalf[1:-1] = 0.5*(xfull[1:] + xfull[:-1])
+	xhalf[0] = 2.*xfull[0] - xfull[1]
+	xhalf[-1] = 2.*xfull[-1] - xfull[-2]
+	return xhalf

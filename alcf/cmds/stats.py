@@ -17,7 +17,7 @@ def run(input_, output,
 	tlim=None,
 	blim=[0., 100.],
 	bres=10.,
-	zlim=[0., 15.],
+	zlim=[0., 15000.],
 	zres=100.,
 ):
 	"""
@@ -50,6 +50,8 @@ HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
 		'tlim': tlim_jd,
 		'blim': np.array(blim, dtype=np.float64)*1e-6,
 		'bres': bres*1e-6,
+		'zlim': zlim,
+		'zres': zres,
 	}
 
 	if os.path.isdir(input_):

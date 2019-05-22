@@ -431,10 +431,12 @@ Options:
 - `dpi`: Resolution in dots per inch (DPI). Default: `300`.
 - `grid`: Plot grid (`true` or `false`). Default: `false`.
 - `height`: Plot height (inches).
-    Default: `5` if `plot_type` is `cloud_occurrence` else `4`.
+    Default: `5` if `plot_type` is `cloud_occurrence` or `backscatter_hist`
+    else `4`.
 - `subcolumn`: Model subcolumn to plot. Default: `0`.
 - `width`: Plot width (inches).
-    Default: `5` if `plot_type` is `cloud_occurrence` else `10`.
+    Default: `5` if `plot_type` is `cloud_occurrence` or `backscatter_hist`
+    else `10`.
 
 Plot options:
 
@@ -479,6 +481,8 @@ Plot options:
 		'labels': labels,
 		'sigma': sigma,
 		'cloud_mask': cloud_mask,
+		'width': width,
+		'height': height,
 	}
 
 	if xlim is not None: opts['xlim'] = xlim
@@ -494,12 +498,12 @@ Plot options:
 			dd += [ds.read(file, VARIABLES)]
 		plot(plot_type, dd, output, **opts)
 		print('-> %s' % output)
-	if plot_type == 'backscatter_hist':
+	elif plot_type == 'backscatter_hist':
 		print('<- %s' % input_[0])
 		d = ds.read(input_[0], VARIABLES)
 		plot(plot_type, d, output, **opts)
 		print('-> %s' % output)
-	else:
+	elif plot_type == 'backscatter':
 		for input1 in input_:
 			if os.path.isdir(input1):
 				for file_ in sorted(os.listdir(input1)):
@@ -516,3 +520,5 @@ Plot options:
 				print('<- %s' % input_)
 				d = ds.read(input_, VARIABLES)
 				plot(plot_type, d, output, **opts)
+	else:
+		raise ValueError('Invalid plot type "%s"' % plot_type)
