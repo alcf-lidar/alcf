@@ -51,7 +51,7 @@ VARIABLES = [
 # 	s_lat = '%d$^\circ$N' % lat if lat > 0 else '%d$^\circ$S' % -lat
 # 	return s_lat + ' ' + s_lon
 
-def plot_profile(plot_type, d, cax, subcolumn=0, sigma=0., ylim=None, **opts):
+def plot_profile(plot_type, d, cax, subcolumn=0, sigma=0., zlim=None, **opts):
 	if plot_type == 'backscatter':
 		cmap = 'viridis'
 		levels = np.arange(20, 201, 20)
@@ -99,7 +99,8 @@ def plot_profile(plot_type, d, cax, subcolumn=0, sigma=0., ylim=None, **opts):
 	plt.xlabel('Time (UTC)')
 	plt.ylabel('Height (km)')
 
-	plt.ylim(ylim[0], ylim[1])
+	if zlim is not None:
+		plt.ylim(zlim[0]*1e-3, zlim[1]*1e-3)
 
 	def formatter_f(t, pos):
 # 		if track is not None:
@@ -185,7 +186,7 @@ def plot_cloud_occurrence(dd,
 	labels=None,
 	subcolumn=0,
 	xlim=[0., 100.],
-	ylim=[0., 15.],
+	zlim=[0., 15000],
 	**kwargs
 ):
 	for i, d in enumerate(dd):
@@ -200,7 +201,7 @@ def plot_cloud_occurrence(dd,
 			label=(labels[i] if labels is not None else None),
 		)
 	plt.xlim(xlim[0], xlim[1])
-	plt.ylim(ylim[0], ylim[1])
+	plt.ylim(zlim[0]*1e-3, zlim[1]*1e-3)
 	plt.xlabel('Cloud occurrence (%)')
 	plt.ylabel('Height (km)')
 
@@ -214,7 +215,7 @@ def plot_cloud_occurrence(dd,
 def plot_backscatter_hist(d,
 	subcolumn=0,
 	xlim=None,
-	ylim=None,
+	zlim=None,
 	vlim=None,
 	vlog=False,
 	**kwargs
@@ -257,8 +258,8 @@ def plot_backscatter_hist(d,
 	)
 	if xlim is not None:
 		plt.xlim(xlim)
-	if ylim is not None:
-		plt.ylim(ylim)
+	if zlim is not None:
+		plt.ylim(zlim[0]*1e-3, zlim[1]*1e-3)
 	plt.xlabel('Total attenuated backscatter coefficient (×10$^{-6}$ m$^{-1}$sr$^{-1}$)')
 	plt.ylabel('Height (km)')
 
@@ -401,7 +402,7 @@ def run(plot_type, *args,
 	lw=1,
 	labels=None,
 	xlim=None,
-	ylim=None,
+	zlim=None,
 	vlim=None,
 	vlog=None,
 	sigma=3.,
@@ -452,14 +453,14 @@ Plot options:
     - `vlog`: use logarithmic scale for values. Default: `false`.
     - `xlim`: `{ <min> <max> }`. x axis limits (10^6 m-1.sr-1) or non for auto.
         Default: `none`.
-    - `zlim`: `{ <min> <max> }`. y axis limits (km) or none for auto.
+    - `zlim`: `{ <min> <max> }`. y axis limits (m) or none for auto.
         Default: `none`.
 - `cloud_occurrence`:
     - `colors`: Line colors. Default: `{ #0084c8 #dc0000 #009100 #ffc022 #ba00ff }`
     - `labels`: Line labels. Default: `none`.
     - `lw`: Line width. Default: `1`.
     - `xlim`: x axis limits `{ <min> <max> }` (%). Default: `{ 0 100 }`.
-    - `ylim`: y axis limits `{ <min> <max> }` (km). Default: `{ 0 15 }`.
+    - `zlim`: y axis limits `{ <min> <max> }` (m). Default: `{ 0 15 }`.
 	"""
 	input_ = args[:-1]
 	output = args[-1]
@@ -486,7 +487,7 @@ Plot options:
 	}
 
 	if xlim is not None: opts['xlim'] = xlim
-	if ylim is not None: opts['ylim'] = ylim
+	if zlim is not None: opts['zlim'] = zlim
 	if vlim is not None: opts['vlim'] = vlim
 	if vlog is not None: opts['vlog'] = vlog
 

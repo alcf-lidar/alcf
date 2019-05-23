@@ -372,8 +372,11 @@ Options:
 
 - `blim`: backscatter histogram limits (1e-6 m-1.sr-1). Default: `{ 0 100 }`.
 - `bres`: backscatter histogram resolution (1e-6 m-1.sr-1). Default: `10`.
+- `filter`: filter profiles by condition: `cloudy` for cloudy profiles only,
+    `clear` for clear sky profiles only, `none` for all profiles.
+    Default: `none`.
 - `tlim`: Time limits `{<start> <end> }` (see Time format below).
-	Default: `none`.
+    Default: `none`.
 - `zlim`: `{ <low> <high> }`: Height limits (m). Default: `{ 0 15000 }`.
 - `zres`: Height resolution (m). Default: `50`.
 
@@ -409,10 +412,12 @@ Options:
 - `dpi`: Resolution in dots per inch (DPI). Default: `300`.
 - `grid`: Plot grid (`true` or `false`). Default: `false`.
 - `height`: Plot height (inches).
-    Default: `5` if `plot_type` is `cloud_occurrence` else `4`.
+    Default: `5` if `plot_type` is `cloud_occurrence` or `backscatter_hist`
+    else `4`.
 - `subcolumn`: Model subcolumn to plot. Default: `0`.
 - `width`: Plot width (inches).
-    Default: `5` if `plot_type` is `cloud_occurrence` else `10`.
+    Default: `5` if `plot_type` is `cloud_occurrence` or `backscatter_hist`
+    else `10`.
 
 Plot options:
 
@@ -428,14 +433,14 @@ Plot options:
     - `vlog`: use logarithmic scale for values. Default: `false`.
     - `xlim`: `{ <min> <max> }`. x axis limits (10^6 m-1.sr-1) or non for auto.
         Default: `none`.
-    - `zlim`: `{ <min> <max> }`. y axis limits (km) or none for auto.
+    - `zlim`: `{ <min> <max> }`. y axis limits (m) or none for auto.
         Default: `none`.
 - `cloud_occurrence`:
     - `colors`: Line colors. Default: `{ #0084c8 #dc0000 #009100 #ffc022 #ba00ff }`
     - `labels`: Line labels. Default: `none`.
     - `lw`: Line width. Default: `1`.
     - `xlim`: x axis limits `{ <min> <max> }` (%). Default: `{ 0 100 }`.
-    - `ylim`: y axis limits `{ <min> <max> }` (km). Default: `{ 0 15 }`.
+    - `zlim`: y axis limits `{ <min> <max> }` (m). Default: `{ 0 15 }`.
 	
 
 ### compare

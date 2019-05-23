@@ -6,6 +6,7 @@ def stats_map(d, state,
 	tlim=None,
 	blim=None,
 	bres=None,
+	filter=None,
 	zlim=None,
 	zres=None,
 	**kwargs
@@ -18,7 +19,6 @@ def stats_map(d, state,
 		state['zfull2'] = state.get('zfull2', d['zfull'])
 	zhalf = misc.half(d['zfull'])
 	zhalf2 = misc.half(state['zfull2'])
-	state['n'] = state.get('n', 0)
 	state['backscatter_half'] = state.get('backscatter_half',
 		np.arange(blim[0], blim[1] + bres, bres)
 	)
@@ -33,6 +33,7 @@ def stats_map(d, state,
 		dims2 = (m2, l)
 		hist_dims = (o, m, l)
 		hist_dims2 = (o, m2, l)
+		filter_mask_dims = (n, l)
 	else:
 		n, m = d['cloud_mask'].shape
 		l = 0
@@ -40,6 +41,10 @@ def stats_map(d, state,
 		dims2 = (m2,)
 		hist_dims = (o, m)
 		hist_dims2 = (o, m2)
+		filter_mask_dims = (n,)
+	state['n'] = state.get('n',
+		0 if l == 0 else np.zeros(l, dtype=np.int64)
+	)
 	state['cloud_occurrence'] = state.get(
 		'cloud_occurrence',
 		np.zeros(dims2, dtype=np.float64)
@@ -54,16 +59,26 @@ def stats_map(d, state,
 		mask = (d['time'] >= tlim[0]) & (d['time'] < tlim[1])
 	else:
 		mask = np.ones(n, dtype=np.bool)
+
+	if filter == 'cloudy':
+		filter_mask = np.any(d['cloud_mask'], axis=1)
+	elif filter == 'clear':
+		filter_mask = ~np.any(d['cloud_mask'], axis=1)
+	else:
+		filter_mask = np.ones(filter_mask_dims, dtype=np.bool)
+
 	if not np.any(mask):
 		return
 	for j in range(m):
 		if l > 0:
 			for k in range(l):
 				backscatter_hist_tmp[:,j,k] += np.histogram(
-					d['backscatter'][:,j,k], bins=state['backscatter_half'])[0]
+					d['backscatter'][filter_mask[:,k],j,k],
+					bins=state['backscatter_half'])[0]
 		else:
 			backscatter_hist_tmp[:,j] += np.histogram(
-				d['backscatter'][:,j], bins=state['backscatter_half'])[0]
+				d['backscatter'][filter_mask,j],
+				bins=state['backscatter_half'])[0]
 	for i in range(o):
 		if l > 0:
 			for k in range(l):
@@ -82,10 +97,16 @@ def stats_map(d, state,
 		if not mask[i]:
 			continue
 		if l > 0:
-			cloud_occurrence_tmp[:,:] += d['cloud_mask'][i,:,:]
+			for k in range(l):
+				if not filter_mask[i,k]:
+					continue
+				cloud_occurrence_tmp[:,:] += d['cloud_mask'][i,:,k]
+				state['n'][k] += 1
 		else:
+			if not filter_mask[i]:
+				continue
 			cloud_occurrence_tmp[:] += d['cloud_mask'][i,:]
-		state['n'] += 1
+			state['n'] += 1
 	if l > 0:
 		for k in range(l):
 			state['cloud_occurrence'][:,k] += interp(
@@ -101,10 +122,17 @@ def stats_map(d, state,
 		)
 
 def stats_reduce(state, **kwargs):
-	if state['n'] != 0:
-		state['backscatter_hist'] /= state['n']
+	if state['cloud_occurrence'].shape == 2:
+		for k in range(state['n'].shape[1]):
+			if state['n'][k] > 0:
+				state['backscatter_hist'][:,:,k] /= state['n'][k]
+				state['cloud_occurrence'][:,k] /= state['n'][k]
+	else:
+		if state['n'] != 0:
+			state['backscatter_hist'] /= state['n']
+			state['cloud_occurrence'] /= state['n']
 	return {
-		'cloud_occurrence': 100.*state['cloud_occurrence']/state['n'],
+		'cloud_occurrence': 100.*state['cloud_occurrence'],
 		'zfull': state['zfull2'],
 		'n': state['n'],
 		'backscatter_full': state['backscatter_full'],
@@ -123,7 +151,9 @@ def stats_reduce(state, **kwargs):
 				'units': '%',
 			},
 			'n': {
-				'.dims': [],
+				'.dims': ['column'] \
+					if len(state['cloud_occurrence'].shape) == 2 \
+					else [],
 				'long_name': 'number_of_profiles',
 				'units': '1',
 			},
