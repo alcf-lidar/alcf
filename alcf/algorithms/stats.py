@@ -60,6 +60,11 @@ def stats_map(d, state,
 	else:
 		mask = np.ones(n, dtype=np.bool)
 
+	if l > 0:
+		mask &= np.all(~np.isnan(d['backscatter']), axis=(1, 2))
+	else:
+		mask &= np.all(~np.isnan(d['backscatter']), axis=(1,))
+
 	if filter == 'cloudy':
 		filter_mask = np.any(d['cloud_mask'], axis=1)
 	elif filter == 'clear':

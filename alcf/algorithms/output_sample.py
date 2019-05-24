@@ -26,7 +26,7 @@ def output_sample(d, tres, output_sampling):
 		size = x.shape
 		size2 = list(size)
 		size2[i] = n2
-		x2 = np.zeros(size2, dtype=x.dtype)
+		x2 = np.full(size2, np.nan, dtype=x.dtype)
 		for j in range(n2):
 			mask = np.maximum(0,
 				np.minimum(time_half[1:], time_half2[j + 1]) -
@@ -44,7 +44,8 @@ def output_sample(d, tres, output_sampling):
 					slice(None) if l != i else k
 					for l in range(len(size))
 				])
-				x2[sel2] += x[sel]*mask[k]
+				x2[sel2] = np.where(np.isnan(x2[sel2])*mask[k], 0, x2[sel2]) + \
+					x[sel]*mask[k]
 		d[var] = x2
 	d['time'] = time2
 
