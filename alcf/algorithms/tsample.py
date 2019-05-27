@@ -9,7 +9,7 @@ def tsample(d, tres):
 	m = d['backscatter'].shape[1]
 	d['backscatter'] = np.mean(d['backscatter'], axis=0, keepdims=True)
 	if 'backscatter_sd' in d:
-		d['backscatter_sd'] = np.mean(d['backscatter_sd'], axis=0, keepdims=True)
+		d['backscatter_sd'] = np.sqrt(1./n*np.mean(d['backscatter_sd']**2, axis=0, keepdims=True))
 	d['time'] = np.array(np.mean(d['time'], keepdims=True))
 
 def stream(dd, state, tres=None, tlim=None, **options):

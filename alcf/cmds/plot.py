@@ -51,51 +51,58 @@ VARIABLES = [
 # 	s_lat = '%d$^\circ$N' % lat if lat > 0 else '%d$^\circ$S' % -lat
 # 	return s_lat + ' ' + s_lon
 
-def plot_profile(plot_type, d, cax, subcolumn=0, sigma=0., zlim=None, **opts):
-	if plot_type == 'backscatter':
-		cmap = 'viridis'
-		levels = np.arange(20, 201, 20)
-		norm = Normalize(20, 200)
-		under = '#222222'
-		#over = '#990000'
-		if len(d['backscatter'].shape) == 3:
-			b = d['backscatter'][:,:,subcolumn]
-			cloud_mask = d['cloud_mask'][:,:,subcolumn]
-			b_sd = d['backscatter_sd'][:,:,subcolumn] if 'backscatter_sd' in d \
-				else np.zeros(b.shape, dtype=np.float64)
-		else:
-			b = d['backscatter']
-			cloud_mask = d['cloud_mask']
-			b_sd = d['backscatter_sd'] if 'backscatter_sd' in d \
-				else np.zeros(b.shape, dtype=np.float64)
-		t1 = d['time'][0] - 0.5*(d['time'][1] - d['time'][0])
-		t2 = d['time'][-1] + 0.5*(d['time'][-1] - d['time'][-2])
-		z1 = d['zfull'][0] - 0.5*(d['zfull'][1] - d['zfull'][0])
-		z2 = d['zfull'][-1] + 0.5*(d['zfull'][-1] - d['zfull'][-2])
+def plot_profile(plot_type, d, cax,
+	subcolumn=0,
+	sigma=0.,
+	zlim=None,
+	vlim=None,
+	**opts
+):
+	cmap = 'viridis'
+	levels = np.arange(20, 201, 20)
+	if vlim is None:
+		vlim = [5, 200]
+	norm = Normalize(vlim[0], vlim[1])
+	under = '#222222'
+	#over = '#990000'
+	if len(d['backscatter'].shape) == 3:
+		b = d['backscatter'][:,:,subcolumn]
+		cloud_mask = d['cloud_mask'][:,:,subcolumn]
+		b_sd = d['backscatter_sd'][:,:,subcolumn] if 'backscatter_sd' in d \
+			else np.zeros(b.shape, dtype=np.float64)
+	else:
+		b = d['backscatter']
+		cloud_mask = d['cloud_mask']
+		b_sd = d['backscatter_sd'] if 'backscatter_sd' in d \
+			else np.zeros(b.shape, dtype=np.float64)
+	t1 = d['time'][0] - 0.5*(d['time'][1] - d['time'][0])
+	t2 = d['time'][-1] + 0.5*(d['time'][-1] - d['time'][-2])
+	z1 = d['zfull'][0] - 0.5*(d['zfull'][1] - d['zfull'][0])
+	z2 = d['zfull'][-1] + 0.5*(d['zfull'][-1] - d['zfull'][-2])
 
-		if sigma > 0.:
-			b[b < (b - sigma*b_sd)] = 0.
-		im = plt.imshow((b - sigma*b_sd).T*1e6,
-			extent=(t1, t2, z1*1e-3, z2*1e-3),
-			aspect='auto',
-			origin='bottom',
-			norm=norm,
-			cmap=cmap,
+	if sigma > 0.:
+		b[b - sigma*b_sd < vlim[0]*1e-6] = 0.
+	im = plt.imshow(b.T*1e6,
+		extent=(t1, t2, z1*1e-3, z2*1e-3),
+		aspect='auto',
+		origin='bottom',
+		norm=norm,
+		cmap=cmap,
+	)
+	im.cmap.set_under(under)
+	# im.cmap.set_over(over)
+	plt.colorbar(
+		cax=cax,
+		label=u'Backscatter (×10$^{-6}$ m$^{-1}$sr$^{-1}$)',
+	)
+	if opts.get('cloud_mask'):
+		cf = plt.contour(d['time'], d['zfull']*1e-3, cloud_mask.T,
+			colors='red',
+			linewidths=0.3,
+			linestyles='dashed',
+			levels=[-1., 0.5, 2.],
 		)
-		im.cmap.set_under(under)
-		# im.cmap.set_over(over)
-		plt.colorbar(
-			cax=cax,
-			label=u'Backscatter (×10$^{-6}$ m$^{-1}$sr$^{-1}$)',
-		)
-		if opts.get('cloud_mask'):
-			cf = plt.contour(d['time'], d['zfull']*1e-3, cloud_mask.T,
-				colors='red',
-				linewidths=0.3,
-				linestyles='dashed',
-				levels=[-1., 0.5, 2.],
-			)
-		# plt.grid(color='k', lw=0.1, alpha=0.5)
+	# plt.grid(color='k', lw=0.1, alpha=0.5)
 	plt.xlabel('Time (UTC)')
 	plt.ylabel('Height (km)')
 
@@ -231,6 +238,12 @@ def plot_backscatter_hist(d,
 	else:
 		if vlim[0] <= 0: vlim[0] = 1e-3
 		norm = LogNorm(vlim[0], vlim[1])
+
+	if xlim is None:
+		xlim = [
+			(1.5*d['backscatter_full'][0] - 0.5*d['backscatter_full'][1])*1e6,
+			(1.5*d['backscatter_full'][-1] - 0.5*d['backscatter_full'][-2])*1e6,
+		]
 
 	under = '#222222'
 	im = plt.imshow(
@@ -447,6 +460,8 @@ Plot options:
 	- `plot_cloud_mask`: Plot cloud mask. Default: `false`.
 	- `sigma`: Suppress backscatter less than a number of standard deviations
 		from the mean backscatter (real). Default: `3`.
+	- `vlim`: `{ <min> <max }`. Value limits (10^6 m-1.sr-1).
+        Default: `{ 5 200 }`.
 - `backscatter_hist`:
     - `vlim`: `{ <min> <max }`. Value limits (%) or `none` for auto. If `none`
         and `vlog` is `none`, `min` is set to 1e-3 if less or equal to zero.
@@ -465,7 +480,6 @@ Plot options:
 	"""
 	input_ = args[:-1]
 	output = args[-1]
-
 
 	if plot_type in ('backscatter_hist', 'cloud_occurrence'):
 		width = width if width is not None else 5

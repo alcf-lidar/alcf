@@ -60,7 +60,8 @@ Types:
 - `cl31`: Vaisala CL31
 - `cl51`: Vaisala CL51
 - `cosp`: COSP simulated lidar
-- `mpl`: Sigma Space MiniMPL
+- `minimpl`: Sigma Space MiniMPL
+- `mpl`: Sigma Space MPL
 
 Options:
 
@@ -89,7 +90,7 @@ Algorithm options:
         - `cloud_nsd`: Number of noise standard deviations to subtract.
         	Default: `3`.
         - `cloud_threshold`: Cloud detection threshold (sr^-1.m^-1).
-            Default: `20e-6`.
+            Default: `5e-6`.
 	- `none`: disable cloud detection
 
 - Cloud base detection:

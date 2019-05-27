@@ -15,8 +15,8 @@ VARIABLES = [
 
 def run(input_, output,
 	tlim=None,
-	blim=[0., 100.],
-	bres=10.,
+	blim=[5., 200.],
+	bres=5.,
 	filter=None,
 	zlim=[0., 15000.],
 	zres=100.,

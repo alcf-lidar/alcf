@@ -37,7 +37,7 @@ def read(filename, vars):
 			for y, m, day, H, M, S
 			in zip(d['year'], d['month'], d['day'], d['hour'], d['minute'], d['second'])
 		], np.float64)
-		dx['time'] += 13.0/24.0
+		# dx['time'] += 13.0/24.0
 	if 'zfull' in vars:
 		zfull1 = np.outer(
 			np.sin(d['elevation_angle']/180.0*np.pi),

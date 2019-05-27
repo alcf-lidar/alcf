@@ -8,5 +8,6 @@ LIDARS = {
 	'cl51': cl51,
 	'cl31': cl51,
 	'mpl': mpl,
+	'minimpl': mpl,
 	'cosp': cosp,
 }
