@@ -1,7 +1,7 @@
 Automatic Lidar and Ceilometer Framework (ALCF)
 ===============================================
 
-**Development status:** in development
+**Development status:** beta
 
 ALCF is an open source command line tool for processing of automatic
 lidar and ceilometer (ALC) data and intercomparison with atmospheric models
@@ -307,7 +307,8 @@ Types:
 - `cl31`: Vaisala CL31
 - `cl51`: Vaisala CL51
 - `cosp`: COSP simulated lidar
-- `mpl`: Sigma Space MiniMPL
+- `minimpl`: Sigma Space MiniMPL
+- `mpl`: Sigma Space MPL
 
 Options:
 
@@ -336,7 +337,7 @@ Algorithm options:
         - `cloud_nsd`: Number of noise standard deviations to subtract.
         	Default: `3`.
         - `cloud_threshold`: Cloud detection threshold (sr^-1.m^-1).
-            Default: `20e-6`.
+            Default: `10e-6`.
 	- `none`: disable cloud detection
 
 - Cloud base detection:
@@ -370,7 +371,7 @@ Arguments:
 
 Options:
 
-- `blim`: backscatter histogram limits (1e-6 m-1.sr-1). Default: `{ 0 100 }`.
+- `blim`: backscatter histogram limits (1e-6 m-1.sr-1). Default: `{ 5 200 }`.
 - `bres`: backscatter histogram resolution (1e-6 m-1.sr-1). Default: `10`.
 - `filter`: filter profiles by condition: `cloudy` for cloudy profiles only,
     `clear` for clear sky profiles only, `none` for all profiles.
@@ -379,6 +380,13 @@ Options:
     Default: `none`.
 - `zlim`: `{ <low> <high> }`: Height limits (m). Default: `{ 0 15000 }`.
 - `zres`: Height resolution (m). Default: `50`.
+- `bsd_lim`: backscatter standard deviation histogram limits (1e-6 m-1.sr-1).
+    Default: `{0 10}`.
+- `bsd_log`: enable/disable logarithmic scale of the backscatter standard
+    deviation histogram (`true` or `false`). Default: `true`.
+- `bsd_res`: backscatter standard deviation histogram resolution
+    (1e-6 m-1.sr-1). Default: `0.1`.
+- `bsd_z`: backscatter standard deviation histogram height (m). Default: `8000`.
 
 Time format:
 
@@ -405,6 +413,7 @@ Plot types:
 
 - `backscatter`: plot backscatter
 - `backscatter_hist`: plot backscatter histogram
+- `backscatter_sd_hist`: plot backscatter standard deviation histogram
 - `cloud_occurrence`: plot cloud occurrence
 
 Options:
@@ -426,6 +435,8 @@ Plot options:
 	- `plot_cloud_mask`: Plot cloud mask. Default: `false`.
 	- `sigma`: Suppress backscatter less than a number of standard deviations
 		from the mean backscatter (real). Default: `3`.
+	- `vlim`: `{ <min> <max }`. Value limits (10^6 m-1.sr-1).
+        Default: `{ 5 200 }`.
 - `backscatter_hist`:
     - `vlim`: `{ <min> <max }`. Value limits (%) or `none` for auto. If `none`
         and `vlog` is `none`, `min` is set to 1e-3 if less or equal to zero.

@@ -1,7 +1,7 @@
 Automatic Lidar and Ceilometer Framework (ALCF)
 ===============================================
 
-**Development status:** in development
+**Development status:** beta
 
 ALCF is an open source command line tool for processing of automatic
 lidar and ceilometer (ALC) data and intercomparison with atmospheric models

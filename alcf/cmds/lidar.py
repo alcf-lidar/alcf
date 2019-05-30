@@ -90,7 +90,7 @@ Algorithm options:
         - `cloud_nsd`: Number of noise standard deviations to subtract.
         	Default: `3`.
         - `cloud_threshold`: Cloud detection threshold (sr^-1.m^-1).
-            Default: `5e-6`.
+            Default: `10e-6`.
 	- `none`: disable cloud detection
 
 - Cloud base detection:
