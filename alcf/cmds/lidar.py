@@ -14,6 +14,7 @@ from alcf import misc
 
 VARIABLES = [
 	'backscatter',
+	'backscatter_mol',
 	'time',
 	'zfull',
 	# 'range',
@@ -212,5 +213,6 @@ Algorithm options:
 				logging.warning(traceback.format_exc())
 		dd = process([None], state, **options)
 	else:
+		print('<- %s' % input_)
 		d = lidar.read(input_, VARIABLES)
 		dd = process([d, None], state, **options)

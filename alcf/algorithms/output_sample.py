@@ -10,7 +10,6 @@ def output_sample(d, tres, output_sampling):
 	dims = ds.get_dims(d)
 	n = dims['time']
 	n2 = int(output_sampling/tres)
-
 	time = d['time']
 	time_half = np.zeros(n + 1, dtype=np.float64)
 	time_half[1:-1] = 0.5*(time[1:] + time[:-1])

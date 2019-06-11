@@ -12,6 +12,7 @@ VARIABLES = [
 	'time',
 	'backscatter',
 	'backscatter_sd',
+	'backscatter_mol',
 ]
 
 def run(input_, output,

@@ -231,12 +231,12 @@ def plot_backscatter_sd_hist(dd,
 		plot_legend()
 
 def plot(plot_type, d, output,
-	title='',
 	width=None,
 	height=None,
 	lr=False,
 	grid=False,
 	dpi=300,
+	title=None,
 	**kwargs
 ):
 	mpl.rcParams['font.family'] = 'Open Sans'
@@ -281,6 +281,10 @@ def plot(plot_type, d, output,
 
 	if grid:
 		plt.grid(lw=0.5, color='k', alpha=0.3)
+
+	if title is not None:
+		plt.title(title)
+
 	plt.savefig(output, bbox_inches='tight', dpi=dpi)
 
 def run(plot_type, *args,
@@ -299,6 +303,7 @@ def run(plot_type, *args,
 	vlog=None,
 	sigma=3.,
 	cloud_mask=False,
+	title=None,
 ):
 	"""
 alcf plot - plot lidar data
@@ -328,6 +333,7 @@ Options:
     Default: `5` if `plot_type` is `cloud_occurrence` or `backscatter_hist`
     else `4`.
 - `subcolumn`: Model subcolumn to plot. Default: `0`.
+- `title`: Plot title.
 - `width`: Plot width (inches).
     Default: `5` if `plot_type` is `cloud_occurrence` or `backscatter_hist`
     else `10`.
@@ -375,6 +381,7 @@ Plot options:
 		'lw': lw,
 		'labels': labels,
 		'sigma': sigma,
+		'title': title,
 		'cloud_mask': cloud_mask,
 		'width': width,
 		'height': height,

@@ -46,5 +46,6 @@ def read(filename, vars):
 	dx['.'] = {
 		x: dx['.'][x]
 		for x in vars
+		if x in VARS
 	}
 	return dx

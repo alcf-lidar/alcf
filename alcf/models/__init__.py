@@ -60,6 +60,7 @@ from . import cmip5
 from . import merra2
 from . import amps
 from . import nzcsm
+from . import nzesm
 
 MODELS = {
 	'amps': amps,
@@ -67,4 +68,5 @@ MODELS = {
 	#'jra55': jra55,
 	'merra2': merra2,
 	'nzcsm': nzcsm,
+	'nzesm': nzesm,
 }

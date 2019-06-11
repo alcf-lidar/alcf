@@ -261,7 +261,14 @@ TODO:
 Model guide
 -----------
 
+Below is a description of the model output supported by ALCF. You might
+have to modify the code for reading the model output depending on the
+exact format of the model output, such as variable names and how they are
+split among the output files.
+
 ### AMPS
+
+**Source:** `alcf/models/amps.py`
 
 ALCF is compatible with the NetCDF AMPS output. You can find the
 [AMPS archive](https://www.earthsystemgrid.org/project/amps.html) on the
@@ -283,6 +290,8 @@ variables.
 
 ### MERRA-2
 
+**Source:** `alcf/models/merra2.py`
+
 MERRA-2 reanalysis files can be found via the
 [NASA EarthData](https://earthdata.nasa.gov/) portal.
 Description of the MERRA-2 products can be found in the [MERRA-2: File Specification](https://gmao.gsfc.nasa.gov/pubs/docs/Bosilovich785.pdf) document. The model-level products are recommended due to
@@ -295,21 +304,61 @@ or directly on the [NASA EOSDIS FTP server](https://goldsmr5.gesdisc.eosdis.nasa
 
 ### NZCSM
 
+**Source:** `alcf/models/nzcsm.py`
+
 New Zealand Convective Scale Model (NZCSM) is a NWP model based on the
 UK Met Office Unified Model. The following model output variables are needed
-to run the lidar simulator: hybridt32, latitude, longitude, model_press,
-model_qcf, model_qcl, theta_lev_temp, time0.
+to run the lidar simulator:
+
+- hybridt32
+- latitude
+- longitude
+- model_press,
+- model_qcf
+- model_qcl
+- theta_lev_temp
+- time0
 
 ### CMIP5
 
 TODO
 
-CMIP5 model output can be downloaded from the [CMIP5 Earth System Grid (ESG) archive](https://esgf-node.llnl.gov/search/cmip5/). ALCF requires the following CMIP5
-variables: cls, clc, clwc, clws, clic, clis, pfull, ps, ta, zfull, zhalf.
+**Source:** `alcf/models/cmip5.py`
+
+CMIP5 model output can be downloaded from the [CMIP5 Earth System Grid (ESG) archive](https://esgf-node.llnl.gov/search/cmip5/). ALCF requires the following CMIP5 variables:
+
+- clc
+- clic
+- clis
+- cls
+- clwc
+- clws
+- pfull
+- ps
+- ta
+- zfull
+- zhalf
 
 ### JRA-55
 
 TODO
+
+### NZESM (experimental)
+
+**Source:** `alcf/models/nzesm.py`
+
+New Zealand Earth System Model output is a model based on HadGEM3. The
+model output variables needed are:
+
+- air_pressure
+- air_temperature
+- cloud_volume_fraction_in_atmosphere_layer
+- latitude
+- level_height
+- longitude
+- mass_fraction_of_cloud_ice_in_air
+- mass_fraction_of_cloud_liquid_water_in_air
+- time
 
 License
 -------

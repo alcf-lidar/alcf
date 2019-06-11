@@ -29,17 +29,17 @@ def stats_map(d, state,
 	state['backscatter_full'] = state.get('backscatter_full',
 		0.5*(state['backscatter_half'][1:] + state['backscatter_half'][:-1])
 	)
+	o = len(state['backscatter_full'])
 	state['backscatter_sd_half'] = state.get('backscatter_sd_half',
-		np.exp(np.arange(np.log(bsd_lim[0]), np.log(bsd_lim[1] + bsd_res),
-			np.log(bsd_lim[0] + bsd_res) - np.log(bsd_lim[0])))
+		# np.exp(np.arange(np.log(bsd_lim[0]), np.log(bsd_lim[1] + bsd_res),
+			# np.log(bsd_lim[0] + bsd_res) - np.log(bsd_lim[0])))
 		# if bsd_log is True \
 		# else
-		# np.arange(bsd_lim[0], bsd_lim[1] + bsd_res, bsd_res)
+		np.arange(bsd_lim[0], bsd_lim[1] + bsd_res, bsd_res)
 	)
 	state['backscatter_sd_full'] = state.get('backscatter_sd_full',
 		0.5*(state['backscatter_sd_half'][1:] + state['backscatter_sd_half'][:-1])
 	)
-	o = len(state['backscatter_full'])
 	osd = len(state['backscatter_sd_full'])
 	m2 = len(state['zfull2'])
 	if len(d['cloud_mask'].shape) == 3:
@@ -62,6 +62,14 @@ def stats_map(d, state,
 	state['n'] = state.get('n',
 		0 if l == 0 else np.zeros(l, dtype=np.int64)
 	)
+	state['backscatter_avg'] = state.get(
+		'backscatter_avg',
+		np.zeros(dims2, dtype=np.float64)
+	)
+	state['backscatter_mol_avg'] = state.get(
+		'backscatter_mol_avg',
+		np.zeros(dims2, dtype=np.float64)
+	)
 	state['cloud_occurrence'] = state.get(
 		'cloud_occurrence',
 		np.zeros(dims2, dtype=np.float64)
@@ -76,6 +84,8 @@ def stats_map(d, state,
 	)
 	backscatter_hist_tmp = np.zeros(hist_dims, dtype=np.float64)
 	cloud_occurrence_tmp = np.zeros(dims, dtype=np.float64)
+	backscatter_avg_tmp = np.zeros(dims, dtype=np.float64)
+	backscatter_mol_avg_tmp = np.zeros(dims, dtype=np.float64)
 	if tlim is not None:
 		mask = (d['time'] >= tlim[0]) & (d['time'] < tlim[1])
 	else:
@@ -106,9 +116,10 @@ def stats_map(d, state,
 				d['backscatter'][filter_mask,j],
 				bins=state['backscatter_half'])[0]
 
+	jsd = np.argmin(np.abs(d['zfull'] - bsd_z))
+	state['backscatter_sd_z'] = d['zfull'][jsd]
+
 	if 'backscatter_sd' in d:
-		jsd = np.argmin(np.abs(d['zfull'] - bsd_z))
-		state['backscatter_sd_z'] = d['zfull'][jsd]
 		state['backscatter_sd_hist'] += np.histogram(
 			d['backscatter_sd'][filter_mask,jsd],
 			bins=state['backscatter_sd_half'])[0]
@@ -134,12 +145,18 @@ def stats_map(d, state,
 			for k in range(l):
 				if not filter_mask[i,k]:
 					continue
-				cloud_occurrence_tmp[:,:] += d['cloud_mask'][i,:,k]
+				cloud_occurrence_tmp[:,k] += d['cloud_mask'][i,:,k]
+				backscatter_avg_tmp[:,k] += d['backscatter'][i,:,k]
+				if 'backscatter_mol' in d:
+					backscatter_mol_avg_tmp[:,k] += d['backscatter_mol'][i,:]
 				state['n'][k] += 1
 		else:
 			if not filter_mask[i]:
 				continue
 			cloud_occurrence_tmp[:] += d['cloud_mask'][i,:]
+			backscatter_avg_tmp[:] += d['backscatter'][i,:]
+			if 'backscatter_mol' in d:
+				backscatter_mol_avg_tmp[:] += d['backscatter_mol'][i,:]
 			state['n'] += 1
 	if l > 0:
 		for k in range(l):
@@ -148,82 +165,126 @@ def stats_map(d, state,
 				cloud_occurrence_tmp[:,k],
 				zhalf2
 			)
+			state['backscatter_avg'][:,k] += interp(
+				zhalf,
+				backscatter_avg_tmp[:,k],
+				zhalf2
+			)
+			state['backscatter_mol_avg'][:,k] += interp(
+				zhalf,
+				backscatter_mol_avg_tmp[:,k],
+				zhalf2
+			)
 	else:
 		state['cloud_occurrence'] += interp(
 			zhalf,
 			cloud_occurrence_tmp,
 			zhalf2
 		)
+		state['backscatter_avg'] += interp(
+			zhalf,
+			backscatter_avg_tmp,
+			zhalf2
+		)
+		state['backscatter_mol_avg'] += interp(
+			zhalf,
+			backscatter_mol_avg_tmp,
+			zhalf2
+		)
 
 def stats_reduce(state, bsd_z=None, **kwargs):
-	if state['cloud_occurrence'].shape == 2:
-		for k in range(state['n'].shape[1]):
+	if len(state['cloud_occurrence'].shape) == 2:
+		for k in range(len(state['n'])):
 			if state['n'][k] > 0:
 				state['backscatter_hist'][:,:,k] /= state['n'][k]
 				state['cloud_occurrence'][:,k] /= state['n'][k]
+				state['backscatter_avg'][:,k] /= state['n'][k]
+				state['backscatter_mol_avg'][:,k] /= state['n'][k]
 	else:
 		if state['n'] != 0:
 			state['backscatter_hist'] /= state['n']
 			state['cloud_occurrence'] /= state['n']
+			state['backscatter_avg'] /= state['n']
+			state['backscatter_mol_avg'] /= state['n']
 	state['backscatter_sd_hist'] /= state['n']
-	return {
+	do = {
 		'cloud_occurrence': 100.*state['cloud_occurrence'],
 		'zfull': state['zfull2'],
 		'n': state['n'],
+		'backscatter_avg': state['backscatter_avg'],
+		'backscatter_mol_avg': state['backscatter_mol_avg'],
 		'backscatter_full': state['backscatter_full'],
 		'backscatter_hist': state['backscatter_hist'],
 		'backscatter_sd_hist': state['backscatter_sd_hist'],
 		'backscatter_sd_full': state['backscatter_sd_full'],
 		'backscatter_sd_z': state['backscatter_sd_z'],
-		'.': {
-			'zfull': {
-				'.dims': ['zfull'],
-				'standard_name': 'height_above_reference_ellipsoid',
-				'units': 'm',
-			},
-			'cloud_occurrence': {
-				'.dims': ['zfull', 'column'] \
-					if len(state['cloud_occurrence'].shape) == 2 \
-					else ['zfull'],
-				'long_name': 'cloud_occurrence',
-				'units': '%',
-			},
-			'n': {
-				'.dims': ['column'] \
-					if len(state['cloud_occurrence'].shape) == 2 \
-					else [],
-				'long_name': 'number_of_profiles',
-				'units': '1',
-			},
-			'backscatter_full': {
-				'.dims': ['backscatter_full'],
-				'long_name': 'total_attenuated_backscatter_coefficient',
-				'units': 'm-1 sr-1',
-			},
-			'backscatter_hist': {
-				'.dims': ['backscatter_full', 'zfull'] \
-					if len(state['backscatter_hist'].shape) == 2 \
-					else ['backscatter_full', 'zfull', 'column'],
-				'long_name': 'backscatter_histogram',
-				'units': '%',
-			},
-			'backscatter_sd_hist': {
-				'.dims': ['backscatter_sd_full'],
-				'long_name': 'total_attenuated_backscatter_coefficient_standard_deviation_histogram',
-				'units': '%',
-			},
-			'backscatter_sd_full': {
-				'.dims': ['backscatter_sd_full'],
-				'long_name': 'total_attenuated_backscatter_coefficient_standard_deviation',
-				'units': 'm-1 sr-1',
-			},
-			'backscatter_sd_z': {
-				'.dims': [],
-				'long_name': 'total_attenuated_backscatter_coefficient_standard_deviation_height_above_reference_ellipsoid',
-				'units': 'm',
-			}
+	}
+	do['.'] = {
+		'zfull': {
+			'.dims': ['zfull'],
+			'standard_name': 'height_above_reference_ellipsoid',
+			'units': 'm',
+		},
+		'cloud_occurrence': {
+			'.dims': ['zfull', 'column'] \
+				if len(state['cloud_occurrence'].shape) == 2 \
+				else ['zfull'],
+			'long_name': 'cloud_occurrence',
+			'units': '%',
+		},
+		'n': {
+			'.dims': ['column'] \
+				if len(state['cloud_occurrence'].shape) == 2 \
+				else [],
+			'long_name': 'number_of_profiles',
+			'units': '1',
+		},
+		'backscatter_avg': {
+			'.dims': ['zfull', 'column'] \
+				if len(state['cloud_occurrence'].shape) == 2 \
+				else ['zfull'],
+			'long_name': 'total_attenuated_backscatter_coefficient_average',
+			'units': 'm-1 sr-1',
+		},
+		'backscatter_mol_avg': {
+			'.dims': ['zfull', 'column'] \
+				if len(state['cloud_occurrence'].shape) == 2 \
+				else ['zfull'],
+			'long_name': 'total_attenuated_molecular_backscatter_coefficient_average',
+			'units': 'm-1 sr-1',
+		},
+		'backscatter_full': {
+			'.dims': ['backscatter_full'],
+			'long_name': 'total_attenuated_backscatter_coefficient',
+			'units': 'm-1 sr-1',
+		},
+		'backscatter_hist': {
+			'.dims': ['backscatter_full', 'zfull'] \
+				if len(state['backscatter_hist'].shape) == 2 \
+				else ['backscatter_full', 'zfull', 'column'],
+			'long_name': 'backscatter_histogram',
+			'units': '%',
+		},
+		'backscatter_sd_hist': {
+			'.dims': ['backscatter_sd_full'],
+			'.dims': ['backscatter_sd_full'] \
+				if len(state['backscatter_sd_hist'].shape) == 1 \
+				else ['backscatter_sd_full', 'column'],
+			'long_name': 'total_attenuated_backscatter_coefficient_standard_deviation_histogram',
+			'units': '%',
+		},
+		'backscatter_sd_full': {
+			'.dims': ['backscatter_sd_full'],
+			'long_name': 'total_attenuated_backscatter_coefficient_standard_deviation',
+			'units': 'm-1 sr-1',
+		},
+		'backscatter_sd_z': {
+			'.dims': [],
+			'long_name': 'total_attenuated_backscatter_coefficient_standard_deviation_height_above_reference_ellipsoid',
+			'units': 'm',
 		}
 	}
+	return do
 
 def stream(dd, state, **options):
 	state['state'] = state.get('state', {})
