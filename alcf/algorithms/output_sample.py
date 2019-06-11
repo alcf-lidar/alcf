@@ -4,9 +4,8 @@ from alcf import misc
 import ds_format as ds
 
 def output_sample(d, tres, output_sampling):
-	t1 = d['time'][0] - ((d['time'][0] + 0.5) % output_sampling)
+	t1 = d['time'][0] - ((d['time'][0] + 0.5) % 1.0)
 	t2 = t1 + output_sampling
-
 	dims = ds.get_dims(d)
 	n = dims['time']
 	n2 = int(output_sampling/tres)

@@ -424,6 +424,7 @@ Options:
     Default: `5` if `plot_type` is `cloud_occurrence` or `backscatter_hist`
     else `4`.
 - `subcolumn`: Model subcolumn to plot. Default: `0`.
+- `title`: Plot title.
 - `width`: Plot width (inches).
     Default: `5` if `plot_type` is `cloud_occurrence` or `backscatter_hist`
     else `10`.
@@ -515,10 +516,90 @@ TODO:
 
     where `<coeff>` is the calibration coefficient.
 
+ALCF output
+-----------
+
+The ALCF output is stored in NetCDF files. Below is description of variables
+contained in the data files.
+
+### model
+
+`alcf model` output is a 2-dimensional "curtain" of model data at a given location
+over a length of time or along a ship track.
+
+Variable | Description | Dimensions | Units
+--- | --- | --- | ---
+cli | mass fraction of cloud ice in air | time, level | 1
+clt | cloud area fraction | time, level | %
+clw | mass fraction of cloud liquid water in air | time, level | 1
+lat | latitude | time | degrees north
+lon | longitude | time | degrees east
+orog | surface altitude | time | m
+pfull | air pressure | time, level | Pa
+ps | surface air pressure | time | Pa
+ta | air temperature | time, level | K
+time | time | time | days since -4712-01-01 12:00
+zg | geopotential height | time, level | m
+
+### cosp
+
+`alcf cosp` output is a 2-dimensional "curtain" of simulated backscatter
+at a given location over a length of time or along a ship track.
+
+Variable | Description | Dimensions | Units
+--- | --- | --- | ---
+backscatter | total attenuated backscatter coefficient | time, level, column | m-1 sr-1
+backscatter_mol | total attenuated molecular backscatter coefficient | time, level | m-1 sr-1
+lat | latitude | time | degrees north
+lon | longitude | time | degrees east
+pfull | air pressure | time, level | Pa
+time | time | time | days since -4712-01-01 12:00
+zfull | height above reference ellipsoid | time, level | m
+
+### lidar
+
+`alcf lidar` output  is a 2-dimensional "curtain" of observed or simulated
+backscatter at a given location over a length of time or along a ship track.
+
+Variable | Description | Dimensions | Units
+--- | --- | --- | ---
+backscatter | total attenuated backscatter coefficient | time, range | m-1 sr-1
+backscatter_sd | total attenuated backscatter coefficient standard deviation | time, range | m-1 sr-1
+cbh | cloud base height | time | m
+cloud_mask | cloud mask | time, range | 1
+lr | lidar ratio | time | sr
+time | time | time | days since -4712-01-01 12:00
+zfull | height above reference ellipsoid | time, level | m
+
+### stats
+
+`alcf stats` output contains histograms and summary statistics calculated
+from a 2-dimensional "curtain" of observed or simulated backscatter.
+
+Variable | Description | Dimensions | Units
+--- | --- | --- | ---
+backscatter_avg | total attenuated backscatter coefficient average | zfull | m-1 sr-1
+backscatter_full | total attenuated backscatter coefficient | backscatter_full | m-1 sr-1
+backscatter_hist | backscatter histogram | backscatter_full, zfull | %
+backscatter_mol_avg | total attenuated molecular backscatter coefficient average | zfull | m-1 sr-1
+backscatter_sd_full | total attenuated backscatter coefficient standard deviation | backscatter_sd_full | m-1 sr-1
+backscatter_sd_hist | total attenuated backscatter coefficient standard deviation histogram | backscatter_sd_full | %
+backscatter_sd_z | total attenuated backscatter coefficient standard deviation height above reference ellipsoid | m
+cloud_occurrence | cloud occurrence | zfull | %
+n | number of profiles | | 1
+zfull | height above reference ellipsoid | zfull | m
+
 Model guide
 -----------
 
+Below is a description of the model output supported by ALCF. You might
+have to modify the code for reading the model output depending on the
+exact format of the model output, such as variable names and how they are
+split among the output files.
+
 ### AMPS
+
+**Source:** `alcf/models/amps.py`
 
 ALCF is compatible with the NetCDF AMPS output. You can find the
 [AMPS archive](https://www.earthsystemgrid.org/project/amps.html) on the
@@ -540,6 +621,8 @@ variables.
 
 ### MERRA-2
 
+**Source:** `alcf/models/merra2.py`
+
 MERRA-2 reanalysis files can be found via the
 [NASA EarthData](https://earthdata.nasa.gov/) portal.
 Description of the MERRA-2 products can be found in the [MERRA-2: File Specification](https://gmao.gsfc.nasa.gov/pubs/docs/Bosilovich785.pdf) document. The model-level products are recommended due to
@@ -552,21 +635,61 @@ or directly on the [NASA EOSDIS FTP server](https://goldsmr5.gesdisc.eosdis.nasa
 
 ### NZCSM
 
+**Source:** `alcf/models/nzcsm.py`
+
 New Zealand Convective Scale Model (NZCSM) is a NWP model based on the
 UK Met Office Unified Model. The following model output variables are needed
-to run the lidar simulator: hybridt32, latitude, longitude, model_press,
-model_qcf, model_qcl, theta_lev_temp, time0.
+to run the lidar simulator:
+
+- hybridt32
+- latitude
+- longitude
+- model_press,
+- model_qcf
+- model_qcl
+- theta_lev_temp
+- time0
 
 ### CMIP5
 
 TODO
 
-CMIP5 model output can be downloaded from the [CMIP5 Earth System Grid (ESG) archive](https://esgf-node.llnl.gov/search/cmip5/). ALCF requires the following CMIP5
-variables: cls, clc, clwc, clws, clic, clis, pfull, ps, ta, zfull, zhalf.
+**Source:** `alcf/models/cmip5.py`
+
+CMIP5 model output can be downloaded from the [CMIP5 Earth System Grid (ESG) archive](https://esgf-node.llnl.gov/search/cmip5/). ALCF requires the following CMIP5 variables:
+
+- clc
+- clic
+- clis
+- cls
+- clwc
+- clws
+- pfull
+- ps
+- ta
+- zfull
+- zhalf
 
 ### JRA-55
 
 TODO
+
+### NZESM (experimental)
+
+**Source:** `alcf/models/nzesm.py`
+
+New Zealand Earth System Model output is a model based on HadGEM3. The
+model output variables needed are:
+
+- air_pressure
+- air_temperature
+- cloud_volume_fraction_in_atmosphere_layer
+- latitude
+- level_height
+- longitude
+- mass_fraction_of_cloud_ice_in_air
+- mass_fraction_of_cloud_liquid_water_in_air
+- time
 
 License
 -------

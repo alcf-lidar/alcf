@@ -19,7 +19,7 @@ def aggregate(dd, state, period):
 		return dd
 	dd0 = []
 	dd1 = []
-	t1 = dd[0]['time'][0] - ((dd[0]['time'][0] + 0.5) % period)
+	t1 = dd[0]['time'][0] - ((dd[0]['time'][0] + 0.5) % 1.0)
 	t2 = t1 + period
 	for i, d in enumerate(dd):
 		if d is None:
