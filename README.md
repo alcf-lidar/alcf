@@ -496,7 +496,7 @@ TODO
 ### auto
 
 
-alcf auto - peform automatic processing of model or lidar data
+alcf auto - peform automatic processing of model or lidar data (TODO)
 
 `alcf auto model` is equivalent to performing the following operations:
 
