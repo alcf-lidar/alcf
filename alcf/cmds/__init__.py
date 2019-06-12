@@ -6,6 +6,7 @@ from . import stats
 from . import compare
 from . import plot
 from . import calibrate
+from . import auto
 
 CMDS = {
 	'convert': convert.run,
@@ -16,4 +17,5 @@ CMDS = {
 	'compare': compare.run,
 	'plot': plot.run,
 	'calibrate': calibrate.run,
+	'auto': auto.run,
 }

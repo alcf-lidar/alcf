@@ -121,6 +121,18 @@ alcf plot stats <input>... <output> [options]
 
 # Calculate comparison statistics from multiple lidar time series
 alcf compare <input-1> <input-2> [<input-n>...] <output>
+
+# Peform automatic processing of model data
+alcf auto model <model_type> <input> <output> [<model_options>] [<lidar_options>]
+
+# Peform automatic processing of model data - along a track
+alcf auto model <model_type> <input> <output> track: <track> [<model_options>] [<lidar_options>]
+
+# Perform automatic processing of lidar data
+alcf auto lidar <lidar_type> <input> <output> [<lidar_options>]
+
+# Perform automatic comparison of model and lidar data
+alcf auto compare <input>... <output> [<compare_options>]
 ```
 
 Commands
@@ -136,6 +148,12 @@ Commands
 | [stats](#stats) | Calculate cloud occurrence statistics. |
 | [plot](#plot) | Plot lidar data. |
 | [compare](#compare) | TODO |
+| [auto](#auto) | Peform automatic processing of model or lidar data (TODO) |
+
+The commands can be either used in a manual processing mode or automatic
+processing mode (described below).
+
+#### Manual processing
 
 The commands are usually run in the following order.
 
@@ -166,6 +184,10 @@ Model output processing:
 
 NetCDF data files generated in each step can be previewed in
 [Panoply](https://www.giss.nasa.gov/tools/panoply/).
+
+#### Automatic processing
+
+TODO
 
 ### convert
 
@@ -218,7 +240,7 @@ alcf model - extract model data at a point or along a track
 Usage:
 
     alcf model <type> point: { <lon> <lat> } time: { <start> <end> } <input>
-    	<output>
+    	<output> [options]
     alcf model <type> track: <track> <input> <output>
 
 Arguments:
@@ -231,6 +253,14 @@ Arguments:
 - `start`: start time (see Time format below)
 - `end`: end time (see Time format below)
 - `track`: track NetCDF file (see Track below)
+- `options`: see Options below
+
+Options:
+
+- `track_override_year`: Override year in track. Use if comparing observations
+    with a model statistically. Default: none.
+- `track_lon_180`: Expect track longitude between -180 and 180 degrees.
+    Default: false.
 
 Types:
 
@@ -238,6 +268,7 @@ Types:
 - `merra2`: Modern-Era Retrospective Analysis for Research and Applications,
 	Version 2 (MERRA-2)
 - `nzcsm`: New Zealand Convection Scale Model (NZCSM)
+- `nzesm`: New Zealand Earth System Model (NZESM) (experimental)
 
 Time format:
 
@@ -246,7 +277,10 @@ HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
 
 Track:
 
-Track file is a NetCDF file containing 1D variables lon, lat, and time.
+Track file is a NetCDF file containing 1D variables `lon`, `lat`, and `time`.
+`time` is time in format conforming with the NetCDF standard,
+`lon` is longitude between 0 and 360 degrees and `lat` is latitude between
+-90 and 90 degrees.
 	
 
 ### simulate
@@ -459,6 +493,76 @@ Plot options:
 
 TODO
 
+### auto
+
+
+alcf auto - peform automatic processing of model or lidar data
+
+`alcf auto model` is equivalent to performing the following operations:
+
+1. alcf model
+2. alcf simulate
+3. alcf lidar
+4. alcf stats
+5. alcf plot backscatter
+6. alcf plot backscatter_hist
+7. alcf plot cloud_occurrence
+
+`alcf auto lidar` is equivalent to performing the following operations:
+
+1. alcf lidar
+2. alcf stats
+3. alcf plot backscatter
+4. alcf plot backscatter_hist
+5. alcf plot cloud_occurrence
+
+`alcf auto compare` is equivalent to performing the following operations:
+
+1. alcf plot cloud_occurrence
+2. alcf plot backscatter_hist
+
+Usage:
+
+    alcf auto model <model_type> <input> <output> point: { <lon> <lat> }
+        time: { <start> <end> } [<model_options>] [<lidar_options>]
+    alcf auto model <model_type> <input> <output> track: <track>
+        [<model_options>] [<lidar_options>]
+    alcf auto lidar <lidar_type> <input> <output> [<lidar_options>]
+    alcf auto compare <input>... <output> [<compare_options>]
+
+Arguments:
+
+- `input`: input directory containing model or lidar data, or,
+    in case of `alcf auto compare`, the output of `alcf auto model` or
+    `alcf auto lidar`
+- `lon`: point longitude
+- `lat`: point latitutde
+- `start`: start time (see Time format below)
+- `track`: track NetCDF file (see Track below)
+- `end`: end time (see Time format below)
+- `lidar_options`: see Lidar options
+- `lidar_type`: lidar type (see Lidar types below)
+- `model_options`: see Model options
+- `model_type`: model type (see Model types below)
+
+Model types:
+
+- `amps`: Antarctic Mesoscale Prediction System (AMPS)
+- `merra2`: Modern-Era Retrospective Analysis for Research and Applications,
+	Version 2 (MERRA-2)
+- `nzcsm`: New Zealand Convection Scale Model (NZCSM)
+- `nzesm`: New Zealand Earth System Model (NZESM) (experimental)
+
+Lidar types:
+
+- `chm15k`: Lufft CHM 15k
+- `cl31`: Vaisala CL31
+- `cl51`: Vaisala CL51
+- `cosp`: COSP simulated lidar
+- `minimpl`: Sigma Space MiniMPL
+- `mpl`: Sigma Space MPL
+	
+
 Supported models
 ----------------
 
@@ -543,7 +647,7 @@ zg | geopotential height | time, level | m
 
 ### cosp
 
-`alcf cosp` output is a 2-dimensional "curtain" of simulated backscatter
+`alcf simulate` output is a 2-dimensional "curtain" of simulated backscatter
 at a given location over a length of time or along a ship track.
 
 Variable | Description | Dimensions | Units

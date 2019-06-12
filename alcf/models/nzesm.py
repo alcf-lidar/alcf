@@ -4,6 +4,7 @@ import os
 import numpy as np
 from alcf.models import META
 from alcf import misc
+import aquarius_time as aq
 
 VARIABLES = [
 	'air_pressure',
@@ -21,11 +22,12 @@ TRANS = {
 	'cloud_volume_fraction_in_atmosphere_layer': 'clt',
 }
 
-def read(dirname, track):
+def read(dirname, track, warnings=[]):
 	dd_index = ds.readdir(dirname,
 		variables=['time', 'latitude', 'longitude', 'level_height'],
 		jd=True,
 		full=True,
+		warnings=warnings,
 	)
 	start_time = track['time'][0]
 	end_time = track['time'][-1]
@@ -41,7 +43,7 @@ def read(dirname, track):
 			lon = d_index['longitude']
 			level_height = d_index['level_height']
 			filename = d_index['filename']
-			ii = np.where((time_half[1:] >= start_time) & (time_half[:-1] < end_time))[0]
+			ii = np.nonzero((time_half[1:] >= start_time) & (time_half[:-1] < end_time))[0]
 			for i in ii:
 				t = time[i]
 				i2 = np.argmin(np.abs(track['time'] - time[i]))

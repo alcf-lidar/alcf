@@ -121,6 +121,18 @@ alcf plot stats <input>... <output> [options]
 
 # Calculate comparison statistics from multiple lidar time series
 alcf compare <input-1> <input-2> [<input-n>...] <output>
+
+# Peform automatic processing of model data
+alcf auto model <model_type> <input> <output> [<model_options>] [<lidar_options>]
+
+# Peform automatic processing of model data - along a track
+alcf auto model <model_type> <input> <output> track: <track> [<model_options>] [<lidar_options>]
+
+# Perform automatic processing of lidar data
+alcf auto lidar <lidar_type> <input> <output> [<lidar_options>]
+
+# Perform automatic comparison of model and lidar data
+alcf auto compare <input>... <output> [<compare_options>]
 ```
 
 Commands
@@ -136,6 +148,12 @@ Commands
 | [stats](#stats) | Calculate cloud occurrence statistics. |
 | [plot](#plot) | Plot lidar data. |
 | [compare](#compare) | TODO |
+| [auto](#auto) | Peform automatic processing of model or lidar data (TODO) |
+
+The commands can be either used in a manual processing mode or automatic
+processing mode (described below).
+
+#### Manual processing
 
 The commands are usually run in the following order.
 
@@ -166,6 +184,10 @@ Model output processing:
 
 NetCDF data files generated in each step can be previewed in
 [Panoply](https://www.giss.nasa.gov/tools/panoply/).
+
+#### Automatic processing
+
+TODO
 
 ### convert
 
@@ -200,6 +222,10 @@ TODO
 ### compare
 
 TODO
+
+### auto
+
+{{{cmd_auto}}}
 
 Supported models
 ----------------
@@ -285,7 +311,7 @@ zg | geopotential height | time, level | m
 
 ### cosp
 
-`alcf cosp` output is a 2-dimensional "curtain" of simulated backscatter
+`alcf simulate` output is a 2-dimensional "curtain" of simulated backscatter
 at a given location over a length of time or along a ship track.
 
 Variable | Description | Dimensions | Units
