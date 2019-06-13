@@ -304,6 +304,7 @@ def run(plot_type, *args,
 	sigma=3.,
 	cloud_mask=False,
 	title=None,
+	**kwargs,
 ):
 	"""
 alcf plot - plot lidar data

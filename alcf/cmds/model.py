@@ -35,6 +35,7 @@ def run(type_, input_, output,
 	track=None,
 	track_override_year=None,
 	track_lon_180=False,
+	**kwargs,
 ):
 	"""
 alcf model - extract model data at a point or along a track
@@ -100,6 +101,7 @@ Track file is a NetCDF file containing 1D variables `lon`, `lat`, and `time`.
 			)
 		time1 = track1['time'][0], track1['time'][-1]
 	elif point is not None and time is not None:
+		time1 = [None, None]
 		for i in 0, 1:
 			time1[i] = aq.from_iso(time[i])
 			if time1[i] is None:
