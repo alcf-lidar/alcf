@@ -4,7 +4,7 @@ from alcf.cmds.auto_cmds import CMDS
 
 def run(cmd, *args, **kwargs):
 	"""
-alcf auto - peform automatic processing of model or lidar data (TODO)
+alcf auto - peform automatic processing of model or lidar data
 
 `alcf auto model` is equivalent to:
 

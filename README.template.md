@@ -118,13 +118,16 @@ alcf stats <input> <output>
 alcf plot stats <input>... <output> [options]
 
 # Peform automatic processing of model data
-alcf auto model <model_type> <input> <output> [<model_options>] [<lidar_options>]
+alcf auto model <model_type> <lidar_type> <input> <output>
+    point: { <lon> <lat> } { time: <start> <end> }
+    [<options>] [<model_options>] [<lidar_options>]
 
 # Peform automatic processing of model data - along a track
-alcf auto model <model_type> <input> <output> track: <track> [<model_options>] [<lidar_options>]
+alcf auto model <model_type> <lidar_type> <input> <output>
+    track: <track>  [<options>] [<model_options>] [<lidar_options>]
 
 # Perform automatic processing of lidar data
-alcf auto lidar <lidar_type> <input> <output> [<lidar_options>]
+alcf auto lidar <lidar_type> <input> <output> [<options>] [<lidar_options>]
 
 # TODO:
 
