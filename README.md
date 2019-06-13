@@ -129,13 +129,13 @@ alcf auto model <model_type> <lidar_type> <input> <output>
 # Perform automatic processing of lidar data
 alcf auto lidar <lidar_type> <input> <output> [<options>] [<lidar_options>]
 
+# Perform automatic comparison of model and lidar data
+alcf auto compare <input>... <output> [<options>] [<compare_options>]
+
 # TODO:
 
 # Calculate comparison statistics from multiple lidar time series
 alcf compare <input-1> <input-2> [<input-n>...] <output>
-
-# Perform automatic comparison of model and lidar data
-alcf auto compare <input>... <output> [<compare_options>]
 ```
 
 Commands
@@ -519,10 +519,9 @@ alcf auto - peform automatic processing of model or lidar data
 4. `alcf plot backscatter_hist`
 5. `alcf plot cloud_occurrence`
 
-`alcf auto compare` (TODO) is equivalent to:
+`alcf auto compare` is equivalent to:
 
 1. `alcf plot cloud_occurrence`
-2. `alcf plot backscatter_hist`
 
 Usage:
 
@@ -555,7 +554,7 @@ Options:
 
 - `skip: <step>`: Skip all processing steps before `step`.
     `step` is one of: `model`, `simulate`, `lidar`, `stats`, `plot`.
-    Default: none.
+    Default: `none`.
 
 Model types:
 

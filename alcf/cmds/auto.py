@@ -24,10 +24,9 @@ alcf auto - peform automatic processing of model or lidar data
 4. `alcf plot backscatter_hist`
 5. `alcf plot cloud_occurrence`
 
-`alcf auto compare` (TODO) is equivalent to:
+`alcf auto compare` is equivalent to:
 
 1. `alcf plot cloud_occurrence`
-2. `alcf plot backscatter_hist`
 
 Usage:
 
@@ -60,7 +59,7 @@ Options:
 
 - `skip: <step>`: Skip all processing steps before `step`.
     `step` is one of: `model`, `simulate`, `lidar`, `stats`, `plot`.
-    Default: none.
+    Default: `none`.
 
 Model types:
 
