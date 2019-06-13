@@ -117,11 +117,6 @@ alcf stats <input> <output>
 # Plot statistics
 alcf plot stats <input>... <output> [options]
 
-# TODO:
-
-# Calculate comparison statistics from multiple lidar time series
-alcf compare <input-1> <input-2> [<input-n>...] <output>
-
 # Peform automatic processing of model data
 alcf auto model <model_type> <input> <output> [<model_options>] [<lidar_options>]
 
@@ -130,6 +125,11 @@ alcf auto model <model_type> <input> <output> track: <track> [<model_options>] [
 
 # Perform automatic processing of lidar data
 alcf auto lidar <lidar_type> <input> <output> [<lidar_options>]
+
+# TODO:
+
+# Calculate comparison statistics from multiple lidar time series
+alcf compare <input-1> <input-2> [<input-n>...] <output>
 
 # Perform automatic comparison of model and lidar data
 alcf auto compare <input>... <output> [<compare_options>]
@@ -148,7 +148,7 @@ Commands
 | [stats](#stats) | Calculate cloud occurrence statistics. |
 | [plot](#plot) | Plot lidar data. |
 | [compare](#compare) | TODO |
-| [auto](#auto) | Peform automatic processing of model or lidar data (TODO) |
+| [auto](#auto) | Peform automatic processing of model or lidar data |
 
 The commands can be either used in a manual processing mode or automatic
 processing mode (described below).
