@@ -58,7 +58,7 @@ Arguments:
 
 Options:
 
-- `skip: <step>: Skip all processing steps before `step`.
+- `skip: <step>`: Skip all processing steps before `step`.
     `step` is one of: `model`, `simulate`, `lidar`, `stats`, `plot`.
     Default: none.
 
