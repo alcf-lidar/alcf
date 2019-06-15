@@ -5,8 +5,6 @@ layout: default
 
 ## Tutorial
 
-TODO
-
 This tutorial shows how to use ALCF to process ceilometer observations,
 simulate lidar from model output and compare the two. As an example,
 we will use 24 hours of Lufft CHM 15k ceilometer observations
@@ -14,7 +12,7 @@ at the Birdlings Flat site in Canterbury, New Zeland on 4 July 2016,
 and the corresponding Antarctic Mesoscale Prediction System (AMPS)
 numerical weather prediction (NWP) model and MERRA-2 renalaysis output.
 To start, download the dataset archive
-[alcf-tutorial-datasets.tar](alcf-tutorial-datasets.tar).
+[alcf-tutorial-datasets.tar](https://ucliveac-my.sharepoint.com/:u:/g/personal/pku33_uclive_ac_nz/ERaql2jZmX9CtouVbz7b1m8BbKCg5juOHrWKJWipXNqR7A?e=RD62et).
 
 Processing with ALCF can be done in two modes: automatic and manual.
 The automatic mode is easier and is convered in this tutorial. Both automatic
@@ -106,6 +104,10 @@ The output will be stored in `processed/merra2`:
 
 See [ALCF output](/documentation/alcf_output/) for description of the NetCDF
 files.
+
+#### Comparison
+
+TODO
 
 ### Conclusion
 
