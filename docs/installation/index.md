@@ -36,6 +36,11 @@ To download and build dependencies
 make
 ```
 
+**Note:** ALCF uses the Python libraries [ds-python](https://github.com/peterkuma/ds-python),
+[aquarius-time](https://github.com/peterkuma/aquarius-time) and
+[pst](https://github.com/peterkuma/pst), which are installed with the commands
+below.
+
 To install in system directories:
 
 ```sh
