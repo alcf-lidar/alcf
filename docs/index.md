@@ -17,8 +17,8 @@ and reanalyses are supported by the lidar simulator: MERRA-2, AMPS, NZCSM,
 NZESM.
 
 <div class="img-flex">
-<a href="{% "/img/chm15k_512x.jpg" | relative_url }}"><img src="{{ "/img/chm15k_512x.jpg" | relative_url }}" height="200" /></a>
-<a href="{% "/img/cl51_512x.jpg" | relative_url }}"><img src="{{ "/img/cl51_512x.jpg" | relative_url }}" height="200" /></a>
+<a href="{{ "/img/chm15k_512x.jpg" | relative_url }}"><img src="{{ "/img/chm15k_512x.jpg" | relative_url }}" height="200" /></a>
+<a href="{{ "/img/cl51_512x.jpg" | relative_url }}"><img src="{{ "/img/cl51_512x.jpg" | relative_url }}" height="200" /></a>
 </div>
 
 #### Resampling and noise removal
@@ -28,7 +28,7 @@ to increase signal-to-noise ratio, calculates noise standard deviation from
 the highest level and removes noise.
 
 <div class="img-flex nospace">
-<a href="{{ "/img/rutherford14_2014-03-30T00:00:00.png" | relative_url |}"><img src="{{ "/img/rutherford14_2014-03-30T00:00:00.png" | relative_url }}" width="600" /></a>
+<a href="{{ "/img/rutherford14_2014-03-30T00:00:00.png" | relative_url }}"><img src="{{ "/img/rutherford14_2014-03-30T00:00:00.png" | relative_url }}" width="600" /></a>
 </div>
 
 #### Lidar simulator

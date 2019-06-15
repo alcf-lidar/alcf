@@ -76,5 +76,5 @@ Processing of model data is done in the following steps:
 This tutorial introduced how to use ALCF to process one month of data
 collected by the Lufft CHM 15k ceilometer and the corresponding data in the
 MERRA-2 reanalysis. ALCF supports more advanced options described in the
-[documentation]({{ site.url }}/documentation).
-For support please see the [support]({{ site.url }}/support) page.
+[documentation]({{ "/documentation/" | relative_url }}).
+For support please see the [support]({{ "/support/" | relative_url }}) page.
