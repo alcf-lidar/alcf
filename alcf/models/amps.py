@@ -24,7 +24,7 @@ VARIABLES = [
 
 GRACE_TIME = 1/24.
 
-def read(dirname, track):
+def read(dirname, track, warnings=[]):
 	dd_index = ds.readdir(dirname, variables=['XTIME'], jd=True)
 	start_time = track['time'][0]
 	end_time = track['time'][1]

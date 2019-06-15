@@ -1,7 +1,7 @@
 import ds_format as ds
 import os
 
-def read(dirname, track):
+def read(dirname, track, warnings=[]):
 	pass
 # 	time = track['time']
 # 	t1, t2 = time[0], time[-1]
