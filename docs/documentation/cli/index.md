@@ -6,6 +6,11 @@ layout: default
 ### [Documentation](../)
 ## Command line interface
 
+After completing the [installation](/installation), ALCF commands can be run in
+the terminal with the `alcf` program. The program uses the
+command line argument format [PST](https://github.com/peterkuma/pst)
+for passing complex command line arguments.
+
 ### Synopsis
 
 {% include cmd_main.md %}

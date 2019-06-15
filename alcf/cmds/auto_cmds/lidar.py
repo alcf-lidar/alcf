@@ -34,7 +34,7 @@ def run(type_, input_, output, *args, skip=None, **kwargs):
 		try: os.mkdir(stats_dir)
 		except OSError: pass
 		print('! alcf stats')
-		stats.run(lidar_dir, stats_filename)
+		stats.run(lidar_dir, stats_filename, **kwargs)
 	if i < STEPS.index('plot'):
 		print('-> %s' % plot_dir)
 		try: os.mkdir(plot_dir)
@@ -43,8 +43,12 @@ def run(type_, input_, output, *args, skip=None, **kwargs):
 		try: os.mkdir(backscatter_dir)
 		except OSError: pass
 		print('! alcf plot backscatter')
-		plot.run('backscatter', lidar_dir, backscatter_dir)
+		plot.run('backscatter', lidar_dir, backscatter_dir, **kwargs)
 		print('! alcf plot cloud_occurrence')
-		plot.run('cloud_occurrence', stats_filename, cloud_occurrence_filename)
+		plot.run('cloud_occurrence', stats_filename, cloud_occurrence_filename,
+			**kwargs
+		)
 		print('! alcf plot backscatter_hist')
-		plot.run('backscatter_hist', stats_filename, backscatter_hist_filename)
+		plot.run('backscatter_hist', stats_filename, backscatter_hist_filename,
+			**kwargs
+		)

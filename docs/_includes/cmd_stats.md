@@ -10,22 +10,25 @@ Arguments:
 
 Options:
 
-- `blim`: backscatter histogram limits (1e-6 m-1.sr-1). Default: `{ 5 200 }`.
-- `bres`: backscatter histogram resolution (1e-6 m-1.sr-1). Default: `10`.
-- `filter`: filter profiles by condition: `cloudy` for cloudy profiles only,
-    `clear` for clear sky profiles only, `none` for all profiles.
+- `blim: <value>`: backscatter histogram limits (1e-6 m-1.sr-1).
+    Default: `{ 5 200 }`.
+- `bres: <value>`: backscatter histogram resolution (1e-6 m-1.sr-1).
+    Default: `10`.
+- `filter: <value>`: filter profiles by condition: `cloudy` for cloudy profiles
+    only, `clear` for clear sky profiles only, `none` for all profiles.
     Default: `none`.
-- `tlim`: Time limits `{<start> <end> }` (see Time format below).
+- `tlim: { <start> <end> }`: Time limits (see Time format below).
     Default: `none`.
-- `zlim`: `{ <low> <high> }`: Height limits (m). Default: `{ 0 15000 }`.
-- `zres`: Height resolution (m). Default: `50`.
-- `bsd_lim`: backscatter standard deviation histogram limits (1e-6 m-1.sr-1).
-    Default: `{0 10}`.
-- `bsd_log`: enable/disable logarithmic scale of the backscatter standard
-    deviation histogram (`true` or `false`). Default: `true`.
-- `bsd_res`: backscatter standard deviation histogram resolution
+- `zlim: { <low> <high> }`: Height limits (m). Default: `{ 0 15000 }`.
+- `zres: <value>`: Height resolution (m). Default: `50`.
+- `bsd_lim: { <low> <high> }`: backscatter standard deviation histogram limits
+    (1e-6 m-1.sr-1). Default: `{ 0 10 }`.
+- `bsd_log: <value>`: enable/disable logarithmic scale of the backscatter
+    standard deviation histogram (`true` or `false`). Default: `true`.
+- `bsd_res: <value>`: backscatter standard deviation histogram resolution
     (1e-6 m-1.sr-1). Default: `0.1`.
-- `bsd_z`: backscatter standard deviation histogram height (m). Default: `8000`.
+- `bsd_z: <value>`: backscatter standard deviation histogram height (m).
+    Default: `8000`.
 
 Time format:
 

@@ -42,8 +42,8 @@ Installation
 ### Requirements
 
 ALCF is written in Python and Fortran. Installation on Linux is recommended.
-Installation on other operating systems may be possible, but is not detailed
-here at the moment.
+Installation on other operating systems may be possible and planned in the
+future, but is not detailed here at the moment.
 
 ### Installation on Linux
 
@@ -85,6 +85,7 @@ To install in user directories (make sure `~/.local/bin` is in the environmental
 pip3 install --user https://github.com/peterkuma/ds-python/archive/master.zip https://github.com/peterkuma/aquarius-time/archive/master.zip https://github.com/peterkuma/pst/archive/master.zip
 python3 setup.py install --user
 ```
+
 
 Usage
 -----
@@ -137,6 +138,7 @@ alcf auto compare <input>... <output> [<options>] [<compare_options>]
 # Calculate comparison statistics from multiple lidar time series
 alcf compare <input-1> <input-2> [<input-n>...] <output>
 ```
+
 
 Commands
 --------

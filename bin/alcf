@@ -3,59 +3,12 @@
 import os
 import sys
 import pst
-from alcf.cmds import CMDS
-
-def main(cmd=None, *args, **kwargs):
-	"""
-alcf - Tool for processing of automatic lidar and ceilometer (ALC) data
-and intercomparison with atmospheric models.
-
-Usage:
-
-	alcf <cmd> [<options>]
-	alcf <cmd> --help
-
-Arguments:
-
-- cmd: command (see below)
-- options: command options
-
-Options:
-
---help: print help for command
-
-Commands:
-
-- convert: convert input instrument or model data to ALCF standard NetCDF
-- model: extract model data at a point or along a track
-- cosp: simulate lidar measurements from model data using COSP
-- lidar: process lidar data
-- stats: calculate cloud occurrence statistics
-- plot: plot lidar data
-- plot_stats: plot lidar statistics
-	"""
-
-	if cmd is None:
-		sys.stderr.write(main.__doc__.strip() + '\n')
-		return 1
-
-	func = CMDS.get(cmd)
-	if func is None:
-		raise ValueError('Invalid command: %s' % cmd)
-	try:
-		func(*args, **kwargs)
-	except TypeError as e:
-		if str(e).startswith('run() '):
-			sys.stderr.write(func.__doc__.replace('`', '').strip() + '\n')
-			return 1
-		else:
-			raise e
-	return 0
+from alcf.cmds import main
 
 if __name__ == '__main__':
 	argv = pst.decode([os.fsencode(y) for y in sys.argv], as_unicode=True)
 	args = [x for x in argv if type(x) is not dict]
 	kwargs = {k: v for x in argv if type(x) is dict for k, v in x.items()}
 
-	ret = main(*args[1:], **kwargs)
+	ret = main.run(*args[1:], **kwargs)
 	sys.exit(ret)

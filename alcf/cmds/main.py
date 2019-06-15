@@ -1,4 +1,8 @@
+import sys
+from alcf.cmds import CMDS
 
+def run(cmd=None, *args, **kwargs):
+	"""
 alcf - Tool for processing of automatic lidar and ceilometer (ALC) data
 and intercomparison with atmospheric models.
 
@@ -25,4 +29,21 @@ Commands:
 - `stats`: calculate cloud occurrence statistics
 - `plot`: plot lidar data
 - `plot_stats`: plot lidar statistics
-	
+	"""
+
+	if cmd is None:
+		sys.stderr.write(main.__doc__.strip() + '\n')
+		return 1
+
+	func = CMDS.get(cmd)
+	if func is None:
+		raise ValueError('Invalid command: %s' % cmd)
+	try:
+		func(*args, **kwargs)
+	except TypeError as e:
+		if str(e).startswith('run() '):
+			sys.stderr.write(func.__doc__.replace('`', '').strip() + '\n')
+			return 1
+		else:
+			raise e
+	return 0

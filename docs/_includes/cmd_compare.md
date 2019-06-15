@@ -5,6 +5,6 @@ Usage: `alcf compare <input_1> <input_2> [<input_n>...] <output>`
 
 Arguments:
 
-- input_*: input lidar data directory
-- output: output filename
+- `input_*`: input lidar data directory
+- `output`: output filename
 	

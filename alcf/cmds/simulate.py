@@ -156,9 +156,9 @@ Types:
 
 Options:
 
-- `ncolumns`: Number of SCOPS subcolumns to generate. Default: `10`.
-- `overlap`: Cloud overlap assumption in the SCOPS subcolumn generator.
-  `maximum` for maximum overlap, `random` for random overlap, or
+- `ncolumns: <ncolumns>`: Number of SCOPS subcolumns to generate. Default: `10`.
+- `overlap: <overlap>`: Cloud overlap assumption in the SCOPS subcolumn
+   generator. `maximum` for maximum overlap, `random` for random overlap, or
   `maximum-random` for maximum-random overlap. Default: `maximum-random`.
 	"""
 	lidar = LIDARS.get(type_)

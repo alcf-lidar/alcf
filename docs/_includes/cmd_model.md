@@ -21,10 +21,9 @@ Arguments:
 
 Options:
 
-- `track_override_year`: Override year in track. Use if comparing observations
-    with a model statistically. Default: none.
-- `track_lon_180`: Expect track longitude between -180 and 180 degrees.
-    Default: false.
+- `track_override_year: <year>`: Override year in track.
+    Use if comparing observations with a model statistically. Default: `none`.
+- `--track_lon_180`: expect track longitude between -180 and 180 degrees
 
 Types:
 
