@@ -15,7 +15,7 @@ for passing complex command line arguments.
 
 {% include cmd_main.md %}
 
-### commands
+### Commands
 
 | Command | Description |
 | --- | --- |
@@ -80,5 +80,6 @@ Model output processing:
 7. `alcf plot backscatter_hist` – plot backscatter histogram calculated in
     step 5.
 
-NetCDF data files generated in each step can be previewed in
+NetCDF data files generated in each step are described in
+[ALCF output](/documentation/alcf_output/) and can be previewed in
 [Panoply](https://www.giss.nasa.gov/tools/panoply/).
