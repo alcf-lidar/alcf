@@ -17,8 +17,8 @@ and reanalyses are supported by the lidar simulator: MERRA-2, AMPS, NZCSM,
 NZESM.
 
 <div class="img-flex">
-<a href="{% link /img/chm15k_512x.jpg %}"><img src="{% link /img/chm15k_512x.jpg %}" height="200" /></a>
-<a href="{% link /img/cl51_512x.jpg %}"><img src="{% link /img/cl51_512x.jpg %}" height="200" /></a>
+<a href="{% "/img/chm15k_512x.jpg" | relative_url }}"><img src="{{ "/img/chm15k_512x.jpg" | relative_url }}" height="200" /></a>
+<a href="{% "/img/cl51_512x.jpg" | relative_url }}"><img src="{{ "/img/cl51_512x.jpg" | relative_url }}" height="200" /></a>
 </div>
 
 #### Resampling and noise removal
@@ -28,7 +28,7 @@ to increase signal-to-noise ratio, calculates noise standard deviation from
 the highest level and removes noise.
 
 <div class="img-flex nospace">
-<a href="{% link /img/rutherford14_2014-03-30T00:00:00.png %}"><img src="{% link /img/rutherford14_2014-03-30T00:00:00.png %}" width="600" /></a>
+<a href="{{ "/img/rutherford14_2014-03-30T00:00:00.png" | relative_url |}"><img src="{{ "/img/rutherford14_2014-03-30T00:00:00.png" | relative_url }}" width="600" /></a>
 </div>
 
 #### Lidar simulator
@@ -56,7 +56,7 @@ calibration of lidar backscatter using fully-opaque stratocumulus scenes
 
 #### Open source
 
-<img src="{% link /img/osi_mit.png %}" height="100" style="float: left; margin-right: 16px" />
+<img src="{{ "/img/osi_mit.png" | relative_url }}" height="100" style="float: left; margin-right: 16px" />
 
 ALCF is available under the terms of the MIT license, which allows free
 use, copying, modification and redistribution.
