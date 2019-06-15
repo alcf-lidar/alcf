@@ -11,6 +11,8 @@ future, but is not described here at the moment.
 
 ### Linux
 
+The installation has been tested on Debian GNU/Linux 10 (buster).
+
 Install the following required software:
 
 - [PGI compiler](https://www.pgroup.com/products/community.htm)
