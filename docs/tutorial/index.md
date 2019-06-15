@@ -14,7 +14,7 @@ at the Birdlings Flat site in Canterbury, New Zeland on 4 July 2016,
 and the corresponding Antarctic Mesoscale Prediction System (AMPS)
 numerical weather prediction (NWP) model and MERRA-2 renalaysis output.
 To start, download the dataset archive
-[alcf-tutorial-datasets.zip](alcf-tutorial-datasets.zip).
+[alcf-tutorial-datasets.tar](alcf-tutorial-datasets.tar).
 
 Processing with ALCF can be done in two modes: automatic and manual.
 The automatic mode is easier and is convered in this tutorial. Both automatic
@@ -27,8 +27,13 @@ goes wrong during the processing. Please see the
 
 First, make sure that you have installed ALCF following the [installation
 instructions]({{ site.url }}/installation), and the you can run `alcf` in the
-terminal. Extract the archive `alcf-tutorial-datasets.zip` in your working
-directory.
+terminal. Extract the archive `alcf-tutorial-datasets.tar` in your working
+directory:
+
+```sh
+tar xf alcf-tutorial-datasets.tar
+cd alcf-tutorial-datasets
+```
 
 ### Datasets
 
