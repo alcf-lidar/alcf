@@ -37,6 +37,11 @@ Embedded lidar simulator based on COSP can be applied on model data
 to produce virtual backscatter measurements comparable with ALC observations
 for the purpose of model evaluation.
 
+<div class="img-flex nospace">
+<div><center><strong>Luff CHM 15k observations</strong></center><a href="/img/birdlings16_chm15k_2016-07-18T00:00:00.png"><img src="/img/birdlings16_chm15k_2016-07-18T00:00:00.png" width="400" /></a></div>
+<div><center><strong>AMPS model simulated lidar</strong></center><a href="/img/birdlings16_amps_2016-07-18T00:00:00.png"><img src="/img/birdlings16_amps_2016-07-18T00:00:00.png" width="400" /></a></div>
+</div>
+
 #### Cloud detection
 
 Cloud detection is done by applying a threshold on absolute backscatter.
