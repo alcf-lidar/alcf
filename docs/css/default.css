@@ -4,7 +4,9 @@ html {
 
 .page {
 	width: 800px;
+	max-width: 100%;
 	margin: 60px auto;
+	padding: 0 4px;
 }
 
 header {
@@ -93,6 +95,7 @@ nav {
 	font-size: 20px;
 	font-weight: 600;
 	line-height: 140%;
+	flex-wrap: wrap;
 }
 
 nav a {
