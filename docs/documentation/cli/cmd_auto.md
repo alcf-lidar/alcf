@@ -3,7 +3,7 @@ title: alcf auto
 layout: default
 ---
 
-### [Documentation](/documentation)
+### [Command line interface](.)
 ## alcf auto
 
 {% include cmd_auto.md %}

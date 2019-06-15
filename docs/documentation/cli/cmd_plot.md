@@ -3,7 +3,7 @@ title: alcf plot
 layout: default
 ---
 
-### [Documentation](/documentation)
+### [Command line interface](.)
 ## alcf plot
 
 {% include cmd_plot.md %}

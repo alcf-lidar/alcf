@@ -3,7 +3,7 @@ title: Commands
 layout: default
 ---
 
-### [Documentation](/documentation)
+### [Documentation](../)
 ## Command line interface
 
 ### Synopsis

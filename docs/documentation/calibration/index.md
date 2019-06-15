@@ -3,7 +3,7 @@ title: Calibration
 layout: default
 ---
 
-### [Documentation](/documentation)
+### [Documentation](../)
 ## Calibration
 
 Depending on the instrument, calibration in ALCF may be an essential part of

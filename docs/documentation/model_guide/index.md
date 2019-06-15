@@ -3,7 +3,7 @@ title: Model guide
 layout: default
 ---
 
-### [Documentation](/documentation)
+### [Documentation](../)
 ## Model guide
 
 The following GCM, NWP models and reanalyses are supported:

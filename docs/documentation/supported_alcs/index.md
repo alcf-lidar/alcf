@@ -3,7 +3,7 @@ title: Supported ALCs
 layout: default
 ---
 
-### [Documentation](/documentation)
+### [Documentation](../)
 ## Supported ALCs
 
 The following ALCs are supported:

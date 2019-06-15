@@ -3,7 +3,7 @@ title: ALCF output
 layout: default
 ---
 
-### [Documentation](/documentation)
+### [Documentation](../)
 ## ALCF output
 
 The ALCF output is stored in NetCDF files. Below is description of variables

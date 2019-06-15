@@ -3,7 +3,7 @@ title: alcf simulate
 layout: default
 ---
 
-### [Documentation](/documentation)
+### [Command line interface](.)
 ## alcf simulate
 
 {% include cmd_simulate.md %}

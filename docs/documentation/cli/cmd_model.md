@@ -3,7 +3,7 @@ title: alcf model
 layout: default
 ---
 
-### [Documentation](/documentation)
+### [Command line interface](.)
 ## alcf model
 
 {% include cmd_model.md %}

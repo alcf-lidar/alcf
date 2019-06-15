@@ -23,7 +23,7 @@ goes wrong during the processing.
 ### Preparation
 
 First, make sure that you have installed ALCF following the [installation
-instructions](/installation), and the you can run `alcf` in the terminal.
+instructions]({{ site.url }}/installation), and the you can run `alcf` in the terminal.
 Extract the archive `example.zip` in your working directory.
 
 ### Automatic processing
@@ -76,5 +76,5 @@ Processing of model data is done in the following steps:
 This tutorial introduced how to use ALCF to process one month of data
 collected by the Lufft CHM 15k ceilometer and the corresponding data in the
 MERRA-2 reanalysis. ALCF supports more advanced options described in the
-[documentation](/documentation).
-For support please see the [support](/support) page.
+[documentation]({{ site.url }}/documentation).
+For support please see the [support]({{ site.url }}/support) page.

@@ -3,7 +3,7 @@ title: alcf compare
 layout: default
 ---
 
-### [Documentation](/documentation)
+### [Command line interface](.)
 ## alcf compare
 
 {% include cmd_compare.md %}

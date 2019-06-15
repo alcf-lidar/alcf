@@ -3,7 +3,7 @@ title: alcf convert
 layout: default
 ---
 
-### [Documentation](/documentation)
+### [Command line interface](.)
 ## alcf convert
 
 {% include cmd_convert.md %}

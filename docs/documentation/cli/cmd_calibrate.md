@@ -3,7 +3,7 @@ title: alcf calibrate
 layout: default
 ---
 
-### [Documentation](/documentation)
+### [Command line interface](.)
 ## alcf calibrate
 
 {% include cmd_calibrate.md %}

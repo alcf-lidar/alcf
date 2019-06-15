@@ -3,7 +3,7 @@ title: alcf lidar
 layout: default
 ---
 
-### [Documentation](/documentation)
+### [Command line interface](.)
 ## alcf lidar
 
 {% include cmd_lidar.md %}
