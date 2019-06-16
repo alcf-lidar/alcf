@@ -48,7 +48,8 @@ To install in system directories:
 ```sh
 pip3 install https://github.com/peterkuma/ds-python/archive/master.zip \
     https://github.com/peterkuma/aquarius-time/archive/master.zip \
-    https://github.com/peterkuma/pst/archive/master.zip
+    https://github.com/peterkuma/pst/archive/master.zip \
+    https://github.com/peterkuma/nclf-python/archive/master.zip
 python3 setup.py install
 ```
 
@@ -57,7 +58,8 @@ To install in user directories (make sure `~/.local/bin` is in the environmental
 ```sh
 pip3 install --user https://github.com/peterkuma/ds-python/archive/master.zip \
     https://github.com/peterkuma/aquarius-time/archive/master.zip \
-    https://github.com/peterkuma/pst/archive/master.zip
+    https://github.com/peterkuma/pst/archive/master.zip \
+    https://github.com/peterkuma/nclf-python/archive/master.zip
 python3 setup.py install --user
 ```
 
