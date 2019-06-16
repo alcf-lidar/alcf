@@ -12,7 +12,11 @@ at the Birdlings Flat site in Canterbury, New Zeland on 4 July 2016,
 and the corresponding Antarctic Mesoscale Prediction System (AMPS)
 numerical weather prediction (NWP) model and MERRA-2 renalaysis output.
 To start, download the dataset archive
-[alcf-tutorial-datasets.tar](https://ucliveac-my.sharepoint.com/:u:/g/personal/pku33_uclive_ac_nz/ERaql2jZmX9CtouVbz7b1m8BbKCg5juOHrWKJWipXNqR7A?e=RD62et).
+[alcf-tutorial-datasets.tar](https://ucliveac-my.sharepoint.com/:u:/g/personal/pku33_uclive_ac_nz/ERaql2jZmX9CtouVbz7b1m8BbKCg5juOHrWKJWipXNqR7A?e=RD62et) (4.3 GB).
+
+**Note:** Normally, you would want to compare more than 24 hours of
+measurements, such as one month or one year. This tutorial uses 24 hours of
+data due to the large size of the datasets.
 
 Processing with ALCF can be done in two modes: automatic and manual.
 The automatic mode is easier and is convered in this tutorial. Both automatic
@@ -72,8 +76,18 @@ be stored in `processed/chm15k`:
 - `stats`: statistics
 - `stats/all.nc`: statistics (NetCDF)
 
+Figure 1 shows the Lufft CHM 15k plots.
 See [ALCF output](/documentation/alcf_output/) for description of the NetCDF
 files.
+
+<figure>
+<div class="img-flex nospace">
+<div><center><strong>Backscatter profile</strong></center><a href="chm15k/plot/backscatter/2016-07-04T00:00:00.png"><img src="chm15k/plot/backscatter/2016-07-04T00:00:00.png" height="200" /></a></div>
+<div><center><strong>Cloud occurrence</strong></center><a href="chm15k/plot/cloud_occurrence.png"><img src="chm15k/plot/cloud_occurrence.png" height="200" /></a></div>
+<div><center><strong>Backscatter histogram</strong></center><a href="chm15k/plot/backscatter_hist.png"><img src="chm15k/plot/backscatter_hist.png" height="200" /></a></div>
+</div>
+<figcaption><strong>Figure 1 | </strong>Lufft CHM 15k plots.</figcaption>
+</figure>
 
 #### Model
 
@@ -102,8 +116,18 @@ The output will be stored in `processed/merra2`:
 - `stats`: statistics
 - `stats/all.nc`: statistics (NetCDF)
 
+Figure 2 shows the MERRA-2 plots.
 See [ALCF output](/documentation/alcf_output/) for description of the NetCDF
 files.
+
+<figure>
+<div class="img-flex nospace">
+<div><center><strong>Backscatter profile</strong></center><a href="merra2/plot/backscatter/2016-07-04T00:00:00.png"><img src="merra2/plot/backscatter/2016-07-04T00:00:00.png" height="200" /></a></div>
+<div><center><strong>Cloud occurrence</strong></center><a href="merra2/plot/cloud_occurrence.png"><img src="merra2/plot/cloud_occurrence.png" height="200" /></a></div>
+<div><center><strong>Backscatter histogram</strong></center><a href="merra2/plot/backscatter_hist.png"><img src="merra2/plot/backscatter_hist.png" height="200" /></a></div>
+</div>
+<figcaption><strong>Figure 2 | </strong>MERRA-2 plots.</figcaption>
+</figure>
 
 #### Comparison
 
