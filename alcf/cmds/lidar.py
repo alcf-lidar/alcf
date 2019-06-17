@@ -176,7 +176,6 @@ Algorithm options:
 		state['lidar_ratio'] = state.get('lidar_ratio', {})
 		state['output'] = state.get('output', {})
 		if noise_removal_mod is not None:
-			print('here')
 			dd = noise_removal_mod.stream(dd, state['noise_removal'], **options)
 		if calibration_mod is not None:
 			dd = calibration_mod.stream(dd, state['calibration'], **options)
