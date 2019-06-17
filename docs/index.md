@@ -13,8 +13,7 @@ ALCF is an open source command line tool for processing of automatic lidar and c
 
 ALCF can process data from multiple ceilometers and lidars:
 Vaisala CL31, CL51, Lufft CHM 15k, Sigma Space MiniMPL. Multiple models
-and reanalyses are supported by the lidar simulator: MERRA-2, AMPS, NZCSM,
-NZESM.
+and reanalyses are supported by the lidar simulator: MERRA-2, AMPS, NZCSM.
 
 <div class="img-flex">
 <a href="{{ "/img/chm15k_512x.jpg" | relative_url }}"><img src="{{ "/img/chm15k_512x.jpg" | relative_url }}" height="200" /></a>
@@ -46,8 +45,8 @@ for the purpose of model evaluation.
 
 #### Cloud detection
 
-Cloud detection is done by applying a threshold on absolute backscatter.
-More sophisticated algorithms may be added in the future.
+Cloud detection is done by applying a threshold on the denoised absolute
+backscatter. More sophisticated algorithms may be added in the future.
 
 <div class="img-flex nospace">
 <a href="/img/birdlings16_chm15k_cm_2016-07-04T00:00:00.png"><img src="/img/birdlings16_chm15k_cm_2016-07-04T00:00:00.png" width
