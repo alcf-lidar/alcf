@@ -8,7 +8,7 @@ layout: default
 ### Questions
 
 If you have a question about using ALCF, you can contact me at
-Peter Kuma &lt;<a href="mailto:peter.kuma@fastmail.com">peter.kuma@fastmail.com</a>&gt;.
+Peter Kuma &lt;peter.kuma<span>@</span>fastmail.com&gt;.
 
 ### Bugs
 
