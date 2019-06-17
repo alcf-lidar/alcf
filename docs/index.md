@@ -4,7 +4,7 @@ layout: default
 ---
 
 <p class="abstract">
-ALCF is an open source command line tool for processing of automatic lidar and ceilometer (ALC) data and intercomparison with atmospheric models such as general circulation models (GCMs), numerical weather prediction (NWP) models and reanalyses with a lidar simulator using the [COSP](https://www.earthsystemcog.org/projects/cfmip/cosp) instrument simulator framework. ALCs are vertically pointing atmospheric lidars, measuring cloud and aerosol backscatter. The primary focus of ALCF are atmospheric studies of cloud using ALC observations and model cloud validation.
+ALCF is an open source command line tool for processing of automatic lidar and ceilometer (ALC) data and intercomparison with atmospheric models such as general circulation models (GCMs), numerical weather prediction (NWP) models and reanalyses utilising a lidar simulator of the <a href="https://www.earthsystemcog.org/projects/cfmip/cosp">COSP</a> instrument simulator framework. ALCs are vertically pointing atmospheric lidars, measuring cloud and aerosol backscatter. The primary focus of ALCF are atmospheric studies of cloud using ALC observations and model cloud validation.
 </p>
 
 ### Features
