@@ -54,17 +54,33 @@ More sophisticated algorithms may be added in the future.
 ="600" /></a>
 </div>
 
+#### Cloud occurrence
+
+Cloud occurrence histogram as a function of height can be calculated
+and plotted from observations and model simulated backscatter.
+
+<figure>
+<figcaption><center><strong>Vaisala CL 51 vs. HadGEM3 model</strong></center></figcaption>
+<div class="img-flex nospace">
+<div><a href="/img/mcq_cl51.png"><img src="/img/mcq_cl51.png" width="267" /></a></div>
+<div><a href="/img/nbp1704_chm15k.png"><img src="/img/nbp1704_chm15k.png" width="267" /></a></div>
+<div><a href="/img/tan1802_chm15k.png"><img src="/img/tan1802_chm15k.png" width="267" /></a></div>
+</div>
+</figure>
+
 #### Calibration
 
 Lidar ratio can calculated and plotted along the backscatter for absolute
 calibration of lidar backscatter using fully-opaque stratocumulus scenes
 ([O'Connor et al., 2004](https://journals.ametsoc.org/doi/abs/10.1175/1520-0426(2004)021%3C0777%3AATFAOC%3E2.0.CO%3B2)).
 
-#### Plotting
+<div class="img-flex nospace">
+<a href="/img/birdlings16_chm15k_lr_2016-07-16T00:00:00.png"><img src="/img/birdlings16_chm15k_lr_2016-07-16T00:00:00.png" width="600" /></a>
+</div>
 
-#### Cloud occurrence
-
+<!--
 #### Backscatter histogram
+-->
 
 #### Open source
 
