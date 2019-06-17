@@ -28,7 +28,9 @@ to increase signal-to-noise ratio, calculates noise standard deviation from
 the highest level and removes noise.
 
 <div class="img-flex nospace">
+<div>
 <a href="{{ "/img/rutherford14_2014-03-30T00:00:00.png" | relative_url }}"><img src="{{ "/img/rutherford14_2014-03-30T00:00:00.png" | relative_url }}" width="600" /></a>
+</div>
 </div>
 
 #### Lidar simulator
@@ -47,11 +49,16 @@ for the purpose of model evaluation.
 Cloud detection is done by applying a threshold on absolute backscatter.
 More sophisticated algorithms may be added in the future.
 
+<div class="img-flex nospace">
+<a href="/img/birdlings16_chm15k_cm_2016-07-04T00:00:00.png"><img src="/img/birdlings16_chm15k_cm_2016-07-04T00:00:00.png" width
+="600" /></a>
+</div>
+
 #### Calibration
 
 Lidar ratio can calculated and plotted along the backscatter for absolute
 calibration of lidar backscatter using fully-opaque stratocumulus scenes
-(O'Connor et al., 2004).
+([O'Connor et al., 2004](https://journals.ametsoc.org/doi/abs/10.1175/1520-0426(2004)021%3C0777%3AATFAOC%3E2.0.CO%3B2)).
 
 #### Plotting
 
