@@ -39,7 +39,9 @@ Plot command options:
 	- `sigma: <value>`: Suppress backscatter less than a number of standard deviations
 		from the mean backscatter (real). Default: `3`.
 	- `vlim: { <min> <max }`. Value limits (10^6 m-1.sr-1).
-        Default: `{ 5 200 }`.
+        Default: `{ 10 2000 }`.
+    - `vlog: <value>`: Plot values on logarithmic scale: `true` of `false`.
+        Default: `true`.
 - `backscatter_hist`:
     - `vlim: { <min> <max }`. Value limits (%) or `none` for auto. If `none`
         and `vlog` is `none`, `min` is set to 1e-3 if less or equal to zero.
