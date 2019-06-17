@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 from matplotlib.dates import date2num, AutoDateFormatter, AutoDateLocator
 from matplotlib.colors import ListedColormap, Normalize, BoundaryNorm, LogNorm
+import matplotlib.lines as mlines
 import scipy.ndimage as ndimage
 import aquarius_time as aq
 import ds_format as ds
@@ -39,25 +40,22 @@ VARIABLES = [
 	'backscatter_full',
 ]
 
-def plot_legend():
-	legend = plt.legend()
+def plot_legend(*args, theme='light', **kwargs):
+	legend = plt.legend(*args, **kwargs)
 	f = legend.get_frame()
-	f.set_facecolor('k')
+	f.set_facecolor('k' if theme == 'light' else 'white')
 	f.set_linewidth(0)
-	f.set_alpha(0.1)
+	f.set_alpha(0.1 if theme == 'light' else 0.9)
 
 def plot_profile(plot_type, d, cax,
 	subcolumn=0,
 	sigma=0.,
 	zlim=None,
-	vlim=None,
-	vlog=False,
+	vlim=[10, 2000],
+	vlog=True,
 	**opts
 ):
 	cmap = 'viridis'
-	levels = np.arange(20, 201, 20)
-	if vlim is None:
-		vlim = [10, 200]
 	if vlog:
 		norm = LogNorm(vlim[0], vlim[1])
 	else:
@@ -101,9 +99,15 @@ def plot_profile(plot_type, d, cax,
 	if opts.get('cloud_mask'):
 		cf = plt.contour(d['time'], d['zfull']*1e-3, cloud_mask.T,
 			colors='red',
-			linewidths=0.3,
+			linewidths=1,
 			linestyles='dashed',
 			levels=[-1., 0.5, 2.],
+		)
+		plot_legend(
+			handles=[mlines.Line2D([], [],
+				color='red', linestyle='dashed', label='Cloud mask'
+			)],
+			theme='dark'
 		)
 	plt.xlabel('Time (UTC)')
 	plt.ylabel('Height (km)')
@@ -356,7 +360,9 @@ Plot command options:
 	- `sigma: <value>`: Suppress backscatter less than a number of standard deviations
 		from the mean backscatter (real). Default: `3`.
 	- `vlim: { <min> <max }`. Value limits (10^6 m-1.sr-1).
-        Default: `{ 5 200 }`.
+        Default: `{ 10 2000 }`.
+    - `vlog: <value>`: Plot values on logarithmic scale: `true` of `false`.
+        Default: `true`.
 - `backscatter_hist`:
     - `vlim: { <min> <max }`. Value limits (%) or `none` for auto. If `none`
         and `vlog` is `none`, `min` is set to 1e-3 if less or equal to zero.
