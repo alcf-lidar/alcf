@@ -6,8 +6,7 @@ layout: default
 ## About
 
 ALCF was developed at the <a href="https://www.canterbury.ac.nz">University of Canterbury</a>
-with support from the <a href="https://www.deepsouthchallenge.co.nz">New Zealand Deep South National Science Challenge</a>.for the purpose of evaluation of climate models based on automatic lidar and ceilometer (ALC)
-observations. ALCF has not yet been peer-reviewed. The current release
+with support from the <a href="https://www.deepsouthchallenge.co.nz">New Zealand Deep South National Science Challenge</a> and <a href="https://www.niwa.co.nz/">NIWA</a> for the purpose of evaluation of climate models based on automatic lidar and ceilometer (ALC) observations. ALCF has not yet been peer-reviewed. The current release
 is a beta release.
 
 ### Abstract
