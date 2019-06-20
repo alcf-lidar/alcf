@@ -35,4 +35,4 @@ Kuma et al. (2019): Ground-based lidar simulator framework for comparing models
 and observations
 -->
 
-Please see [alcf.peterkuma.net](https://alcf.peterkuma.net) for more information.
+Please see [alcf-lidar.github.io](https://alcf-lidar.github.io) for more information.
