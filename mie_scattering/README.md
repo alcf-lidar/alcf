@@ -7,14 +7,25 @@ Mie scattering
 
 Plot theoretical particle size distribution (log-normal or Gamma).
 
-Usage: `bin/plot_size_dist <type> <output> [<mean>] [<sd>]`
+Usage: `bin/plot_size_dist { <type> <reff> <sigmaeff> }... <output> [num: <num>]`
 
 Arguments:
 
-- `type` – Distribution type: `log-norm` or `gamma`.
-- `output` – Output plot filename (PNG or PDF).
-- `mean` – Distribution mean (effective radius). Default: 20 um.
-- `sd` – Standard deviation.
+- `type` – distribution type: `log-norm` or `gamma`
+- `reff` – effective radius (um)
+- `sigmaeff` – effective standard deviation (um)
+- `output` – output plot filename (PDF)
+
+Options:
+
+- `num` – number of `reff` bins. Default: 100000.
+
+Example:
+
+```sh
+bin/plot_size_dist { lognorm 20 10 } { lognorm 20 5 } { lognorm 10 5 } plot/size_dist_lognorm.pdf
+bin/plot_size_dist { gamma 20 10 } { gamma 20 5 } { gamma 10 5 } plot/size_dist_gamma.pdf
+```
 
 ### calc_k (TODO)
 
