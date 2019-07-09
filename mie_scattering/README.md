@@ -1,6 +1,9 @@
 Mie scattering
 ==============
 
+This directory contains code for calculation of Mie scattering parameters
+required by the COSP/ACTSIM lidar simulator.
+
 ## Contents
 
 ### plot_size_dist
@@ -18,7 +21,7 @@ Arguments:
 
 Options:
 
-- `num` – number of `reff` bins. Default: 100000.
+- `num` – Number of `reff` bins. Default: 100000.
 
 Example:
 
