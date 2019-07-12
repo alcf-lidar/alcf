@@ -15,8 +15,8 @@ Usage: `bin/plot_size_dist { <type> <reff> <sigmaeff> }... <output> [num: <num>]
 Arguments:
 
 - `type` – distribution type: `log-norm` or `gamma`
-- `reff` – effective radius (um)
-- `sigmaeff` – effective standard deviation (um)
+- `reff` – effective radius (μm)
+- `sigmaeff` – effective standard deviation (μm)
 - `output` – output plot filename (PDF)
 
 Options:
@@ -32,8 +32,8 @@ bin/plot_size_dist { gamma 20 10 } { gamma 20 5 } { gamma 10 5 } plot/size_dist_
 
 ### calc_k
 
-Calculate the scattering-to-extinction ratio k by integrating Mie scattering
-parameters over a range of particle radii.
+Calculate the scattering-to-extinction ratio k (inverse of the lidar ratio)
+by integrating Mie scattering parameters over a range of particle radii.
 
 Usage: `bin/calc_k <input> <type> <output> [sigmaeff_ratio: <sigmaeff_ratio>]`
 
@@ -52,6 +52,30 @@ Example:
 bin/calc_k out/miev_532 lognorm out/k_lognorm_532.nc
 bin/calc_k out/miev_910 lognorm out/k_lognorm_910.nc
 bin/calc_k out/miev_1064 lognorm out/k_lognorm_1064.nc
+bin/calc_k out/miev_532 gamma out/k_gamma_532.nc
+bin/calc_k out/miev_910 gamma out/k_gamma_910.nc
+bin/calc_k out/miev_1064 gamma out/k_gamma_1064.nc
+```
+
+### plot_lr
+
+Plot lidar ratio calculated by calc_k.
+
+Usage: `bin/plot_lr <input>... <output> [xlim: { <xmin> <xmax> }] [ylim: { <ymin> <ymax> }]`
+
+Arguments:
+
+- `input` – output of calc_k (NetCDF)
+- `output` – output plot filename (PDF)
+- `xmin` – x axis minimum (μm). Default: 5.
+- `xmax` – x axis maximum (μm). Default: 50.
+- `ymin` – y axis minimum (sr). Default: 10.
+- `ymax` – y axis maximum (sr). Default: 25.
+
+Example:
+
+```sh
+bin/plot_lr out/k_*.nc plot/lr.pdf
 ```
 
 ## MIEV
@@ -87,12 +111,12 @@ The output contains a line with metadata:
 followed by a header line (`r qext qsca p180`), followed by lines containing
 four space separated columns:
 
-- `r` – particle radius (um)
+- `r` – particle radius (μm)
 - `qext` – extinction efficiency (1)
 - `qsca` – scattering efficiency (1)
 - `p180` – scattering phase function at 180 degrees (1)
 
-The particle radii range from 0.1 um to 100 um by 0.1 um, and radii
+The particle radii range from 0.1 μm to 100 μm by 0.1 μm, and radii
 identified as "spikes" by MIEV are ignored (not printed).
 
 Example:
