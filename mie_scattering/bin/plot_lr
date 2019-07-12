@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import numpy as np
+import pst
+from matplotlib import pyplot as plt
+import ds_format as ds
+
+COLORS = [
+	'#0084C8',
+	'#DC0000',
+	'#009100',
+]
+
+LINESTYLES = [
+	'solid',
+	'dashed',
+	'dotted',
+]
+
+if __name__ == '__main__':
+	stderr = os.fdopen(sys.stderr.fileno(), 'wb')
+	args, opts = pst.decode_argv(sys.argv)
+	if len(args) < 3:
+		stderr.write(b'Usage: %s <input>... <output> [xlim: { <xmin> <xmax> }] [ylim: { <ymin> <ymax> }]\n' % args[0])
+		sys.exit(1)
+	input_ = [os.fsdecode(x) for x in args[1:-1]]
+	output = os.fsdecode(args[-1])
+	xlim = opts.get(b'xlim', [5., 50.])
+	ylim = opts.get(b'ylim', [10., 25.])
+
+	plt.figure(figsize=(6, 6))
+	for i, filename in enumerate(input_):
+		d = ds.read(filename)
+		label = '%s, $\\lambda$ = %d nm' % (d['.']['.']['distribution'], d['wavelength']*1e9)
+		plt.plot(d['reff']*1e6, d['lr'],
+			color=COLORS[i % len(COLORS)],
+			lw=1,
+			label=label,
+			linestyle=LINESTYLES[int(i/len(COLORS))]
+		)
+	plt.xlim(xlim)
+	plt.ylim(ylim)
+	plt.xlabel('Effective radius ($\\mu$m)')
+	plt.ylabel('Lidar ratio (sr)')
+	legend = plt.legend()
+	frame = legend.get_frame()
+	frame.set_facecolor('k')
+	frame.set_alpha(0.05)
+	frame.set_linewidth(0)
+	plt.savefig(output, bbox_inches='tight')

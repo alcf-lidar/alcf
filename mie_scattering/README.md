@@ -30,17 +30,29 @@ bin/plot_size_dist { lognorm 20 10 } { lognorm 20 5 } { lognorm 10 5 } plot/size
 bin/plot_size_dist { gamma 20 10 } { gamma 20 5 } { gamma 10 5 } plot/size_dist_gamma.pdf
 ```
 
-### calc_k (TODO)
+### calc_k
 
 Calculate the scattering-to-extinction ratio k by integrating Mie scattering
 parameters over a range of particle radii.
 
-Usage: `bin/calc_k <mie_parameters>`
+Usage: `bin/calc_k <input> <type> <output> [sigmaeff_ratio: <sigmaeff_ratio>]`
 
 Arguments:
 
-- `mie_parameters` – file containing Mie scattering parameters calculated by
+- `input` – file containing Mie scattering parameters calculated by
     MIEV (see below)
+- `type` – type of particle size distribution: `lognorm` or `gamma`
+- `output` – output file (NetCDF)
+- `sigmaeff_ratio` – Ratio of effective standard deviation to effective radius.
+    Default: 0.25.
+
+Example:
+
+```sh
+bin/calc_k out/miev_532 lognorm out/k_lognorm_532.nc
+bin/calc_k out/miev_910 lognorm out/k_lognorm_910.nc
+bin/calc_k out/miev_1064 lognorm out/k_lognorm_1064.nc
+```
 
 ## MIEV
 
