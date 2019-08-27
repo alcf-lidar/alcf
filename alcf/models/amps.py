@@ -47,8 +47,8 @@ def read(dirname, track, warnings=[]):
 			ps = d['PSFC'][i,j]
 			orog = d['HGT'][i,j]
 			pfull = d['PB'][:,i,j] + d['P'][:,i,j]
-			zg = (d['PHB'][:,i,j] + d['PH'][:,i,j])/9.81
-			zg = 0.5*(zg[1:] + zg[:-1])
+			zfull = (d['PHB'][:,i,j] + d['PH'][:,i,j])/9.81
+			zfull = 0.5*(zfull[1:] + zfull[:-1])
 			theta = d['T'][:,i,j] + d['T00']
 			ta = theta*(pfull/ps)**KAPPA
 			newshape3 = [1] + list(clw.shape)
@@ -59,7 +59,7 @@ def read(dirname, track, warnings=[]):
 				'ta': ta.reshape(newshape3),
 				'cl': cl.reshape(newshape3),
 				'pfull': pfull.reshape(newshape3),
-				'zg': zg.reshape(newshape3),
+				'zfull': zfull.reshape(newshape3),
 				'ps': ps.reshape(newshape2),
 				'orog': orog.reshape(newshape2),
 				'lon': np.array([lon[i,j]]),

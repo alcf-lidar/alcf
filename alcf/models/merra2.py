@@ -45,7 +45,7 @@ def read(dirname, track, warnings=[]):
 			ps = d['PS']
 			orog = d['PHIS']
 			pfull = d['PL'][::-1]
-			zg = d['H'][::-1]
+			zfull = d['H'][::-1]
 			ta = d['T'][::-1]
 			nlev = len(clw)
 			newshape4 = (1,nlev)
@@ -56,7 +56,7 @@ def read(dirname, track, warnings=[]):
 				'ta': ta.reshape(newshape4),
 				'cl': cl.reshape(newshape4),
 				'pfull': pfull.reshape(newshape4),
-				'zg': zg.reshape(newshape4),
+				'zfull': zfull.reshape(newshape4),
 				'ps': ps.reshape(newshape3),
 				'orog': orog.reshape(newshape3),
 				'lat': np.array([lat[j]]),

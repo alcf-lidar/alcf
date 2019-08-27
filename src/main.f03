@@ -25,7 +25,7 @@ contains
             ps, &
             orog
         real(8), dimension(:,:), allocatable :: &
-            zg, &
+            zfull, &
             ta, &
             pfull, &
             clw, &
@@ -48,7 +48,7 @@ contains
         call nc_get_var_1d_real(ncid, 'time', time)
         call nc_get_var_1d_real(ncid, 'ps', ps)
         call nc_get_var_1d_real(ncid, 'orog', orog)
-        call nc_get_var_2d_real(ncid, 'zg', zg)
+        call nc_get_var_2d_real(ncid, 'zfull', zfull)
         call nc_get_var_2d_real(ncid, 'ta', ta)
         call nc_get_var_2d_real(ncid, 'pfull', pfull)
         call nc_get_var_2d_real(ncid, 'clw', clw)
@@ -71,7 +71,7 @@ contains
         input%T = transpose(ta)
         input%p = transpose(pfull)
         input%tca = transpose(cl)*0.01
-        input%zlev = transpose(zg)
+        input%zlev = transpose(zfull)
         do i = 1, npoints
             input%zlev(i,:) = input%zlev(i,:) - orog(i)
         end do

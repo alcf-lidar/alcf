@@ -19,9 +19,9 @@ META = {
 		'standard_name': 'air_pressure',
 		'units': 'Pa',
 	},
-	'zg': {
+	'zfull': {
 		'.dims': ['time', 'level'],
-		'standard_name': 'geopotential_height',
+		'standard_name': 'height_above_reference_ellipsoid',
 		'units': 'm',
 	},
 	'time': {

@@ -93,16 +93,16 @@ def read(dirname, track, warnings=[]):
 		d['ps'] = np.full(n, np.nan, dtype=np.float64)
 		for i in range(n):
 	 		d['ps'][i] = 2*d['pfull'][i,0] - d['pfull'][i,1]
-	if 'zg' not in d:
+	if 'zfull' not in d:
 		n, m = d['pfull'].shape
-		d['zg'] = np.full((n, m), np.nan, dtype=np.float64)
+		d['zfull'] = np.full((n, m), np.nan, dtype=np.float64)
 		for i in range(n):
-			d['zg'][i,:] = d['level_height']
+			d['zfull'][i,:] = d['level_height']
 	del d['level_height']
 	if 'orog' not in d:
-		n, m = d['zg'].shape
+		n, m = d['zfull'].shape
 		d['orog'] = np.full(n, np.nan, dtype=np.float64)
 		for i in range(n):
-	 		d['orog'][i] = 2*d['zg'][i,0] - d['zg'][i,1]
+			d['orog'][i] = 2*d['zfull'][i,0] - d['zfull'][i,1]
 	d['.'] = META
 	return d
