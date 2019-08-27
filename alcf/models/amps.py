@@ -43,7 +43,7 @@ def read(dirname, track, warnings=[]):
 			i, j = np.unravel_index(l, lon.shape)
 			clw = d['QCLOUD'][:,i,j]
 			cli = d['QICE'][:,i,j]
-			clt = 100.*np.ones(len(clw), dtype=np.float64)
+			cl = 100.*np.ones(len(clw), dtype=np.float64)
 			ps = d['PSFC'][i,j]
 			orog = d['HGT'][i,j]
 			pfull = d['PB'][:,i,j] + d['P'][:,i,j]
@@ -57,7 +57,7 @@ def read(dirname, track, warnings=[]):
 				'clw': clw.reshape(newshape3),
 				'cli': cli.reshape(newshape3),
 				'ta': ta.reshape(newshape3),
-				'clt': clt.reshape(newshape3),
+				'cl': cl.reshape(newshape3),
 				'pfull': pfull.reshape(newshape3),
 				'zg': zg.reshape(newshape3),
 				'ps': ps.reshape(newshape2),
