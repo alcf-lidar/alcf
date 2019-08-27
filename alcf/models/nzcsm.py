@@ -41,7 +41,7 @@ def read(dirname, track, warnings=[]):
 				continue
 			clw = d['model_qcl']
 			cli = d['model_qcf']
-			clt = 100.*np.ones(len(clw), dtype=np.float64)
+			cl = 100.*np.ones(len(clw), dtype=np.float64)
 			ps = 2*d['model_press'][0] - d['model_press'][1]
 			orog = max(0., 2*d['hybridt32'][0] - d['hybridt32'][1])
 			pfull = d['model_press']
@@ -53,7 +53,7 @@ def read(dirname, track, warnings=[]):
 				'clw': clw.reshape(newshape4),
 				'cli': cli.reshape(newshape4),
 				'ta': ta.reshape(newshape4),
-				'clt': clt.reshape(newshape4),
+				'cl': cl.reshape(newshape4),
 				'pfull': pfull.reshape(newshape4),
 				'zg': zg.reshape(newshape4),
 				'ps': [ps],

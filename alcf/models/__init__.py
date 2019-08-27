@@ -44,9 +44,9 @@ META = {
 		'standard_name': 'air_temperature',
 		'units': 'K',
 	},
-	'clt': {
+	'cl': {
 		'.dims': ['time', 'level'],
-		'standard_name': 'cloud_area_fraction',
+		'standard_name': 'cloud_area_fraction_in_atmosphere_layer',
 		'units': '%',
 	},
 	'orog': {

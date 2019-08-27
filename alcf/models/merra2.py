@@ -41,7 +41,7 @@ def read(dirname, track, warnings=[]):
 			d = ds.read(filename, variables=VARIABLES, sel={'time': i, 'lat': j, 'lon': k})
 			clw = d['QL'][::-1]
 			cli = d['QI'][::-1]
-			clt = d['CLOUD'][::-1]*100.
+			cl = d['CLOUD'][::-1]*100.
 			ps = d['PS']
 			orog = d['PHIS']
 			pfull = d['PL'][::-1]
@@ -54,7 +54,7 @@ def read(dirname, track, warnings=[]):
 				'clw': clw.reshape(newshape4),
 				'cli': cli.reshape(newshape4),
 				'ta': ta.reshape(newshape4),
-				'clt': clt.reshape(newshape4),
+				'cl': cl.reshape(newshape4),
 				'pfull': pfull.reshape(newshape4),
 				'zg': zg.reshape(newshape4),
 				'ps': ps.reshape(newshape3),

@@ -19,7 +19,7 @@ TRANS = {
 	'air_temperature': 'ta',
 	'mass_fraction_of_cloud_liquid_water_in_air': 'clw',
 	'mass_fraction_of_cloud_ice_in_air': 'cli',
-	'cloud_volume_fraction_in_atmosphere_layer': 'clt',
+	'cloud_volume_fraction_in_atmosphere_layer': 'cl',
 }
 
 def read(dirname, track, warnings=[]):
@@ -64,7 +64,7 @@ def read(dirname, track, warnings=[]):
 					'.dims': ['level']
 				}
 				d_new[TRANS[var]] = d[var].reshape([1] + list(d[var].shape))
-				if TRANS[var] == 'clt':
+				if TRANS[var] == 'cl':
 					d_new[TRANS[var]] *= 100.
 				dd.append(d_new)
 		if len(dd) > 0:

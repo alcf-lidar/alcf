@@ -30,7 +30,7 @@ contains
             pfull, &
             clw, &
             cli, &
-            clt
+            cl
         integer :: &
             nlon, &
             nlat, &
@@ -53,7 +53,7 @@ contains
         call nc_get_var_2d_real(ncid, 'pfull', pfull)
         call nc_get_var_2d_real(ncid, 'clw', clw)
         call nc_get_var_2d_real(ncid, 'cli', cli)
-        call nc_get_var_2d_real(ncid, 'clt', clt)
+        call nc_get_var_2d_real(ncid, 'cl', cl)
 
         shp(1:2) = shape(ta)
         npoints = shp(2)
@@ -70,7 +70,7 @@ contains
         input%lat = lat
         input%T = transpose(ta)
         input%p = transpose(pfull)
-        input%tca = transpose(clt)*0.01
+        input%tca = transpose(cl)*0.01
         input%zlev = transpose(zg)
         do i = 1, npoints
             input%zlev(i,:) = input%zlev(i,:) - orog(i)
