@@ -5,16 +5,35 @@ import aquarius_time as aq
 import ds_format as ds
 from alcf.models import MODELS
 
+def get_track_segment(track, t1, t2):
+	mask = (track['time'] >= t1) & (track['time'] < t2)
+	n = np.sum(mask)
+	lon1, lon2 = np.interp([t1, t2], track['time'], track['lon'])
+	lat1, lat2 = np.interp([t1, t2], track['time'], track['lat'])
+	time = np.full(n + 2, np.nan, np.float64)
+	lon = np.full(n + 2, np.nan, np.float64)
+	lat = np.full(n + 2, np.nan, np.float64)
+	time[1:-1] = track['time'][mask]
+	lon[1:-1] = track['lon'][mask]
+	lat[1:-1] = track['lat'][mask]
+	time[0], time[-1] = t1, t2
+	lon[0], lon[-1] = lon1, lon2
+	lat[0], lat[-1] = lat1, lat2
+	return {
+		'time': time,
+		'lon': lon,
+		'lat': lat,
+		'.': track['.']
+	}
+
 def model(type_, input_, point=None, time=None, track=None):
 	model = MODELS.get(type_)
 	warnings = []
 	if model is None:
 		raise ValueError('Invalid type: %s' % type_)
 	if track is not None:
-		mask = (track['time'] >= time[0]) & (track['time'] < time[1])
-		track_delta = ds.copy(track)
-		ds.select(track_delta, {'time': mask})
-		d = model.read(input_, track_delta, warnings=warnings)
+		track_segment = get_track_segment(track, time[0], time[1])
+		d = model.read(input_, track_segment, warnings=warnings)
 	else:
 		lon = np.array([point[0], point[0]], dtype=np.float64)
 		lat = np.array([point[1], point[1]], dtype=np.float64)
