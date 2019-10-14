@@ -33,7 +33,7 @@ VARIABLES = [
 	'backscatter_sd_hist',
 	'zfull',
 	'lr',
-	'cloud_occurrence',
+	'cl',
 	'n',
 	'cloud_mask',
 	'backscatter_hist',
@@ -148,11 +148,11 @@ def plot_cloud_occurrence(dd,
 ):
 	for i, d in enumerate(dd):
 		zfull = d['zfull']
-		cloud_occurrence = d['cloud_occurrence'][:,subcolumn] \
-			if len(d['cloud_occurrence'].shape) == 2 \
-			else d['cloud_occurrence']
+		cl = d['cl'][:,subcolumn] \
+			if len(d['cl'].shape) == 2 \
+			else d['cl']
 		n = d['n']
-		plt.plot(cloud_occurrence, 1e-3*zfull,
+		plt.plot(cl, 1e-3*zfull,
 			color=colors[i],
 			lw=lw,
 			label=(labels[i] if labels is not None else None),

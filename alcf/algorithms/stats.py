@@ -70,9 +70,13 @@ def stats_map(d, state,
 		'backscatter_mol_avg',
 		np.zeros(dims2, dtype=np.float64)
 	)
-	state['cloud_occurrence'] = state.get(
-		'cloud_occurrence',
+	state['cl'] = state.get(
+		'cl',
 		np.zeros(dims2, dtype=np.float64)
+	)
+	state['clt'] = state.get(
+		'clt',
+		np.zeros(l, dtype=np.float64) if l > 0 else 0
 	)
 	state['backscatter_hist'] = state.get(
 		'backscatter_hist',
@@ -83,7 +87,8 @@ def stats_map(d, state,
 		np.zeros(sd_hist_dims, dtype=np.float64)
 	)
 	backscatter_hist_tmp = np.zeros(hist_dims, dtype=np.float64)
-	cloud_occurrence_tmp = np.zeros(dims, dtype=np.float64)
+	cl_tmp = np.zeros(dims, dtype=np.float64)
+	clt_tmp = np.zeros(l, dtype=np.float64) if l > 0 else 0
 	backscatter_avg_tmp = np.zeros(dims, dtype=np.float64)
 	backscatter_mol_avg_tmp = np.zeros(dims, dtype=np.float64)
 	if tlim is not None:
@@ -145,24 +150,26 @@ def stats_map(d, state,
 			for k in range(l):
 				if not filter_mask[i,k]:
 					continue
-				cloud_occurrence_tmp[:,k] += d['cloud_mask'][i,:,k]
+				cl_tmp[:,k] += d['cloud_mask'][i,:,k]
 				backscatter_avg_tmp[:,k] += d['backscatter'][i,:,k]
 				if 'backscatter_mol' in d:
 					backscatter_mol_avg_tmp[:,k] += d['backscatter_mol'][i,:]
 				state['n'][k] += 1
+				state['clt'][k] += np.any(d['cloud_mask'][i,:,k])
 		else:
 			if not filter_mask[i]:
 				continue
-			cloud_occurrence_tmp[:] += d['cloud_mask'][i,:]
+			cl_tmp[:] += d['cloud_mask'][i,:]
 			backscatter_avg_tmp[:] += d['backscatter'][i,:]
 			if 'backscatter_mol' in d:
 				backscatter_mol_avg_tmp[:] += d['backscatter_mol'][i,:]
 			state['n'] += 1
+			state['clt'] += np.any(d['cloud_mask'][i,:])
 	if l > 0:
 		for k in range(l):
-			state['cloud_occurrence'][:,k] += interp(
+			state['cl'][:,k] += interp(
 				zhalf,
-				cloud_occurrence_tmp[:,k],
+				cl_tmp[:,k],
 				zhalf2
 			)
 			state['backscatter_avg'][:,k] += interp(
@@ -176,9 +183,9 @@ def stats_map(d, state,
 				zhalf2
 			)
 	else:
-		state['cloud_occurrence'] += interp(
+		state['cl'] += interp(
 			zhalf,
-			cloud_occurrence_tmp,
+			cl_tmp,
 			zhalf2
 		)
 		state['backscatter_avg'] += interp(
@@ -193,22 +200,25 @@ def stats_map(d, state,
 		)
 
 def stats_reduce(state, bsd_z=None, **kwargs):
-	if len(state['cloud_occurrence'].shape) == 2:
+	if len(state['cl'].shape) == 2:
 		for k in range(len(state['n'])):
 			if state['n'][k] > 0:
 				state['backscatter_hist'][:,:,k] /= state['n'][k]
-				state['cloud_occurrence'][:,k] /= state['n'][k]
+				state['cl'][:,k] /= state['n'][k]
+				state['clt'][k] /= state['n'][k]
 				state['backscatter_avg'][:,k] /= state['n'][k]
 				state['backscatter_mol_avg'][:,k] /= state['n'][k]
 	else:
 		if state['n'] != 0:
 			state['backscatter_hist'] /= state['n']
-			state['cloud_occurrence'] /= state['n']
+			state['cl'] /= state['n']
+			state['clt'] /= state['n']
 			state['backscatter_avg'] /= state['n']
 			state['backscatter_mol_avg'] /= state['n']
 	state['backscatter_sd_hist'] /= state['n']
 	do = {
-		'cloud_occurrence': 100.*state['cloud_occurrence'],
+		'cl': 100.*state['cl'],
+		'clt': 100.*state['clt'],
 		'zfull': state['zfull2'],
 		'n': state['n'],
 		'backscatter_avg': state['backscatter_avg'],
@@ -225,30 +235,37 @@ def stats_reduce(state, bsd_z=None, **kwargs):
 			'standard_name': 'height_above_reference_ellipsoid',
 			'units': 'm',
 		},
-		'cloud_occurrence': {
+		'cl': {
 			'.dims': ['zfull', 'column'] \
-				if len(state['cloud_occurrence'].shape) == 2 \
+				if len(state['cl'].shape) == 2 \
 				else ['zfull'],
-			'long_name': 'cloud_occurrence',
+			'long_name': 'cloud_area_fraction_in_atmosphere_layer',
+			'units': '%',
+		},
+		'clt': {
+			'.dims': ['column'] \
+				if isinstance(state['clt'], np.ndarray) \
+				else [],
+			'long_name': 'cloud_area_fraction',
 			'units': '%',
 		},
 		'n': {
 			'.dims': ['column'] \
-				if len(state['cloud_occurrence'].shape) == 2 \
+				if len(state['cl'].shape) == 2 \
 				else [],
 			'long_name': 'number_of_profiles',
 			'units': '1',
 		},
 		'backscatter_avg': {
 			'.dims': ['zfull', 'column'] \
-				if len(state['cloud_occurrence'].shape) == 2 \
+				if len(state['cl'].shape) == 2 \
 				else ['zfull'],
 			'long_name': 'total_attenuated_backscatter_coefficient_average',
 			'units': 'm-1 sr-1',
 		},
 		'backscatter_mol_avg': {
 			'.dims': ['zfull', 'column'] \
-				if len(state['cloud_occurrence'].shape) == 2 \
+				if len(state['cl'].shape) == 2 \
 				else ['zfull'],
 			'long_name': 'total_attenuated_molecular_backscatter_coefficient_average',
 			'units': 'm-1 sr-1',
