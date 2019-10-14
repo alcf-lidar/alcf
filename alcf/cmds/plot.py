@@ -4,6 +4,7 @@ import os
 import sys
 import numpy as np
 import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 from matplotlib.dates import date2num, AutoDateFormatter, AutoDateLocator
@@ -14,8 +15,6 @@ import aquarius_time as aq
 import ds_format as ds
 from alcf import misc
 from alcf.lidars import LIDARS
-
-mpl.use('Agg')
 
 COLORS = [
 	'#0084c8',
