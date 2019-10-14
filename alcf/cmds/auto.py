@@ -68,6 +68,7 @@ Model types:
 	Version 2 (MERRA-2)
 - `nzcsm`: New Zealand Convection Scale Model (NZCSM)
 - `nzesm`: New Zealand Earth System Model (NZESM) (experimental)
+- `um`: UK Met Office Unified Model (UM)
 
 Lidar types:
 

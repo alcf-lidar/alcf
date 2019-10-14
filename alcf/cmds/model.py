@@ -90,6 +90,7 @@ Types:
 	Version 2 (MERRA-2)
 - `nzcsm`: New Zealand Convection Scale Model (NZCSM)
 - `nzesm`: New Zealand Earth System Model (NZESM) (experimental)
+- `um`: UK Met Office Unified Model (UM)
 
 Time format:
 
@@ -118,14 +119,17 @@ Track file is a NetCDF file containing 1D variables `lon`, `lat`, and `time`.
 				360. + track1['lon']
 			)
 		time1 = track1['time'][0], track1['time'][-1]
-	elif point is not None and time is not None:
-		time1 = [None, None]
-		for i in 0, 1:
-			time1[i] = aq.from_iso(time[i])
-			if time1[i] is None:
-				raise ValueError('Invalid time format: %s' % time[i])
+	elif point is not None:
+		pass
 	else:
 		raise ValueError('Point and time or track is required')
+
+	if time is not None:
+			time1 = [None, None]
+			for i in 0, 1:
+				time1[i] = aq.from_iso(time[i])
+				if time1[i] is None:
+					raise ValueError('Invalid time format: %s' % time[i])
 
 	# if os.path.isdir(output):
 	t1, t2 = time1[0], time1[1]

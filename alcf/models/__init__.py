@@ -61,6 +61,7 @@ from . import merra2
 from . import amps
 from . import nzcsm
 from . import nzesm
+from . import um
 
 MODELS = {
 	'amps': amps,
@@ -69,4 +70,5 @@ MODELS = {
 	'merra2': merra2,
 	'nzcsm': nzcsm,
 	'nzesm': nzesm,
+	'um': um,
 }
