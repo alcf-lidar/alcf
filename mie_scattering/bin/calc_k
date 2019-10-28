@@ -17,8 +17,8 @@ def read(filename):
 	}
 	with open(input_, 'rb') as f:
 		meta = pst.decode(f.readline())
-		d['wavelength_nm'] = meta[0][b'wavelength_nm']
-		d['crefin'] = meta[0][b'crefin']
+		d['wavelength_nm'] = meta[b'wavelength_nm']
+		d['crefin'] = meta[b'crefin']
 		f.readline()
 		for line in f.readlines():
 			r, qext, qsca, p180 = [float(x) for x in line.split()]

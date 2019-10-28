@@ -6,9 +6,6 @@ import pst
 from alcf.cmds import main
 
 if __name__ == '__main__':
-	argv = pst.decode([os.fsencode(y) for y in sys.argv], as_unicode=True)
-	args = [x for x in argv if type(x) is not dict]
-	kwargs = {k: v for x in argv if type(x) is dict for k, v in x.items()}
-
+	args, kwargs = pst.decode_argv(sys.argv, as_unicode=True)
 	ret = main.run(*args[1:], **kwargs)
 	sys.exit(ret)
