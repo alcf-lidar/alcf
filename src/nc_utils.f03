@@ -146,7 +146,7 @@ contains
 		allocate(dimids(size(dims)))
 		status = nf90_redef(ncid)
 		do i = 1, size(dims)
-			write(dimname, "(I)") i
+			write(dimname, "(I32)") i
 			call nc_check(nf90_def_dim( &
 				ncid, &
 				name // '_' // adjustl(dimname), &

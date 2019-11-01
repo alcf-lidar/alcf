@@ -4,7 +4,7 @@ LIBPATH := build/opt/lib
 
 LIBS := $(LIBPATH)/libcmor.a -lnetcdff -lnetcdf -ludunits2 -luuid
 
-FC := pgf95 -fPIC -Isrc -I$(COSP_PATH) -I$(INCLUDEPATH) -L$(LIBPATH)
+FC := gfortran -fPIC -ffree-line-length-512 -Isrc -I$(COSP_PATH) -I$(INCLUDEPATH) -L$(LIBPATH)
 
 COSP_OBJ_FILES := cosp_radar.o cosp_types.o cosp_constants.o cosp_simulator.o \
         cosp_utils.o scops.o prec_scops.o cosp.o cosp_stats.o \
@@ -33,7 +33,7 @@ alcf/opt/bin/cosp_alcf: src/main.o $(OBJS)
 src/main.o: src/main.f03 src/nc_utils.o src/cosp_run.o
 
 %.o: %.f03
-	$(FC) -c -module $(dir $@) -o $@ $<
+	$(FC) -c -o $@ $<
 
 .PHONY: clean
 clean:

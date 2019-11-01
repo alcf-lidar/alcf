@@ -1,4 +1,4 @@
-module cosp_run
+module cosp_run_mod
     use mod_cosp_constants
     use mod_cosp_types
     use mod_cosp
@@ -376,7 +376,7 @@ contains
     end subroutine
 
     subroutine deallocate_cosp_input_fields(fields, npoints, nlevels)
-        type(cosp_input_fields), intent(in) :: fields
+        type(cosp_input_fields), intent(inout) :: fields
         integer, intent(in) :: &
             npoints, &
             nlevels

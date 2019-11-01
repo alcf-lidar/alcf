@@ -5,14 +5,14 @@
  #              Adapt these variables to your environment
  ########################################################################
 -F90      = ifort
-+F90      = pgf95
++F90      = gfortran
  #F90FLAGS = -C -check -fpp
  #F90FLAGS = -check bounds
  #F90FLAGS = -pg
 -F90FLAGS = -O2
 -NCDF_INC = /data/cr2/hadac/software/cosp/include
 -NCDF_LIB = /data/cr2/hadac/software/cosp/lib
-+F90FLAGS = -O2 -fPIC
++F90FLAGS = -O2 -fPIC -ffree-line-length-512
 +NCDF_INC = ../opt/include
 +NCDF_LIB = ../opt/lib
  

@@ -21,7 +21,6 @@ setup(
 	install_requires=[
 		'netCDF4>=1.2.9',
 		'cl2nc',
-		'pst',
 	],
 	keywords=['alc', 'ceilometer', 'lidar', 'atmosphere', 'model', 'simulator', 'nwp', 'gcm', 'cosp', 'actsim', 'vaisala', 'cl51', 'cl31', 'lufft', 'chm-15k', 'minimpl', 'amps', 'merra-2', 'um'],
 	url='https://github.com/peterkuma/alcf',
@@ -30,7 +29,7 @@ setup(
 		'Environment :: Console',
 		'Intended Audience :: Science/Research',
 		'License :: OSI Approved :: MIT License',
-		'Operating System :: OS Independent',
+		'Operating System :: POSIX',
 		'Programming Language :: Python :: 3',
 		'Topic :: Scientific/Engineering :: Atmospheric Science',
 	]

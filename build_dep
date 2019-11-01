@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e
 cd build
-export CC=pgcc
-export FC=pgf90
+export CC=gcc
+export FC=gfortran
 prefix="$(pwd)/opt"
 includedir="$prefix/include"
 libdir="$prefix/lib"

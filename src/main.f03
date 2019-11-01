@@ -1,5 +1,5 @@
 module main_module
-    use cosp_run
+    use cosp_run_mod
     use nc_utils
     implicit none
 contains
@@ -138,7 +138,7 @@ end module
 
 program main
     use iso_fortran_env
-    use cosp_run
+    use cosp_run_mod
     use main_module
     implicit none
 
