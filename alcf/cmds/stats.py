@@ -26,7 +26,7 @@ def run(input_, output,
 	filter=None,
 	zlim=[0., 15000.],
 	zres=100.,
-	**kwargs,
+	**kwargs
 ):
 	"""
 alcf stats - calculate cloud occurrence statistics

@@ -134,7 +134,7 @@ def cosp_alcf(config, input_, output):
 def run(type_, input_, output,
 	ncolumns=10,
 	overlap='maximum-random',
-	**kwargs,
+	**kwargs
 ):
 	"""
 alcf simulate - simulate lidar measurements from model data using COSP

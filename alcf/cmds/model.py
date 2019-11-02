@@ -54,7 +54,7 @@ def run(type_, input_, output,
 	track=None,
 	track_override_year=None,
 	track_lon_180=False,
-	**kwargs,
+	**kwargs
 ):
 	"""
 alcf model - extract model data at a point or along a track
