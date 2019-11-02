@@ -8,6 +8,8 @@ includedir="$prefix/include"
 libdir="$prefix/lib"
 export LDFLAGS="-L"$libdir""
 export CFLAGS="-I$includedir"
+export C_INCLUDE_PATH="$includedir"
+export LIBRARY_PATH="$libdir"
 export LD_LIBRARY_PATH="$libdir"
 jobs=10
 tar xf udunits-2.2.26.tar.gz
