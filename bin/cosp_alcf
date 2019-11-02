@@ -6,5 +6,5 @@ import subprocess
 prefix = pkg_resources.resource_filename('alcf', 'opt')
 libpath = os.path.join(prefix, 'lib')
 binpath = os.path.join(prefix, 'bin')
-os.environ['LD_LIBRARY_PATH'] += ':' + libpath
+os.environ['LD_LIBRARY_PATH'] = os.environ.get('LD_LIBRARY_PATH', '') + ':' + libpath
 sys.exit(subprocess.call([os.path.join(binpath, 'cosp_alcf')] + sys.argv[1:]))
