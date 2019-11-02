@@ -19,6 +19,9 @@ setup(
 		for f in fs
 	]},
 	install_requires=[
+		'numpy',
+		'scipy',
+		'matplotlib',
 		'netCDF4>=1.2.9',
 		'cl2nc',
 	],
