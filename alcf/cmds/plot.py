@@ -122,8 +122,8 @@ def plot_profile(plot_type, d, cax,
 	plt.gca().xaxis.set_major_formatter(formatter)
 	plt.gca().xaxis.set_major_locator(locator)
 
-def plot_lr(d):
-	plt.plot(d['time'], d['lr'], lw=0.7, color='#0087ed')
+def plot_lr(d, subcolumn=0, **opts):
+	plt.plot(d['time'], d['lr'][:,subcolumn], lw=0.7, color='#0087ed')
 	locator = AutoDateLocator()
 	plt.gca().xaxis.set_major_locator(locator)
 	plt.grid(lw=0.1, color='black')
@@ -281,7 +281,7 @@ def plot(plot_type, d, output,
 		plot_profile(plot_type, d, cax, **kwargs)
 		if lr:
 			plt.subplot(gs[2])
-			plot_lr(d)
+			plot_lr(d, **kwargs)
 	elif plot_type == 'cloud_occurrence':
 		plot_cloud_occurrence(d, **kwargs)
 	elif plot_type == 'backscatter_hist':
