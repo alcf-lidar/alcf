@@ -120,7 +120,7 @@ Track file is a NetCDF file containing 1D variables `lon`, `lat`, and `time`.
 				360. + track1['lon']
 			)
 		time1 = track1['time'][0], track1['time'][-1]
-	elif point is not None:
+	elif point is not None and time is not None:
 		pass
 	else:
 		raise ValueError('Point and time or track is required')
