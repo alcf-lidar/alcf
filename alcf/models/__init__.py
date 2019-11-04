@@ -62,6 +62,7 @@ from . import amps
 from . import nzcsm
 from . import nzesm
 from . import um
+from . import era5
 
 MODELS = {
 	'amps': amps,
@@ -71,4 +72,5 @@ MODELS = {
 	'nzcsm': nzcsm,
 	'nzesm': nzesm,
 	'um': um,
+	'era5': era5,
 }
