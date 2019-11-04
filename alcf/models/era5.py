@@ -101,8 +101,6 @@ def read0(type_, dirname, track, warnings=[]):
 				d['pfull'] = d['pfull'][:,::-1]
 			dd.append(d)
 	d = ds.op.merge(dd, 'time')
-	if 'clw' in d:
-		d['clw'] = 1e3*d['clw']
 	if 'pfull' in d:
 		d['pfull'] = 1e2*d['pfull']
 	if 'zfull' in d:
