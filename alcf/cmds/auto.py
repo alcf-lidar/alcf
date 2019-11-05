@@ -73,6 +73,7 @@ Model types:
 
 Lidar types:
 
+- `caliop`: CALIPSO/CALIOP
 - `chm15k`: Lufft CHM 15k
 - `cl31`: Vaisala CL31
 - `cl51`: Vaisala CL51

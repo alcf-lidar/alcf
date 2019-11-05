@@ -3,6 +3,7 @@ import ds_format as ds
 
 WAVELENGTH = 1064
 CALIBRATION_COEFF = 1.0
+SURFACE_LIDAR = True
 
 VARS = {
 	'backscatter': ['time', 'range', 'beta_raw'],

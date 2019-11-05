@@ -27,7 +27,7 @@ CONFIG_TEMPLATE = """
 	config%Nprmts_max_aero=1,
 	config%lidar_ice_type=0,
 	config%lidar_wavelength=${wavelength},
-	config%surface_lidar=1,
+	config%surface_lidar=${surface_lidar},
 	config%OVERLAP=${overlap},
 	config%ISCCP_TOPHEIGHT=1,
 	config%ISCCP_TOPHEIGHT_DIRECTION=2,
@@ -150,6 +150,7 @@ Arguments:
 
 Types:
 
+- `caliop`: CALIPSO/CALIOP
 - `chm15k`: Lufft CHM 15k
 - `cl51`: Vaisala CL51
 - `mpl`: Sigma Space MiniMPL
@@ -177,6 +178,7 @@ Options:
 		nlevels=nlevels,
 		overlap=overlap_flag,
 		wavelength=lidar.WAVELENGTH,
+		surface_lidar=(1 if lidar.SURFACE_LIDAR else 0),
 	)
 
 	if os.path.isfile(input_):

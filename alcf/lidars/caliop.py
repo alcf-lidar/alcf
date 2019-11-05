@@ -1,0 +1,5 @@
+import numpy as np
+
+WAVELENGTH = 532
+CALIBRATION_COEFF = 1.0
+SURFACE_LIDAR = False

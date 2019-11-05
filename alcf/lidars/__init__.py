@@ -2,6 +2,7 @@ from . import chm15k
 from . import cl51
 from . import mpl
 from . import cosp
+from . import caliop
 
 LIDARS = {
 	'chm15k': chm15k,
@@ -10,4 +11,5 @@ LIDARS = {
 	'mpl': mpl,
 	'minimpl': mpl,
 	'cosp': cosp,
+	'caliop': caliop,
 }

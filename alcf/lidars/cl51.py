@@ -4,6 +4,7 @@ import datetime as dt
 
 WAVELENGTH = 910
 CALIBRATION_COEFF = 1.0
+SURFACE_LIDAR = True
 
 VARS = {
 	'backscatter': ['backscatter'],
