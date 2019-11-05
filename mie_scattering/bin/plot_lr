@@ -11,9 +11,21 @@ COLORS = [
 	'#0084C8',
 	'#DC0000',
 	'#009100',
+	'#0084C8',
+	'#DC0000',
+	'#009100',
+	'#000000',
+	'#000000',
+	'#000000',
 ]
 
 LINESTYLES = [
+	'solid',
+	'solid',
+	'solid',
+	'dashed',
+	'dashed',
+	'dashed',
 	'solid',
 	'dashed',
 	'dotted',
@@ -30,6 +42,7 @@ if __name__ == '__main__':
 	xlim = opts.get(b'xlim', [5., 50.])
 	ylim = opts.get(b'ylim', [10., 25.])
 
+	plt.rcParams['font.family'] = 'Public Sans'
 	plt.figure(figsize=(6, 6))
 	for i, filename in enumerate(input_):
 		d = ds.read(filename)
@@ -38,7 +51,7 @@ if __name__ == '__main__':
 			color=COLORS[i % len(COLORS)],
 			lw=1,
 			label=label,
-			linestyle=LINESTYLES[int(i/len(COLORS))]
+			linestyle=LINESTYLES[i % len(COLORS)]
 		)
 	plt.xlim(xlim)
 	plt.ylim(ylim)
@@ -49,4 +62,4 @@ if __name__ == '__main__':
 	frame.set_facecolor('k')
 	frame.set_alpha(0.05)
 	frame.set_linewidth(0)
-	plt.savefig(output, bbox_inches='tight')
+	plt.savefig(output, bbox_inches='tight', dpi=300)

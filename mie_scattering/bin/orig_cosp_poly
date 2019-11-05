@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import pst
+import numpy as np
+import ds_format as ds
+
+def poly_liq(x):
+	return 2.6980e-8*x**4 + -3.7701e-6*x**3 + 1.6594e-4*x**2 + -0.0024*x + 0.0626
+
+def poly_ice(x):
+	return -1.0176e-8*x**4 + 1.7615e-6*x**3 + -1.0480e-4*x**2 + 0.0019*x + 0.0460
+
+def poly_ice_ns(x):
+	return 1.3615e-8*x**4 + -2.04206e-6*x**3 + 7.51799e-5*x**2 + 0.00078213*x + 0.0182131
+
+if __name__ == '__main__':
+	stderr = os.fdopen(sys.stderr.fileno(), 'wb')
+	args, opts = pst.decode_argv(sys.argv)
+	if len(args) != 3:
+		stderr.write(b'Usage: %s <type> <output>\n' % args[0])
+		sys.exit(1)
+	type_ = args[1]
+	output = args[2]
+	reff = np.linspace(10, 35, 100)
+	f = {
+		b'liq': poly_liq,
+		b'ice': poly_ice,
+		b'ice_ns': poly_ice_ns,
+	}[type_]
+	k = f(reff)
+	desc = {
+		b'liq': 'liq.',
+		b'ice': 'ice',
+		b'ice_ns': 'ice (NS)',
+	}[type_]
+	ds.write(output, {
+		'wavelength': 532e-9,
+		'reff': reff*1e-6,
+		'sigmaeff': np.nan*reff,
+		'k': k,
+		'lr': 1./k,
+		'.': {
+			'.': {
+				'distribution': 'COSP poly. ' + desc,
+			},
+			'wavelength': {
+				'.dims': [],
+				'long_name': 'wavelength',
+				'units': 'm',
+			},
+			'reff': {
+				'.dims': ['reff'],
+				'long_name': 'effective_radius',
+				'units': 'm',
+			},
+			'sigmaeff': {
+				'.dims': ['reff'],
+				'long_name': 'effective_standard_deviation',
+				'units': 'm',
+			},
+			'k': {
+				'.dims': ['reff'],
+				'long_name': 'backscatter_to_extinction_ratio',
+				'units': 'sr-1',
+			},
+			'lr': {
+				'.dims': ['reff'],
+				'long_name': 'lidar_ratio',
+				'units': 'sr',
+			}
+		}
+	})
