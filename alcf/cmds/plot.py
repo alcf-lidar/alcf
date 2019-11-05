@@ -123,7 +123,8 @@ def plot_profile(plot_type, d, cax,
 	plt.gca().xaxis.set_major_locator(locator)
 
 def plot_lr(d, subcolumn=0, **opts):
-	plt.plot(d['time'], d['lr'][:,subcolumn], lw=0.7, color='#0087ed')
+	lr = d['lr'][:,subcolumn] if d['lr'].ndim == 2 else d['lr'][:]
+	plt.plot(d['time'], lr, lw=0.7, color='#0087ed')
 	locator = AutoDateLocator()
 	plt.gca().xaxis.set_major_locator(locator)
 	plt.grid(lw=0.1, color='black')
