@@ -56,21 +56,22 @@ META = {
 	},
 }
 
-from . import cmip5
-from . import merra2
 from . import amps
+#from . import cmip5
+from . import era5
+from . import jra55
+from . import merra2
 from . import nzcsm
 from . import nzesm
 from . import um
-from . import era5
 
 MODELS = {
 	'amps': amps,
 	#'cmip5': cmip5,
-	#'jra55': jra55,
+	'era5': era5,
+	'jra55': jra55,
 	'merra2': merra2,
 	'nzcsm': nzcsm,
 	'nzesm': nzesm,
 	'um': um,
-	'era5': era5,
 }

@@ -87,6 +87,7 @@ Types:
 
 - `amps`: Antarctic Mesoscale Prediction System (AMPS)
 - `era5`: ERA5
+- `jra55`: JRA-55
 - `merra2`: Modern-Era Retrospective Analysis for Research and Applications,
 	Version 2 (MERRA-2)
 - `nzcsm`: New Zealand Convection Scale Model (NZCSM)
