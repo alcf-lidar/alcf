@@ -4,6 +4,7 @@ import ds_format as ds
 WAVELENGTH = 1064
 CALIBRATION_COEFF = 1.0
 SURFACE_LIDAR = True
+SC_LR = 18.2 # Stratocumulus lidar ratio (O'Connor et al., 2004)
 
 VARS = {
 	'backscatter': ['time', 'range', 'beta_raw'],

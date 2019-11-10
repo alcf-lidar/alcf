@@ -11,6 +11,7 @@ from alcf.algorithms.cloud_detection import CLOUD_DETECTION
 from alcf.algorithms.cloud_base_detection import CLOUD_BASE_DETECTION
 from alcf.algorithms import tsample, zsample, output_sample, lidar_ratio
 from alcf import misc
+import pst
 
 VARIABLES = [
 	'backscatter',
@@ -19,6 +20,10 @@ VARIABLES = [
 	'zfull',
 	# 'range',
 ]
+
+def read_calibration_file(filename):
+	with open(filename, 'rb') as f:
+		return pst.decode(f.read())
 
 def run(type_, input_, output,
 	tres=300,
@@ -31,6 +36,7 @@ def run(type_, input_, output,
 	calibration='default',
 	output_sampling=86400,
 	eta=0.7,
+	calibration_file=None,
 	**options
 ):
 	"""
@@ -100,9 +106,8 @@ Algorithm options:
 	- `none`: disable cloud base detection
 
 - Calibration:
-    - `default`: multiply backscatter by calibration coefficient
-        - `calibration_coeff: <coeff>`: Calibration coefficient.
-        Default: instrument-dependent default value.
+    - `default`: multiply backscatter by a calibration coefficient
+        - `calibration_file: <file>`: calibration file
 	- `none`: disable calibration
 
 - Noise removal:
@@ -143,7 +148,11 @@ Algorithm options:
 		if cloud_base_detection_mod is None:
 			raise ValueError('Invalid cloud base detection algorithm: %s' % cloud_base_detection)
 
-	calibration_coeff = lidar.CALIBRATION_COEFF
+	if calibration_file is not None:
+		c = read_calibration_file(calibration_file)
+		calibration_coeff = c[b'calibration_coeff']
+	else:
+		calibration_coeff = lidar.CALIBRATION_COEFF
 
 	def write(d, output):
 		if len(d['time']) == 0:
