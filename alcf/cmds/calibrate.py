@@ -45,9 +45,13 @@ Time periods file:
 A text file containting start and end time (see Time format below) of a time
 period separated by whitespace, one time period per line:
 
-<start1> <end2>
-<start2> <end2>
+```
+<start> <end>
+<start> <end>
 ...
+```
+
+where `start` is the start time and `end` is the end time.
 
 Time format:
 
