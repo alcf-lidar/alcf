@@ -82,7 +82,7 @@ Read time periods from `time_periods.txt`, lidar profiles from the directory
 		lr.append(d['lr'])
 	lr = np.hstack(lr)
 	lr_median = np.median(lr)
-	calibration_ceoff = lidar.CALIBRATION_COEFF*lidar.SC_LR/lr_median
+	calibration_ceoff = lidar.CALIBRATION_COEFF*lr_median/lidar.SC_LR
 	print('-> %s' % output)
 	with open(output, 'w') as f:
 		f.write('lidar: %s wavelength: %d calibration_coeff: %f lr_median: %f\n' % (

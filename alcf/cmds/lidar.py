@@ -209,6 +209,7 @@ Algorithm options:
 		return dd
 
 	options['output'] = output
+	options['calibration_coeff'] = calibration_coeff
 
 	state = {}
 	if os.path.isdir(input_):
