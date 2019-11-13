@@ -50,7 +50,7 @@ def plot_profile(plot_type, d, cax,
 	subcolumn=0,
 	sigma=0.,
 	zlim=None,
-	vlim=[10, 2000],
+	vlim=[2, 200],
 	vlog=True,
 	**opts
 ):

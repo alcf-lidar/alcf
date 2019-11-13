@@ -2,7 +2,7 @@ import numpy as np
 import ds_format as ds
 
 WAVELENGTH = 1064
-CALIBRATION_COEFF = 1.0
+CALIBRATION_COEFF = 0.2
 SURFACE_LIDAR = True
 SC_LR = 18.2 # Stratocumulus lidar ratio (O'Connor et al., 2004)
 
@@ -23,7 +23,7 @@ def read(filename, vars):
 	if 'time' in vars:
 		dx['time'] = d['time']/(24.0*60.0*60.0) + 2416480.5
 	if 'backscatter' in vars:
-		dx['backscatter'] = d['beta_raw']*1e-11
+		dx['backscatter'] = d['beta_raw']*1e-11*CALIBRATION_COEFF
 	if 'zfull' in vars:
 		zfull1 = d['range'] + d['altitude']
 		dx['zfull'] = np.tile(zfull1, (n, 1))
