@@ -1,5 +1,6 @@
 import numpy as np
 import ds_format as ds
+from alcf.lidars import META
 
 WAVELENGTH = 1064
 CALIBRATION_COEFF = 0.2
@@ -27,24 +28,7 @@ def read(filename, vars):
 	if 'zfull' in vars:
 		zfull1 = d['range'] + d['altitude']
 		dx['zfull'] = np.tile(zfull1, (n, 1))
-	dx['.'] = {
-		'time': {
-			'.dims': ['time'],
-			'long_name': 'time',
-			'units': 'days since -4712-01-01 12:00',
-			'calendar': 'gregorian',
-		},
-		'zfull': {
-			'.dims': ['time', 'level'],
-			'standard_name': 'height_above_reference_ellipsoid',
-			'units': 'm',
-		},
-		'backscatter': {
-			'.dims': ['time', 'level'],
-			'long_name': 'backscatter',
-			'units': 'm-1 sr-1',
-		},
-	}
+	dx['.'] = META
 	dx['.'] = {
 		x: dx['.'][x]
 		for x in vars

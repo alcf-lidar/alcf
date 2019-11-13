@@ -1,6 +1,7 @@
 import numpy as np
 import ds_format as ds
 import datetime as dt
+from alcf.lidars import META
 
 WAVELENGTH = 910
 CALIBRATION_COEFF = 3e-3
@@ -32,24 +33,7 @@ def read(filename, vars):
 	dx['zfull'] = np.tile(zfull1, (n, 1))
 	if 'backscatter' in vars:
 		dx['backscatter'] = d['backscatter']*CALIBRATION_COEFF
-	dx['.'] = {
-		'time': {
-			'.dims': ['time'],
-			'long_name': 'time',
-			'units': 'days since -4712-01-01 12:00',
-			'calendar': 'gregorian',
-		},
-		'zfull': {
-			'.dims': ['time', 'level'],
-			'standard_name': 'height_above_reference_ellipsoid',
-			'units': 'm',
-		},
-		'backscatter': {
-			'.dims': ['time', 'range'],
-			'long_name': 'total_attenuated_backscatter_coefficient',
-			'units': 'm-1 sr-1'
-		},
-	}
+	dx['.'] = META
 	dx['.'] = {
 		x: dx['.'][x]
 		for x in vars

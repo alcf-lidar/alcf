@@ -1,6 +1,7 @@
 import numpy as np
 import ds_format as ds
 import datetime as dt
+from alcf.lidars import META
 
 WAVELENGTH = 532
 CALIBRATION_COEFF = 0.375e-5
@@ -52,23 +53,7 @@ def read(filename, vars):
 	# 	dx['backscatter_x'] = d['copol_nrb']*CALIBRATION_COEFF
 	# if 'backscatter_y' in vars:
 	# 	dx['backscatter_y'] = d['crosspol_nrb']*CALIBRATION_COEFF
-	dx['.'] = {
-		'time': {
-			'.dims': ['time'],
-			'long_name': 'time',
-			'units': 'days since -4712-01-01 12:00',
-			'calendar': 'gregorian',
-		},
-		'zfull': {
-			'.dims': ['time', 'level'],
-			'standard_name': 'height_above_reference_ellipsoid',
-			'units': 'm',
-		},
-		'backscatter': {
-			'.dims': ['time', 'level'],
-			'long_name': 'backscatter',
-			'units': 'm-1 sr-1',
-		},
+	dx['.'] = META
 		# 'backscatter_x': {
 		# 	'.dims': ['time', 'level'],
 		# 	'long_name': 'copolarized_attenuated_backscatter_coefficient',
@@ -79,7 +64,6 @@ def read(filename, vars):
 		# 	'long_name': 'crosspolarized_attenuated_backscatter_coefficient',
 		# 	'units': 'm-1 sr-1',
 		# },
-	}
 	dx['.'] = {
 		x: dx['.'][x]
 		for x in vars
