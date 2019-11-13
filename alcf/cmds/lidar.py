@@ -150,9 +150,9 @@ Algorithm options:
 
 	if calibration_file is not None:
 		c = read_calibration_file(calibration_file)
-		calibration_coeff = c[b'calibration_coeff']
+		calibration_coeff = c[b'calibration_coeff']/lidar.CALIBRATION_COEFF
 	else:
-		calibration_coeff = lidar.CALIBRATION_COEFF
+		calibration_coeff = 1.
 
 	def write(d, output):
 		if len(d['time']) == 0:

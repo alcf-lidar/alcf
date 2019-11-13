@@ -3,7 +3,7 @@ import ds_format as ds
 import datetime as dt
 
 WAVELENGTH = 532
-CALIBRATION_COEFF = 2e-6*1e1
+CALIBRATION_COEFF = 2e-5
 SURFACE_LIDAR = True
 SC_LR = 18.6 # Stratocumulus lidar ratio (O'Connor et al., 2004)
 
