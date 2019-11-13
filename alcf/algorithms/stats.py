@@ -114,11 +114,11 @@ def stats_map(d, state,
 		if l > 0:
 			for k in range(l):
 				backscatter_hist_tmp[:,j,k] += np.histogram(
-					d['backscatter'][filter_mask[:,k],j,k],
+					d['backscatter'][filter_mask[:,k] & mask,j,k],
 					bins=state['backscatter_half'])[0]
 		else:
 			backscatter_hist_tmp[:,j] += np.histogram(
-				d['backscatter'][filter_mask,j],
+				d['backscatter'][filter_mask & mask,j],
 				bins=state['backscatter_half'])[0]
 
 	jsd = np.argmin(np.abs(d['zfull'] - bsd_z))
@@ -126,7 +126,7 @@ def stats_map(d, state,
 
 	if 'backscatter_sd' in d:
 		state['backscatter_sd_hist'] += np.histogram(
-			d['backscatter_sd'][filter_mask,jsd],
+			d['backscatter_sd'][filter_mask & mask,jsd],
 			bins=state['backscatter_sd_half'])[0]
 
 	for i in range(o):
