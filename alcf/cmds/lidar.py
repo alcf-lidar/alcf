@@ -28,6 +28,7 @@ def read_calibration_file(filename):
 def run(type_, input_, output,
 	tres=300,
 	tlim=None,
+	tshift=0.,
 	zres=50,
 	zlim=[0., 15000.],
 	cloud_detection='default',
@@ -87,6 +88,7 @@ Options:
 - `tlim: { <low> <high> }`: Time limits (see Time format below).
     Default: `none`.
 - `tres: <tres>`: Time resolution (seconds). Default: `300` (5 min).
+- `tshift: <tshift>`: Time shift (seconds). Default: `0`.
 - `zlim: { <low> <high> }`: Height limits (m). Default: `{ 0 15000 }`.
 - `zres: <zres>`: Height resolution (m). Default: `50`.
 
@@ -184,6 +186,7 @@ Algorithm options:
 		state['cloud_base_detection'] = state.get('cloud_base_detection', {})
 		state['lidar_ratio'] = state.get('lidar_ratio', {})
 		state['output'] = state.get('output', {})
+		d['time'] += tshift/86400.
 		if noise_removal_mod is not None:
 			dd = noise_removal_mod.stream(dd, state['noise_removal'], **options)
 		if calibration_mod is not None:
