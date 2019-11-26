@@ -7,7 +7,7 @@ from scipy.stats import norm
 from scipy.optimize import minimize_scalar
 from alcf import misc
 
-def cloud_detection(d, cloud_threshold=10e-6, cloud_nsd=3, **options):
+def cloud_detection(d, cloud_threshold=2e-6, cloud_nsd=3, **options):
 	b = d['backscatter']
 	b_sd = d.get('backscatter_sd')
 	if b_sd is not None:
