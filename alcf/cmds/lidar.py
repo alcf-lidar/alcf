@@ -176,7 +176,13 @@ Algorithm options:
 		# 	)
 		return misc.stream(dd, state, write, output=output)
 
+	def preprocess(d, tshift=None, **options):
+		if tshift is not None:
+			d['time'] += tshift/86400.
+		return d
+
 	def process(dd, state, **options):
+		state['preprocess'] = state.get('preprocess', {})
 		state['noise_removal'] = state.get('noise_removal', {})
 		state['calibration'] = state.get('calibration', {})
 		state['tsample'] = state.get('tsample', {})
@@ -186,7 +192,7 @@ Algorithm options:
 		state['cloud_base_detection'] = state.get('cloud_base_detection', {})
 		state['lidar_ratio'] = state.get('lidar_ratio', {})
 		state['output'] = state.get('output', {})
-		d['time'] += tshift/86400.
+		dd = misc.stream(dd, state['preprocess'],  preprocess, **options)
 		if noise_removal_mod is not None:
 			dd = noise_removal_mod.stream(dd, state['noise_removal'], **options)
 		if calibration_mod is not None:
