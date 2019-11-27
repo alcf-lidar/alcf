@@ -27,6 +27,7 @@ def read_calibration_file(filename):
 		return pst.decode(f.read())
 
 def run(type_, input_, output,
+	altitude=None,
 	tres=300,
 	tlim=None,
 	tshift=0.,
@@ -74,6 +75,8 @@ Types:
 
 Options:
 
+- `altitude`: Altitude of the instrument (m).
+    Default: Taken from lidar data or `0` if not available.
 - `calibration: <algorithm>`: Backscatter calibration algorithm.
     Available algorithms: `default`, `none`. Default: `default`.
 - `cloud_detection: <algorithm>`: Cloud detection algorithm.
@@ -228,7 +231,7 @@ Algorithm options:
 			input_filename = os.path.join(input_, file)
 			print('<- %s' % input_filename)
 			try:
-				d = lidar.read(input_filename, VARIABLES)
+				d = lidar.read(input_filename, VARIABLES, altitude=altitude)
 				dd = process([d], state, **options)
 			except:
 				logging.warning(traceback.format_exc())

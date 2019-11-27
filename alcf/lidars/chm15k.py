@@ -14,7 +14,7 @@ VARS = {
 	'altitude': ['altitude'],
 }
 
-def read(filename, vars):
+def read(filename, vars, altitude=None):
 	dep_vars = list(set([y for x in vars if x in VARS for y in VARS[x]]))
 	d = ds.from_netcdf(
 		filename,
@@ -22,15 +22,17 @@ def read(filename, vars):
 	)
 	dx = {}
 	n, m = d['beta_raw'].shape
+	if altitude is None:
+		altitude = d['altitude']
 	if 'time' in vars:
 		dx['time'] = d['time']/(24.0*60.0*60.0) + 2416480.5
 	if 'backscatter' in vars:
 		dx['backscatter'] = d['beta_raw']*1e-11*CALIBRATION_COEFF
 	if 'zfull' in vars:
-		zfull1 = d['range'] + d['altitude']
+		zfull1 = d['range'] + altitude
 		dx['zfull'] = np.tile(zfull1, (n, 1))
 	if 'altitude' in vars:
-		dx['altitude'] = np.full(n, d['altitude'], np.float64)
+		dx['altitude'] = np.full(n, altitude, np.float64)
 	dx['.'] = META
 	dx['.'] = {
 		x: dx['.'][x]

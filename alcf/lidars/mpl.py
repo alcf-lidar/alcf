@@ -26,7 +26,7 @@ DEFAULT_VARS = [
 	'altitude',
 ]
 
-def read(filename, vars):
+def read(filename, vars, altitude=None):
 	dep_vars = list(set([y for x in vars if x in VARS for y in VARS[x]]))
 	required_vars = dep_vars + DEFAULT_VARS
 	d = ds.from_netcdf(
@@ -36,6 +36,10 @@ def read(filename, vars):
 	mask = d['elevation_angle'] == 0.0
 	dx = {}
 	n = len(d['year'])
+	if altitude is None:
+		altitude = d['altitude']
+	else:
+		altitude = np.full(n, altitude, np.float64)
 	if 'time' in vars:
 		dx['time'] = np.array([
 			(dt.datetime(y, m, day, H, M, S) - dt.datetime(1970, 1, 1)).total_seconds()/(24.0*60.0*60.0) + 2440587.5
@@ -50,11 +54,11 @@ def read(filename, vars):
 		)
 		dx['zfull'] = np.tile(zfull1, (n, 1))
 		for i in range(n):
-			dx['zfull'] += d['altitude'][i]
+			dx['zfull'][i,:] += altitude[i]
 	if 'backscatter' in vars:
 		dx['backscatter'] = (d['copol_nrb'] + d['crosspol_nrb'])*CALIBRATION_COEFF
 	if 'altitude' in vars:
-		dx['altitude'] = d['altitude']
+		dx['altitude'] = altitude
 	# if 'backscatter_x' in vars:
 	# 	dx['backscatter_x'] = d['copol_nrb']*CALIBRATION_COEFF
 	# if 'backscatter_y' in vars:
