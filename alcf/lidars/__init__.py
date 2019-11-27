@@ -14,6 +14,11 @@ META = {
 		'long_name': 'backscatter',
 		'units': 'm-1 sr-1',
 	},
+	'altitude': {
+		'.dims': ['time'],
+		'long_name': 'altitude',
+		'units': 'm',
+	},
 }
 
 from . import chm15k

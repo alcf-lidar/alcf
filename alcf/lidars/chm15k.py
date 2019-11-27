@@ -8,9 +8,10 @@ SURFACE_LIDAR = True
 SC_LR = 18.2 # Stratocumulus lidar ratio (O'Connor et al., 2004)
 
 VARS = {
-	'backscatter': ['time', 'range', 'beta_raw'],
+	'backscatter': ['beta_raw'],
 	'time': ['time'],
 	'zfull': ['range', 'altitude'],
+	'altitude': ['altitude'],
 }
 
 def read(filename, vars):
@@ -28,6 +29,8 @@ def read(filename, vars):
 	if 'zfull' in vars:
 		zfull1 = d['range'] + d['altitude']
 		dx['zfull'] = np.tile(zfull1, (n, 1))
+	if 'altitude' in vars:
+		dx['altitude'] = np.full(n, d['altitude'], np.float64)
 	dx['.'] = META
 	dx['.'] = {
 		x: dx['.'][x]

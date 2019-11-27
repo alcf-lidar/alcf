@@ -23,6 +23,7 @@ DEFAULT_VARS = [
 	'hour',
 	'minute',
 	'second',
+	'altitude',
 ]
 
 def read(filename, vars):
@@ -34,6 +35,7 @@ def read(filename, vars):
 	)
 	mask = d['elevation_angle'] == 0.0
 	dx = {}
+	n = len(d['year'])
 	if 'time' in vars:
 		dx['time'] = np.array([
 			(dt.datetime(y, m, day, H, M, S) - dt.datetime(1970, 1, 1)).total_seconds()/(24.0*60.0*60.0) + 2440587.5
@@ -46,9 +48,13 @@ def read(filename, vars):
 			np.sin(d['elevation_angle']/180.0*np.pi),
 			d['range_nrb']*1e3
 		)
-		dx['zfull'] = np.tile(zfull1, (len(d['year']), 1))
+		dx['zfull'] = np.tile(zfull1, (n, 1))
+		for i in range(n):
+			dx['zfull'] += d['altitude'][i]
 	if 'backscatter' in vars:
 		dx['backscatter'] = (d['copol_nrb'] + d['crosspol_nrb'])*CALIBRATION_COEFF
+	if 'altitude' in vars:
+		dx['altitude'] = d['altitude']
 	# if 'backscatter_x' in vars:
 	# 	dx['backscatter_x'] = d['copol_nrb']*CALIBRATION_COEFF
 	# if 'backscatter_y' in vars:

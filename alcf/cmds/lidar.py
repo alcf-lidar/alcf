@@ -18,6 +18,7 @@ VARIABLES = [
 	'backscatter_mol',
 	'time',
 	'zfull',
+	'altitude',
 	# 'range',
 ]
 
