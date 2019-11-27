@@ -68,6 +68,7 @@ contains
         input%time = 1.
         input%lon = lon
         input%lat = lat
+        input%orog = orog
         input%T = transpose(ta)
         input%p = transpose(pfull)
         input%tca = transpose(cl)*0.01
@@ -87,7 +88,7 @@ contains
 
     subroutine write_output(file, input, time, output)
         character(len=*), intent(in) :: file
-        type(cosp_input_fields), intent(in) :: input
+        type(cosp_input_fields), intent(inout) :: input
         real(8), dimension(:), allocatable, intent(in) :: time
         type(cosp_output_fields), intent(in) :: output
         integer :: ncid
@@ -96,6 +97,7 @@ contains
             lon_varid, &
             lat_varid, &
             time_varid, &
+            altitude_varid, &
             zlev_varid, &
             zlev_half_varid, &
             p_varid, &
@@ -104,10 +106,15 @@ contains
             beta_tot_varid
         integer :: status
         integer :: npoints, nlevels, ncolumns
+        integer :: i
 
         npoints = input%npoints
         nlevels = input%nlevels
         ncolumns = size(output%sglidar%beta_tot, 2)
+
+        do i = 1, npoints
+            input%zlev(i,:) = input%zlev(i,:) + input%orog(i)
+        end do
 
         call nc_check(nf90_create(file, 0, ncid))
         call nc_check(nf90_def_dim(ncid, 'time', npoints, time_dimid))
@@ -115,6 +122,7 @@ contains
         call nc_check(nf90_def_dim(ncid, 'column', ncolumns, column_dimid))
         call nc_check(nf90_def_var(ncid, 'lon', nf90_double, time_dimid, lon_varid))
         call nc_check(nf90_def_var(ncid, 'lat', nf90_double, time_dimid, lat_varid))
+        call nc_check(nf90_def_var(ncid, 'altitude', nf90_double, time_dimid, altitude_varid))
         call nc_check(nf90_def_var(ncid, 'zfull', nf90_double, (/level_dimid, time_dimid/), zlev_varid))
         !call nc_check(nf90_def_var(ncid, 'zhalf', nf90_double, (/level_dimid, time_dimid/), zlev_half_varid))
         call nc_check(nf90_def_var(ncid, 'pfull', nf90_double, (/level_dimid, time_dimid/), p_varid))
@@ -125,6 +133,7 @@ contains
         call nc_check(nf90_enddef(ncid))
         call nc_check(nf90_put_var(ncid, lon_varid, input%lon))
         call nc_check(nf90_put_var(ncid, lat_varid, input%lat))
+        call nc_check(nf90_put_var(ncid, altitude_varid, input%orog))
         call nc_check(nf90_put_var(ncid, beta_tot_varid, reshape(output%sglidar%beta_tot, (/ncolumns, nlevels, npoints/), order=(/3,1,2/))))
         call nc_check(nf90_put_var(ncid, beta_mol_varid, reshape(output%sglidar%beta_mol, (/nlevels, npoints/), order=(/2,1/))))
         call nc_check(nf90_put_var(ncid, zlev_varid, reshape(input%zlev, (/nlevels, npoints/), order=(/2,1/))))

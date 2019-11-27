@@ -105,6 +105,8 @@ def read0(type_, dirname, track, warnings=[]):
 		d['pfull'] = 1e2*d['pfull']
 	if 'zfull' in d:
 		d['zfull'] /= 9.80665
+	if 'orog' in d:
+		d['orog'] /= 9.80665
 	if 'cl' in d:
 		d['cl'] *= 100.
 	d['.'] = META

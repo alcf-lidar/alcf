@@ -60,7 +60,8 @@ module cosp_run_mod
             land, &
             u_wind, &
             v_wind, &
-            sunlit
+            sunlit, &
+            orog
         real, dimension(:, :), allocatable :: &
             p, &
             ph, &
@@ -322,6 +323,7 @@ contains
             fields%u_wind(npoints), &
             fields%v_wind(npoints), &
             fields%sunlit(npoints), &
+            fields%orog(npoints), &
             fields%p(npoints, nlevels), &
             fields%ph(npoints, nlevels), &
             fields%zlev(npoints, nlevels), &
@@ -352,6 +354,7 @@ contains
         fields%u_wind  = 0
         fields%v_wind = 0
         fields%sunlit = 0
+        fields%orog = 0
         fields%p = 0
         fields%ph = 0
         fields%zlev = 0
