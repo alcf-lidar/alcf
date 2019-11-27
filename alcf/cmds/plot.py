@@ -37,6 +37,7 @@ VARIABLES = [
 	'cloud_mask',
 	'backscatter_hist',
 	'backscatter_full',
+	'altitude',
 ]
 
 def plot_legend(*args, theme='light', **kwargs):
@@ -108,6 +109,8 @@ def plot_profile(plot_type, d, cax,
 			)],
 			theme='dark'
 		)
+	if 'altitude' in d:
+		plt.plot(d['time'], d['altitude']*1e-3, color='red', lw=0.5)
 	plt.xlabel('Time (UTC)')
 	plt.ylabel('Height (km)')
 
