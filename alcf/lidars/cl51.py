@@ -4,7 +4,7 @@ import datetime as dt
 from alcf.lidars import META
 
 WAVELENGTH = 910
-CALIBRATION_COEFF = 3e-3
+CALIBRATION_COEFF = 1.4e-3
 SURFACE_LIDAR = True
 SC_LR = 18.8 # Stratocumulus lidar ratio (O'Connor et al., 2004)
 
