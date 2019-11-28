@@ -32,7 +32,7 @@ def read(filename, vars, altitude=None):
 		range_ = d['vertical_resolution'][0]*d['level']
 		zfull1 = range_
 		dx['zfull'] = np.tile(zfull1, (n, 1))
-		if 'altitude' is not None:
+		if altitude is not None:
 			dx['zfull'] += altitude
 	if 'backscatter' in vars:
 		dx['backscatter'] = d['backscatter']*CALIBRATION_COEFF
