@@ -23,6 +23,7 @@ META = {
 
 from . import chm15k
 from . import cl51
+from . import cl31
 from . import mpl
 from . import cosp
 from . import caliop
@@ -30,7 +31,7 @@ from . import caliop
 LIDARS = {
 	'chm15k': chm15k,
 	'cl51': cl51,
-	'cl31': cl51,
+	'cl31': cl31,
 	'mpl': mpl,
 	'minimpl': mpl,
 	'cosp': cosp,

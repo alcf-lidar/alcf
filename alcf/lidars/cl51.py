@@ -4,7 +4,7 @@ import datetime as dt
 from alcf.lidars import META
 
 WAVELENGTH = 910
-CALIBRATION_COEFF = 1.4e-3
+CALIBRATION_COEFF = 1.2e-3
 SURFACE_LIDAR = True
 SC_LR = 18.8 # Stratocumulus lidar ratio (O'Connor et al., 2004)
 
@@ -18,7 +18,7 @@ DEFAULT_VARS = [
 	'time',
 ]
 
-def read(filename, vars, altitude=None):
+def read(filename, vars, altitude=None, calibration_coeff=CALIBRATION_COEFF):
 	dep_vars = list(set([y for x in vars if x in VARS for y in VARS[x]]))
 	required_vars = dep_vars + DEFAULT_VARS
 	d = ds.from_netcdf(
@@ -35,7 +35,7 @@ def read(filename, vars, altitude=None):
 		if altitude is not None:
 			dx['zfull'] += altitude
 	if 'backscatter' in vars:
-		dx['backscatter'] = d['backscatter']*CALIBRATION_COEFF
+		dx['backscatter'] = d['backscatter']*calibration_coeff
 	if 'altitude' in vars:
 		dx['altitude'] = np.full(n, altitude, np.float64)
 	dx['.'] = META
