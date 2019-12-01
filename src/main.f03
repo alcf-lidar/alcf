@@ -38,7 +38,7 @@ contains
             nlev, &
             nhydro
         integer, dimension(256) :: shp
-        integer :: i
+        integer :: i, j
         integer :: ilon, ilat
 
         call nc_check(nf90_open(file, NF90_NOWRITE, ncid))
@@ -77,11 +77,31 @@ contains
             input%zlev(i,:) = input%zlev(i,:) - orog(i)
         end do
         input%zlev_half(:,2:nlev) = 0.5*(input%zlev(:,1:(nlev-1)) + input%zlev(:,2:nlev))
-        input%zlev_half(:,1) = 0
         input%mr_hydro(:,:,1) = transpose(clw)
         input%mr_hydro(:,:,2) = transpose(cli)
         input%ph(:,2:(nlev-1)) = 0.5*(input%p(:,1:(nlev-1)) + input%p(:,2:nlev))
-        input%ph(:,1) = ps
+
+        do i = 1, npoints
+            do j = 1, nlev
+                if (input%zlev(i,j) <= 0.) then
+                    input%zlev(i,j) = 0.
+                    input%zlev_half(i,j) = 0.
+                    input%p(i,j) = ps(i)
+                    input%ph(i,j) = ps(i)
+                    input%T(i,j) = 273.15
+                    input%tca(i,j) = 0.
+                    input%mr_hydro(i,j,:) = 0.
+                else
+                    input%zlev_half(i,j) = 0.
+                    input%ph(i,j) = ps(i)
+                    exit
+                end if
+            end do
+        end do
+
+        where (input%mr_hydro < 0.)
+            input%mr_hydro = 0.
+        end where
 
         call nc_check(nf90_close(ncid))
     end subroutine
