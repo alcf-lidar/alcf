@@ -36,6 +36,15 @@ TRANS = {
 }
 
 def read(dirname, track, warnings=[]):
+	d_ll = ds.read(os.path.join(dirname, 'LL125.nc'), [
+		'latitude',
+		'longitude',
+		'z'
+	])
+	lat_ll = d_ll['latitude']
+	lon_ll = d_ll['longitude']
+	orog_ll = d_ll['z'][0,:,:]/9.80665
+
 	dd_idx = ds.readdir(dirname,
 		variables=['time', 'latitude', 'longitude'],
 		jd=True,
@@ -64,6 +73,8 @@ def read(dirname, track, warnings=[]):
 				lon0 = track['lon'][i2]
 				j = np.argmin(np.abs(lat - lat0))
 				k = np.argmin(np.abs(lon - lon0))
+				j_ll = np.argmin(np.abs(lat_ll - lat0))
+				k_ll = np.argmin(np.abs(lon_ll - lon0))
 				d = ds.read(filename, VARIABLES_AUX + [var],
 					sel={
 						'time': [i],
@@ -77,8 +88,10 @@ def read(dirname, track, warnings=[]):
 						ds.rename(d, a, b)
 				d['lat'] = np.array([d['lat']])
 				d['lon'] = np.array([d['lon']])
+				d['orog'] = np.array([orog_ll[j_ll,k_ll]])
 				d['.']['lat']['.dims'] = ['time']
 				d['.']['lon']['.dims'] = ['time']
+				d['.']['orog'] = {'.dims': ['time']}
 				if 'pfull' in ds.get_vars(d):
 					d['pfull'] = d['pfull'].reshape([1, len(d['pfull'])])
 					d['.']['pfull']['.dims'] = ['time', 'pfull']
@@ -94,6 +107,5 @@ def read(dirname, track, warnings=[]):
 				raise ValueError('%s: Field differs between input files' % TRANS[var_aux])
 		d_out.update(d)
 	d_out['pfull'] = d_out['pfull']*1e2
-	d_out['orog'] = d_out['zfull'][:,0]
 	d_out['.'] = META
 	return d_out
