@@ -77,4 +77,5 @@ def read(dirname, track, warnings=[], step=3./24.):
 	d = ds.op.merge(dd, 'time')
 	if 'time' in d:
 		d['time_bnds'] = misc.time_bnds(d['time'], step)
+	d['.'] = META
 	return d
