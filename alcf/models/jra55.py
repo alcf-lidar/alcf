@@ -35,7 +35,7 @@ TRANS = {
 	'sp': 'ps',
 }
 
-def read(dirname, track, warnings=[]):
+def read(dirname, track, warnings=[], step=6./24.):
 	d_ll = ds.read(os.path.join(dirname, 'LL125.nc'), [
 		'latitude',
 		'longitude',
@@ -107,5 +107,7 @@ def read(dirname, track, warnings=[]):
 				raise ValueError('%s: Field differs between input files' % TRANS[var_aux])
 		d_out.update(d)
 	d_out['pfull'] = d_out['pfull']*1e2
+	if 'time' in d:
+		d['time_bnds'] = misc.time_bnds(d['time'], step)
 	d_out['.'] = META
 	return d_out

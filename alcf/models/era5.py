@@ -44,7 +44,7 @@ TRANS_SURF = {
 	'sp': 'ps',
 }
 
-def read0(type_, dirname, track, warnings=[]):
+def read0(type_, dirname, track, warnings=[], step=1./24.):
 	dd_idx = ds.readdir(dirname,
 		variables=['time', 'latitude', 'longitude'],
 		jd=True,
@@ -101,6 +101,8 @@ def read0(type_, dirname, track, warnings=[]):
 				d['pfull'] = d['pfull'][:,::-1]
 			dd.append(d)
 	d = ds.op.merge(dd, 'time')
+	if 'time' in d:
+		d['time_bnds'] = misc.time_bnds(d['time'], step)
 	if 'pfull' in d:
 		d['pfull'] = 1e2*d['pfull']
 	if 'zfull' in d:

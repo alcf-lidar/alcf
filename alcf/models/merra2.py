@@ -19,7 +19,7 @@ VARIABLES = [
 
 GRACE_TIME = 1/24.
 
-def read(dirname, track, warnings=[]):
+def read(dirname, track, warnings=[], step=3./24.):
 	dd_index = ds.readdir(dirname, variables=['time', 'lat', 'lon'], jd=True)
 	start_time = track['time'][0]
 	end_time = track['time'][-1]
@@ -66,4 +66,6 @@ def read(dirname, track, warnings=[]):
 			}
 			dd.append(d_new)
 	d = ds.op.merge(dd, 'time')
+	if 'time' in d:
+		d['time_bnds'] = misc.time_bnds(d['time'], step)
 	return d

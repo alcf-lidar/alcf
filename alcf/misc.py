@@ -68,3 +68,18 @@ def half(xfull):
 	xhalf[0] = 2.*xfull[0] - xfull[1]
 	xhalf[-1] = 2.*xfull[-1] - xfull[-2]
 	return xhalf
+
+def time_bnds(time, step):
+	n = len(time)
+	bnds = np.full((n, 2), np.nan, time.dtype)
+	bnds[0,0] = time[0] - step
+	bnds[-1,1] = time[-1] + step
+	if n < 2:
+		return bnds
+	m = 0.5*(time[1:] + time[:(n - 1)])
+	bnds[1:,0] = m
+	bnds[:-1,1] = m
+	for i in range(n):
+		bnds[i,0] = max(bnds[i,0], time[i] - step)
+		bnds[i,1] = min(bnds[i,1], time[i] + step)
+	return bnds

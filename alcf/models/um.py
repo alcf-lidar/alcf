@@ -33,7 +33,7 @@ TRANS = {
 	'STASH_m01s16i004': 'ta',
 }
 
-def read(dirname, track, warnings=[]):
+def read(dirname, track, warnings=[], step=1./24.):
 	dd_idx = ds.readdir(dirname,
 		variables=['TALLTS', 'latitude_t', 'longitude_t', 'DALLTH_zsea_theta'],
 		jd=True,
@@ -76,5 +76,7 @@ def read(dirname, track, warnings=[]):
 	d = ds.op.merge(dd, 'time')
 	d['orog'] = d['zfull'][:,0]
 	d['cl'] *= 100.
+	if 'time' in d:
+		d['time_bnds'] = misc.time_bnds(d['time'], step)
 	d['.'] = META
 	return d

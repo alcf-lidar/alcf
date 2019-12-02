@@ -22,7 +22,7 @@ TRANS = {
 	'cloud_volume_fraction_in_atmosphere_layer': 'cl',
 }
 
-def read(dirname, track, warnings=[]):
+def read(dirname, track, warnings=[], step=6./24.):
 	dd_index = ds.readdir(dirname,
 		variables=['time', 'latitude', 'longitude', 'level_height'],
 		jd=True,
@@ -104,5 +104,7 @@ def read(dirname, track, warnings=[]):
 		d['orog'] = np.full(n, np.nan, dtype=np.float64)
 		for i in range(n):
 			d['orog'][i] = 2*d['zfull'][i,0] - d['zfull'][i,1]
+	if 'time' in d:
+		d['time_bnds'] = misc.time_bnds(d['time'], step)
 	d['.'] = META
 	return d

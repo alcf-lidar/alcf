@@ -29,6 +29,11 @@ META = {
 		'standard_name': 'time',
 		'units': 'days since -4712-01-01T12:00',
 	},
+	'time_bnds': {
+		'.dims': ['time', 'bnds'],
+		'standard_name': 'time_bounds',
+		'units': 'days since -4712-01-01T12:00',
+	},
 	'lon': {
 		'.dims': ['time'],
 		'standard_name': 'longitude',
