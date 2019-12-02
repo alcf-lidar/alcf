@@ -1,7 +1,8 @@
 import ds_format as ds
 import os
 import numpy as np
-from . import META
+from alcf.models import META
+from alcf import misc
 
 VARIABLES = [
 	'hybridt32',

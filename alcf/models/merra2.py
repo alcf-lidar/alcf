@@ -2,6 +2,7 @@ import ds_format as ds
 import os
 import numpy as np
 from alcf.models import META
+from alcf import misc
 
 VARIABLES = [
 	'lon',

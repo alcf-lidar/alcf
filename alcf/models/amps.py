@@ -1,7 +1,9 @@
 import ds_format as ds
 import os
 import numpy as np
+import aquarius_time as aq
 from alcf.models import META
+from alcf import misc
 
 KAPPA = 0.2854 # Poisson constant for dry air.
 
@@ -31,6 +33,10 @@ def read(dirname, track, warnings=[], step=3./24.):
 	dd = []
 	for d_index in dd_index:
 		time = d_index['XTIME'][0]
+		time0 = d_index['.']['.']['SIMULATION_START_DATE']
+		time0 = aq.from_iso(time0.replace('_', 'T'))
+		if time < 2000000.:
+			time = time0 + time/(24.*60.)
 		filename = d_index['filename']
 		if (time >= start_time - GRACE_TIME) & (time <= end_time + GRACE_TIME):
 			k = np.argmin(np.abs(track['time'] - time))
