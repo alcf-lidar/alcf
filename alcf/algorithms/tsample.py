@@ -13,6 +13,11 @@ def tsample(d, tres):
 	if 'backscatter_mol' in d:
 		d['backscatter_mol'] = np.mean(d['backscatter_mol'], axis=0, keepdims=True)
 	d['time'] = np.array(np.mean(d['time'], keepdims=True))
+	if 'time_bnds' in d:
+		d['time_bnds'] = np.array([[
+			np.amin(d['time_bnds'][:,0]),
+			np.amax(d['time_bnds'][:,1])
+		]])
 
 def stream(dd, state, tres=None, tlim=None, **options):
 	if tres is not None:

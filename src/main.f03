@@ -13,11 +13,13 @@ contains
         call get_command_argument(i, arg, len)
     end function
 
-    subroutine read_input(file, input, time)
+    subroutine read_input(file, input, time, time_bnds)
         character(len=*), intent(in) :: file
         type(cosp_input_fields), intent(out) :: input
         real(8), dimension(:), allocatable, intent(out) :: &
             time
+        real(8), dimension(:,:), allocatable, intent(out) :: &
+            time_bnds
         integer :: ncid
         real(8), dimension(:), allocatable :: &
             lon, &
@@ -46,6 +48,7 @@ contains
         call nc_get_var_1d_real(ncid, 'lon', lon)
         call nc_get_var_1d_real(ncid, 'lat', lat)
         call nc_get_var_1d_real(ncid, 'time', time)
+        call nc_get_var_2d_real(ncid, 'time_bnds', time_bnds)
         call nc_get_var_1d_real(ncid, 'ps', ps)
         call nc_get_var_1d_real(ncid, 'orog', orog)
         call nc_get_var_2d_real(ncid, 'zfull', zfull)
@@ -106,17 +109,19 @@ contains
         call nc_check(nf90_close(ncid))
     end subroutine
 
-    subroutine write_output(file, input, time, output)
+    subroutine write_output(file, input, time, time_bnds, output)
         character(len=*), intent(in) :: file
         type(cosp_input_fields), intent(inout) :: input
         real(8), dimension(:), allocatable, intent(in) :: time
+        real(8), dimension(:,:), allocatable, intent(in) :: time_bnds
         type(cosp_output_fields), intent(in) :: output
         integer :: ncid
-        integer :: column_dimid, level_dimid, time_dimid
+        integer :: column_dimid, level_dimid, time_dimid, bnds_dimid
         integer :: &
             lon_varid, &
             lat_varid, &
             time_varid, &
+            time_bnds_varid, &
             altitude_varid, &
             zlev_varid, &
             zlev_half_varid, &
@@ -138,6 +143,7 @@ contains
 
         call nc_check(nf90_create(file, 0, ncid))
         call nc_check(nf90_def_dim(ncid, 'time', npoints, time_dimid))
+        call nc_check(nf90_def_dim(ncid, 'bnds', 2, bnds_dimid))
         call nc_check(nf90_def_dim(ncid, 'level', nlevels, level_dimid))
         call nc_check(nf90_def_dim(ncid, 'column', ncolumns, column_dimid))
         call nc_check(nf90_def_var(ncid, 'lon', nf90_double, time_dimid, lon_varid))
@@ -150,6 +156,7 @@ contains
         call nc_check(nf90_def_var(ncid, 'backscatter', nf90_double, (/column_dimid, level_dimid, time_dimid/), beta_tot_varid))
         call nc_check(nf90_def_var(ncid, 'backscatter_mol', nf90_double, (/level_dimid, time_dimid/), beta_mol_varid))
         call nc_check(nf90_def_var(ncid, 'time', nf90_double, time_dimid, time_varid))
+        call nc_check(nf90_def_var(ncid, 'time_bnds', nf90_double, (/bnds_dimid, time_dimid/), time_bnds_varid))
         call nc_check(nf90_enddef(ncid))
         call nc_check(nf90_put_var(ncid, lon_varid, input%lon))
         call nc_check(nf90_put_var(ncid, lat_varid, input%lat))
@@ -161,6 +168,7 @@ contains
         call nc_check(nf90_put_var(ncid, p_varid, reshape(input%p, (/nlevels, npoints/), order=(/2,1/))))
         !call nc_check(nf90_put_var(ncid, ph_varid, reshape(input%ph, (/nlevels, npoints/), order=(/2,1/))))
         call nc_check(nf90_put_var(ncid, time_varid, time))
+        call nc_check(nf90_put_var(ncid, time_bnds_varid, time_bnds))
         call nc_check(nf90_close(ncid))
     end subroutine
 end module
@@ -181,6 +189,7 @@ program main
     type(cosp_output_fields) :: output
     namelist /config_nml/ config
     real(8), dimension(:), allocatable ::  time
+    real(8), dimension(:,:), allocatable ::  time_bnds
 
     program_name = arg(0)
     if (command_argument_count() /= 3) then
@@ -195,7 +204,7 @@ program main
     read(unit, nml=config_nml)
     close(unit)
 
-    call read_input(input_file, input, time)
+    call read_input(input_file, input, time, time_bnds)
     call cosp_run(config, input, output)
-    call write_output(output_file, input, time, output)
+    call write_output(output_file, input, time, time_bnds, output)
 end program
