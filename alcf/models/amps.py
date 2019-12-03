@@ -38,7 +38,7 @@ def read(dirname, track, warnings=[], step=3./24.):
 		if time < 2000000.:
 			time = time0 + time/(24.*60.)
 		filename = d_index['filename']
-		if (time >= start_time - GRACE_TIME) & (time <= end_time + GRACE_TIME):
+		if (time >= start_time) & (time < end_time):
 			k = np.argmin(np.abs(track['time'] - time))
 			lon0 = track['lon'][k]
 			lat0 = track['lat'][k]

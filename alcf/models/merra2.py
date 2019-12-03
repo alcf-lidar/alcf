@@ -31,7 +31,7 @@ def read(dirname, track, warnings=[], step=3./24.):
 		lon = d_index['lon']
 		lon = np.where(lon < 0., 360. + lon, lon)
 		filename = d_index['filename']
-		ii = np.where((time >= start_time - GRACE_TIME) & (time <= end_time + GRACE_TIME))[0]
+		ii = np.nonzero((time >= start_time) & (time < end_time))[0]
 		for i in ii:
 			t = time[i]
 			i2 = np.argmin(np.abs(track['time'] - time[i]))
@@ -69,4 +69,5 @@ def read(dirname, track, warnings=[], step=3./24.):
 	d = ds.op.merge(dd, 'time')
 	if 'time' in d:
 		d['time_bnds'] = misc.time_bnds(d['time'], step)
+	d['.'] = META
 	return d
