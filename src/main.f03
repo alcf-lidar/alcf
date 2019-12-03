@@ -109,12 +109,13 @@ contains
         call nc_check(nf90_close(ncid))
     end subroutine
 
-    subroutine write_output(file, input, time, time_bnds, output)
+    subroutine write_output(file, config, input, time, time_bnds, output)
         character(len=*), intent(in) :: file
+        type(cosp_run_config) :: config
         type(cosp_input_fields), intent(inout) :: input
         real(8), dimension(:), allocatable, intent(in) :: time
         real(8), dimension(:,:), allocatable, intent(in) :: time_bnds
-        type(cosp_output_fields), intent(in) :: output
+        type(cosp_output_fields), intent(inout) :: output
         integer :: ncid
         integer :: column_dimid, level_dimid, time_dimid, bnds_dimid
         integer :: &
@@ -131,11 +132,22 @@ contains
             beta_tot_varid
         integer :: status
         integer :: npoints, nlevels, ncolumns
-        integer :: i
+        integer :: i, j, k
 
         npoints = input%npoints
         nlevels = input%nlevels
         ncolumns = size(output%sglidar%beta_tot, 2)
+
+        do i = 1, npoints
+            do j = 1, nlevels
+                if (input%zlev(i,j) > config%lidar_max_range) then
+                    do k = 1, ncolumns
+                        output%sglidar%beta_tot(i,k,j) = 0.
+                    end do
+                    output%sglidar%beta_mol(i,j) = 0.
+                end if
+            end do
+        end do
 
         do i = 1, npoints
             input%zlev(i,:) = input%zlev(i,:) + input%orog(i)
@@ -206,5 +218,5 @@ program main
 
     call read_input(input_file, input, time, time_bnds)
     call cosp_run(config, input, output)
-    call write_output(output_file, input, time, time_bnds, output)
+    call write_output(output_file, config, input, time, time_bnds, output)
 end program

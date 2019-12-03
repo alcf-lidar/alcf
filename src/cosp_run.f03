@@ -42,7 +42,8 @@ module cosp_run_mod
             co2, &
             ch4, &
             n2o, &
-            co
+            co, &
+            lidar_max_range
         integer, dimension(RTTOV_MAX_CHANNELS) :: channels
         real, dimension(RTTOV_MAX_CHANNELS) :: surfem
     end type

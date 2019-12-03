@@ -27,6 +27,7 @@ CONFIG_TEMPLATE = """
 	config%Nprmts_max_aero=1,
 	config%lidar_ice_type=0,
 	config%lidar_wavelength=${wavelength},
+	config%lidar_max_range=${max_range},
 	config%surface_lidar=${surface_lidar},
 	config%OVERLAP=${overlap},
 	config%ISCCP_TOPHEIGHT=1,
@@ -178,6 +179,7 @@ Options:
 		nlevels=nlevels,
 		overlap=overlap_flag,
 		wavelength=lidar.WAVELENGTH,
+		max_range=lidar.MAX_RANGE,
 		surface_lidar=(1 if lidar.SURFACE_LIDAR else 0),
 	)
 

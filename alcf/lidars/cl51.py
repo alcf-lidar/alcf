@@ -7,6 +7,7 @@ WAVELENGTH = 910
 CALIBRATION_COEFF = 1.2e-3
 SURFACE_LIDAR = True
 SC_LR = 18.8 # Stratocumulus lidar ratio (O'Connor et al., 2004)
+MAX_RANGE = 15400
 
 VARS = {
 	'backscatter': ['backscatter'],
