@@ -108,6 +108,6 @@ def read(dirname, track, warnings=[], step=6./24.):
 		d_out.update(d)
 	d_out['pfull'] = d_out['pfull']*1e2
 	if 'time' in d:
-		d['time_bnds'] = misc.time_bnds(d['time'], step)
+		d_out['time_bnds'] = misc.time_bnds(d['time'], step)
 	d_out['.'] = META
 	return d_out
