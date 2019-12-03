@@ -125,9 +125,15 @@ def stats_map(d, state,
 	state['backscatter_sd_z'] = d['zfull'][jsd]
 
 	if 'backscatter_sd' in d:
-		state['backscatter_sd_hist'] += np.histogram(
-			d['backscatter_sd'][filter_mask & mask,jsd],
-			bins=state['backscatter_sd_half'])[0]
+		if l > 0:
+			for k in range(l):
+				state['backscatter_sd_hist'][:,k] += np.histogram(
+					d['backscatter_sd'][filter_mask[:,k] & mask,jsd,k],
+					bins=state['backscatter_sd_half'])[0]
+		else:
+			state['backscatter_sd_hist'] += np.histogram(
+				d['backscatter_sd'][filter_mask & mask,jsd],
+				bins=state['backscatter_sd_half'])[0]
 
 	for i in range(o):
 		if l > 0:

@@ -10,6 +10,7 @@ from alcf.algorithms.noise_removal import NOISE_REMOVAL
 from alcf.algorithms.cloud_detection import CLOUD_DETECTION
 from alcf.algorithms.cloud_base_detection import CLOUD_BASE_DETECTION
 from alcf.algorithms import tsample, zsample, output_sample, lidar_ratio
+from alcf.algorithms import couple as couple_mod
 from alcf import misc
 import pst
 
@@ -41,6 +42,7 @@ def run(type_, input_, output,
 	output_sampling=86400,
 	eta=0.7,
 	calibration_file=None,
+	couple=None,
 	**options
 ):
 	"""
@@ -80,6 +82,7 @@ Options:
     Default: Taken from lidar data or `0` if not available.
 - `calibration: <algorithm>`: Backscatter calibration algorithm.
     Available algorithms: `default`, `none`. Default: `default`.
+- `couple: <directory>`: Couple to other lidar data. Default: `none`.
 - `cloud_detection: <algorithm>`: Cloud detection algorithm.
     Available algorithms: `default`, `none`. Default: `default`.
 - `cloud_base_detection: <algorithm>`: Cloud base detection algorithm.
@@ -197,7 +200,10 @@ Algorithm options:
 		state['cloud_base_detection'] = state.get('cloud_base_detection', {})
 		state['lidar_ratio'] = state.get('lidar_ratio', {})
 		state['output'] = state.get('output', {})
+		state['couple'] = state.get('couple', {})
 		dd = misc.stream(dd, state['preprocess'], preprocess, tshift=tshift)
+		if couple is not None:
+			dd = couple_mod.stream(dd, state['couple'], couple)
 		if noise_removal_mod is not None:
 			dd = noise_removal_mod.stream(dd, state['noise_removal'], **options)
 		if calibration_mod is not None:
