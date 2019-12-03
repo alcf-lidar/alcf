@@ -10,7 +10,6 @@ from matplotlib.gridspec import GridSpec
 from matplotlib.dates import date2num, AutoDateFormatter, AutoDateLocator
 from matplotlib.colors import ListedColormap, Normalize, BoundaryNorm, LogNorm
 import matplotlib.lines as mlines
-import scipy.ndimage as ndimage
 import aquarius_time as aq
 import ds_format as ds
 from alcf import misc
@@ -24,8 +23,11 @@ COLORS = [
 	'#ba00ff',
 ]
 
+LINESTYLE = 'solid'
+
 VARIABLES = [
 	'time',
+	'time_bnds',
 	'backscatter',
 	'backscatter_sd',
 	'backscatter_sd_full',
@@ -33,6 +35,7 @@ VARIABLES = [
 	'zfull',
 	'lr',
 	'cl',
+	'clt',
 	'n',
 	'cloud_mask',
 	'backscatter_hist',
@@ -41,7 +44,7 @@ VARIABLES = [
 ]
 
 def plot_legend(*args, theme='light', **kwargs):
-	legend = plt.legend(*args, **kwargs)
+	legend = plt.legend(*args, fontsize=8, **kwargs)
 	f = legend.get_frame()
 	f.set_facecolor('k' if theme == 'light' else 'white')
 	f.set_linewidth(0)
@@ -142,6 +145,7 @@ def plot_lr(d, subcolumn=0, **opts):
 
 def plot_cloud_occurrence(dd,
 	colors=COLORS,
+	linestyle=LINESTYLE,
 	lw=None,
 	labels=None,
 	subcolumn=0,
@@ -154,11 +158,17 @@ def plot_cloud_occurrence(dd,
 		cl = d['cl'][:,subcolumn] \
 			if len(d['cl'].shape) == 2 \
 			else d['cl']
+		clt = d['clt'][subcolumn] \
+			if len(d['clt'].shape) == 1 \
+			else d['clt']
 		n = d['n']
+		label = (labels[i] if labels is not None else '')
+		label += ' | CF: %d%%' % clt
 		plt.plot(cl, 1e-3*zfull,
 			color=colors[i],
+			linestyle=(linestyle[i] if type(linestyle) is list else linestyle),
 			lw=lw,
-			label=(labels[i] if labels is not None else None),
+			label=label,
 		)
 	plt.xlim(xlim[0], xlim[1])
 	plt.ylim(zlim[0]*1e-3, zlim[1]*1e-3)
@@ -255,7 +265,7 @@ def plot(plot_type, d, output,
 	title=None,
 	**kwargs
 ):
-	mpl.rcParams['font.family'] = 'Open Sans'
+	mpl.rcParams['font.family'] = 'Public Sans'
 	mpl.rcParams['axes.linewidth'] = 0.5
 	mpl.rcParams['xtick.major.size'] = 3
 	mpl.rcParams['xtick.major.width'] = 0.5
@@ -311,6 +321,7 @@ def run(plot_type, *args,
 	dpi=300,
 	grid=False,
 	colors=COLORS,
+	linestyle=LINESTYLE,
 	lw=1,
 	labels=None,
 	xlim=None,
@@ -358,11 +369,11 @@ Options:
 Plot command options:
 
 - `backscatter`:
-	- `--lr`: plot lidar ratio (LR)
-	- `--plot_cloud_mask`: plot cloud mask
-	- `sigma: <value>`: Suppress backscatter less than a number of standard deviations
-		from the mean backscatter (real). Default: `3`.
-	- `vlim: { <min> <max }`. Value limits (10^6 m-1.sr-1).
+    - `--lr`: plot lidar ratio (LR)
+    - `--plot_cloud_mask`: plot cloud mask
+    - `sigma: <value>`: Suppress backscatter less than a number of standard deviations
+        from the mean backscatter (real). Default: `3`.
+    - `vlim: { <min> <max }`. Value limits (10^6 m-1.sr-1).
         Default: `{ 10 2000 }`.
     - `vlog: <value>`: Plot values on logarithmic scale: `true` of `false`.
         Default: `true`.
@@ -378,6 +389,8 @@ Plot command options:
 - `cloud_occurrence`:
     - `colors: { <value>... }`: Line colors.
         Default: `{ #0084c8 #dc0000 #009100 #ffc022 #ba00ff }`
+    - `linestyle`: { <value> ... }`: Line style (`solid`, `dashed`, `dotted`).
+        Default: `solid`.
     - `labels: { <value>... }`: Line labels. Default: `none`.
     - `lw: <value>`: Line width. Default: `1`.
     - `xlim: { <min> <max> }`: x axis limits (%). Default: `{ 0 100 }`.
@@ -398,6 +411,7 @@ Plot command options:
 		'subcolumn': subcolumn,
 		'grid': grid,
 		'colors': colors,
+		'linestyle': linestyle,
 		'lw': lw,
 		'labels': labels,
 		'sigma': sigma,
