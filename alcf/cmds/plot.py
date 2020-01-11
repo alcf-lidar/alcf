@@ -239,18 +239,24 @@ def plot_backscatter_hist(d,
 def plot_backscatter_sd_hist(dd,
 	labels=None,
 	xlim=None,
+	zlim=None,
+	colors=COLORS,
+	linestyle=LINESTYLE,
 	**kwargs
 ):
 	for i, d in enumerate(dd):
 		plt.plot(d['backscatter_sd_full']*1e6, d['backscatter_sd_hist'],
 			lw=1,
-			color=COLORS[i],
+			color=colors[i],
+			linestyle=(linestyle[i] if type(linestyle) is list else linestyle),
 			label=(labels[i] if labels is not None else None),
 		)
 	plt.gca().set_yscale('log')
 	plt.gca().set_xscale('log')
 	if xlim is not None:
 		plt.xlim(xlim)
+	if zlim is not None:
+		plt.ylim(zlim)
 	plt.xlabel('Total attenuated backscatter coefficient (×10$^{-6}$ m$^{-1}$sr$^{-1}$)')
 	plt.ylabel('Occurrence (%)')
 	if labels is not None:
@@ -384,8 +390,13 @@ Plot command options:
     - `--vlog`: use logarithmic scale for values
     - `xlim: { <min> <max> }`. x axis limits (10^6 m-1.sr-1) or `none` for
         automatic. Default: `none`.
-    - `zlim: { <min> <max> }`. y axis limits (m) or `none` for automatic.
+    - `zlim: { <min> <max> }`. z axis limits (m) or `none` for automatic.
         Default: `none`.
+- `backscatter_sd_hist`:
+    - `xlim: { <min> <max> }`. x axis limits (10^6 m-1.sr-1) or `none` for
+        automatic. Default: `none`.
+    - `zlim: { <min> <max> }`. z axis limits (%) or `none` for
+        automatic. Default: `none`.
 - `cloud_occurrence`:
     - `colors: { <value>... }`: Line colors.
         Default: `{ #0084c8 #dc0000 #009100 #ffc022 #ba00ff }`
@@ -394,7 +405,7 @@ Plot command options:
     - `labels: { <value>... }`: Line labels. Default: `none`.
     - `lw: <value>`: Line width. Default: `1`.
     - `xlim: { <min> <max> }`: x axis limits (%). Default: `{ 0 100 }`.
-    - `zlim: { <min> <max> }`: y axis limits (m). Default: `{ 0 15 }`.
+    - `zlim: { <min> <max> }`: z axis limits (m). Default: `{ 0 15 }`.
 	"""
 	input_ = args[:-1]
 	output = args[-1]
