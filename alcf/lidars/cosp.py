@@ -6,7 +6,7 @@ CALIBRATION_COEFF = 1.0
 SURFACE_LIDAR = None
 SC_LR = None
 
-def read(filename, vars, altitude=None):
+def read(filename, vars, **kwargs):
 	d = ds.from_netcdf(filename, vars)
 	return d
 

@@ -10,9 +10,9 @@ SURFACE_LIDAR = True
 SC_LR = 18.8 # Stratocumulus lidar ratio (O'Connor et al., 2004)
 MAX_RANGE = 7700
 
-def read(filename, vars, altitude=None):
+def read(filename, vars, **kwargs):
 	return cl51.read(filename, vars,
-		altitude=altitude,
-		calibration_coeff=CALIBRATION_COEFF
+		calibration_coeff=CALIBRATION_COEFF,
+		**kwargs
 	)
 

@@ -15,7 +15,7 @@ VARS = {
 	'altitude': ['altitude'],
 }
 
-def read(filename, vars, altitude=None):
+def read(filename, vars, altitude=None, **kwargs):
 	dep_vars = list(set([y for x in vars if x in VARS for y in VARS[x]]))
 	d = ds.from_netcdf(
 		filename,

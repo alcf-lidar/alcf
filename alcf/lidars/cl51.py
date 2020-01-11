@@ -17,9 +17,16 @@ DEFAULT_VARS = [
 	'vertical_resolution',
 	'level',
 	'time',
+	'detection_status',
 ]
 
-def read(filename, vars, altitude=None, calibration_coeff=CALIBRATION_COEFF):
+def read(filename, vars,
+	altitude=None,
+	calibration_coeff=CALIBRATION_COEFF,
+	fix_cl_range=False,
+	cl_crit_range=6000,
+	**kwargs
+):
 	dep_vars = list(set([y for x in vars if x in VARS for y in VARS[x]]))
 	required_vars = dep_vars + DEFAULT_VARS
 	d = ds.from_netcdf(
@@ -29,14 +36,19 @@ def read(filename, vars, altitude=None, calibration_coeff=CALIBRATION_COEFF):
 	dx = {}
 	dx['time'] = d['time']/(24.0*60.0*60.0) + 2440587.5
 	n = len(dx['time'])
+	range_ = d['vertical_resolution'][0]*d['level']
 	if 'zfull' in vars:
-		range_ = d['vertical_resolution'][0]*d['level']
 		zfull1 = range_
 		dx['zfull'] = np.tile(zfull1, (n, 1))
 		if altitude is not None:
 			dx['zfull'] += altitude
 	if 'backscatter' in vars:
 		dx['backscatter'] = d['backscatter']*calibration_coeff
+		mask = range_ > 6000
+		if fix_cl_range is True:
+			for i in range(n):
+				if d['detection_status'][i] == b'0':
+					dx['backscatter'][i,mask] *= (range_[mask]/6000)**2
 	if 'altitude' in vars:
 		dx['altitude'] = np.full(n, altitude, np.float64)
 	dx['.'] = META

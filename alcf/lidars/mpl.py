@@ -27,7 +27,7 @@ DEFAULT_VARS = [
 	'altitude',
 ]
 
-def read(filename, vars, altitude=None):
+def read(filename, vars, altitude=None, **kwargs):
 	dep_vars = list(set([y for x in vars if x in VARS for y in VARS[x]]))
 	required_vars = dep_vars + DEFAULT_VARS
 	d = ds.from_netcdf(

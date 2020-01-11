@@ -43,6 +43,8 @@ def run(type_, input_, output,
 	eta=0.7,
 	calibration_file=None,
 	couple=None,
+	fix_cl_range=False,
+	cl_crit_range=6000,
 	**options
 ):
 	"""
@@ -83,12 +85,16 @@ Options:
 - `calibration: <algorithm>`: Backscatter calibration algorithm.
     Available algorithms: `default`, `none`. Default: `default`.
 - `couple: <directory>`: Couple to other lidar data. Default: `none`.
+- `cl_crit_range: <range>`: Critical range for the `fix_cl_range` option (m).
+    Default: 6000.
 - `cloud_detection: <algorithm>`: Cloud detection algorithm.
     Available algorithms: `default`, `none`. Default: `default`.
 - `cloud_base_detection: <algorithm>`: Cloud base detection algorithm.
     Available algorithms: `default`, `none`. Default: `default`.
 - `eta: <eta>`: Multiple-scattering factor to assume in lidar ratio calculation.
     Default: `0.7`.
+- `fix_cl_range` (experimental): Fix CL31/CL51 range correction (if `noise_h2`
+	firmware option if off). The critical range is taken from `cl_crit_range`.
 - `noise_removal: <algorithm>`: Noise removal algorithm.
     Available algorithms: `default`, `none`.  Default: `default`.
 - `output_sampling: <period>`: Output sampling period (seconds).
@@ -238,12 +244,20 @@ Algorithm options:
 			input_filename = os.path.join(input_, file)
 			print('<- %s' % input_filename)
 			try:
-				d = lidar.read(input_filename, VARIABLES, altitude=altitude)
+				d = lidar.read(input_filename, VARIABLES,
+					altitude=altitude,
+					fix_cl_range=fix_cl_range,
+					cl_crit_range=cl_crit_range,
+				)
 				dd = process([d], state, **options)
 			except:
 				logging.warning(traceback.format_exc())
 		dd = process([None], state, **options)
 	else:
 		print('<- %s' % input_)
-		d = lidar.read(input_, VARIABLES)
+		d = lidar.read(input_, VARIABLES,
+			altitude=altitude,
+			fix_cl_range=fix_cl_range,
+			cl_crit_range=cl_crit_range,
+		)
 		dd = process([d, None], state, **options)
