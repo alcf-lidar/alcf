@@ -19,10 +19,10 @@ def run(input_, output,
 	tlim=None,
 	blim=[5., 200.],
 	bres=5.,
-	bsd_lim=[0., 10.],
+	bsd_lim=[0.001, 10.],
 	bsd_log=True,
 	bsd_res=0.001,
-	bsd_z=5000.,
+	bsd_z=8000.,
 	filter=None,
 	zlim=[0., 15000.],
 	zres=100.,
@@ -52,11 +52,11 @@ Options:
 - `zlim: { <low> <high> }`: Height limits (m). Default: `{ 0 15000 }`.
 - `zres: <value>`: Height resolution (m). Default: `50`.
 - `bsd_lim: { <low> <high> }`: backscatter standard deviation histogram limits
-    (1e-6 m-1.sr-1). Default: `{ 0 10 }`.
+    (1e-6 m-1.sr-1). Default: `{ 0.001 10 }`.
 - `bsd_log: <value>`: enable/disable logarithmic scale of the backscatter
     standard deviation histogram (`true` or `false`). Default: `true`.
 - `bsd_res: <value>`: backscatter standard deviation histogram resolution
-    (1e-6 m-1.sr-1). Default: `0.1`.
+    (1e-6 m-1.sr-1). Default: `0.001`.
 - `bsd_z: <value>`: backscatter standard deviation histogram height (m).
     Default: `8000`.
 
