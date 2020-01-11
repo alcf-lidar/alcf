@@ -31,11 +31,10 @@ def stats_map(d, state,
 	)
 	o = len(state['backscatter_full'])
 	state['backscatter_sd_half'] = state.get('backscatter_sd_half',
-		# np.exp(np.arange(np.log(bsd_lim[0]), np.log(bsd_lim[1] + bsd_res),
-			# np.log(bsd_lim[0] + bsd_res) - np.log(bsd_lim[0])))
-		# if bsd_log is True \
-		# else
-		np.arange(bsd_lim[0], bsd_lim[1] + bsd_res, bsd_res)
+		np.exp(np.arange(np.log(bsd_lim[0]), np.log(bsd_lim[1] + bsd_res),
+			np.log(bsd_lim[0] + bsd_res) - np.log(bsd_lim[0])))
+		if bsd_log is True \
+		else np.arange(bsd_lim[0], bsd_lim[1] + bsd_res, bsd_res)
 	)
 	state['backscatter_sd_full'] = state.get('backscatter_sd_full',
 		0.5*(state['backscatter_sd_half'][1:] + state['backscatter_sd_half'][:-1])
