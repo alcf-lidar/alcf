@@ -10,7 +10,7 @@ VARIABLES = [
 	'TALLTS',
 	'latitude_t',
 	'longitude_t',
-	'DALLTH_zsea_theta',
+	'DALLTH_eta_theta',
 	'STASH_m01s00i265',
 	'STASH_m01s00i408',
 	'STASH_m01s00i409',
@@ -23,8 +23,7 @@ TRANS = {
 	'TALLTS': 'time',
 	'latitude_t': 'lat',
 	'longitude_t': 'lon',
-	'DALLTH_eta_theta': 'level',
-	'DALLTH_zsea_theta': 'zfull',
+	'DALLTH_eta_theta': 'eta',
 	'STASH_m01s00i265': 'cl',
 	'STASH_m01s00i408': 'pfull',
 	'STASH_m01s00i409': 'ps',
@@ -34,6 +33,12 @@ TRANS = {
 }
 
 def read(dirname, track, warnings=[], step=1./24.):
+	d_orog = ds.read(os.path.join(dirname, 'qrparm.orog.nc'), [
+		'latitude',
+		'longitude',
+		'surface_altitude',
+	])
+
 	dd_idx = ds.readdir(dirname,
 		variables=['TALLTS', 'latitude_t', 'longitude_t', 'DALLTH_zsea_theta'],
 		jd=True,
@@ -45,6 +50,9 @@ def read(dirname, track, warnings=[], step=1./24.):
 
 	dd = []
 	for d_idx in dd_idx:
+		if 'TALLTS' not in d_idx:
+			continue
+
 		time = d_idx['TALLTS']
 		lat = d_idx['latitude_t']
 		lon = d_idx['longitude_t']
@@ -65,16 +73,19 @@ def read(dirname, track, warnings=[], step=1./24.):
 			for a, b in TRANS.items():
 				if a in d.keys():
 					ds.rename(d, a, b)
-			ds.rename_dim(d, 'DALLTH_eta_theta', 'level')
 			d['lat'] = np.array([d['lat']])
 			d['lon'] = np.array([d['lon']])
 			d['.']['lat']['.dims'] = ['time']
 			d['.']['lon']['.dims'] = ['time']
+			orog = d_orog['surface_altitude'][j,k]
+			d['zfull'] = d['eta']*85000. + orog*(1. - d['eta']/d['eta'][51])**2
 			d['zfull'] = d['zfull'].reshape([1, len(d['zfull'])])
-			d['.']['zfull']['.dims'] = ['time', 'level']
+			d['.']['zfull'] = {'.dims': ['time', 'level']}
+			d['orog'] = np.array([orog], np.float64)
+			d['.']['orog'] = {'.dims': ['time']}
+			del d['eta']
 			dd.append(d)
 	d = ds.op.merge(dd, 'time')
-	d['orog'] = d['zfull'][:,0]
 	d['cl'] *= 100.
 	if 'time' in d:
 		d['time_bnds'] = misc.time_bnds(d['time'], step)
