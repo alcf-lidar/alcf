@@ -57,7 +57,7 @@ def read(filename, vars, altitude=None, **kwargs):
 		for i in range(n):
 			dx['zfull'][i,:] += altitude[i]
 	if 'backscatter' in vars:
-		dx['backscatter'] = (d['copol_nrb'] + d['crosspol_nrb'])*CALIBRATION_COEFF
+		dx['backscatter'] = (d['copol_nrb'] + 2.*d['crosspol_nrb'])*CALIBRATION_COEFF
 	if 'altitude' in vars:
 		dx['altitude'] = altitude
 	# if 'backscatter_x' in vars:
