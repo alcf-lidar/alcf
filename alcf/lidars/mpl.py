@@ -3,11 +3,11 @@ import ds_format as ds
 import datetime as dt
 from alcf.lidars import META
 
-WAVELENGTH = 532
+WAVELENGTH = 532 # nm
 CALIBRATION_COEFF = 0.375e-5
 SURFACE_LIDAR = True
-SC_LR = 16.0
-MAX_RANGE = 30000
+SC_LR = 16.0 # sr
+MAX_RANGE = 30000 # m
 
 VARS = {
 	'backscatter': ['copol_nrb', 'crosspol_nrb'],

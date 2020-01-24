@@ -2,11 +2,11 @@ import numpy as np
 import ds_format as ds
 from alcf.lidars import META
 
-WAVELENGTH = 1064
+WAVELENGTH = 1064 # nm
 CALIBRATION_COEFF = 0.34
 SURFACE_LIDAR = True
-SC_LR = 18.2 # Stratocumulus lidar ratio (O'Connor et al., 2004)
-MAX_RANGE = 15400
+SC_LR = 18.2 # sr. Stratocumulus lidar ratio (O'Connor et al., 2004).
+MAX_RANGE = 15400 # m
 
 VARS = {
 	'backscatter': ['beta_raw'],
