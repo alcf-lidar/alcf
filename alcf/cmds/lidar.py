@@ -76,7 +76,8 @@ Types:
 - `cl51`: Vaisala CL51
 - `cosp`: COSP simulated lidar
 - `minimpl`: Sigma Space MiniMPL
-- `mpl`: Sigma Space MPL
+- `mpl`: Sigma Space MPL (converted via SigmaMPL)
+- `mpl2nc`: Sigma Space MPL (converted via mpl2nc)
 
 Options:
 
