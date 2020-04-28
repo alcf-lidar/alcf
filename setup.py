@@ -5,7 +5,7 @@ import os.path
 
 setup(
 	name='alcf',
-	version='1.0.0',
+	version='1.0.0-beta.1',
 	description='Automatic Lidar and Ceilometer Framework - processing of ALC data and lidar simulator',
 	author='Peter Kuma',
 	author_email='peter.kuma@fastmail.com',
@@ -26,7 +26,7 @@ setup(
 		'cl2nc',
 	],
 	keywords=['alc', 'ceilometer', 'lidar', 'atmosphere', 'model', 'simulator', 'nwp', 'gcm', 'cosp', 'actsim', 'vaisala', 'cl51', 'cl31', 'lufft', 'chm-15k', 'minimpl', 'amps', 'merra-2', 'um'],
-	url='https://github.com/peterkuma/alcf',
+	url='https://alcf-lidar.github.io',
 	classifiers=[
 		'Development Status :: 4 - Beta',
 		'Environment :: Console',
