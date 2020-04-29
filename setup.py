@@ -34,6 +34,9 @@ setup(
 		'License :: OSI Approved :: MIT License',
 		'Operating System :: POSIX',
 		'Programming Language :: Python :: 3',
+		'Programming Language :: Fortran',
 		'Topic :: Scientific/Engineering :: Atmospheric Science',
+		'Topic :: Scientific/Engineering :: Physics',
+		'Topic :: Scientific/Engineering :: Visualization',
 	]
 )
