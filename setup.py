@@ -6,9 +6,9 @@ import os.path
 setup(
 	name='alcf',
 	version='1.0.0-beta.1',
-	description='Automatic Lidar and Ceilometer Framework - processing of ALC data and lidar simulator',
-	author='Peter Kuma',
-	author_email='peter.kuma@fastmail.com',
+	description='Automatic Lidar and Ceilometer Framework (ALCF)',
+	author='Peter Kuma, Adrian J. McDonald, Olaf Morgenstern, Richard Querel, Israel Silber, Connor J. Flynn',
+	author_email='peter@peterkuma.net',
 	license='MIT',
 	scripts=['bin/alcf', 'bin/cosp_alcf'],
 	packages=find_packages(),
