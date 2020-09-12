@@ -318,6 +318,7 @@ def plot(plot_type, d, output,
 		plt.title(title)
 
 	plt.savefig(output, bbox_inches='tight', dpi=dpi)
+	plt.close()
 
 def run(plot_type, *args,
 	lr=False,
