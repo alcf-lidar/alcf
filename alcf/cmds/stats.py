@@ -81,9 +81,9 @@ HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
 	}
 
 	if os.path.isdir(input_):
-		files = os.listdir(input_)
-		for file in sorted(files):
-			filename = os.path.join(input_, file)
+		files = sorted(os.listdir(input_))
+		for file_ in files:
+			filename = os.path.join(input_, file_)
 			if not os.path.isfile(filename):
 				continue
 			d = ds.read(filename, VARIABLES)

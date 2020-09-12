@@ -4,7 +4,7 @@ import os
 import re
 
 def dir_all(input_, output, inext, outext):
-	files = os.listdir(input_)
+	files = sorted(os.listdir(input_))
 	input2 = []
 	output2 = []
 	for file in files:

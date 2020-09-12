@@ -68,10 +68,10 @@ Read time periods from `time_periods.txt`, lidar profiles from the directory
 	"""
 	lidar = LIDARS.get(type_)
 	tp = read_time_periods(time_periods)
-	files = os.listdir(input_)
+	files = sorted(os.listdir(input_))
 	lr = []
-	for file in sorted(files):
-		filename = os.path.join(input_, file)
+	for file_ in files:
+		filename = os.path.join(input_, file_)
 		print('<- %s' % filename)
 		d = ds.read(filename, ['time'])
 		mask = np.zeros(len(d['time']), dtype=np.bool)

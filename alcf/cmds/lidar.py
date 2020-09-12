@@ -240,9 +240,9 @@ Algorithm options:
 
 	state = {}
 	if os.path.isdir(input_):
-		files = os.listdir(input_)
-		for file in sorted(files):
-			input_filename = os.path.join(input_, file)
+		files = sorted(os.listdir(input_))
+		for file_ in files:
+			input_filename = os.path.join(input_, file_)
 			print('<- %s' % input_filename)
 			try:
 				d = lidar.read(input_filename, VARIABLES,

@@ -187,10 +187,10 @@ Options:
 		print('<- %s' % input_)
 		cosp_alcf(config, input_, output)
 	else:
-		files = os.listdir(input_)
-		for file in sorted(files):
-			input_filename = os.path.join(input_, file)
-			output_filename = os.path.join(output, file)
+		files = sorted(os.listdir(input_))
+		for file_ in files:
+			input_filename = os.path.join(input_, file_)
+			output_filename = os.path.join(output, file_)
 			if not os.path.isfile(input_filename):
 				continue
 			print('<- %s' % input_filename)
