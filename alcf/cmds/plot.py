@@ -464,8 +464,8 @@ Plot command options:
 					plot(plot_type, d, output_filename, **opts)
 					print('-> %s' % output_filename)
 			else:
-				print('<- %s' % input_)
-				d = ds.read(input_, VARIABLES)
+				print('<- %s' % input1)
+				d = ds.read(input1, VARIABLES)
 				plot(plot_type, d, output, **opts)
 	else:
 		raise ValueError('Invalid plot type "%s"' % plot_type)
