@@ -14,8 +14,8 @@ VARIABLES = [
 	'STASH_m01s00i265',
 	'STASH_m01s00i408',
 	'STASH_m01s00i409',
-	'STASH_m01s04i205',
-	'STASH_m01s04i206',
+        'STASH_m01s00i254',
+        'STASH_m01s00i012',
 	'STASH_m01s16i004',
 ]
 
@@ -27,8 +27,8 @@ TRANS = {
 	'STASH_m01s00i265': 'cl',
 	'STASH_m01s00i408': 'pfull',
 	'STASH_m01s00i409': 'ps',
-	'STASH_m01s04i205': 'clw',
-	'STASH_m01s04i206': 'cli',
+        'STASH_m01s00i254': 'clw',
+        'STASH_m01s00i012': 'cli',
 	'STASH_m01s16i004': 'ta',
 }
 
