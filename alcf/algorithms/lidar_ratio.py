@@ -19,7 +19,7 @@ def lidar_ratio(d, eta=1.):
 	d['lr'] = 1./(2.*eta*bint) # See O'Connor et al. (2004), Equation 6.
 	d['.']['lr'] = {
 		'.dims': dims,
-		'long_name': 'lidar_ratio',
+		'long_name': 'lidar ratio',
 		'units': 'sr',
 	}
 
