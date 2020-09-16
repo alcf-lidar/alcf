@@ -2,21 +2,24 @@ META = {
 	'time': {
 		'.dims': ['time'],
 		'long_name': 'time',
+		'standard_name': 'time',
 		'units': 'days since -4712-01-01T12:00',
 	},
 	'zfull': {
 		'.dims': ['time', 'level'],
-		'long_name': 'height_above_reference_ellipsoid',
+		'long_name': 'altitude of full-levels',
+		'standard_name': 'altitude',
 		'units': 'm',
 	},
 	'backscatter': {
 		'.dims': ['time', 'level'],
-		'long_name': 'backscatter',
+		'long_name': 'attenuated volume backscattering coefficient',
 		'units': 'm-1 sr-1',
 	},
 	'altitude': {
 		'.dims': ['time'],
-		'long_name': 'altitude',
+		'long_name': 'instrument altitude',
+		'standard_name': 'altitude',
 		'units': 'm',
 	},
 }
