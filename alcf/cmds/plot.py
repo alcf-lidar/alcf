@@ -98,14 +98,14 @@ def plot_profile(plot_type, d,
 			'cl': 'k',
 		}[plot_type]
 		label = {
-			'clw': 'Mass fraction of cloud liquid water (kg/kg)',
-			'cli': 'Mass fraction of cloud ice (kg/kg)',
+			'clw': 'Mass fraction of cloud liquid water (g/kg)',
+			'cli': 'Mass fraction of cloud ice (g/kg)',
 			'cl': 'Cloud area fraction (%)',
 		}[plot_type]
 		if vlim is None:
 			vlim = {
-				'clw': [1e-6, 1e-3],
-				'cli': [1e-6, 1e-3],
+				'clw': [1e-3, 1],
+				'cli': [1e-3, 1],
 				'cl': [0, 100],
 			}[plot_type]
 		if vlog is None:
@@ -115,6 +115,8 @@ def plot_profile(plot_type, d,
 				'cl': False
 			}[plot_type]
 		x = d[plot_type]
+		if plot_type in ('clw', 'cli', 'clw+cli'):
+			x *= 1e3
 		if x.shape == 3:
 			x = x[:,:,subcolumn]
 		if zlim is None:
@@ -491,8 +493,8 @@ Plot command options:
         Default: `false`.
     - `zres: <zres>`: Height resolution (m). Default: `50`.
 - `cli`, `clw`, `clw+cli`:
-    - `vlim: { <min> <max> }`. Value limits (%).
-        Default: `{ 1e-6 1e-3 }`.
+    - `vlim: { <min> <max> }`. Value limits (g/kg).
+        Default: `{ 1e-3 1 }`.
     - `vlog: <value>`: Plot values on logarithmic scale: `true` of `false`.
         Default: `true`.
     - `zres: <zres>`: Height resolution (m). Default: `50`.
