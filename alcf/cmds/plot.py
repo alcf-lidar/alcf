@@ -12,7 +12,7 @@ from matplotlib.colors import ListedColormap, Normalize, BoundaryNorm, LogNorm
 import matplotlib.lines as mlines
 import aquarius_time as aq
 import ds_format as ds
-from alcf import misc
+from alcf import misc, algorithms
 from alcf.lidars import LIDARS
 
 COLORS = [
@@ -41,6 +41,8 @@ VARIABLES = [
 	'backscatter_hist',
 	'backscatter_full',
 	'altitude',
+	'clw',
+	'cli',
 ]
 
 def plot_legend(*args, theme='light', **kwargs):
@@ -50,56 +52,129 @@ def plot_legend(*args, theme='light', **kwargs):
 	f.set_linewidth(0)
 	f.set_alpha(0.1 if theme == 'light' else 0.9)
 
-def plot_profile(plot_type, d, cax,
+def plot_profile(plot_type, d,
+	cax=None,
 	subcolumn=0,
 	sigma=0.,
+	vlim=None,
+	vlog=None,
+	zres=50,
 	zlim=None,
-	vlim=[2, 200],
-	vlog=True,
+	alpha=1,
 	**opts
 ):
-	cmap = 'viridis'
+	if plot_type == 'backscatter':
+		cmap = 'viridis'
+		under = '#222222'
+		label = 'Backscatter (×10$^{-6}$ m$^{-1}$sr$^{-1}$)'
+		if vlim is None:
+			vlim = [2, 200]
+		if vlog is None:
+			vlog = True
+		if len(d['backscatter'].shape) == 3:
+			b = d['backscatter'][:,:,subcolumn]
+			cloud_mask = d['cloud_mask'][:,:,subcolumn]
+			b_sd = d['backscatter_sd'][:,:,subcolumn] if 'backscatter_sd' in d \
+				else np.zeros(b.shape, dtype=np.float64)
+		else:
+			b = d['backscatter']
+			cloud_mask = d['cloud_mask']
+			b_sd = d['backscatter_sd'] if 'backscatter_sd' in d \
+				else np.zeros(b.shape, dtype=np.float64)
+		if sigma > 0.:
+			b[b - sigma*b_sd < vlim[0]*1e-6] = 0.
+		x = b*1e6
+		time = d['time']
+		zfull = d['zfull']
+	elif plot_type in ('clw', 'cli', 'cl'):
+		cmap = {
+			'clw': 'Reds',
+			'cli': 'Blues',
+			'cl': 'Greys_r',
+		}[plot_type]
+		under = {
+			'clw': 'white',
+			'cli': 'white',
+			'cl': 'k',
+		}[plot_type]
+		label = {
+			'clw': 'Mass fraction of cloud liquid water (kg/kg)',
+			'cli': 'Mass fraction of cloud ice (kg/kg)',
+			'cl': 'Cloud area fraction (%)',
+		}[plot_type]
+		if vlim is None:
+			vlim = {
+				'clw': [1e-6, 1e-3],
+				'cli': [1e-6, 1e-3],
+				'cl': [0, 100],
+			}[plot_type]
+		if vlog is None:
+			vlog = {
+				'clw': True,
+				'cli': True,
+				'cl': False
+			}[plot_type]
+		x = d[plot_type]
+		if x.shape == 3:
+			x = x[:,:,subcolumn]
+		if zlim is None:
+			zlim = [np.min(d['zfull']), np.max(d['zfull'])]
+		zhalf = np.arange(zlim[0], zlim[1] + zres, zres)
+		zfull = 0.5*(zhalf[1:] + zhalf[:-1])
+		xp = np.full((x.shape[0], len(zfull)), np.nan, np.float64)
+		for i in range(xp.shape[0]):
+			zhalfi = misc.half(d['zfull'][i,:])
+			xp[i,:] = algorithms.interp(
+				zhalfi, x[i,:], zhalf
+			)
+		x = xp
+		time = d['time']
+	else:
+		raise ValueError('Invalid plot type "%s"' % plot_type)
+
 	if vlog:
 		norm = LogNorm(vlim[0], vlim[1])
 	else:
 		norm = Normalize(vlim[0], vlim[1])
-	under = '#222222'
-	#over = '#990000'
-	if len(d['backscatter'].shape) == 3:
-		b = d['backscatter'][:,:,subcolumn]
-		cloud_mask = d['cloud_mask'][:,:,subcolumn]
-		b_sd = d['backscatter_sd'][:,:,subcolumn] if 'backscatter_sd' in d \
-			else np.zeros(b.shape, dtype=np.float64)
-	else:
-		b = d['backscatter']
-		cloud_mask = d['cloud_mask']
-		b_sd = d['backscatter_sd'] if 'backscatter_sd' in d \
-			else np.zeros(b.shape, dtype=np.float64)
-	t1 = d['time'][0] - 0.5*(d['time'][1] - d['time'][0])
-	t2 = d['time'][-1] + 0.5*(d['time'][-1] - d['time'][-2])
-	z1 = d['zfull'][0] - 0.5*(d['zfull'][1] - d['zfull'][0])
-	z2 = d['zfull'][-1] + 0.5*(d['zfull'][-1] - d['zfull'][-2])
 
-	if sigma > 0.:
-		b[b - sigma*b_sd < vlim[0]*1e-6] = 0.
-	im = plt.imshow(b.T*1e6,
+	t1 = time[0] - 0.5*(time[1] - time[0])
+	t2 = time[-1] + 0.5*(time[-1] - time[-2])
+	z1 = zfull[0] - 0.5*(zfull[1] - zfull[0])
+	z2 = zfull[-1] + 0.5*(zfull[-1] - zfull[-2])
+
+	im = plt.imshow(x.T,
 		extent=(t1, t2, z1*1e-3, z2*1e-3),
 		aspect='auto',
 		origin='bottom',
 		norm=norm,
 		cmap=cmap,
+		alpha=alpha,
 	)
 	plt.gca().set_facecolor(under)
 	im.cmap.set_under(under)
+
 	cb = plt.colorbar(
 		cax=cax,
-		label=u'Backscatter (×10$^{-6}$ m$^{-1}$sr$^{-1}$)',
+		label=label,
 		pad=0.03,
 		fraction=0.05,
 		aspect='auto',
 		extend='both',
 	)
-	if opts.get('cloud_mask'):
+
+	if zlim is not None:
+		plt.ylim(zlim[0]*1e-3, zlim[1]*1e-3)
+
+	plt.xlabel('Time (UTC)')
+	plt.ylabel('Height (km)')
+
+	formatter = plt.FuncFormatter(lambda t, p: \
+		aq.to_datetime(t).strftime('%d/%m\n%H:%M'))
+	locator = AutoDateLocator()
+	plt.gca().xaxis.set_major_formatter(formatter)
+	plt.gca().xaxis.set_major_locator(locator)
+
+	if plot_type == 'backscatter' and opts.get('cloud_mask'):
 		cf = plt.contour(d['time'], d['zfull']*1e-3, cloud_mask.T,
 			colors='red',
 			linewidths=1,
@@ -112,21 +187,9 @@ def plot_profile(plot_type, d, cax,
 			)],
 			theme='dark'
 		)
+
 	if 'altitude' in d:
 		plt.plot(d['time'], d['altitude']*1e-3, color='red', lw=0.5)
-	plt.xlabel('Time (UTC)')
-	plt.ylabel('Height (km)')
-
-	if zlim is not None:
-		plt.ylim(zlim[0]*1e-3, zlim[1]*1e-3)
-
-	def formatter_f(t, pos):
-		return aq.to_datetime(t).strftime('%d/%m\n%H:%M')
-
-	formatter = plt.FuncFormatter(formatter_f)
-	locator = AutoDateLocator()
-	plt.gca().xaxis.set_major_formatter(formatter)
-	plt.gca().xaxis.set_major_locator(locator)
 
 def plot_lr(d, subcolumn=0, **opts):
 	lr = d['lr'][:,subcolumn] if d['lr'].ndim == 2 else d['lr'][:]
@@ -302,6 +365,24 @@ def plot(plot_type, d, output,
 		if lr:
 			plt.subplot(gs[2])
 			plot_lr(d, **kwargs)
+	elif plot_type in ('clw', 'cli', 'cl'):
+		gs = GridSpec(1, 2,
+			width_ratios=[0.985, 0.015],
+			wspace=0.05,
+		)
+		cax = plt.subplot(gs[1])
+		ax = plt.subplot(gs[0])
+		plot_profile(plot_type, d, cax, **kwargs)
+	elif plot_type == 'clw+cli':
+		gs = GridSpec(1, 4,
+			width_ratios=[0.94, 0.015, 0.03, 0.015],
+			wspace=0.15,
+		)
+		cax1 = plt.subplot(gs[1])
+		cax2 = plt.subplot(gs[3])
+		ax = plt.subplot(gs[0])
+		plot_profile('clw', d, cax1, alpha=0.5, **kwargs)
+		plot_profile('cli', d, cax2, alpha=0.5, **kwargs)
 	elif plot_type == 'cloud_occurrence':
 		plot_cloud_occurrence(d, **kwargs)
 	elif plot_type == 'backscatter_hist':
@@ -338,6 +419,7 @@ def run(plot_type, *args,
 	sigma=3.,
 	cloud_mask=False,
 	title=None,
+	zres=50,
 	**kwargs
 ):
 	"""
@@ -358,7 +440,11 @@ Plot types:
 - `backscatter`: plot backscatter
 - `backscatter_hist`: plot backscatter histogram
 - `backscatter_sd_hist`: plot backscatter standard deviation histogram
+- `cl`: plot model cloud area fraction
+- `cli`: plot model mass fraction of cloud ice
 - `cloud_occurrence`: plot cloud occurrence
+- `clw`: plot model mass fraction of cloud liquid water
+- `clw+cli`: plot model mass fraction of cloud liquid water and ice
 
 Options:
 
@@ -385,7 +471,7 @@ Plot command options:
     - `vlog: <value>`: Plot values on logarithmic scale: `true` of `false`.
         Default: `true`.
 - `backscatter_hist`:
-    - `vlim: { <min> <max }`. Value limits (%) or `none` for auto. If `none`
+    - `vlim: { <min> <max> }`. Value limits (%) or `none` for auto. If `none`
         and `vlog` is `none`, `min` is set to 1e-3 if less or equal to zero.
         Default: `none`.
     - `--vlog`: use logarithmic scale for values
@@ -398,6 +484,18 @@ Plot command options:
         automatic. Default: `none`.
     - `zlim: { <min> <max> }`. z axis limits (%) or `none` for
         automatic. Default: `none`.
+- `cl`:
+    - `vlim: { <min> <max> }`. Value limits (%).
+        Default: `{ 0 100 }`.
+    - `vlog: <value>`: Plot values on logarithmic scale: `true` of `false`.
+        Default: `false`.
+    - `zres: <zres>`: Height resolution (m). Default: `50`.
+- `cli`, `clw`, `clw+cli`:
+    - `vlim: { <min> <max> }`. Value limits (%).
+        Default: `{ 1e-6 1e-3 }`.
+    - `vlog: <value>`: Plot values on logarithmic scale: `true` of `false`.
+        Default: `true`.
+    - `zres: <zres>`: Height resolution (m). Default: `50`.
 - `cloud_occurrence`:
     - `colors: { <value>... }`: Line colors.
         Default: `{ #0084c8 #dc0000 #009100 #ffc022 #ba00ff }`
@@ -437,6 +535,7 @@ Plot command options:
 	if zlim is not None: opts['zlim'] = zlim
 	if vlim is not None: opts['vlim'] = vlim
 	if vlog is not None: opts['vlog'] = vlog
+	if zres is not None: opts['zres'] = zres
 
 	state = {}
 	if plot_type in ('cloud_occurrence', 'backscatter_sd_hist'):
@@ -451,7 +550,7 @@ Plot command options:
 		d = ds.read(input_[0], VARIABLES)
 		plot(plot_type, d, output, **opts)
 		print('-> %s' % output)
-	elif plot_type == 'backscatter':
+	elif plot_type in ('backscatter', 'clw', 'cli', 'clw+cli', 'cl'):
 		for input1 in input_:
 			if os.path.isdir(input1):
 				for file_ in sorted(os.listdir(input1)):
