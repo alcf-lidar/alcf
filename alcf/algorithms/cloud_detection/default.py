@@ -17,7 +17,7 @@ def cloud_detection(d, cloud_threshold=2e-6, cloud_nsd=3, **options):
 	d['cloud_mask'] = cloud_mask
 	d['.']['cloud_mask'] = {
 		'.dims': d['.']['backscatter']['.dims'],
-		'long_name': 'cloud_mask',
+		'long_name': 'cloud mask',
 		'units': '1',
 	}
 

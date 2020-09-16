@@ -13,7 +13,7 @@ META = {
 	},
 	'backscatter': {
 		'.dims': ['time', 'level'],
-		'long_name': 'attenuated volume backscattering coefficient',
+		'long_name': 'total attenuated volume backscattering coefficient',
 		'units': 'm-1 sr-1',
 	},
 	'altitude': {

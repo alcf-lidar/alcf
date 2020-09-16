@@ -237,6 +237,7 @@ def stats_reduce(state, bsd_z=None, **kwargs):
 	do['.'] = {
 		'zfull': {
 			'.dims': ['zfull'],
+			'long_name': 'altitude of model full-levels',
 			'standard_name': 'height_above_reference_ellipsoid',
 			'units': 'm',
 		},
@@ -244,47 +245,49 @@ def stats_reduce(state, bsd_z=None, **kwargs):
 			'.dims': ['zfull', 'column'] \
 				if len(state['cl'].shape) == 2 \
 				else ['zfull'],
-			'long_name': 'cloud_area_fraction_in_atmosphere_layer',
+			'long_name': 'cloud area fraction',
+			'standard_name': 'cloud_area_fraction_in_atmosphere_layer',
 			'units': '%',
 		},
 		'clt': {
 			'.dims': ['column'] \
 				if isinstance(state['clt'], np.ndarray) \
 				else [],
-			'long_name': 'cloud_area_fraction',
+			'long_name': 'total cloud fraction',
+			'standard_name': 'cloud_area_fraction',
 			'units': '%',
 		},
 		'n': {
 			'.dims': ['column'] \
 				if len(state['cl'].shape) == 2 \
 				else [],
-			'long_name': 'number_of_profiles',
+			'long_name': 'number of profiles',
 			'units': '1',
 		},
 		'backscatter_avg': {
 			'.dims': ['zfull', 'column'] \
 				if len(state['cl'].shape) == 2 \
 				else ['zfull'],
-			'long_name': 'total_attenuated_backscatter_coefficient_average',
+			'long_name': 'total attenuated volume backscattering coefficient average',
 			'units': 'm-1 sr-1',
 		},
 		'backscatter_mol_avg': {
 			'.dims': ['zfull', 'column'] \
 				if len(state['cl'].shape) == 2 \
 				else ['zfull'],
-			'long_name': 'total_attenuated_molecular_backscatter_coefficient_average',
+			'long_name': 'total attenuated molecular volume backscattering coefficient average',
 			'units': 'm-1 sr-1',
 		},
 		'backscatter_full': {
 			'.dims': ['backscatter_full'],
-			'long_name': 'total_attenuated_backscatter_coefficient',
+			'long_name': 'total attenuated volume backscattering coefficient',
 			'units': 'm-1 sr-1',
 		},
 		'backscatter_hist': {
 			'.dims': ['backscatter_full', 'zfull'] \
 				if len(state['backscatter_hist'].shape) == 2 \
 				else ['backscatter_full', 'zfull', 'column'],
-			'long_name': 'backscatter_histogram',
+			'long_name': 'total attenuated volume backscattering coefficient histogram',
 			'units': '%',
 		},
 		'backscatter_sd_hist': {
@@ -292,17 +295,17 @@ def stats_reduce(state, bsd_z=None, **kwargs):
 			'.dims': ['backscatter_sd_full'] \
 				if len(state['backscatter_sd_hist'].shape) == 1 \
 				else ['backscatter_sd_full', 'column'],
-			'long_name': 'total_attenuated_backscatter_coefficient_standard_deviation_histogram',
+			'long_name': 'total attenuated volume backscattering coefficient standard deviation histogram',
 			'units': '%',
 		},
 		'backscatter_sd_full': {
 			'.dims': ['backscatter_sd_full'],
-			'long_name': 'total_attenuated_backscatter_coefficient_standard_deviation',
+			'long_name': 'total attenuated volume backscattering coefficient standard deviation',
 			'units': 'm-1 sr-1',
 		},
 		'backscatter_sd_z': {
 			'.dims': [],
-			'long_name': 'total_attenuated_backscatter_coefficient_standard_deviation_height_above_reference_ellipsoid',
+			'long_name': 'total attenuated volume backscattering coefficient standard deviation height above reference ellipsoid',
 			'units': 'm',
 		}
 	}

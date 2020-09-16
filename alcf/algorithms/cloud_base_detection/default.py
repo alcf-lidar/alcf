@@ -34,7 +34,7 @@ def cloud_base_detection(d, **options):
 	d['cbh'] = cbh
 	d['.']['cbh'] = {
 		'.dims': dimnames,
-		'long_name': 'cloud_base_height',
+		'long_name': 'cloud base height',
 		'units': 'm',
 	}
 
