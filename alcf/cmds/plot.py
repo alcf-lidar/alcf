@@ -501,7 +501,7 @@ Plot command options:
 - `cloud_occurrence`:
     - `colors: { <value>... }`: Line colors.
         Default: `{ #0084c8 #dc0000 #009100 #ffc022 #ba00ff }`
-    - `linestyle`: { <value> ... }`: Line style (`solid`, `dashed`, `dotted`).
+    - `linestyle: { <value> ... }`: Line style (`solid`, `dashed`, `dotted`).
         Default: `solid`.
     - `labels: { <value>... }`: Line labels. Default: `none`.
     - `lw: <value>`: Line width. Default: `1`.
