@@ -376,9 +376,11 @@ def plot(plot_type, d, output,
 		ax = plt.subplot(gs[0])
 		plot_profile(plot_type, d, cax, **kwargs)
 	elif plot_type == 'clw+cli':
+		r = 10./(plt.gcf().get_figwidth())*0.045
 		gs = GridSpec(1, 4,
-			width_ratios=[0.94, 0.015, 0.03, 0.015],
+			width_ratios=[max(0.015, 1. - 2*0.015 - r), 0.015, r, 0.015],
 			wspace=0.15,
+			figure=plt.gcf(),
 		)
 		cax1 = plt.subplot(gs[1])
 		cax2 = plt.subplot(gs[3])
