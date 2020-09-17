@@ -22,7 +22,7 @@ def couple(d, d_idx):
 		d1 = ds.read(filename, ['zfull', 'backscatter_sd'], {'time': i1})
 		zhalf1 = misc.half(d1['zfull'])
 		zhalf = misc.half(d['zfull'][i,:])
-		b_sd = interp(zhalf1, d1['backscatter_sd'],	zhalf)
+		b_sd = interp(zhalf1, d1['backscatter_sd'], zhalf)
 		for k in range(l):
 			d['backscatter_sd'][i,:,k] = b_sd
 
