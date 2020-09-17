@@ -2,6 +2,8 @@
 
 import os
 import sys
+import logging
+import traceback
 import numpy as np
 import matplotlib as mpl
 mpl.use('Agg')
@@ -563,10 +565,20 @@ Plot command options:
 						output,
 						os.path.splitext(file_)[0] + '.png'
 					)
-					print('<- %s' % filename)
-					d = ds.read(filename, VARIABLES)
-					plot(plot_type, d, output_filename, **opts)
-					print('-> %s' % output_filename)
+					try:
+						print('<- %s' % filename)
+						d = ds.read(filename, VARIABLES)
+					except SystemExit:
+						break
+					except:
+						logging.warning(traceback.format_exc())
+					try:
+						plot(plot_type, d, output_filename, **opts)
+						print('-> %s' % output_filename)
+					except SystemExit:
+						break
+					except:
+						logging.warning(traceback.format_exc())
 			else:
 				print('<- %s' % input1)
 				d = ds.read(input1, VARIABLES)
