@@ -98,9 +98,9 @@ def plot_profile(plot_type, d,
 			'cl': 'k',
 		}[plot_type]
 		label = {
-			'clw': 'Mass fraction of cloud liquid water (g/kg)',
-			'cli': 'Mass fraction of cloud ice (g/kg)',
-			'cl': 'Cloud area fraction (%)',
+			'clw': 'Cloud water (g/kg)',
+			'cli': 'Cloud ice (g/kg)',
+			'cl': 'Cloud fraction (%)',
 		}[plot_type]
 		if vlim is None:
 			vlim = {
