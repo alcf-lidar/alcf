@@ -29,16 +29,17 @@ from . import cl51
 from . import cl31
 from . import mpl
 from . import mpl2nc
-from . import cosp
+from . import default
 from . import caliop
 
 LIDARS = {
+	'default': default,
 	'chm15k': chm15k,
 	'cl51': cl51,
 	'cl31': cl31,
 	'mpl': mpl,
 	'mpl2nc': mpl2nc,
 	'minimpl': mpl,
-	'cosp': cosp,
+	'cosp': default,
 	'caliop': caliop,
 }

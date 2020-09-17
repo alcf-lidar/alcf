@@ -19,9 +19,9 @@ def zsample(d, zres=None, zlim=None):
 	zfull = d['zfull']
 	zhalf = np.zeros((n, m+1), dtype=np.float64)
 	for i in range(n):
-		zhalf[i,1:-1] = 0.5*(d['zfull'][i,1:] + d['zfull'][i,:-1])
-		zhalf[i,0] = 2*d['zfull'][i,0] - d['zfull'][i,1]
-		zhalf[i,-1] = 2.*d['zfull'][i,-1] - d['zfull'][i,-2]
+		zhalf[i,:] = misc.half(zfull[i,:]) \
+			if zfull.ndim == 2 \
+			else misc.half(zfull)
 	r = d['range'] if 'range' in d \
 		else np.zeros(m, dtype=np.float64)
 	if m == 0:

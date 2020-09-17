@@ -17,6 +17,7 @@ import pst
 VARIABLES = [
 	'backscatter',
 	'backscatter_mol',
+	'backscatter_sd',
 	'time',
 	'time_bnds',
 	'zfull',
@@ -75,6 +76,7 @@ Types:
 - `cl31`: Vaisala CL31
 - `cl51`: Vaisala CL51
 - `cosp`: COSP simulated lidar
+- `default`: the same format as the output of `alcf lidar`
 - `minimpl`: Sigma Space MiniMPL
 - `mpl`: Sigma Space MPL (converted via SigmaMPL)
 - `mpl2nc`: Sigma Space MPL (converted via mpl2nc)
@@ -145,7 +147,7 @@ Algorithm options:
 	cloud_detection_mod = None
 	cloud_base_detection_mod = None
 
-	if type_ != 'cosp' and noise_removal is not None:
+	if type_ not in ('default', 'cosp') and noise_removal is not None:
 		noise_removal_mod = NOISE_REMOVAL.get(noise_removal)
 		if noise_removal_mod is None:
 			raise ValueError('Invalid noise removal algorithm: %s' % noise_removal)
