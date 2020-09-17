@@ -251,6 +251,8 @@ Algorithm options:
 					cl_crit_range=cl_crit_range,
 				)
 				dd = process([d], state, **options)
+			except SystemExit:
+				break
 			except:
 				logging.warning(traceback.format_exc())
 		dd = process([None], state, **options)
