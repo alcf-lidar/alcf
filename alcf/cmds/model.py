@@ -136,7 +136,8 @@ Track file is a NetCDF file containing 1D variables `lon`, `lat`, and `time`.
 	# if os.path.isdir(output):
 	t1, t2 = time1[0], time1[1]
 	for t in np.arange(np.floor(t1 - 0.5), np.ceil(t2 - 0.5)) + 0.5:
-		output_filename = os.path.join(output, '%s.nc' % aq.to_iso(t))
+		output_filename = os.path.join(output, '%s.nc' % \
+			aq.to_iso(t).replace(':', ''))
 		d = model(type_, input_, point, time=[t, t + 1.], track=track1)
 		if d is not None:
 			ds.to_netcdf(output_filename, d)

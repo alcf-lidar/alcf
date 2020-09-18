@@ -180,7 +180,7 @@ Algorithm options:
 		if len(d['time'] > 1):
 			t1 -= 0.5*(d['time'][1] - d['time'][0])
 		t1 = np.round(t1*86400.)/86400.
-		filename = os.path.join(output, '%s.nc' % aq.to_iso(t1))
+		filename = os.path.join(output, '%s.nc' % aq.to_iso(t1).replace(':', ''))
 		ds.to_netcdf(filename, d)
 		print('-> %s' % filename)
 		return []
