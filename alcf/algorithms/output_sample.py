@@ -10,10 +10,7 @@ def output_sample(d, tres, output_sampling):
 	n = dims['time']
 	n2 = int(output_sampling/tres)
 	time = d['time']
-	time_half = np.zeros(n + 1, dtype=np.float64)
-	time_half[1:-1] = 0.5*(time[1:] + time[:-1])
-	time_half[0] = time[0] - 0.5*(time[1] - time[0])
-	time_half[-1] = time[-1] + 0.5*(time[-1] - time[-2])
+	time_half = misc.half(time)
 	time_half2 = np.linspace(t1, t2, n2 + 1)
 	time2 = 0.5*(time_half2[1:] + time_half2[:-1])
 	for var in ds.get_vars(d):
@@ -37,7 +34,7 @@ def output_sample(d, tres, output_sampling):
 				slice(None) if l != i else j
 				for l in range(len(size))
 			])
-			for k in range(len(mask)):
+			for k in np.argwhere(mask > 0):
 				sel = tuple([
 					slice(None) if l != i else k
 					for l in range(len(size))
