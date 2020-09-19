@@ -58,7 +58,7 @@ def plot_legend(*args, theme='light', **kwargs):
 def plot_profile(plot_type, d,
 	cax=None,
 	subcolumn=0,
-	sigma=3,
+	sigma=5,
 	remove_bmol=True,
 	vlim=None,
 	vlog=None,
@@ -72,7 +72,7 @@ def plot_profile(plot_type, d,
 		under = '#222222'
 		label = 'Backscatter (×10$^{-6}$ m$^{-1}$sr$^{-1}$)'
 		if vlim is None:
-			vlim = [2, 200]
+			vlim = [0.1, 200]
 		if vlog is None:
 			vlog = True
 		if len(d['backscatter'].shape) == 3:
@@ -428,7 +428,7 @@ def run(plot_type, *args,
 	zlim=None,
 	vlim=None,
 	vlog=None,
-	sigma=3.,
+	sigma=5.,
 	remove_bmol=True,
 	cloud_mask=False,
 	title=None,
@@ -478,12 +478,12 @@ Plot command options:
     - `--lr`: plot lidar ratio (LR)
     - `--plot_cloud_mask`: plot cloud mask
     - `sigma: <value>`: Remove of number of standard deviations of backscatter
-        from the mean backscatter (real). Default: `3`.
+        from the mean backscatter (real). Default: `5`.
     - `remove_bmol: <value>`: Remove molecular backscatter (observed data have
         to be coupled with model data via the `couple` option of `alcf lidar`).
         Default: `true`.
     - `vlim: { <min> <max }`. Value limits (10^6 m-1.sr-1).
-        Default: `{ 10 2000 }`.
+        Default: `{ 0.1 200 }`.
     - `vlog: <value>`: Plot values on logarithmic scale: `true` of `false`.
         Default: `true`.
 - `backscatter_hist`:
