@@ -32,6 +32,7 @@ VARIABLES = [
 	'time_bnds',
 	'backscatter',
 	'backscatter_sd',
+	'backscatter_mol',
 	'backscatter_sd_full',
 	'backscatter_sd_hist',
 	'zfull',
@@ -57,7 +58,8 @@ def plot_legend(*args, theme='light', **kwargs):
 def plot_profile(plot_type, d,
 	cax=None,
 	subcolumn=0,
-	sigma=0.,
+	sigma=3,
+	remove_bmol=True,
 	vlim=None,
 	vlog=None,
 	zres=50,
@@ -76,15 +78,19 @@ def plot_profile(plot_type, d,
 		if len(d['backscatter'].shape) == 3:
 			b = d['backscatter'][:,:,subcolumn]
 			cloud_mask = d['cloud_mask'][:,:,subcolumn]
-			b_sd = d['backscatter_sd'][:,:,subcolumn] if 'backscatter_sd' in d \
+			bsd = d['backscatter_sd'][:,:,subcolumn] if 'backscatter_sd' in d \
 				else np.zeros(b.shape, dtype=np.float64)
 		else:
 			b = d['backscatter']
 			cloud_mask = d['cloud_mask']
-			b_sd = d['backscatter_sd'] if 'backscatter_sd' in d \
+			bsd = d['backscatter_sd'] if 'backscatter_sd' in d \
 				else np.zeros(b.shape, dtype=np.float64)
-		if sigma > 0.:
-			b[b - sigma*b_sd < vlim[0]*1e-6] = 0.
+		if sigma > 0:
+			b -= sigma*bsd
+		if remove_bmol and 'backscatter_mol' in d:
+			bmol = d['backscatter_mol']
+			mask = ~np.isnan(bmol)
+			b[mask] -= bmol[mask]
 		x = b*1e6
 		time = d['time']
 		zfull = d['zfull']
@@ -423,6 +429,7 @@ def run(plot_type, *args,
 	vlim=None,
 	vlog=None,
 	sigma=3.,
+	remove_bmol=True,
 	cloud_mask=False,
 	title=None,
 	zres=50,
@@ -470,8 +477,11 @@ Plot command options:
 - `backscatter`:
     - `--lr`: plot lidar ratio (LR)
     - `--plot_cloud_mask`: plot cloud mask
-    - `sigma: <value>`: Suppress backscatter less than a number of standard deviations
+    - `sigma: <value>`: Remove of number of standard deviations of backscatter
         from the mean backscatter (real). Default: `3`.
+    - `remove_bmol: <value>`: Remove molecular backscatter (observed data have
+        to be coupled with model data via the `couple` option of `alcf lidar`).
+        Default: `true`.
     - `vlim: { <min> <max }`. Value limits (10^6 m-1.sr-1).
         Default: `{ 10 2000 }`.
     - `vlog: <value>`: Plot values on logarithmic scale: `true` of `false`.
@@ -531,6 +541,7 @@ Plot command options:
 		'lw': lw,
 		'labels': labels,
 		'sigma': sigma,
+		'remove_bmol': remove_bmol,
 		'title': title,
 		'cloud_mask': cloud_mask,
 		'width': width,
