@@ -254,7 +254,7 @@ Algorithm options:
 				)
 				dd = process([d], state, **options)
 			except SystemExit:
-				break
+				raise
 			except:
 				logging.warning(traceback.format_exc())
 		dd = process([None], state, **options)
