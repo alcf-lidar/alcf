@@ -3,7 +3,7 @@ META = {
 		'.dims': ['time'],
 		'long_name': 'time',
 		'standard_name': 'time',
-		'units': 'days since -4712-01-01T12:00',
+		'units': 'days since -4713-01-01 12:00 UTC',
 	},
 	'zfull': {
 		'.dims': ['time', 'level'],
