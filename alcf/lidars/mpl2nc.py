@@ -1,6 +1,7 @@
 import numpy as np
 import ds_format as ds
 import datetime as dt
+from alcf import misc
 from alcf.lidars import META
 
 WAVELENGTH = 532 # nm
@@ -30,6 +31,7 @@ def read(filename, vars, altitude=None, **kwargs):
 		altitude = np.full(n, altitude, np.float64)
 	if 'time' in vars:
 		dx['time'] = d['time']
+		dx['time_bnds'] = misc.time_bnds(dx['time'], dx['time'][1] - dx['time'][0])
 	if 'zfull' in vars:
 		dx['zfull'] = np.full((n, m), np.nan, np.float64)
 		for i in range(n):

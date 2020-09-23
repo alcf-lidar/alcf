@@ -1,5 +1,6 @@
 import numpy as np
 import ds_format as ds
+from alcf import misc
 from alcf.lidars import META
 
 WAVELENGTH = 1064 # nm
@@ -27,6 +28,7 @@ def read(filename, vars, altitude=None, **kwargs):
 		altitude = d['altitude']
 	if 'time' in vars:
 		dx['time'] = d['time']/(24.0*60.0*60.0) + 2416480.5
+		dx['time_bnds'] = misc.time_bnds(dx['time'], dx['time'][1] - dx['time'][0])
 	if 'backscatter' in vars:
 		dx['backscatter'] = d['beta_raw']*1e-11*CALIBRATION_COEFF
 	if 'zfull' in vars:
