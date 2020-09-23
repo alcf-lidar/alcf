@@ -1,6 +1,7 @@
 import numpy as np
 import ds_format as ds
 import datetime as dt
+from alcf import misc
 from alcf.lidars import META
 
 WAVELENGTH = 910 # nm
@@ -35,6 +36,8 @@ def read(filename, vars,
 	)
 	dx = {}
 	dx['time'] = d['time']/(24.0*60.0*60.0) + 2440587.5
+	dx['time_bnds'] = misc.time_bnds(dx['time'], dx['time'][1] - dx['time'][0])
+
 	n = len(dx['time'])
 	range_ = d['vertical_resolution'][0]*d['level']
 	if 'zfull' in vars:

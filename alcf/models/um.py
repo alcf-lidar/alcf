@@ -6,7 +6,7 @@ from alcf.models import META
 from alcf import misc
 import aquarius_time as aq
 
-VARIABLES = [
+VARS = [
 	'TALLTS',
 	'latitude_t',
 	'longitude_t',
@@ -14,8 +14,8 @@ VARIABLES = [
 	'STASH_m01s00i265',
 	'STASH_m01s00i408',
 	'STASH_m01s00i409',
-        'STASH_m01s00i254',
-        'STASH_m01s00i012',
+	'STASH_m01s00i254',
+	'STASH_m01s00i012',
 	'STASH_m01s16i004',
 ]
 
@@ -58,7 +58,10 @@ def read(dirname, track, warnings=[], step=1./24.):
 		lon = d_idx['longitude_t']
 		filename = d_idx['filename']
 
-		ii = np.nonzero((time >= start_time) & (time < end_time))[0]
+		ii = np.nonzero(
+			(time >= start_time - step*0.5) &
+			(time < end_time + step*0.5)
+		)[0]
 		for i in ii:
 			t = time[i]
 			i2 = np.argmin(np.abs(track['time'] - time[i]))
@@ -66,7 +69,7 @@ def read(dirname, track, warnings=[], step=1./24.):
 			lon0 = track['lon'][i2]
 			j = np.argmin(np.abs(lat - lat0))
 			k = np.argmin(np.abs(lon - lon0))
-			d = ds.read(filename, VARIABLES,
+			d = ds.read(filename, VARS,
 				sel={'TALLTS': [i], 'latitude_t': j, 'longitude_t': k},
 				jd=True,
 			)
@@ -88,6 +91,7 @@ def read(dirname, track, warnings=[], step=1./24.):
 	d = ds.op.merge(dd, 'time')
 	d['cl'] *= 100.
 	if 'time' in d:
-		d['time_bnds'] = misc.time_bnds(d['time'], step)
+		d['time_bnds'] = misc.time_bnds(d['time'], step, start_time, end_time)
+		d['time'] = np.mean(d['time_bnds'], axis=1)
 	d['.'] = META
 	return d

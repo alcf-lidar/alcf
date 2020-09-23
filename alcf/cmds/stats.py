@@ -95,4 +95,4 @@ HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
 		dd = stats.stream([d], state, **options)
 	dd = stats.stream([None], state, **options)
 	print('-> %s' % output)
-	ds.to_netcdf(output, dd[0])
+	ds.write(output, dd[0])

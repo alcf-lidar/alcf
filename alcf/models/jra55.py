@@ -6,7 +6,7 @@ from alcf.models import META
 from alcf import misc
 import aquarius_time as aq
 
-VARIABLES = [
+VARS = [
 	'gh',
 	't',
 	'ciwc',
@@ -15,7 +15,7 @@ VARIABLES = [
 	'sp',
 ]
 
-VARIABLES_AUX = [
+VARS_AUX = [
 	'level',
 	'time',
 	'latitude',
@@ -54,7 +54,7 @@ def read(dirname, track, warnings=[], step=6./24.):
 	start_time = track['time'][0]
 	end_time = track['time'][-1]
 	d_out = {}
-	for var in VARIABLES:
+	for var in VARS:
 		dd = []
 		var2 = TRANS[var]
 		for d_idx in dd_idx:
@@ -64,8 +64,10 @@ def read(dirname, track, warnings=[], step=6./24.):
 			lat = d_idx['latitude']
 			lon = d_idx['longitude']
 			filename = d_idx['filename']
-			ii = np.nonzero((time >= start_time) & \
-				(time < end_time))[0]
+			ii = np.nonzero(
+				(time >= start_time - step*0.5) &
+				(time < end_time + step*0.5)
+			)[0]
 			for i in ii:
 				t = time[i]
 				i2 = np.argmin(np.abs(track['time'] - time[i]))
@@ -75,7 +77,7 @@ def read(dirname, track, warnings=[], step=6./24.):
 				k = np.argmin(np.abs(lon - lon0))
 				j_ll = np.argmin(np.abs(lat_ll - lat0))
 				k_ll = np.argmin(np.abs(lon_ll - lon0))
-				d = ds.read(filename, VARIABLES_AUX + [var],
+				d = ds.read(filename, VARS_AUX + [var],
 					sel={
 						'time': [i],
 						'latitude': j,
@@ -100,14 +102,15 @@ def read(dirname, track, warnings=[], step=6./24.):
 					ds.select(d, {'pfull': np.arange(27)})
 				dd.append(d)
 		d = ds.op.merge(dd, 'time')
-		for var_aux in VARIABLES_AUX:
+		for var_aux in VARS_AUX:
 			if TRANS[var_aux] in ds.get_vars(d_out) \
 				and TRANS[var_aux] in ds.get_vars(d) \
 				and not np.all(d_out[TRANS[var_aux]] == d[TRANS[var_aux]]):
 				raise ValueError('%s: Field differs between input files' % TRANS[var_aux])
 		d_out.update(d)
 	d_out['pfull'] = d_out['pfull']*1e2
-	if 'time' in d:
-		d_out['time_bnds'] = misc.time_bnds(d['time'], step)
+	if 'time' in d_out:
+		d_out['time_bnds'] = misc.time_bnds(d_out['time'], step, start_time, end_time)
+		d_out['time'] = np.mean(d_out['time_bnds'], axis=1)
 	d_out['.'] = META
 	return d_out

@@ -140,7 +140,7 @@ Track file is a NetCDF file containing 1D variables `lon`, `lat`, and `time`.
 			aq.to_iso(t).replace(':', ''))
 		d = model(type_, input_, point, time=[t, t + 1.], track=track1)
 		if d is not None:
-			ds.to_netcdf(output_filename, d)
+			ds.write(output_filename, d)
 			print('-> %s' % output_filename)
 	# else:
 	# 	d = model(type_, input_, point, time=time1, track=track1)

@@ -4,15 +4,20 @@ from alcf import misc
 import ds_format as ds
 
 def output_sample(d, tres, output_sampling):
-	t1 = d['time'][0] - ((d['time'][0] + 0.5) % 1.0)
+	t = d['time_bnds'][0,0]
+	r = (t + 0.5) % output_sampling
+	t1 = t - r
 	t2 = t1 + output_sampling
+
 	dims = ds.get_dims(d)
 	n = dims['time']
 	n2 = int(output_sampling/tres)
 	time = d['time']
-	time_half = misc.half(time)
+	time_bnds = d['time_bnds']
+
 	time_half2 = np.linspace(t1, t2, n2 + 1)
 	time2 = 0.5*(time_half2[1:] + time_half2[:-1])
+
 	for var in ds.get_vars(d):
 		if 'time' not in d['.'][var]['.dims']:
 			continue
@@ -24,8 +29,8 @@ def output_sample(d, tres, output_sampling):
 		x2 = np.full(size2, np.nan, dtype=x.dtype)
 		for j in range(n2):
 			mask = np.maximum(0,
-				np.minimum(time_half[1:], time_half2[j + 1]) -
-				np.maximum(time_half[:-1], time_half2[j])
+				np.minimum(time_bnds[:,1], time_half2[j + 1]) -
+				np.maximum(time_bnds[:,0], time_half2[j])
 			)
 			s = np.sum(mask)
 			if s > 0.:
@@ -43,6 +48,9 @@ def output_sample(d, tres, output_sampling):
 					x[sel]*mask[k]
 		d[var] = x2
 	d['time'] = time2
+	d['time_bnds'] = np.full((n2, 2), np.nan, np.float64)
+	d['time_bnds'][:,0] = time_half2[:-1]
+	d['time_bnds'][:,1] = time_half2[1:]
 
 def stream(dd, state, tres=None, tlim=None, output_sampling=None, **options):
 	if tres is not None:

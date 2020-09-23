@@ -176,12 +176,10 @@ Algorithm options:
 	def write(d, output):
 		if len(d['time']) == 0:
 			return
-		t1 = d['time'][0]
-		if len(d['time'] > 1):
-			t1 -= 0.5*(d['time'][1] - d['time'][0])
+		t1 = d['time_bnds'][0,0]
 		t1 = np.round(t1*86400.)/86400.
 		filename = os.path.join(output, '%s.nc' % aq.to_iso(t1).replace(':', ''))
-		ds.to_netcdf(filename, d)
+		ds.write(filename, d)
 		print('-> %s' % filename)
 		return []
 
@@ -220,15 +218,13 @@ Algorithm options:
 		if zres is not None or zlim is not None:
 			dd = zsample.stream(dd, state['zsample'], zres=zres, zlim=zlim)
 		if tres is not None or tlim is not None:
-			dd = tsample.stream(dd, state['tsample'],
-				tres=tres/86400.,
-				tlim=tlim
-			)
+			dd = tsample.stream(dd, state['tsample'], tres=tres/86400., tlim=tlim)
 		if output_sampling is not None:
 			dd = output_sample.stream(dd, state['output_sample'],
 				tres=tres/86400.,
 				output_sampling=output_sampling/86400.,
 			)
+			dd = misc.aggregate(dd, state['output_sample'], output_sampling/86400.)
 		if cloud_detection_mod is not None:
 			dd = cloud_detection_mod.stream(dd, state['cloud_detection'], **options)
 		if cloud_base_detection_mod is not None:
@@ -254,6 +250,8 @@ Algorithm options:
 				)
 				dd = process([d], state, **options)
 			except SystemExit:
+				raise
+			except SystemError:
 				raise
 			except:
 				logging.warning(traceback.format_exc())

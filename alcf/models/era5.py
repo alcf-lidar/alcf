@@ -6,7 +6,7 @@ from alcf.models import META
 from alcf import misc
 import aquarius_time as aq
 
-VARIABLES_PLEV = [
+VARS_PLEV = [
 	'time',
 	'clwc',
 	'ciwc',
@@ -18,7 +18,7 @@ VARIABLES_PLEV = [
 	'z',
 ]
 
-VARIABLES_SURF = [
+VARS_SURF = [
 	'time',
 	'sp',
 	'z',
@@ -55,8 +55,8 @@ def read0(type_, dirname, track, warnings=[], step=1./24.):
 	end_time = track['time'][-1]
 
 	vars = {
-		'surf': VARIABLES_SURF,
-		'plev': VARIABLES_PLEV,
+		'surf': VARS_SURF,
+		'plev': VARS_PLEV,
 	}[type_]
 
 	trans = {
@@ -71,7 +71,10 @@ def read0(type_, dirname, track, warnings=[], step=1./24.):
 		lon = d_idx['longitude']
 		filename = d_idx['filename']
 
-		ii = np.nonzero((time >= start_time) & (time < end_time))[0]
+		ii = np.nonzero(
+			(time >= start_time - step*0.5) &
+			(time < end_time + step*0.5)
+		)[0]
 		for i in ii:
 			t = time[i]
 			i2 = np.argmin(np.abs(track['time'] - time[i]))
@@ -102,7 +105,8 @@ def read0(type_, dirname, track, warnings=[], step=1./24.):
 			dd.append(d)
 	d = ds.op.merge(dd, 'time')
 	if 'time' in d:
-		d['time_bnds'] = misc.time_bnds(d['time'], step)
+		d['time_bnds'] = misc.time_bnds(d['time'], step, start_time, end_time)
+		d['time'] = np.mean(d['time_bnds'], axis=1)
 	if 'pfull' in d:
 		d['pfull'] = 1e2*d['pfull']
 	if 'zfull' in d:

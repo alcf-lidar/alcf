@@ -7,7 +7,7 @@ from alcf import misc
 
 KAPPA = 0.2854 # Poisson constant for dry air.
 
-VARIABLES = [
+VARS = [
 	'QCLOUD',
 	'QICE',
 	'PSFC',
@@ -24,8 +24,6 @@ VARIABLES = [
 	'T00',
 ]
 
-GRACE_TIME = 1/24.
-
 def read(dirname, track, warnings=[], step=3./24.):
 	dd_index = ds.readdir(dirname, variables=['XTIME'], jd=True)
 	start_time = track['time'][0]
@@ -38,11 +36,11 @@ def read(dirname, track, warnings=[], step=3./24.):
 		if time < 2000000.:
 			time = time0 + time/(24.*60.)
 		filename = d_index['filename']
-		if (time >= start_time) & (time < end_time):
+		if (time >= start_time - step*0.5) & (time < end_time + step*0.5):
 			k = np.argmin(np.abs(track['time'] - time))
 			lon0 = track['lon'][k]
 			lat0 = track['lat'][k]
-			d = ds.read(filename, variables=VARIABLES, sel={'Time': 0})
+			d = ds.read(filename, variables=VARS, sel={'Time': 0})
 			lon = np.where(d['XLONG'] < 0., 360. + d['XLONG'], d['XLONG'])
 			lat = d['XLAT']
 			l = np.argmin((lon - lon0)**2 + (lat - lat0)**2)
@@ -76,6 +74,7 @@ def read(dirname, track, warnings=[], step=3./24.):
 			dd.append(d_new)
 	d = ds.op.merge(dd, 'time')
 	if 'time' in d:
-		d['time_bnds'] = misc.time_bnds(d['time'], step)
+		d['time_bnds'] = misc.time_bnds(d['time'], step, start_time, end_time)
+		d['time'] = np.mean(d['time_bnds'], axis=1)
 	d['.'] = META
 	return d

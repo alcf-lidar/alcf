@@ -4,7 +4,7 @@ import numpy as np
 from alcf.models import META
 from alcf import misc
 
-VARIABLES = [
+VARS = [
 	'lon',
 	'lat',
 	'time',
@@ -18,8 +18,6 @@ VARIABLES = [
 	'CLOUD',
 ]
 
-GRACE_TIME = 1/24.
-
 def read(dirname, track, warnings=[], step=3./24.):
 	dd_index = ds.readdir(dirname, variables=['time', 'lat', 'lon'], jd=True)
 	start_time = track['time'][0]
@@ -31,7 +29,10 @@ def read(dirname, track, warnings=[], step=3./24.):
 		lon = d_index['lon']
 		lon = np.where(lon < 0., 360. + lon, lon)
 		filename = d_index['filename']
-		ii = np.nonzero((time >= start_time) & (time < end_time))[0]
+		ii = np.nonzero(
+			(time >= start_time - step*0.5) &
+			(time < end_time + step*0.5)
+		)[0]
 		for i in ii:
 			t = time[i]
 			i2 = np.argmin(np.abs(track['time'] - time[i]))
@@ -39,17 +40,19 @@ def read(dirname, track, warnings=[], step=3./24.):
 			lon0 = track['lon'][i2]
 			j = np.argmin(np.abs(lat - lat0))
 			k = np.argmin(np.abs(lon - lon0))
-			d = ds.read(filename, variables=VARIABLES, sel={'time': i, 'lat': j, 'lon': k})
+			d = ds.read(filename, variables=VARS,
+				sel={'time': i, 'lat': j, 'lon': k}
+			)
 			clw = d['QL'][::-1]
 			cli = d['QI'][::-1]
 			cl = d['CLOUD'][::-1]*100.
 			ps = d['PS']
-			orog = d['PHIS'] / 9.80665
+			orog = d['PHIS']/9.80665
 			pfull = d['PL'][::-1]
 			zfull = d['H'][::-1]
 			ta = d['T'][::-1]
 			nlev = len(clw)
-			newshape4 = (1,nlev)
+			newshape4 = (1, nlev)
 			newshape3 = (1,)
 			d_new = {
 				'clw': clw.reshape(newshape4),
@@ -68,6 +71,7 @@ def read(dirname, track, warnings=[], step=3./24.):
 			dd.append(d_new)
 	d = ds.op.merge(dd, 'time')
 	if 'time' in d:
-		d['time_bnds'] = misc.time_bnds(d['time'], step)
+		d['time_bnds'] = misc.time_bnds(d['time'], step, start_time, end_time)
+		d['time'] = np.mean(d['time_bnds'], axis=1)
 	d['.'] = META
 	return d

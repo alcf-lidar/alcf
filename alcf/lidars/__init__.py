@@ -5,6 +5,12 @@ META = {
 		'standard_name': 'time',
 		'units': 'days since -4713-01-01 12:00 UTC',
 	},
+	'time_bnds': {
+		'.dims': ['time', 'bnds'],
+		'long_name': 'time bounds',
+		'standard_name': 'time',
+		'units': 'days since -4713-01-01 12:00 UTC',
+	},
 	'zfull': {
 		'.dims': ['time', 'level'],
 		'long_name': 'altitude of full-levels',

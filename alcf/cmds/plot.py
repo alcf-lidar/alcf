@@ -581,12 +581,16 @@ Plot command options:
 						d = ds.read(filename, VARIABLES)
 					except SystemExit:
 						raise
+					except SystemError:
+						raise
 					except:
 						logging.warning(traceback.format_exc())
 					try:
 						plot(plot_type, d, output_filename, **opts)
 						print('-> %s' % output_filename)
 					except SystemExit:
+						raise
+					except SystemError:
 						raise
 					except:
 						logging.warning(traceback.format_exc())
