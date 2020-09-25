@@ -194,6 +194,7 @@ Algorithm options:
 	def preprocess(d, tshift=None):
 		if tshift is not None:
 			d['time'] += tshift/86400.
+			d['time_bnds'] += tshift/86400.
 		return d
 
 	def process(dd, state, **options):
