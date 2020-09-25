@@ -64,7 +64,6 @@ def plot_profile(plot_type, d,
 	vlog=None,
 	zres=50,
 	zlim=None,
-	alpha=1,
 	**opts
 ):
 	if plot_type == 'backscatter':
@@ -92,6 +91,7 @@ def plot_profile(plot_type, d,
 			mask = ~np.isnan(bmol)
 			b[mask] -= bmol[mask]
 		x = b*1e6
+		x[x <= 0.] = 0.5*vlim[0] # A value below the limit.
 		time = d['time']
 		zfull = d['zfull']
 	elif plot_type in ('clw', 'cli', 'cl'):
@@ -158,9 +158,7 @@ def plot_profile(plot_type, d,
 		origin='bottom',
 		norm=norm,
 		cmap=cmap,
-		alpha=alpha,
 	)
-	plt.gca().set_facecolor(under)
 	im.cmap.set_under(under)
 
 	cb = plt.colorbar(
@@ -591,12 +589,17 @@ Plot command options:
 					except SystemExit:
 						raise
 					except SystemError:
-						raise
+						sys.exit(1)
 					except:
 						logging.warning(traceback.format_exc())
 			else:
 				print('<- %s' % input1)
 				d = ds.read(input1, VARIABLES)
-				plot(plot_type, d, output, **opts)
+				try:
+					plot(plot_type, d, output, **opts)
+				except SystemExit:
+					raise
+				except SystemError:
+					sys.exit(1)
 	else:
 		raise ValueError('Invalid plot type "%s"' % plot_type)
