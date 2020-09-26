@@ -12,6 +12,7 @@ MAX_RANGE = 15400 # m
 VARS = {
 	'backscatter': ['beta_raw'],
 	'time': ['time'],
+	'time_bnds': ['time'],
 	'zfull': ['range', 'altitude'],
 	'altitude': ['altitude'],
 }
