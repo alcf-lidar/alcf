@@ -114,7 +114,7 @@ Algorithm options:
 - Cloud detection:
     - `default`: cloud detection based on backscatter threshold
         - `cloud_nsd: <n>`: Number of noise standard deviations to subtract.
-        	Default: `3`.
+            Default: `5`.
         - `cloud_threshold: <threshold>`: Cloud detection threshold
             (sr^-1.m^-1). Default: `2e-6`.
 	- `none`: disable cloud detection
