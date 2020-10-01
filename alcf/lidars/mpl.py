@@ -28,6 +28,25 @@ DEFAULT_VARS = [
 	'altitude',
 ]
 
+def parse_temporal_resolution(s):
+	errmsg = 'Unrecognized temporal resolution "%s"' % s
+	x = s.split(' ')
+	if len(x) != 2:
+		raise ValueError(errmsg)
+	FACTOR = [
+		[['s', 'sec', 'second', 'seconds'], 1./60./60./24.],
+		[['m', 'min', 'minute', 'minutes'], 1./60./24.],
+		[['h', 'hour', 'hours'], 1./24.],
+	]
+	try:
+		f = float(x[0])
+	except:
+		raise ValueError(errmsg)
+	for item in FACTOR:
+		if x[1] in item[0]:
+			return f*item[1]
+	raise ValueError(errmsg)
+
 def read(filename, vars, altitude=None, **kwargs):
 	dep_vars = list(set([y for x in vars if x in VARS for y in VARS[x]]))
 	required_vars = dep_vars + DEFAULT_VARS
@@ -48,7 +67,8 @@ def read(filename, vars, altitude=None, **kwargs):
 			for y, m, day, H, M, S
 			in zip(d['year'], d['month'], d['day'], d['hour'], d['minute'], d['second'])
 		], np.float64)
-		dx['time_bnds'] = misc.time_bnds(dx['time'], dx['time'][1] - dx['time'][0])
+		tres = parse_temporal_resolution(d['.']['.']['temporal_resolution'])
+		dx['time_bnds'] = misc.time_bnds(dx['time'], tres)
 		# dx['time'] += 13.0/24.0
 	if 'zfull' in vars:
 		zfull1 = np.outer(
