@@ -412,7 +412,7 @@ def plot(plot_type, d, output,
 	plt.close()
 
 def run(plot_type, *args,
-	lr=False,
+	lr=True,
 	subcolumn=0,
 	width=None,
 	height=None,
@@ -428,7 +428,7 @@ def run(plot_type, *args,
 	vlog=None,
 	sigma=5.,
 	remove_bmol=True,
-	cloud_mask=False,
+	cloud_mask=True,
 	title=None,
 	zres=50,
 	**kwargs
@@ -473,8 +473,8 @@ Options:
 Plot command options:
 
 - `backscatter`:
-    - `--lr`: plot lidar ratio (LR)
-    - `--plot_cloud_mask`: plot cloud mask
+    - `lr: <value>`: Plot lidar ratio (LR). Default: `true`.
+    - `cloud_mask: <value>`: plot cloud mask. Default: `true`.
     - `sigma: <value>`: Remove of number of standard deviations of backscatter
         from the mean backscatter (real). Default: `5`.
     - `remove_bmol: <value>`: Remove molecular backscatter (observed data have
