@@ -19,11 +19,11 @@ setup(
 		for f in fs
 	]},
 	install_requires=[
-		'numpy',
-		'scipy',
-		'matplotlib',
+		'numpy>=1.16.2',
+		'scipy>=1.1.0',
+		'matplotlib>=3.0.2',
 		'netCDF4>=1.2.9',
-		'cl2nc',
+		'cl2nc>=3.3.0',
 		'aquarius-time>=0.1.0',
 		'ds-format>=1.0.0',
 		'pst>=1.1.1',
