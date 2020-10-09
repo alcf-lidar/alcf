@@ -155,7 +155,7 @@ def plot_profile(plot_type, d,
 	im = plt.imshow(x.T,
 		extent=(t1, t2, z1*1e-3, z2*1e-3),
 		aspect='auto',
-		origin='bottom',
+		origin='lower',
 		norm=norm,
 		cmap=cmap,
 	)
