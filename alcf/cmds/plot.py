@@ -4,6 +4,7 @@ import os
 import sys
 import logging
 import traceback
+import copy
 import numpy as np
 import matplotlib as mpl
 mpl.use('Agg')
@@ -67,7 +68,7 @@ def plot_profile(plot_type, d,
 	**opts
 ):
 	if plot_type == 'backscatter':
-		cmap = 'viridis'
+		cmap = copy.copy(mpl.cm.get_cmap('viridis'))
 		under = '#222222'
 		label = 'Backscatter (×10$^{-6}$ m$^{-1}$sr$^{-1}$)'
 		if vlim is None:
@@ -95,11 +96,11 @@ def plot_profile(plot_type, d,
 		time = d['time']
 		zfull = d['zfull']
 	elif plot_type in ('clw', 'cli', 'cl'):
-		cmap = {
+		cmap = copy.copy(mpl.cm.get_cmap({
 			'clw': 'Reds',
 			'cli': 'Blues',
 			'cl': 'Greys_r',
-		}[plot_type]
+		}[plot_type]))
 		under = {
 			'clw': 'white',
 			'cli': 'white',
