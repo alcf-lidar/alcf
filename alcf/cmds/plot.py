@@ -277,6 +277,8 @@ def plot_backscatter_hist(d,
 		]
 
 	under = '#222222'
+	cmap = copy.copy(mpl.cm.get_cmap('viridis'))
+	cmap.set_under(under)
 	im = plt.imshow(
 		d['backscatter_hist'].T*1e2
 			if len(d['backscatter_hist'].shape) == 2
@@ -290,8 +292,8 @@ def plot_backscatter_hist(d,
 			(1.5*d['zfull'][-1] - 0.5*d['zfull'][-2])*1e-3,
 		),
 		norm=norm,
+		cmap=cmap,
 	)
-	im.cmap.set_under(under)
 	plt.gca().set_facecolor(under)
 	plt.colorbar(
 		label='Occurrence (%)',
