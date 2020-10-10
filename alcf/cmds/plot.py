@@ -70,7 +70,7 @@ def plot_profile(plot_type, d,
 	if plot_type == 'backscatter':
 		cmap = copy.copy(mpl.cm.get_cmap('viridis'))
 		under = '#222222'
-		label = 'Backscatter (×10$^{-6}$ m$^{-1}$sr$^{-1}$)'
+		label = 'Att. vol. backscattering coef. (×10$^{-6}$ m$^{-1}$sr$^{-1}$)'
 		if vlim is None:
 			vlim = [0.1, 200]
 		if vlog is None:
@@ -304,7 +304,7 @@ def plot_backscatter_hist(d,
 		plt.xlim(xlim)
 	if zlim is not None:
 		plt.ylim(zlim[0]*1e-3, zlim[1]*1e-3)
-	plt.xlabel('Total attenuated backscatter coefficient (×10$^{-6}$ m$^{-1}$sr$^{-1}$)')
+	plt.xlabel('Att. vol. backscattering coef. (×10$^{-6}$ m$^{-1}$sr$^{-1}$)')
 	plt.ylabel('Height (km)')
 	plt.axvline(0, lw=0.3, linestyle='dashed', color='k')
 
@@ -329,7 +329,7 @@ def plot_backscatter_sd_hist(dd,
 		plt.xlim(xlim)
 	if zlim is not None:
 		plt.ylim(zlim)
-	plt.xlabel('Total attenuated backscatter coefficient (×10$^{-6}$ m$^{-1}$sr$^{-1}$)')
+	plt.xlabel('Att. vol. backscattering coef. (×10$^{-6}$ m$^{-1}$sr$^{-1}$)')
 	plt.ylabel('Occurrence (%)')
 	if labels is not None:
 		plot_legend()
