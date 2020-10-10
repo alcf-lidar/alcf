@@ -304,7 +304,7 @@ def plot_backscatter_hist(d,
 		plt.xlim(xlim)
 	if zlim is not None:
 		plt.ylim(zlim[0]*1e-3, zlim[1]*1e-3)
-	plt.xlabel('Att. vol. backscattering coef. (×10$^{-6}$ m$^{-1}$sr$^{-1}$)')
+	plt.xlabel('Attenuated volume backscattering coefficient (×10$^{-6}$ m$^{-1}$sr$^{-1}$)')
 	plt.ylabel('Height (km)')
 	plt.axvline(0, lw=0.3, linestyle='dashed', color='k')
 
@@ -329,7 +329,7 @@ def plot_backscatter_sd_hist(dd,
 		plt.xlim(xlim)
 	if zlim is not None:
 		plt.ylim(zlim)
-	plt.xlabel('Att. vol. backscattering coef. (×10$^{-6}$ m$^{-1}$sr$^{-1}$)')
+	plt.xlabel('Attenuated volume backscattering coefficient (×10$^{-6}$ m$^{-1}$sr$^{-1}$)')
 	plt.ylabel('Occurrence (%)')
 	if labels is not None:
 		plot_legend()
