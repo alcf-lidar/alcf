@@ -47,8 +47,12 @@ Options:
 - `bres: <value>`: backscatter histogram resolution (1e-6 m-1.sr-1).
     Default: `10`.
 - `filter: <value> | { <value> ... }`: Filter profiles by condition: `cloudy` for
-    cloudy profiles only, `clear` for clear sky profiles only, `none` for all
-    profiles. If an array of values is supplied, all conditions must be true.
+    cloudy profiles only, `clear` for clear sky profiles only, `night` for
+    nighttime profiles, `day` for daytime profiles, `none` for all profiles.
+    If an array of values is supplied, all conditions must be true. For `night`
+    and `day`, lidar profiles must contain valid longitude and latitude
+    fields set via the `lon` and `lat` arguments of `alcf lidar` or read
+    implicitly from raw lidar data files if available (mpl, mpl2nc).
     Default: `none`.
 - `tlim: { <start> <end> }`: Time limits (see Time format below).
     Default: `none`.
