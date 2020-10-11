@@ -13,6 +13,8 @@ VARIABLES = [
 	'backscatter',
 	'backscatter_sd',
 	'backscatter_mol',
+	'lon',
+	'lat',
 ]
 
 def run(input_, output,
@@ -44,8 +46,9 @@ Options:
     Default: `{ 5 200 }`.
 - `bres: <value>`: backscatter histogram resolution (1e-6 m-1.sr-1).
     Default: `10`.
-- `filter: <value>`: filter profiles by condition: `cloudy` for cloudy profiles
-    only, `clear` for clear sky profiles only, `none` for all profiles.
+- `filter: <value> | { <value> ... }`: Filter profiles by condition: `cloudy` for
+    cloudy profiles only, `clear` for clear sky profiles only, `none` for all
+    profiles. If an array of values is supplied, all conditions must be true.
     Default: `none`.
 - `tlim: { <start> <end> }`: Time limits (see Time format below).
     Default: `none`.
@@ -75,7 +78,7 @@ HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
 		'bsd_log': bsd_log,
 		'bsd_res': bsd_res*1e-6,
 		'bsd_z': bsd_z,
-		'filter': filter,
+		'filter': filter if type(filter) is list else [filter],
 		'zlim': zlim,
 		'zres': zres,
 	}

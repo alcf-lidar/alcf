@@ -26,6 +26,8 @@ DEFAULT_VARS = [
 	'minute',
 	'second',
 	'altitude',
+	'latitude',
+	'longitude',
 ]
 
 def parse_temporal_resolution(s):
@@ -47,7 +49,7 @@ def parse_temporal_resolution(s):
 			return f*item[1]
 	raise ValueError(errmsg)
 
-def read(filename, vars, altitude=None, **kwargs):
+def read(filename, vars, altitude=None, lon=None, lat=None, **kwargs):
 	dep_vars = list(set([y for x in vars if x in VARS for y in VARS[x]]))
 	required_vars = dep_vars + DEFAULT_VARS
 	d = ds.from_netcdf(
@@ -57,10 +59,14 @@ def read(filename, vars, altitude=None, **kwargs):
 	mask = d['elevation_angle'] == 0.0
 	dx = {}
 	n = len(d['year'])
-	if altitude is None:
-		altitude = d['altitude']
-	else:
-		altitude = np.full(n, altitude, np.float64)
+
+	altitude = d['altitude'] if altitude is None else \
+		np.full(n, altitude, np.float64)
+	lon = d['longitude'] if lon is None else \
+		np.full(n, lon, np.float64)
+	lat = d['latitude'] if lat is None else \
+		np.full(n, lat, np.float64)
+
 	if 'time' in vars:
 		dx['time'] = np.array([
 			(dt.datetime(y, m, day, H, M, S) - dt.datetime(1970, 1, 1)).total_seconds()/(24.0*60.0*60.0) + 2440587.5
@@ -82,6 +88,10 @@ def read(filename, vars, altitude=None, **kwargs):
 		dx['backscatter'] = (d['copol_nrb'] + 2.*d['crosspol_nrb'])*CALIBRATION_COEFF
 	if 'altitude' in vars:
 		dx['altitude'] = altitude
+	if 'lon' in vars:
+		dx['lon'] = lon
+	if 'lat' in vars:
+		dx['lat'] = lat
 	# if 'backscatter_x' in vars:
 	# 	dx['backscatter_x'] = d['copol_nrb']*CALIBRATION_COEFF
 	# if 'backscatter_y' in vars:

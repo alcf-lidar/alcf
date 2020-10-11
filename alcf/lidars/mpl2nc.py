@@ -20,15 +20,19 @@ VARIABLES = [
 	'gps_altitude',
 ]
 
-def read(filename, vars, altitude=None, **kwargs):
+def read(filename, vars, altitude=None, lon=None, lat=None, **kwargs):
 	d = ds.read(filename, VARIABLES, jd=True)
 	mask = d['elevation_angle'] == 0.0
 	dx = {}
 	n, m = d['nrb_copol'].shape
-	if altitude is None:
-		altitude = d['gps_altitude']
-	else:
-		altitude = np.full(n, altitude, np.float64)
+
+	altitude = d['gps_altitude'] if altitude is None else \
+		np.full(n, altitude, np.float64)
+	lon = d['gps_longitude'] if lon is None else \
+		np.full(n, lon, np.float64)
+	lat = d['gps_latitude'] if lat is None else \
+		np.full(n, lat, np.float64)
+
 	if 'time' in vars:
 		dx['time'] = d['time']
 		dx['time_bnds'] = misc.time_bnds(dx['time'], dx['time'][1] - dx['time'][0])
@@ -42,8 +46,10 @@ def read(filename, vars, altitude=None, **kwargs):
 		dx['backscatter'] = (d['nrb_copol'] + 2.*d['nrb_crosspol'])*CALIBRATION_COEFF
 	if 'altitude' in vars:
 		dx['altitude'] = altitude
-	dx['backscatter'] = dx['backscatter'][:,10:]
-	dx['zfull'] = dx['zfull'][:,10:]
+	if 'lon' in vars:
+		dx['lon'] = lon
+	if 'lat' in vars:
+		dx['lat'] = lat
 	dx['.'] = META
 	dx['.'] = {
 		x: dx['.'][x]

@@ -1,5 +1,8 @@
 import copy
 import numpy as np
+import astropy.coordinates
+import astropy.time
+import astropy.units
 import ds_format as ds
 import aquarius_time as aq
 
@@ -95,3 +98,13 @@ def time_bnds(time, step, start=None, end=None):
 	if end is not None:
 		bnds[-1,1] = end
 	return bnds
+
+def sun_altitude(t, lon, lat):
+	loc = astropy.coordinates.EarthLocation(
+		lon=lon*astropy.units.deg,
+		lat=lat*astropy.units.deg
+	)
+	time = astropy.time.Time(t, format='jd')
+	altaz = astropy.coordinates.AltAz(location=loc, obstime=time)
+	sun = astropy.coordinates.get_sun(time)
+	return sun.transform_to(altaz).alt.hour/24.*360.

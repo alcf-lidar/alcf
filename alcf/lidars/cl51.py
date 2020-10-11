@@ -23,6 +23,8 @@ DEFAULT_VARS = [
 
 def read(filename, vars,
 	altitude=None,
+	lon=None,
+	lat=None,
 	calibration_coeff=CALIBRATION_COEFF,
 	fix_cl_range=False,
 	cl_crit_range=6000,
@@ -54,6 +56,10 @@ def read(filename, vars,
 					dx['backscatter'][i,mask] *= (range_[mask]/6000)**2
 	if 'altitude' in vars:
 		dx['altitude'] = np.full(n, altitude, np.float64)
+	if 'lon' in vars:
+		dx['lon'] = np.full(n, lon, np.float64)
+	if 'lat' in vars:
+		dx['lat'] = np.full(n, lon, np.float64)
 	dx['.'] = META
 	dx['.'] = {
 		x: dx['.'][x]

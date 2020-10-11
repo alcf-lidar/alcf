@@ -17,7 +17,7 @@ VARS = {
 	'altitude': ['altitude'],
 }
 
-def read(filename, vars, altitude=None, **kwargs):
+def read(filename, vars, altitude=None, lon=None, lat=None, **kwargs):
 	dep_vars = list(set([y for x in vars if x in VARS for y in VARS[x]]))
 	d = ds.from_netcdf(
 		filename,
@@ -37,6 +37,10 @@ def read(filename, vars, altitude=None, **kwargs):
 		dx['zfull'] = np.tile(zfull1, (n, 1))
 	if 'altitude' in vars:
 		dx['altitude'] = np.full(n, altitude, np.float64)
+	if 'lon' in vars:
+		dx['lon'] = np.full(n, lon, np.float64)
+	if 'lat' in vars:
+		dx['lat'] = np.full(n, lon, np.float64)
 	dx['.'] = META
 	dx['.'] = {
 		x: dx['.'][x]

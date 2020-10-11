@@ -22,6 +22,8 @@ VARIABLES = [
 	'time_bnds',
 	'zfull',
 	'altitude',
+	'lon',
+	'lat',
 	# 'range',
 ]
 
@@ -41,11 +43,14 @@ def run(type_, input_, output,
 	noise_removal='default',
 	calibration='default',
 	output_sampling=86400,
+	overlap_file=None,
 	eta=0.7,
 	calibration_file=None,
 	couple=None,
 	fix_cl_range=False,
 	cl_crit_range=6000,
+	lat=None,
+	lon=None,
 	**options
 ):
 	"""
@@ -98,6 +103,10 @@ Options:
     Default: `0.7`.
 - `fix_cl_range` (experimental): Fix CL31/CL51 range correction (if `noise_h2`
 	firmware option if off). The critical range is taken from `cl_crit_range`.
+- `lat: <lat>`: Latitude of the instrument (degrees North).
+    Default: Taken from lidar data or `none` if not available.
+- `lon: <lon>`: Longitude of the instrument (degrees East).
+    Default: Taken from lidar data or `none` if not available.
 - `noise_removal: <algorithm>`: Noise removal algorithm.
     Available algorithms: `default`, `none`.  Default: `default`.
 - `output_sampling: <period>`: Output sampling period (seconds).
@@ -246,6 +255,8 @@ Algorithm options:
 			try:
 				d = lidar.read(input_filename, VARIABLES,
 					altitude=altitude,
+					lon=lon,
+					lat=lat,
 					fix_cl_range=fix_cl_range,
 					cl_crit_range=cl_crit_range,
 				)
@@ -261,6 +272,8 @@ Algorithm options:
 		print('<- %s' % input_)
 		d = lidar.read(input_, VARIABLES,
 			altitude=altitude,
+			lon=lon,
+			lat=lat,
 			fix_cl_range=fix_cl_range,
 			cl_crit_range=cl_crit_range,
 		)

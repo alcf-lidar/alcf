@@ -28,6 +28,18 @@ META = {
 		'standard_name': 'altitude',
 		'units': 'm',
 	},
+	'lon': {
+		'.dims': ['time'],
+		'long_name': 'instrument longitude',
+		'standard_name': 'longitude',
+		'units': 'degrees_east',
+	},
+	'lat': {
+		'.dims': ['time'],
+		'long_name': 'instrument latitude',
+		'standard_name': 'latitude',
+		'units': 'degrees_north',
+	},
 }
 
 from . import chm15k

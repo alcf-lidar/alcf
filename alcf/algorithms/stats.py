@@ -100,12 +100,19 @@ def stats_map(d, state,
 	else:
 		mask &= np.all(~np.isnan(d['backscatter']), axis=(1,))
 
-	if filter == 'cloudy':
-		filter_mask = np.any(d['cloud_mask'], axis=1)
-	elif filter == 'clear':
-		filter_mask = ~np.any(d['cloud_mask'], axis=1)
-	else:
-		filter_mask = np.ones(filter_mask_dims, dtype=np.bool)
+	filter_mask = np.ones(filter_mask_dims, dtype=np.bool)
+	if 'cloudy' in filter:
+		filter_mask &= np.any(d['cloud_mask'], axis=1)
+	if 'clear' in filter:
+		filter_mask &= ~np.any(d['cloud_mask'], axis=1)
+	if 'day' in filter:
+		filter_mask_0 = misc.sun_altitude(d['time'], d['lon'], d['lat']) >= 0
+		if l > 0: filter_mask_0 = np.tile(filter_mask_0, [l, 1]).T
+		filter_mask &= filter_mask_0
+	if 'night' in filter:
+		filter_mask_0 = misc.sun_altitude(d['time'], d['lon'], d['lat']) < 0
+		if l > 0: filter_mask_0 = np.tile(filter_mask_0, [l, 1]).T
+		filter_mask &= filter_mask_0
 
 	if not np.any(mask):
 		return
