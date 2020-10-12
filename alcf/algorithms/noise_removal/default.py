@@ -8,12 +8,13 @@ def noise_removal(d, **options):
 	n, m = b.shape
 	b2 = np.zeros((n, m), np.float64)
 	b_sd = np.zeros((n, m), np.float64)
-	noise_m = np.mean(bt)
-	noise_sd = np.std(bt)
+	w = d['time_bnds'][:,1] - d['time_bnds'][:,0]
+	noise_m = np.average(bt, weights=w)
+	noise_sd = np.sqrt(np.cov(bt, aweights=w))
 	for i in range(n):
 		c = (1.0*zfull[i,:]/zfull[i,-1])**2
-		b2[i] = b[i] - noise_m*c
-		b_sd[i] = noise_sd*c
+		b2[i,:] = b[i,:] - noise_m*c
+		b_sd[i,:] = noise_sd*c
 	d['backscatter'] = b2
 	d['backscatter_sd'] = b_sd
 	d['.']['backscatter_sd'] = {
