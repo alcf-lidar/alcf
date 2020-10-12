@@ -16,7 +16,9 @@ def read(filename, vars, altitude=None, lon=None, lat=None, **kwargs):
 		np.full(n, lon, np.float64)
 	d['lat'] = d['lat'] if lat is None and 'latitude' in d else \
 		np.full(n, lat, np.float64)
-	d['.'].update(META)
+	d['.']['altitude'] = META['altitude']
+	d['.']['lon'] = META['lon']
+	d['.']['lat'] = META['lat']
 	d['.'] = {
 		x: d['.'][x]
 		for x in vars
