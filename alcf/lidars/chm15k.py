@@ -15,6 +15,8 @@ VARS = {
 	'time_bnds': ['time'],
 	'zfull': ['range', 'altitude'],
 	'altitude': ['altitude'],
+	'lon': [],
+	'lat': [],
 }
 
 def read(filename, vars, altitude=None, lon=None, lat=None, **kwargs):
