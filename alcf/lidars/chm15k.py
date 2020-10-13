@@ -42,7 +42,7 @@ def read(filename, vars, altitude=None, lon=None, lat=None, **kwargs):
 	if 'lon' in vars:
 		dx['lon'] = np.full(n, lon, np.float64)
 	if 'lat' in vars:
-		dx['lat'] = np.full(n, lon, np.float64)
+		dx['lat'] = np.full(n, lat, np.float64)
 	dx['.'] = META
 	dx['.'] = {
 		x: dx['.'][x]
