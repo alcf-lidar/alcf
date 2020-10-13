@@ -18,6 +18,8 @@ VARIABLES = [
 	'time',
 	'elevation_angle',
 	'gps_altitude',
+	'gps_longitude',
+	'gps_latitude',
 ]
 
 def read(filename, vars, altitude=None, lon=None, lat=None, **kwargs):
