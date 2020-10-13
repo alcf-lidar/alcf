@@ -212,7 +212,7 @@ def plot_lr(d, subcolumn=0, **opts):
 	plt.gca().xaxis.set_major_formatter(formatter)
 	plt.xlim(np.min(d['time']), np.max(d['time']))
 	plt.ylim(0, 50)
-	plt.ylabel('Lidar ratio (sr)')
+	plt.ylabel('Eff. lidar ratio (sr)')
 	plt.xlabel('Time (UTC)')
 
 def plot_cloud_occurrence(dd,
@@ -476,7 +476,7 @@ Options:
 Plot command options:
 
 - `backscatter`:
-    - `lr: <value>`: Plot lidar ratio (LR). Default: `true`.
+    - `lr: <value>`: Plot effective lidar ratio. Default: `true`.
     - `cloud_mask: <value>`: plot cloud mask. Default: `true`.
     - `sigma: <value>`: Remove of number of standard deviations of backscatter
         from the mean backscatter (real). Default: `5`.

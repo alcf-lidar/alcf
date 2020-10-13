@@ -1,7 +1,7 @@
 import numpy as np
 from alcf import misc
 
-def lidar_ratio(d, eta=1.):
+def lidar_ratio(d):
 	dz = np.diff([0] + list(d['zfull']))
 	if len(d['backscatter'].shape) == 3:
 		n, m, l = d['backscatter'].shape
@@ -16,10 +16,10 @@ def lidar_ratio(d, eta=1.):
 		dims = ['time']
 		for i in range(n):
 		 	bint[i] = np.sum(d['backscatter'][i,:]*dz)
-	d['lr'] = 1./(2.*eta*bint) # See O'Connor et al. (2004), Equation 6.
+	d['lr'] = 1./(2.*bint) # See O'Connor et al. (2004), Equation 6.
 	d['.']['lr'] = {
 		'.dims': dims,
-		'long_name': 'lidar ratio',
+		'long_name': 'effective lidar ratio',
 		'units': 'sr',
 	}
 

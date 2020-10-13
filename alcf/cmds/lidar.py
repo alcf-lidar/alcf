@@ -44,7 +44,6 @@ def run(type_, input_, output,
 	calibration='default',
 	output_sampling=86400,
 	overlap_file=None,
-	eta=0.7,
 	calibration_file=None,
 	couple=None,
 	fix_cl_range=False,
@@ -99,8 +98,6 @@ Options:
     Available algorithms: `default`, `none`. Default: `default`.
 - `cloud_base_detection: <algorithm>`: Cloud base detection algorithm.
     Available algorithms: `default`, `none`. Default: `default`.
-- `eta: <eta>`: Multiple-scattering factor to assume in lidar ratio calculation.
-    Default: `0.7`.
 - `fix_cl_range` (experimental): Fix CL31/CL51 range correction (if `noise_h2`
 	firmware option if off). The critical range is taken from `cl_crit_range`.
 - `lat: <lat>`: Latitude of the instrument (degrees North).
@@ -239,7 +236,7 @@ Algorithm options:
 			dd = cloud_detection_mod.stream(dd, state['cloud_detection'], **options)
 		if cloud_base_detection_mod is not None:
 			dd = cloud_base_detection_mod.stream(dd, state['cloud_base_detection'], **options)
-		dd = lidar_ratio.stream(dd, state['lidar_ratio'], eta=eta)
+		dd = lidar_ratio.stream(dd, state['lidar_ratio'])
 		dd = output_stream(dd, state['output']) #, output_sampling=output_sampling)
 		return dd
 
