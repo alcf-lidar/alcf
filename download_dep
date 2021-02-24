@@ -1,8 +1,8 @@
 #!/bin/sh
 mkdir -p build
 cd build
-wget -c 'https://www.hdfgroup.org/package/source-gzip-4/?wpdmdl=13048&refresh=5c5b7b652d45b1549499237' -O hdf5-1.10.4.tar.gz
-wget -c ftp://ftp.unidata.ucar.edu/pub/udunits/udunits-2.2.26.tar.gz
+wget -c https://github.com/HDFGroup/hdf5/archive/hdf5-1_10_4.tar.gz -O hdf5-1.10.4.tar.gz
+wget -c http://deb.debian.org/debian/pool/main/u/udunits/udunits_2.2.26.orig.tar.xz -O udunits-2.2.26.tar.gz
 wget -c https://github.com/Unidata/netcdf-c/archive/v4.6.2.tar.gz -O netcdf-v4.6.2.tar.gz
 wget -c https://github.com/Unidata/netcdf-fortran/archive/v4.4.5.tar.gz -O netcdf-fortran-v4.4.5.tar.gz
 wget -c http://deb.debian.org/debian/pool/main/o/ossp-uuid/ossp-uuid_1.6.2.orig.tar.gz -O uuid-1.6.2.tar.gz
