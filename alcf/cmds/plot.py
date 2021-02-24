@@ -522,6 +522,13 @@ Plot command options:
     - `lw: <value>`: Line width. Default: `1`.
     - `xlim: { <min> <max> }`: x axis limits (%). Default: `{ 0 100 }`.
     - `zlim: { <min> <max> }`: z axis limits (m). Default: `{ 0 15 }`.
+
+Examples:
+
+Plot backscatter from processed Vaisala CL51 data in `alcf_cl51_lidar`
+and store the output in the directory `alcf_cl51_backscatter`.
+
+    alcf plot backscatter alcf_cl51_lidar alcf_cl51_backscatter
 	"""
 	input_ = args[:-1]
 	output = args[-1]
