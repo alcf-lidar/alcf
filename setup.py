@@ -26,7 +26,7 @@ setup(
 		'cl2nc>=3.3.0',
 		'aquarius-time>=0.1.0',
 		'ds-format>=1.0.0',
-		'pst>=1.1.1',
+		'pst-format>=1.1.1',
 		'astropy>=3.1.2',
 	],
 	keywords=['alc', 'ceilometer', 'lidar', 'atmosphere', 'model', 'simulator', 'nwp', 'gcm', 'cosp', 'actsim', 'vaisala', 'cl51', 'cl31', 'lufft', 'chm-15k', 'minimpl', 'amps', 'merra-2', 'um'],
