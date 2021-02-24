@@ -26,7 +26,7 @@ def get_track_segment(track, t1, t2):
 		'.': track['.']
 	}
 
-def model(type_, input_, point=None, time=None, track=None):
+def model(type_, input_, point=None, time=None, track=None, debug=False):
 	model = MODELS.get(type_)
 	warnings = []
 	if model is None:
@@ -45,7 +45,12 @@ def model(type_, input_, point=None, time=None, track=None):
 		}
 		d = model.read(input_, track, warnings=warnings)
 	for w in warnings:
-		sys.stderr.write('Warning: %s\n' % w)
+		if len(w) == 2:
+			print('Warning: %s' % w[0], file=sys.stderr)
+			if debug: print(w[1], file=sys.stderr)
+			else: print('Use --debug to print debugging information.', file=sys.stderr)
+		else:
+			print('Warning: %s' % w, file=sys.stderr)
 	return d
 
 def run(type_, input_, output,
@@ -54,6 +59,7 @@ def run(type_, input_, output,
 	track=None,
 	track_override_year=None,
 	track_lon_180=False,
+	debug=False,
 	**kwargs
 ):
 	"""
@@ -138,7 +144,8 @@ Track file is a NetCDF file containing 1D variables `lon`, `lat`, and `time`.
 	for t in np.arange(np.floor(t1 - 0.5), np.ceil(t2 - 0.5)) + 0.5:
 		output_filename = os.path.join(output, '%s.nc' % \
 			aq.to_iso(t).replace(':', ''))
-		d = model(type_, input_, point, time=[t, t + 1.], track=track1)
+		d = model(type_, input_, point, time=[t, t + 1.],
+			track=track1, debug=debug)
 		if d is not None:
 			ds.write(output_filename, d)
 			print('-> %s' % output_filename)
