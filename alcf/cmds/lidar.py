@@ -140,6 +140,13 @@ Algorithm options:
         - `noise_removal_sampling: <period>`: Sampling period for noise removal
             (seconds). Default: 300.
     - `none`: disable noise removal
+
+Examples:
+
+Process Vaisala CL51 data in `cl51_data` and store the output in
+`cl51_alcf_lidar`, assuming instrument altitude of 100 m above sea level.
+
+    alcf lidar cl51 cl51_data cl51_alcf_lidar altitude: 100
 	"""
 	# if time is not None:
 	# 	start, end = misc.parse_time(time)
