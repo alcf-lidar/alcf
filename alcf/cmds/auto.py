@@ -82,6 +82,19 @@ Lidar types:
 - `minimpl`: Sigma Space MiniMPL
 - `mpl`: Sigma Space MPL (converted via SigmaMPL)
 - `mpl2nc`: Sigma Space MPL (converted via mpl2nc)
+
+Examples:
+
+Simulate a Vaisala CL51 instrument from MERRA-2 data in `M2I3NVASM.5.12.4`
+at 45 S, 170 E between 1 and 2 January 2020 and store the output in
+`alcf_merra2`.
+
+    alcf auto model merra2 cl51 M2I3NVASM.5.12.4 alcf_merra2 \\
+    point: { -45.0 170.0 } time: { 2020-01-01 2020-01-02 }
+
+Process Lufft CHM 15k data in `chm15k` and store the output in `alcf_chm15k`.
+
+    alcf auto lidar chm15k chm15k_data alcf_chm15k
 	"""
 	if cmd is None:
 		sys.stderr.write(main.__doc__.strip() + '\n')
