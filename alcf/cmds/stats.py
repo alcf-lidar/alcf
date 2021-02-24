@@ -75,9 +75,9 @@ HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
 Examples:
 
 Calculate statistics from processed lidar data in `alcf_cl51_lidar`
-and store the results in the directory `alcf_cl51_stats`.
+and store the output in `alcf_cl51_stats.nc`.
 
-    alcf stats alcf_cl51_lidar alcf_cl51_stats
+    alcf stats alcf_cl51_lidar alcf_cl51_stats.nc
 	"""
 	tlim_jd = parse_time(tlim) if tlim is not None else None
 	state = {}
