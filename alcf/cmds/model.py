@@ -105,6 +105,14 @@ Track file is a NetCDF file containing 1D variables `lon`, `lat`, and `time`.
 `time` is time in format conforming with the NetCDF standard,
 `lon` is longitude between 0 and 360 degrees and `lat` is latitude between
 -90 and 90 degrees.
+
+Examples:
+
+Extract MERRA-2 model data in `M2I3NVASM.5.12.4` at 45 S, 170 E between
+1 and 2 January 2020 and store the output in the directory `alcf_merra2_model`.
+
+    alcf model merra2 point: { -45.0 170.0 } time: { 2020-01-01 2020-01-02 } \\
+    M2I3NVASM.5.12.4 alcf_merra2_model
 	"""
 	time1 = None
 	track1 = None
