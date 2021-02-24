@@ -71,6 +71,13 @@ Time format:
 
 "YYYY-MM-DD[THH:MM[:SS]]", where YYYY is year, MM is month, DD is day,
 HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
+
+Examples:
+
+Calculate statistics from processed lidar data in `alcf_cl51_lidar`
+and store the results in the directory `alcf_cl51_stats`.
+
+    alcf stats alcf_cl51_lidar alcf_cl51_stats
 	"""
 	tlim_jd = parse_time(tlim) if tlim is not None else None
 	state = {}
