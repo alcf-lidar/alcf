@@ -108,3 +108,8 @@ def sun_altitude(t, lon, lat):
 	altaz = astropy.coordinates.AltAz(location=loc, obstime=time)
 	sun = astropy.coordinates.get_sun(time)
 	return sun.transform_to(altaz).alt.hour/24.*360.
+
+def require_vars(d, variables):
+	for v in variables:
+		if v not in d:
+			raise ValueError('Variable "%s" is required' % v)
