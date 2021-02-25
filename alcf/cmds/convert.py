@@ -71,6 +71,18 @@ Types:
 
 If `input` is a directory, all data files in `input` are converted
 to corresponding .nc files in `output`.
+
+Examples:
+
+Convert raw Vaisala CL51 data in `cl51_raw` to NetCDF and store the output in
+the directory `cl51_data`.
+
+    alcf convert cl51 cl51_raw cl51_data
+
+Convert JRA-55 data in `jra55_raw` to NetCDF and store the output in the
+directory `jra55_data`.
+
+    alcf convert jra55 jra55_raw jra55_data
 	"""
 
 	func = TYPES.get(type_)
