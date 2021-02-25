@@ -74,15 +74,15 @@ to corresponding .nc files in `output`.
 
 Examples:
 
-Convert raw Vaisala CL51 data in `cl51_raw` to NetCDF and store the output in
-the directory `cl51_data`.
+Convert raw Vaisala CL51 data in `cl51_dat` to NetCDF and store the output in
+the directory `cl51_nc`.
 
-    alcf convert cl51 cl51_raw cl51_data
+    alcf convert cl51 cl51_dat cl51_nc
 
-Convert JRA-55 data in `jra55_raw` to NetCDF and store the output in the
-directory `jra55_data`.
+Convert JRA-55 data in `jra55_grib` to NetCDF and store the output in the
+directory `jra55_nc`.
 
-    alcf convert jra55 jra55_raw jra55_data
+    alcf convert jra55 jra55_grib jra55_nc
 	"""
 
 	func = TYPES.get(type_)

@@ -143,10 +143,10 @@ Algorithm options:
 
 Examples:
 
-Process Vaisala CL51 data in `cl51_data` and store the output in
+Process Vaisala CL51 data in `cl51_nc` and store the output in
 `cl51_alcf_lidar`, assuming instrument altitude of 100 m above sea level.
 
-    alcf lidar cl51 cl51_data cl51_alcf_lidar altitude: 100
+    alcf lidar cl51 cl51_nc cl51_alcf_lidar altitude: 100
 	"""
 	# if time is not None:
 	# 	start, end = misc.parse_time(time)
