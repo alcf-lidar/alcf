@@ -84,6 +84,12 @@ directory `jra55_nc`.
 
     alcf convert jra55 jra55_grib jra55_nc
 	"""
+	if type_ not in ('cl51', 'jra55'):
+		raise ValueError('invalid type argument')
+	if type(input_) is not str:
+		raise ValueError('input argument must be a string')
+	if type(output) is not str:
+		raise ValueError('output argument must be a string')
 
 	func = TYPES.get(type_)
 	if func is None:

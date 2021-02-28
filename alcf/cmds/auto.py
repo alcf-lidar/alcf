@@ -101,6 +101,9 @@ Process Lufft CHM 15k data in `chm15k` and store the output in `alcf_chm15k`.
 
     alcf auto lidar chm15k chm15k_data alcf_chm15k
 	"""
+	if cmd not in ('model', 'lidar', 'compare'):
+		raise ValueError('invalid auto command')
+
 	if cmd is None:
 		sys.stderr.write(main.__doc__.strip() + '\n')
 		return 1

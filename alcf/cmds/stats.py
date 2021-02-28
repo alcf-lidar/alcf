@@ -79,6 +79,35 @@ and store the output in `alcf_cl51_stats.nc`.
 
     alcf stats alcf_cl51_lidar alcf_cl51_stats.nc
 	"""
+	if type(input_) is not str:
+		raise ValueError('input argument must be a string')
+	if type(output) is not str:
+		raise ValueError('output argument must be a string')
+	if not (type(blim) is list and len(blim) == 2 and \
+		type(blim[0]) in (int, float) and type(blim[1]) in (int, float)):
+		raise ValueError('blim must be an array of two numbers')
+	if type(bres) not in (int, float) or not (bres > 0):
+		raise ValueError('bres must be a positive number')
+	if filter_ not in ('cloudy', 'clear', 'night', 'day', None):
+		raise ValueError('invalid filter option')
+	if not (type(tlim) is list and len(tlim) == 2 and \
+		type(tlim[0]) is str and type(tlim[1]) is str) and tlim is not None:
+		raise ValueError('tlim option must be an array of two strings or none')
+	if not (type(zlim) is list and len(zlim) == 2 and \
+		type(zlim[0]) in (int, float) and type(zlim[1]) in (int, float)):
+		raise ValueError('zlim option must be an array of two numbers')
+	if type(zres) not in (int, float) or not (zres > 0):
+		raise ValueError('zres option must be a positive number')
+	if not (type(bsd_lim) is list and len(bsd_lim) == 2 and \
+		type(bsd_lim[0]) in (int, float) and type(bsd_lim[1]) in (int, float)):
+		raise ValueError('bsd_lim must be and array of two numbers')
+	if type(bsd_log) is not bool:
+		raise ValueError('bsd_log option must be true or false')
+	if type(bsd_res) not in (int, float) or not (bsd_res > 0):
+		raise ValueError('bsd_res option must be a positive number')
+	if type(bsd_z) not in (int, float):
+		raise ValueError('bsd_z option must be a number')
+
 	tlim_jd = parse_time(tlim) if tlim is not None else None
 	state = {}
 	options = {

@@ -65,6 +65,15 @@ Read time periods from `time_periods.txt`, lidar profiles from the directory
 `lidar` and write the calibration coefficient to `calibration.txt`.
 
 	"""
+	if type_ not in ('chm15k', 'cl31', 'cl51', 'minimpl', 'mpl'):
+		raise ValueError('invalid type argument')
+	if type(time_periods) is not str:
+		raise ValueError('time_periods argument must be a string')
+	if type(input_) is not str:
+		raise ValueError('input argument must be a string')
+	if type(output) is not str:
+		raise ValueError('output argument must be a string')
+
 	lidar = LIDARS.get(type_)
 	tp = read_time_periods(time_periods)
 	files = sorted(os.listdir(input_))
