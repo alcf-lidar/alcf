@@ -83,6 +83,11 @@ Lidar types:
 - `mpl`: Sigma Space MPL (converted via SigmaMPL)
 - `mpl2nc`: Sigma Space MPL (converted via mpl2nc)
 
+Time format:
+
+"YYYY-MM-DD[THH:MM[:SS]]", where YYYY is year, MM is month, DD is day,
+HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
+
 Examples:
 
 Simulate a Vaisala CL51 instrument from MERRA-2 data in `M2I3NVASM.5.12.4`

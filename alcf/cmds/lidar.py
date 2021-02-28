@@ -141,6 +141,11 @@ Algorithm options:
             (seconds). Default: 300.
     - `none`: disable noise removal
 
+Time format:
+
+"YYYY-MM-DD[THH:MM[:SS]]", where YYYY is year, MM is month, DD is day,
+HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
+
 Examples:
 
 Process Vaisala CL51 data in `cl51_nc` and store the output in

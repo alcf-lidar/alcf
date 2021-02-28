@@ -23,14 +23,13 @@ alcf calibrate - calibrate ALC backscatter
 Calibration based the O'Connor et al. (2004) method of lidar ratio (LR) in fully
 opaque stratocumulus clouds.
 
-Usage: `alcf calibrate <type> <time_periods> <input> <output> [<options>]`
+Usage: `alcf calibrate <type> <time_periods> <input> <output>`
 
 - `type`: lidar type (see Types below)
 - `time_periods`: file containing calibration time periods of stratocumulus
     clouds in the backscatter profiles (see Time periods below)
 - `input`: input directory containing NetCDF files (the output of `alcf lidar`)
 - `output`: output calibration file
-- `options`: see Options below.
 
 Types:
 
