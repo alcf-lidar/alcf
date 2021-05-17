@@ -79,6 +79,7 @@ Types:
 - `chm15k`: Lufft CHM 15k
 - `cl31`: Vaisala CL31
 - `cl51`: Vaisala CL51
+- `cl61`: Vaisala CL61
 - `cosp`: COSP simulated lidar
 - `default`: the same format as the output of `alcf lidar`
 - `minimpl`: Sigma Space MiniMPL
