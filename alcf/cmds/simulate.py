@@ -153,7 +153,9 @@ Types:
 
 - `caliop`: CALIPSO/CALIOP
 - `chm15k`: Lufft CHM 15k
+- `cl31`: Vaisala CL31
 - `cl51`: Vaisala CL51
+- `cl61`: Vaisala CL61
 - `mpl`: Sigma Space MiniMPL
 
 Options:
