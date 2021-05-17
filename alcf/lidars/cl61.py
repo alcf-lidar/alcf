@@ -4,7 +4,7 @@ from alcf import misc
 from alcf.lidars import META
 
 WAVELENGTH = 910 # nm
-CALIBRATION_COEFF = 0.5e-9
+CALIBRATION_COEFF = 0.8e-9
 SURFACE_LIDAR = True
 SC_LR = 18.8 # sr. Stratocumulus lidar ratio (O'Connor et al., 2004).
 MAX_RANGE = 15400 # m
