@@ -141,7 +141,61 @@ Algorithm options:
         - `noise_removal_sampling: <period>`: Sampling period for noise removal
             (seconds). Default: 300.
     - `none`: disable noise removal
+
+Time format:
+
+"YYYY-MM-DD[THH:MM[:SS]]", where YYYY is year, MM is month, DD is day,
+HH is hour, MM is minute, SS is second. Example: 2000-01-01T00:00:00.
+
+Examples:
+
+Process Vaisala CL51 data in `cl51_nc` and store the output in
+`cl51_alcf_lidar`, assuming instrument altitude of 100 m above sea level.
+
+    alcf lidar cl51 cl51_nc cl51_alcf_lidar altitude: 100
 	"""
+	if type_ not in ('chm15k', 'cl31', 'cl51', 'cosp', 'default', 'minimpl',
+		'mpl', 'mpl2nc'):
+		raise ValueError('invalid type argument')
+	if type(input_) is not str:
+		raise ValueError('lidar argument must be a string')
+	if type(output) is not str:
+		raise ValueError('output argument must be a string')
+	if type(altitude) not in (int, float) and altitude is not None:
+		raise ValueError('altitude option must be a number or none')
+	if calibration not in ('default', None):
+		raise ValueError('invalid calibration option')
+	if type(couple) is not str and couple is not None:
+		raise ValueError('couple option must be a string or none')
+	if type(cl_crit_range) not in (int, float):
+		raise ValueError('cl_crit_range option must be a number')
+	if cloud_detection not in ('default', None):
+		raise ValueError('invalid cloud_detection option')
+	if cloud_base_detection not in ('default', None):
+		raise ValueError('invalid cloud_base_detection option')
+	if type(fix_cl_range) is not bool:
+		raise ValueError('fix_cl_range option must be true or false')
+	if type(lat) not in (float, int) and lat is not None:
+		raise ValueError('lat must be a number or none')
+	if type(lon) not in (float, int) and lon is not None:
+		raise ValueError('lon must be a number or none')
+	if noise_removal not in ('default', None):
+		raise ValueError('invalid noise_removal option')
+	if type(output_sampling) not in (int, float) or not (output_sampling > 0):
+		raise ValueError('output_sample option must be a positive number')
+	if not (type(tlim) is list and len(tlim) == 2 and \
+		type(tlim[0]) is str and type(tlim[1]) is str) and tlim is not None:
+		raise ValueError('tlim option must be an array of two strings or none')
+	if type(tres) not in (int, float) and not (tres > 0):
+		raise ValueError('tres option must be an positive number')
+	if type(tshift) not in (int, float):
+		raise ValueError('tshift option must be a number')
+	if not (type(zlim) is list and len(zlim) == 2 and \
+		type(zlim[0]) in (int, float) and type(zlim[1]) in (int, float)):
+		raise ValueError('zlim option must be an array of two numbers')
+	if type(zres) not in (int, float) and not (zres > 0):
+		raise ValueError('zres option must be a positive number')
+
 	# if time is not None:
 	# 	start, end = misc.parse_time(time)
 

@@ -111,7 +111,39 @@ Track file is a NetCDF file containing 1D variables `lon`, `lat`, and `time`.
 `time` is time in format conforming with the NetCDF standard,
 `lon` is longitude between 0 and 360 degrees and `lat` is latitude between
 -90 and 90 degrees.
+
+Examples:
+
+Extract MERRA-2 model data in `M2I3NVASM.5.12.4` at 45 S, 170 E between
+1 and 2 January 2020 and store the output in the directory `alcf_merra2_model`.
+
+    alcf model merra2 point: { -45.0 170.0 } time: { 2020-01-01 2020-01-02 } \\
+    M2I3NVASM.5.12.4 alcf_merra2_model
 	"""
+	if type_ not in ('amps', 'era5', 'jra55', 'merra2', 'nzcsm', 'nzesm', 'um'):
+		raise ValueError('invalid type argument')
+	if not (type(point) is list and len(point) == 2 and \
+		type(point[0]) in (int, float) and type(point[1]) in (int, float)) and \
+		type(point) is not None:
+		raise ValueError('point option must be an array of two numbers or none')
+	if not (type(time) is list and len(time) == 2 and \
+		type(time[0]) is str and type(time[1]) is str) and \
+		type(time) is not None:
+		raise ValueError('time option must be and array of two numbers or none')
+	if type(input_) is not str:
+		raise ValueError('input argument must be a string')
+	if type(output) is not str:
+		raise ValueError('output argument must be a string')
+	if type(track) is not str and track is not None:
+		raise ValueError('track option must be a string or none')
+	if not (point is not None and time is not None and track is None or \
+		track is not None and point is None and time is None):
+		raise ValueError('either point and time options or track option must be defined')
+	if type(track_override_year) is not int and track_override_year is not None:
+		raise ValueError('track_override_year must be an integer or none')
+	if type(track_lon_180) is not bool:
+		raise ValueError('track_lon_180 option must be true or false')
+
 	time1 = None
 	track1 = None
 	if track is not None:
