@@ -44,6 +44,7 @@ META = {
 
 from . import chm15k
 from . import cl61
+from . import blview
 from . import cl51
 from . import cl31
 from . import mpl
@@ -55,6 +56,7 @@ LIDARS = {
 	'default': default,
 	'chm15k': chm15k,
 	'cl61': cl61,
+	'blview': blview,
 	'cl51': cl51,
 	'cl31': cl31,
 	'mpl': mpl,

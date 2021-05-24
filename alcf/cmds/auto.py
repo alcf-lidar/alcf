@@ -74,6 +74,7 @@ Model types:
 
 Lidar types:
 
+- `blview`: Vaisala BL-VIEW L2 product
 - `caliop`: CALIPSO/CALIOP (`alcf auto model` only)
 - `chm15k`: Lufft CHM 15k
 - `cl31`: Vaisala CL31

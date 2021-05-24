@@ -76,6 +76,7 @@ Arguments:
 
 Types:
 
+- `blview`: Vaisala BL-VIEW L2 product
 - `chm15k`: Lufft CHM 15k
 - `cl31`: Vaisala CL31
 - `cl51`: Vaisala CL51
