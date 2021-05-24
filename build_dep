@@ -13,8 +13,8 @@ export LIBRARY_PATH="$libdir"
 export LD_LIBRARY_PATH="$libdir"
 jobs=10
 tar xf udunits-2.2.26.tar.gz
-tar xf netcdf-v4.6.2.tar.gz
-tar xf netcdf-fortran-v4.4.5.tar.gz
+tar xf netcdf-v4.8.0.tar.gz
+tar xf netcdf-fortran-v4.5.3.tar.gz
 tar xf uuid-1.6.2.tar.gz
 tar xf hdf5-1.10.4.tar.gz
 tar xf cmor-2.9.1.tar.xz
@@ -34,12 +34,12 @@ cd udunits-2.2.26
 make -j $jobs
 make -j $jobs install
 cd ..
-cd netcdf-c-4.6.2
+cd netcdf-c-4.8.0
 ./configure --prefix="$prefix"
 make -j $jobs
 make -j $jobs install
 cd ..
-cd netcdf-fortran-4.4.5
+cd netcdf-fortran-4.5.3
 ./configure --prefix="$prefix"
 make -j $jobs
 make -j $jobs install
