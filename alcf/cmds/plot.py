@@ -533,62 +533,6 @@ and store the output in the directory `alcf_cl51_backscatter`.
 
     alcf plot backscatter alcf_cl51_lidar alcf_cl51_backscatter
 	"""
-	if plot_type not in ('backscatter', 'backscatter_hist',
-		'backscatter_sd_hist', 'cl', 'cli', 'cloud_occurrence', 'clw',
-		'clw+cli'):
-		raise ValueError('invalid plot_type argument')
-	if type(input_) is not str:
-		raise ValueError('input argument must be a string')
-	if type(output) is not str:
-		raise ValueError('output argument must be a string')
-	if type(dpi) not in (int, float) or not (dpi > 0):
-		raise ValueError('dpi option must be a positive number')
-	if type(grid) is not bool:
-		raise ValueError('grid option must be true or false')
-	if type(height) not in (int, float) or not (height > 0):
-		raise ValueError('height option must be a positive number')
-	if type(subcolumn) is not int or not (subcolumn >= 0):
-		raise ValueError('subcolumn option must be a non-negative integer')
-	if type(title) is not str and title is not None:
-		raise ValueError('title option must be a string or none')
-	if type(width) not in (int, float) or not (width > 0):
-		raise ValueError('width option must be a positive number')
-	if type(lr) is not bool:
-		raise ValueError('lr option must be true or false')
-	if type(cloud_mask) is not bool:
-		raise ValueError('cloud_mask option must be true or false')
-	if type(sigma) not in (int, float) or not (sigma >= 0):
-		raise ValueError('sigma option must be a non-negative number')
-	if type(remove_bmol) is not bool:
-		raise ValueError('remove_bmol option must be true or false')
-	if not (type(vlim) is list and len(vlim) == 2 and \
-		type(vlim[0]) in (int, float) and \
-		type(vlim[1]) in (int, float)) and vlim is not None:
-		raise ValueError('vlim option must be an array of two numbers or none')
-	if type(vlog) is not bool:
-		raise ValueError('vlog option must be true or false')
-	if not (type(xlim) is list and len(xlim) == 2 and \
-		type(xlim[0]) in (int, float) and \
-		type(xlim[1]) in (int, float)) and xlim is not None:
-		raise ValueError('xlim option must be an array of two numbers or none')
-	if not (type(zlim) is list and len(zlim) == 2 and \
-		type(zlim[0]) in (int, float) and \
-		type(zlim[1]) in (int, float)) and zlim is not None:
-		raise ValueError('zlim option must be an array of two numbers or none')
-	if type(zres) not in (int, float) or not (zres > 0):
-		raise ValueError('zres option must be a positive number')
-	if type(colors) is not list or \
-		not all([type(color) is str for color in colors]):
-		raise ValueError('colors option must be an array of strings')
-	if type(linestyle) is not list or \
-		not all([type(ls) is str for ls in linestyle]):
-		raise ValueError('linestyle option must be an array of strings')
-	if type(labels) is not list or \
-		not all([type(label) is str for label in labels]):
-		raise ValueError('labels option must be an array of strings')
-	if type(lw) not in (int, float) or not (lw >= 0):
-		raise ValueError('lw option must be a non-negative number')
-
 	input_ = args[:-1]
 	output = args[-1]
 

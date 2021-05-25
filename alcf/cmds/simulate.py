@@ -173,17 +173,6 @@ previously extracted using `alcf model` and store the output in the direcctory
 
     alcf simulate cl51 alcf_merra2_model alcf_merra2_simulate
 	"""
-	if type_ not in ('caliop', 'chm15k', 'cl51', 'mpl'):
-		raise ValueError('invalid type argument')
-	if type(input_) is not str:
-		raise ValueError('input argument must be a string')
-	if type(output) is not str:
-		raise ValueError('output argument must be a string')
-	if type(ncolumns) not in int or not (ncolumns > 0):
-		raise ValueError('ncolumns option must be a positive integer')
-	if overlap not in ('maximum', 'random', 'maximum-random'):
-		raise ValueError('invalid overlap option')
-
 	lidar = LIDARS.get(type_)
 	if lidar is None:
 		raise ValueError('Invalid type: %s' % type_)
