@@ -1,0 +1,27 @@
+#!/usr/bin/env python3
+
+import os
+import copy
+from alcf.cmds import CMDS
+from alcf.cmds import main
+
+def get_vars():
+	vars = {}
+	for k, cmd in CMDS.items():
+		vars['cmd_%s' % k] = cmd.__doc__
+	vars['cmd_main'] = main.run.__doc__
+	for file in os.listdir('doc'):
+		filename = os.path.join('doc', file)
+		if os.path.isfile(filename) and file.endswith('.md'):
+			vars[file[:-3]] = open(filename).read()
+	return vars
+
+def build_cmds():
+	for k, cmd in {**CMDS, **{'main': main.run}}.items():
+		filename = os.path.join('../alcf-lidar.github.io/_includes', 'cmd_%s.md' % k)
+		print('-> %s' % filename)
+		with open(filename, 'w') as f:
+			f.write(cmd.__doc__)
+
+if __name__ == '__main__':
+	build_cmds()
