@@ -10,7 +10,7 @@ def noise_removal(d, **options):
 	b_sd = np.zeros((n, m), np.float64)
 	w = d['time_bnds'][:,1] - d['time_bnds'][:,0]
 	noise_m = np.average(bt, weights=w)
-	noise_sd = np.sqrt(np.cov(bt, aweights=w))
+	noise_sd = np.sqrt(np.cov(bt, aweights=w)) if len(bt) > 1 else 0.
 	for i in range(n):
 		c = (1.0*zfull[i,:]/zfull[i,-1])**2
 		b2[i,:] = b[i,:] - noise_m*c
