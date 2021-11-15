@@ -167,7 +167,6 @@ def plot_profile(plot_type, d,
 		label=label,
 		pad=0.03,
 		fraction=0.05,
-		aspect='auto',
 		extend='both',
 	)
 
@@ -295,12 +294,13 @@ def plot_backscatter_hist(d,
 		cmap=cmap,
 	)
 	plt.gca().set_facecolor(under)
-	plt.colorbar(
-		label='Occurrence (%)',
-		pad=0.03,
-		fraction=0.03,
-		aspect='auto',
+	plt.gca().set_box_aspect(1)
+	cax = plt.gca().inset_axes([1.03, 0, 0.03, 1],
+		transform=plt.gca().transAxes)
+	plt.gcf().colorbar(im,
+		cax=cax,
 		extend='both',
+		label='Occurrence (%)',
 	)
 	if xlim is not None:
 		plt.xlim(xlim)
