@@ -1,5 +1,5 @@
---- cosp/Makefile	2018-05-23 03:45:33.000000000 +1200
-+++ cosp-new/Makefile	2019-02-07 14:25:43.743043376 +1300
+--- COSPv1-master/Makefile	2020-10-14 15:30:59.000000000 +0200
++++ COSPv1-master-new/Makefile	2021-11-29 20:25:21.596474829 +0100
 @@ -2,25 +2,25 @@
  ########################################################################
  #              Adapt these variables to your environment
@@ -38,12 +38,16 @@
  
  
  # Non-optional simulators. You should not need to change this
-@@ -59,7 +59,7 @@
+@@ -59,9 +59,9 @@
  $(PROG): $(OBJS)
  	$(F90) $(F90FLAGS) $(PROG).F90 $(OBJS) \
  	-L${CMOR_LIB} -L. -lcmor -I$(CMOR_INC) \
 -	-I$(NCDF_INC) -L${NCDF_LIB} -lnetcdff \
+-	-L${UDUNITS_LIB} -Wl,-rpath=${UDUNITS_LIB} -ludunits2 -lexpat -I${UDUNITS_INC} \
+-	-L${UUID_LIB} -Wl,-rpath=${UUID_LIB} -luuid -I$(UUID_INC) \
 +	-I$(NCDF_INC) -L${NCDF_LIB} -lnetcdff -lnetcdf -luuid \
- 	-L${UDUNITS_LIB} -Wl,-rpath=${UDUNITS_LIB} -ludunits2 -lexpat -I${UDUNITS_INC} \
- 	-L${UUID_LIB} -Wl,-rpath=${UUID_LIB} -luuid -I$(UUID_INC) \
++	-L${UDUNITS_LIB} -ludunits2 -lexpat -I${UDUNITS_INC} \
++	-L${UUID_LIB} -luuid -I$(UUID_INC) \
  	-o $(PROG)
+ 
+ rttov: $(OBJS) cosp_rttov.o
