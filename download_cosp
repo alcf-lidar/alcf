@@ -1,0 +1,10 @@
+#!/bin/sh
+version=1.0.0
+if [ -e cosp ]; then
+	echo "cosp directory already exists. Nothing to do."
+	exit 0
+fi
+wget -c "https://github.com/alcf-lidar/alcf-cosp/archive/refs/tags/v${version}.zip" -O "alcf-cosp-${version}.zip"
+unzip "alcf-cosp-${version}.zip"
+mv "alcf-cosp-${version}" cosp
+echo "Finished downloading dependencies"

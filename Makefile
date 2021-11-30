@@ -1,10 +1,11 @@
-COSP_PATH := build/COSPv1-master
-INCLUDEPATH := build/opt/include
-LIBPATH := build/opt/lib
+COSP_PATH := cosp
 
-LIBS := $(LIBPATH)/libcmor.a -lnetcdff -lnetcdf -ludunits2 -luuid
+LIBS := -lnetcdff -lnetcdf
 
-FC := gfortran -fPIC -ffree-line-length-512 -Isrc -I$(COSP_PATH) -I$(INCLUDEPATH) -L$(LIBPATH)
+FC := gfortran -fPIC -ffree-line-length-512 -Isrc -I$(COSP_PATH) \
+-I/usr/include -I/usr/local/include -I/opt/local/include \
+-I/usr/lib64/gfortran/modules \
+-L/usr/lib -L/usr/local/lib -L/opt/local/lib
 
 COSP_OBJ_FILES := cosp_radar.o cosp_types.o cosp_constants.o cosp_simulator.o \
         cosp_utils.o scops.o prec_scops.o cosp.o cosp_stats.o \
@@ -23,11 +24,11 @@ COSP_OBJS := $(foreach obj,$(COSP_OBJ_FILES),$(COSP_PATH)/$(obj))
 
 OBJS := src/cosp_run.o src/nc_utils.o $(COSP_OBJS)
 
-TARGETS := alcf/opt/bin/cosp_alcf
+TARGETS := alcf/cosp_alcf
 
 all: $(TARGETS)
 
-alcf/opt/bin/cosp_alcf: src/main.o $(OBJS)
+alcf/cosp_alcf: src/main.o $(OBJS)
 	$(FC) -o $@ $^ $(LIBS)
 
 src/main.o: src/main.f03 src/nc_utils.o src/cosp_run.o

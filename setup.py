@@ -1,7 +1,16 @@
 #!/usr/bin/env python3
 
 from setuptools import setup, find_packages
+from setuptools.command.build_py import build_py
+import os
 import os.path
+import subprocess
+
+class BuildCOSP(build_py):
+	def run(self):
+		subprocess.run('make', cwd='cosp', check=True)
+		subprocess.run('make', check=True)
+		build_py.run(self)
 
 setup(
 	name='alcf',
@@ -10,14 +19,10 @@ setup(
 	author='Peter Kuma, Adrian J. McDonald, Olaf Morgenstern, Richard Querel, Israel Silber, Connor J. Flynn',
 	author_email='peter@peterkuma.net',
 	license='MIT',
-	scripts=['bin/alcf', 'bin/cosp_alcf'],
+	scripts=['bin/alcf'],
 	packages=find_packages(),
 	zip_safe=False,
-	package_data={'alcf': [
-		os.path.join('..',p,f)
-		for p,_,fs in os.walk('alcf/opt')
-		for f in fs
-	]},
+	package_data={'alcf': ['cosp_alcf']},
 	install_requires=[
 		'numpy>=1.16.2',
 		'scipy>=1.1.0',
@@ -42,5 +47,8 @@ setup(
 		'Topic :: Scientific/Engineering :: Atmospheric Science',
 		'Topic :: Scientific/Engineering :: Physics',
 		'Topic :: Scientific/Engineering :: Visualization',
-	]
+	],
+	cmdclass={
+		'build_py': BuildCOSP,
+	}
 )

@@ -128,7 +128,8 @@ def cosp_alcf(config, input_, output):
 	try:
 		with open(config_filename, 'w') as f:
 			f.write(config)
-		subprocess.call(['cosp_alcf', config_filename, input_, output])
+		program = os.path.join(os.path.dirname(__file__), '../cosp_alcf')
+		subprocess.call([program, config_filename, input_, output])
 	finally:
 		os.unlink(config_filename)
 
