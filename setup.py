@@ -32,7 +32,7 @@ setup(
 	keywords=['alc', 'ceilometer', 'lidar', 'atmosphere', 'model', 'simulator', 'nwp', 'gcm', 'cosp', 'actsim', 'vaisala', 'cl51', 'cl31', 'lufft', 'chm-15k', 'minimpl', 'amps', 'merra-2', 'um'],
 	url='https://alcf-lidar.github.io',
 	classifiers=[
-		'Development Status :: 4 - Beta',
+		'Development Status :: 5 - Production/Stable',
 		'Environment :: Console',
 		'Intended Audience :: Science/Research',
 		'License :: OSI Approved :: MIT License',
