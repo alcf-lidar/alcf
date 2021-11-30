@@ -1,0 +1,3 @@
+include Makefile download_cosp build_doc README.md LICENSE.md watch .editorconfig
+recursive-include cosp *
+recursive-include mie-scattering *
