@@ -345,6 +345,9 @@ def plot(plot_type, d, output,
 	title=None,
 	**kwargs
 ):
+	fontsdir = os.path.join(os.path.dirname(__file__), '../fonts')
+	for font in mpl.font_manager.findSystemFonts(fontsdir):
+		mpl.font_manager.fontManager.addfont(font)
 	mpl.rcParams['font.family'] = 'Public Sans'
 	mpl.rcParams['axes.linewidth'] = 0.5
 	mpl.rcParams['xtick.major.size'] = 3

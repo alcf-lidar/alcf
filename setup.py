@@ -22,7 +22,8 @@ setup(
 	scripts=['bin/alcf'],
 	packages=find_packages(),
 	zip_safe=False,
-	package_data={'alcf': ['cosp_alcf']},
+	package_data={'alcf': ['cosp_alcf'] + \
+		[os.path.join('fonts', x) for x in os.listdir('alcf/fonts')]},
 	install_requires=[
 		'numpy>=1.16.2',
 		'scipy>=1.1.0',
