@@ -34,6 +34,7 @@ setup(
 		'ds-format>=1.0.0',
 		'pst-format>=1.1.1',
 		'astropy>=3.1.2',
+		'cftime>=1.5.1',
 	],
 	keywords=['alc', 'ceilometer', 'lidar', 'atmosphere', 'model', 'simulator', 'nwp', 'gcm', 'cosp', 'actsim', 'vaisala', 'cl51', 'cl31', 'lufft', 'chm-15k', 'minimpl', 'amps', 'merra-2', 'um'],
 	url='https://alcf-lidar.github.io',

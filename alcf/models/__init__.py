@@ -33,13 +33,15 @@ META = {
 		'.dims': ['time'],
 		'long_name': 'time',
 		'standard_name': 'time',
-		'units': 'days since -4712-01-01 12:00 UTC',
+		'units': 'days since -4713-11-24 12:00 UTC',
+		'calendar': 'proleptic_gregorian',
 	},
 	'time_bnds': {
 		'.dims': ['time', 'bnds'],
 		'long_name': 'time bounds',
 		'standard_name': 'time_bounds',
-		'units': 'days since -4712-01-01 12:00 UTC',
+		'units': 'days since -4713-11-24 12:00 UTC',
+		'calendar': 'proleptic_gregorian',
 	},
 	'lon': {
 		'.dims': ['time'],
