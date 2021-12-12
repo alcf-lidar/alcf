@@ -7,4 +7,4 @@ fi
 wget -c "https://github.com/alcf-lidar/alcf-cosp/archive/refs/tags/v${version}.zip" -O "alcf-cosp-${version}.zip"
 unzip "alcf-cosp-${version}.zip"
 mv "alcf-cosp-${version}" cosp
-echo "Finished downloading dependencies"
+echo "Finished downloading ALCF-COSP"
