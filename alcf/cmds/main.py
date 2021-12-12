@@ -33,7 +33,7 @@ Commands:
 	"""
 
 	if cmd is None:
-		sys.stderr.write(run.__doc__.strip() + '\n')
+		sys.stderr.write(run.__doc__.replace('`', '').strip() + '\n')
 		return 1
 
 	func = CMDS.get(cmd)
