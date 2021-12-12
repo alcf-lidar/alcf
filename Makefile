@@ -26,6 +26,7 @@ OBJS := src/cosp_run.o src/nc_utils.o $(COSP_OBJS)
 
 TARGETS := alcf/cosp_alcf
 
+.PHONY: all
 all: $(TARGETS)
 
 alcf/cosp_alcf: src/main.o $(OBJS)
