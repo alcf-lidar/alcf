@@ -55,16 +55,21 @@ def stream(ddd, state):
 	return dd
 
 def run(arg1, arg2, arg3, *args):
-	"""
-alcf compare - calculate comparison statistics from multiple lidar time series
+	'''
+alcf-compare -- Calculate comparison statistics from multiple lidar time series.
+============
 
-Usage: `alcf compare <input_1> <input_2> [<input_n>...] <output>`
+Synopsis
+--------
 
-Arguments:
+    alcf compare <input_1> <input_2> [<input_n>...] <output>
 
-- `input_*`: input lidar data directory
-- `output`: output filename
-	"""
+Arguments
+---------
+
+- `input_*`: Input lidar data directory.
+- `output`: Output filename.
+	'''
 	args = [arg1, arg2, arg3] + list(args)
 	input_ = args[:-1]
 	output = args[-1]

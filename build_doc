@@ -2,8 +2,36 @@
 
 import os
 import copy
+import re
+import subprocess
 from alcf.cmds import CMDS
 from alcf.cmds import main
+
+MAN_FOOTER = '''
+## COPYRIGHT
+
+Copyright © 2019–2021 Peter Kuma, Adrian J. McDonald, Olaf Morgenstern, Richard
+Querel, Israel Silber and Connor J. Flynn.
+
+## BUG REPORTING
+
+Report bugs to Peter Kuma (<peter@peterkuma.net>).
+
+## SEE ALSO
+
+'''
+
+def md_to_man(md, cmd, cmds):
+	man = md
+	man = re.sub(r'^[\*\-] `([^`]*)`: (.*)', r'* `\1`:\n\2\n', man, flags=re.M)
+	man = re.sub(r'^\#\# (.*)', lambda s: s.group(0).upper(), man, flags=re.M)
+	man = re.sub(r'^(.*)\n--+\n$', lambda s: s.group(0).upper(), man, flags=re.M)
+	man += MAN_FOOTER
+	man += ', '.join([
+		('alcf-%s(1)' % cmd2 if cmd2 != 'main' else 'alcf(1)')
+		for cmd2 in cmds if cmd2 != cmd
+	])
+	return man
 
 def get_vars():
 	vars = {}
@@ -22,6 +50,14 @@ def build_cmds():
 		print('-> %s' % filename)
 		with open(filename, 'w') as f:
 			f.write(cmd.__doc__)
+		if k == 'main':
+			filename = os.path.join('man', 'alcf.1.ronn')
+		else:
+			filename = os.path.join('man', 'alcf-%s.1.ronn' % k)
+		print('-> %s' % filename)
+		with open(filename, 'w') as f:
+			f.write(md_to_man(cmd.__doc__, k, ['main'] + sorted(CMDS)))
+		subprocess.run(['ronn', '-r', filename], check=True)
 
 if __name__ == '__main__':
 	build_cmds()

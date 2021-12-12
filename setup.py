@@ -24,6 +24,8 @@ setup(
 	zip_safe=False,
 	package_data={'alcf': ['cosp_alcf'] + \
 		[os.path.join('fonts', x) for x in os.listdir('alcf/fonts')]},
+	data_files=[('share/man/man1',
+		[os.path.join('man', x) for x in os.listdir('man')])],
 	install_requires=[
 		'numpy>=1.16.2',
 		'scipy>=1.1.0',

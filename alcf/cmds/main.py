@@ -1,39 +1,49 @@
 import sys
+import re
 from alcf.cmds import CMDS
 
-def run(cmd=None, *args, **kwargs):
-	"""
-alcf - Tool for processing of automatic lidar and ceilometer (ALC) data
-and intercomparison with atmospheric models.
+def md_to_text(md):
+	text = md.strip()
+	text += '\n\nBug reporting\n-------------\n\nReport bugs to Peter Kuma (peter@peterkuma.net).\n'
+	return text
 
-Usage:
+def run(cmd=None, *args, **kwargs):
+	'''alcf -- Tool for processing of automatic lidar and ceilometer (ALC) data and intercomparison with atmospheric models.
+====
+
+Synopsis
+--------
 
     alcf <cmd> [<options>]
     alcf <cmd> --help
 
-Arguments:
+Arguments
+---------
 
-- `cmd`: see Commands below
-- `options`: command options
+- `cmd`: See Commands below.
+- `options`: Command options.
 
-Options:
+Commands
+--------
 
-`--help`: print help for command
-`--debug`: Enable debugging information.
+- `auto`: Peform automatic processing of model or lidar data.
+- `calibrate`: Calibrate lidar backscatter.
+- `convert`: Convert input instrument or model data to the ALCF standard NetCDF.
+- `lidar`: Process lidar data.
+- `model`: Extract model data at a point or along a track.
+- `plot`: Plot lidar data.
+- `simulate`: Simulate lidar measurements from model data using COSP.
+- `stats`: Calculate cloud occurrence statistics.
 
-Commands:
+Options
+-------
 
-- `convert`: convert input instrument or model data to ALCF standard NetCDF
-- `model`: extract model data at a point or along a track
-- `cosp`: simulate lidar measurements from model data using COSP
-- `lidar`: process lidar data
-- `stats`: calculate cloud occurrence statistics
-- `plot`: plot lidar data
-- `plot_stats`: plot lidar statistics
-	"""
+- `--help`: Print help for command.
+- `--debug`: Enable debugging information.
+'''
 
 	if cmd is None:
-		sys.stderr.write(run.__doc__.replace('`', '').strip() + '\n')
+		sys.stderr.write(md_to_text(run.__doc__))
 		return 1
 
 	func = CMDS.get(cmd)
@@ -43,7 +53,7 @@ Commands:
 		func(*args, **kwargs)
 	except TypeError as e:
 		if str(e).startswith('run() '):
-			sys.stderr.write(func.__doc__.replace('`', '').strip() + '\n')
+			sys.stderr.write(md_to_text(func.__doc__))
 			return 1
 		else:
 			raise e
