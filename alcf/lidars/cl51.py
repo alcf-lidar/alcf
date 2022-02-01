@@ -32,12 +32,13 @@ def read(filename, vars,
 ):
 	dep_vars = list(set([y for x in vars if x in VARS for y in VARS[x]]))
 	required_vars = dep_vars + DEFAULT_VARS
-	d = ds.from_netcdf(
+	d = ds.read(
 		filename,
-		required_vars
+		required_vars,
+		jd=True
 	)
 	dx = {}
-	dx['time'] = d['time']/(24.0*60.0*60.0) + 2440587.5
+	dx['time'] = d['time']
 	dx['time_bnds'] = misc.time_bnds(dx['time'], dx['time'][1] - dx['time'][0])
 
 	n = len(dx['time'])
