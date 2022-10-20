@@ -46,7 +46,7 @@ def get_vars():
 
 def build_cmds():
 	for k, cmd in {**CMDS, **{'main': main.run}}.items():
-		filename = os.path.join('../alcf-lidar.github.io/_includes', 'cmd_%s.md' % k)
+		filename = os.path.join('docs/_includes', 'cmd_%s.md' % k)
 		print('-> %s' % filename)
 		with open(filename, 'w') as f:
 			f.write(cmd.__doc__)
