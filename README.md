@@ -10,5 +10,5 @@ offline on model output. ALCs are vertically pointing atmospheric lidars,
 measuring cloud and aerosol backscatter. The primary focus of ALCF are
 atmospheric studies of cloud using ALC observations and model cloud validation.
 
-Please see [alcf-lidar.github.io](https://alcf-lidar.github.io) for
-more information.
+Please see [alcf.peterkuma.net](https://alcf.peterkuma.net) for more
+information.
