@@ -39,7 +39,7 @@ setup(
 		'cftime>=1.5.1',
 	],
 	keywords=['alc', 'ceilometer', 'lidar', 'atmosphere', 'model', 'simulator', 'nwp', 'gcm', 'cosp', 'actsim', 'vaisala', 'cl51', 'cl31', 'lufft', 'chm-15k', 'minimpl', 'amps', 'merra-2', 'um'],
-	url='https://alcf-lidar.github.io',
+	url='https://alcf.peterkuma.net',
 	classifiers=[
 		'Development Status :: 5 - Production/Stable',
 		'Environment :: Console',
