@@ -67,9 +67,9 @@ and plotted from observations and model simulated backscatter.
 <figure>
 <figcaption><center><strong>Vaisala CL 51 vs. HadGEM3 model</strong></center></figcaption>
 <div class="img-flex nospace">
-<div><a href="img/mcq_cl51.png"><img src="img/mcq_cl51.png" width="267" /></a></div>
-<div><a href="img/nbp1704_chm15k.png"><img src="img/nbp1704_chm15k.png" width="267" /></a></div>
-<div><a href="img/tan1802_chm15k.png"><img src="img/tan1802_chm15k.png" width="267" /></a></div>
+<div><a href="img/mcq_cl51.png"><img src="img/mcq_cl51.png" width="266" /></a></div>
+<div><a href="img/nbp1704_chm15k.png"><img src="img/nbp1704_chm15k.png" width="266" /></a></div>
+<div><a href="img/tan1802_chm15k.png"><img src="img/tan1802_chm15k.png" width="266" /></a></div>
 </div>
 </figure>
 
