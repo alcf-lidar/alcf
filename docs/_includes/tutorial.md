@@ -79,9 +79,9 @@ files.
 
 <figure>
 <div class="img-flex nospace">
-<div><center><strong>Backscatter profile</strong></center><a href="chm15k/plot/backscatter/2016-07-04T000000.png"><img src="chm15k/plot/backscatter/2016-07-04T000000.png" height="200" /></a></div>
-<div><center><strong>Cloud occurrence</strong></center><a href="chm15k/plot/cloud_occurrence.png"><img src="chm15k/plot/cloud_occurrence.png" height="200" /></a></div>
-<div><center><strong>Backscatter histogram</strong></center><a href="chm15k/plot/backscatter_hist.png"><img src="chm15k/plot/backscatter_hist.png" height="200" /></a></div>
+<div><center><strong>Backscatter profile</strong></center><a href="chm15k/plot/backscatter/2016-07-04T000000.png"><img alt="Backscatter profile" src="chm15k/plot/backscatter/2016-07-04T000000.png" height="200" /></a></div>
+<div><center><strong>Cloud occurrence</strong></center><a href="chm15k/plot/cloud_occurrence.png"><img alt="Cloud occurrence" src="chm15k/plot/cloud_occurrence.png" height="200" /></a></div>
+<div><center><strong>Backscatter histogram</strong></center><a href="chm15k/plot/backscatter_hist.png"><img alt="Backscatter histogram" src="chm15k/plot/backscatter_hist.png" height="200" /></a></div>
 </div>
 <figcaption><strong>Figure 1 | </strong>Lufft CHM 15k plots.</figcaption>
 </figure>
@@ -120,9 +120,9 @@ files.
 
 <figure>
 <div class="img-flex nospace">
-<div><center><strong>Backscatter profile</strong></center><a href="merra2/plot/backscatter/2016-07-04T000000.png"><img src="merra2/plot/backscatter/2016-07-04T000000.png" height="200" /></a></div>
-<div><center><strong>Cloud occurrence</strong></center><a href="merra2/plot/cloud_occurrence.png"><img src="merra2/plot/cloud_occurrence.png" height="200" /></a></div>
-<div><center><strong>Backscatter histogram</strong></center><a href="merra2/plot/backscatter_hist.png"><img src="merra2/plot/backscatter_hist.png" height="200" /></a></div>
+<div><center><strong>Backscatter profile</strong></center><a href="merra2/plot/backscatter/2016-07-04T000000.png"><img alt="Backscatter profile" src="merra2/plot/backscatter/2016-07-04T000000.png" height="200" /></a></div>
+<div><center><strong>Cloud occurrence</strong></center><a href="merra2/plot/cloud_occurrence.png"><img alt="Cloud occurrence" src="merra2/plot/cloud_occurrence.png" height="200" /></a></div>
+<div><center><strong>Backscatter histogram</strong></center><a href="merra2/plot/backscatter_hist.png"><img alt="Backscatter histogram" src="merra2/plot/backscatter_hist.png" height="200" /></a></div>
 </div>
 <figcaption><strong>Figure 2 | </strong>MERRA-2 plots.</figcaption>
 </figure>
