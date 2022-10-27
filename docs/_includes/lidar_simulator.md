@@ -204,4 +204,4 @@ bin/plot_lr out/k_*.nc plot/lr.pdf
 Figure 1 shows the result of `plot_lr` for k calculated by
 `calc_k` and `orig_cosp_poly`.
 
-<figure><a href="lr.png"><img src="lr.png" width="500" /></a><figcaption><strong>Figure 1: </strong>Lidar ratio as a function of the effective radius.</figcaption></figure>
+<figure><a href="lr.png"><img alt="Plot of lidar ratio as a function of the effective radius" src="lr.png" width="500" /></a><figcaption><strong>Figure 1: </strong>Lidar ratio as a function of the effective radius.</figcaption></figure>

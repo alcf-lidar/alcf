@@ -41,7 +41,7 @@ default calibration coefficient.
 	2018-02-18T13:00 2018-02-18T15:00
 	```
 
-	<figure><a href="2018-02-18T000000.png"><img src="2018-02-18T000000.png" width="600" /></a><br /><strong>Figure 1:</strong> Stratocumulus layer between 13:00 and 15:00 UTC suitable for calibration.</figure>
+	<figure><a href="2018-02-18T000000.png"><img alt="Ceilometer backscatter and lidar ratio of a stratocumulus layer" src="2018-02-18T000000.png" width="600" /></a><br /><strong>Figure 1:</strong> Stratocumulus layer between 13:00 and 15:00 UTC suitable for calibration.</figure>
 
 3. Run `alcf calibrate` with a file listing the time periods to calculate
 the calibration coefficient.
