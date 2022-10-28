@@ -4,8 +4,7 @@ The following ALCs are supported:
 
 - [Lufft CHM 15k](https://www.lufft.com/products/cloud-height-snow-depth-sensors-288/ceilometer-chm-15k-nimbus-2300/)
 - [Sigma Space MiniMPL](https://www.dropletmeasurement.com/micro-pulse-lidar/)
-- [Vaisala CL31](https://www.vaisala.com/en/products/instruments-sensors-and-other-measurement-devices/weather-stations-and-sensors/cl31)
-- [Vaisala CL51](https://www.vaisala.com/en/products/instruments-sensors-and-other-measurement-devices/weather-stations-and-sensors/cl51)
+- [Vaisala CL31 and CL51](https://www.vaisala.com/en/products/weather-environmental-sensors/ceilometers-CL31-CL51-meteorology)
 - [Vaisala CL61](https://www.vaisala.com/en/products/weather-environmental-sensors/ceilometer-CL61)
 - [CALIPSO/CALIOP](https://www-calipso.larc.nasa.gov/) (lidar simulation only)
 
