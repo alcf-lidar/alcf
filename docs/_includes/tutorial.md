@@ -45,7 +45,7 @@ The contents of the dataset archive are:
 The data files are stored in the NetCDF format and can be previewed
 with [Panoply](https://www.giss.nasa.gov/tools/panoply/),
 [HDFView](https://www.hdfgroup.org/downloads/hdfview/),
-[ncdump](https://www.unidata.ucar.edu/software/netcdf/docs/netcdf_utilities_guide.html#ncdump_guide) or
+[ncdump](https://www.unidata.ucar.edu/software/netcdf/workshops/2011/utilities/Ncdump.html) or
 [ds](https://github.com/peterkuma/ds-python).
 
 ### Automatic processing

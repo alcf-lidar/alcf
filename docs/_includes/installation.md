@@ -67,7 +67,7 @@ Installation on Windows is possible under the "Windows Subsystem for Linux".
 The installation has been tested on macOS Monterey Intel. Installation on Apple
 M1 may be possible but is untested.
 
-1. Install [Anaconda](https://anaconda.org).
+1. Install [Anaconda](https://www.anaconda.com).
 
 2. Install [MacPorts](https://www.macports.org).
 

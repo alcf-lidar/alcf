@@ -9,7 +9,7 @@ The ALCF is an open source command line tool for processing of automatic lidar a
 #### Multiple instruments and models
 
 The ALCF can process data from multiple ceilometers and lidars:
-Vaisala [CL31](https://www.vaisala.com/en/products/instruments-sensors-and-other-measurement-devices/weather-stations-and-sensors/cl31), [CL51](https://www.vaisala.com/en/products/instruments-sensors-and-other-measurement-devices/weather-stations-and-sensors/cl51), [CL61](https://www.vaisala.com/en/products/weather-environmental-sensors/ceilometer-CL61), Lufft [CHM 15k](https://www.lufft.com/products/cloud-height-snow-depth-sensors-288/ceilometer-chm-15k-nimbus-2300/) and Sigma Space [MiniMPL](https://www.micropulselidar.com/). Multiple models
+Vaisala [CL31, CL51](https://www.vaisala.com/en/products/weather-environmental-sensors/ceilometers-CL31-CL51-meteorology), [CL61](https://www.vaisala.com/en/products/weather-environmental-sensors/ceilometer-CL61), Lufft [CHM 15k](https://www.lufft.com/products/cloud-height-snow-depth-sensors-288/ceilometer-chm-15k-nimbus-2300/) and Sigma Space [MiniMPL](https://www.dropletmeasurement.com/micro-pulse-lidar/). Multiple models
 and reanalyses are supported by the lidar simulator: [AMPS](http://www2.mmm.ucar.edu/rt/amps/), [ERA5](https://www.ecmwf.int/en/forecasts/datasets/reanalysis-datasets/era5), [JRA-55](https://jra.kishou.go.jp/JRA-55/index_en.html), [MERRA-2](https://gmao.gsfc.nasa.gov/reanalysis/MERRA-2/), [NZCSM](https://www.nesi.org.nz/case-studies/improving-new-zealands-weather-forecasting-ability) and [UM](https://www.metoffice.gov.uk/research/approach/modelling-systems/unified-model/index).
 
 <div class="img-flex">
