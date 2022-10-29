@@ -43,6 +43,8 @@ The instructions below assume that you enter the commands in the terminal.
 
 ### Windows
 
+It is recommended to run ALCF on [Linux](#linux).
+
 Installation on Windows is possible under the "Windows Subsystem for Linux".
 
 1. Install "Ubuntu" from the Microsoft Store. You might have to enable
@@ -63,6 +65,8 @@ Installation on Windows is possible under the "Windows Subsystem for Linux".
 	to list the directory contents.
 
 ### macOS
+
+It is recommended to run ALCF on [Linux](#linux).
 
 The installation has been tested on macOS Monterey Intel. Installation on Apple
 M1 may be possible but is untested.
