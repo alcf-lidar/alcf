@@ -36,8 +36,8 @@ to produce virtual backscatter measurements comparable with ALC observations
 for the purpose of model evaluation.
 
 <div class="img-flex nospace">
-<div><center><strong>Luff CHM 15k observations</strong></center><a href="img/birdlings16_chm15k_2016-07-18T000000.png"><img alt="A plot of Lufft CHM 15k backscatter" src="img/birdlings16_chm15k_2016-07-18T000000.png" width="400" /></a></div>
-<div><center><strong>AMPS model simulated lidar</strong></center><a href="img/birdlings16_amps_2016-07-18T000000.png"><img alt="A plot of AMPS model simulated lidar backscatter" src="img/birdlings16_amps_2016-07-18T000000.png" width="400" /></a></div>
+<div style="text-align: center"><strong>Luff CHM 15k observations</strong><a href="img/birdlings16_chm15k_2016-07-18T000000.png"><img alt="A plot of Lufft CHM 15k backscatter" src="img/birdlings16_chm15k_2016-07-18T000000.png" width="400" /></a></div>
+<div style="text-align: center"><strong>AMPS model simulated lidar</strong><a href="img/birdlings16_amps_2016-07-18T000000.png"><img alt="A plot of AMPS model simulated lidar backscatter" src="img/birdlings16_amps_2016-07-18T000000.png" width="400" /></a></div>
 </div>
 
 #### Cloud detection
@@ -56,7 +56,7 @@ Cloud occurrence histogram as a function of height can be calculated
 and plotted from observations and model simulated backscatter.
 
 <figure>
-<figcaption><center><strong>Vaisala CL51 vs. HadGEM3 model</strong></center></figcaption>
+<figcaption style="text-align: center"><strong>Vaisala CL51 vs. HadGEM3 model</strong></figcaption>
 <div class="img-flex nospace">
 <div><a href="img/mcq_cl51.png"><img alt="A plot of Vaisala CL51 vs. HadGEM3 model cloud occurrence by height" src="img/mcq_cl51.png" width="266" /></a></div>
 <div><a href="img/nbp1704_chm15k.png"><img alt="A plot of NBP1704 CHM 15k cloud occurrence by height" src="img/nbp1704_chm15k.png" width="266" /></a></div>
