@@ -1,6 +1,7 @@
 import os
 import logging
 import traceback
+import glob
 import numpy as np
 import ds_format as ds
 import aquarius_time as aq
@@ -50,6 +51,7 @@ def run(type_, input_, output,
 	cl_crit_range=6000,
 	lat=None,
 	lon=None,
+	r=False,
 	**options
 ):
 	"""
@@ -79,7 +81,7 @@ Arguments
 ---------
 
 - `type`: Lidar type (see Types below).
-- `lidar`: Input lidar data directory or filename.
+- `lidar`: Input lidar data directory or filename. If a directory, only `.nc` files in the directory are processed. If the option `-r` is supplied, the directory is processed recursively.
 - `output`: Output filename or directory.
 - `options`: See Options below.
 - `algorithm_options`: See Algorithm options below.
@@ -112,6 +114,7 @@ Options
 - `lon: <lon>`: Longitude of the instrument (degrees East). Default: Taken from lidar data or `none` if not available.
 - `noise_removal: <algorithm>`: Noise removal algorithm. Available algorithms: `default`, `none`.  Default: `default`.
 - `output_sampling: <period>`: Output sampling period (seconds). Default: `86400` (24 hours).
+- `-r`: Process the input directory recursively.
 - `tlim: { <low> <high> }`: Time limits (see Time format below). Default: `none`.
 - `tres: <tres>`: Time resolution (seconds). Default: `300` (5 min).
 - `tshift: <tshift>`: Time shift (seconds). Default: `0`.
@@ -274,12 +277,17 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 
 	state = {}
 	if os.path.isdir(input_):
-		files = sorted(os.listdir(input_))
+		pattern = '**/*.nc' if r else '*.nc'
+		files = sorted(glob.glob(os.path.join(
+			glob.escape(input_),
+			pattern
+		), recursive=r))
 		for file_ in files:
-			input_filename = os.path.join(input_, file_)
-			print('<- %s' % input_filename)
+			if not os.path.isfile(file_):
+				continue
+			print('<- %s' % file_)
 			try:
-				d = lidar.read(input_filename, VARIABLES,
+				d = lidar.read(file_, VARIABLES,
 					altitude=altitude,
 					lon=lon,
 					lat=lat,
