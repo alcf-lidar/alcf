@@ -21,12 +21,12 @@ def find(input_, output, inext, outext, recursive=False):
 	files = sorted(glob.glob(pattern, recursive=recursive))
 	input2 = []
 	output2 = []
-	for file in files:
-		if not os.path.isfile(file):
+	for file_ in files:
+		if not os.path.isfile(file_):
 			continue
-		if not file.startswith(input_):
+		if not file_.startswith(input_):
 			continue
-		infile = file[len(input_):]
+		infile = file_[len(input_):]
 		if inext is not None and infile.endswith('.' + inext):
 			outfile = infile[:-len(inext)] + outext
 		else:
@@ -54,7 +54,7 @@ Arguments
 ---------
 
 - `type`: Input data type (see Types below).
-- `input`: Input filename or dirname. If `input` is a directory, all data files ending with the correct file extension (see Types below) in `input` are converted to corresponding `.nc` files in the directory `output`.
+- `input`: Input filename or dirname. If `input` is a directory, all data files ending with the correct file extension (see Types below) in `input` are converted to corresponding `.nc` files in the directory `output`. If the option `-r` is supplied, the directory is processed recursively.
 - `output`: Output filename or dirname.
 
 Options
