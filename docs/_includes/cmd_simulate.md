@@ -5,7 +5,12 @@ alcf-simulate -- Simulate lidar measurements from model data using COSP.
 Synopsis
 --------
 
-    alcf simulate <type> <input> <output> [<options>]
+    alcf simulate <type> [<options>] [--] <input> <output>
+
+Description
+-----------
+
+Arguments following `--` are treated as literal strings. Use this delimiter if the input or output file names might otherwise be interpreted as non-strings, e.g. purely numerical file names.
 
 Arguments
 ---------

@@ -446,7 +446,12 @@ alcf-plot -- Plot lidar data.
 Synopsis
 --------
 
-    alcf plot <plot_type> <input> <output> [<options>] [<plot_options>]
+    alcf plot <plot_type> [<options>] [<plot_options>] [--] <input> <output>
+
+Description
+-----------
+
+Arguments following `--` are treated as literal strings. Use this delimiter if the input or output file names might otherwise be interpreted as non-strings, e.g. purely numerical file names.
 
 Arguments
 ---------
@@ -530,8 +535,7 @@ cloud_occurrence options
 Examples
 --------
 
-Plot backscatter from processed Vaisala CL51 data in `alcf_cl51_lidar`
-and store the output in the directory `alcf_cl51_backscatter`.
+Plot backscatter from processed Vaisala CL51 data in `alcf_cl51_lidar` and store the output in the directory `alcf_cl51_backscatter`.
 
     alcf plot backscatter alcf_cl51_lidar alcf_cl51_backscatter
 	'''

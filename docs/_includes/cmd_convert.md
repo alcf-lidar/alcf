@@ -5,7 +5,12 @@ alcf-convert -- Convert input instrument or model data to NetCDF.
 Synopsis
 --------
 
-    alcf convert <type> <input> <output>
+    alcf convert <type> [--] <input> <output>
+
+Description
+-----------
+
+Arguments following `--` are treated as literal strings. Use this delimiter if the input or output file names might otherwise be interpreted as non-strings, e.g. purely numerical file names.
 
 Arguments
 ---------
@@ -23,13 +28,11 @@ Types
 Examples
 --------
 
-Convert raw Vaisala CL51 data in `cl51_dat` to NetCDF and store the output in
-the directory `cl51_nc`.
+Convert raw Vaisala CL51 data in `cl51_dat` to NetCDF and store the output in the directory `cl51_nc`.
 
     alcf convert cl51 cl51_dat cl51_nc
 
-Convert JRA-55 data in `jra55_grib` to NetCDF and store the output in the
-directory `jra55_nc`.
+Convert JRA-55 data in `jra55_grib` to NetCDF and store the output in the directory `jra55_nc`.
 
     alcf convert jra55 jra55_grib jra55_nc
 	

@@ -10,11 +10,11 @@ alcf-auto -- Peform automatic processing of model or lidar data.
 Synopsis
 --------
 
-    alcf auto model <model_type> <lidar_type> <input> <output> point: { <lon> <lat> } time: { <start> <end> } [<options>] [<model_options>] [<lidar_options>]
+    alcf auto model <model_type> <lidar_type> point: { <lon> <lat> } time: { <start> <end> } [<options>] [<model_options>] [<lidar_options>] [--] <input> <output>
 
-    alcf auto model <model_type> <lidar_type> <input> <output> track: <track> [<options>] [<model_options>] [<lidar_options>]
+    alcf auto model <model_type> <lidar_type> track: <track> [<options>] [<model_options>] [<lidar_options>] [--] <input> <output>
 
-    alcf auto lidar <lidar_type> <input> <output> [<options>] [<lidar_options>]
+    alcf auto lidar <lidar_type> [<options>] [<lidar_options>] [--] <input> <output>
 
 Description
 -----------
@@ -36,6 +36,8 @@ Description
     alcf plot backscatter
     alcf plot backscatter_hist
     alcf plot cloud_occurrence
+
+Arguments following `--` are treated as literal strings. Use this delimiter if the input or output file names might otherwise be interpreted as non-strings, e.g. purely numerical file names.
 
 Arguments
 ---------
@@ -96,7 +98,7 @@ Simulate a Vaisala CL51 instrument from MERRA-2 data in `M2I3NVASM.5.12.4`
 at 45 S, 170 E between 1 and 2 January 2020 and store the output in
 `alcf_merra2`.
 
-    alcf auto model merra2 cl51 M2I3NVASM.5.12.4 alcf_merra2 point: { -45.0 170.0 } time: { 2020-01-01 2020-01-02 }
+    alcf auto model merra2 cl51 point: { -45.0 170.0 } time: { 2020-01-01 2020-01-02 } M2I3NVASM.5.12.4 alcf_merra2
 
 Process Lufft CHM 15k data in `chm15k` and store the output in `alcf_chm15k`.
 

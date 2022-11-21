@@ -37,7 +37,12 @@ alcf-stats -- Calculate cloud occurrence statistics.
 Synopsis
 --------
 
-    alcf stats <input> <output> [<options>]
+    alcf stats [<options>] [--] <input> <output>
+
+Description
+-----------
+
+Arguments following `--` are treated as literal strings. Use this delimiter if the input or output file names might otherwise be interpreted as non-strings, e.g. purely numerical file names.
 
 Arguments
 ---------

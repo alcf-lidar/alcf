@@ -69,9 +69,14 @@ alcf-model -- Extract model data at a point or along a track.
 Synopsis
 --------
 
-    alcf model <type> point: { <lon> <lat> } time: { <start> <end> } <input> <output> [options]
+    alcf model <type> point: { <lon> <lat> } time: { <start> <end> } [options] [--] <input> <output>
 
-    alcf model <type> track: <track> <input> <output>
+    alcf model <type> track: <track> [--] <input> <output>
+
+Description
+-----------
+
+Arguments following `--` are treated as literal strings. Use this delimiter if the input or output file names might otherwise be interpreted as non-strings, e.g. purely numerical file names.
 
 Arguments
 ---------

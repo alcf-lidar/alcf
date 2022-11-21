@@ -34,7 +34,7 @@ setup(
 		'cl2nc>=3.3.0',
 		'aquarius-time>=0.1.0',
 		'ds-format>=1.0.0',
-		'pst-format>=1.1.1',
+		'pst-format>=2.0.0',
 		'astropy>=3.1.2',
 		'cftime>=1.5.1',
 	],

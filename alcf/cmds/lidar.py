@@ -59,7 +59,7 @@ alcf-lidar -- Process lidar data.
 Synopsis
 --------
 
-    alcf lidar <type> <lidar> <output> [<options>] [<algorithm_options>]
+    alcf lidar <type> [<options>] [<algorithm_options>] [--] <lidar> <output>
 
 Description
 -----------
@@ -72,6 +72,8 @@ The processing is done in the following order:
 - height resampling
 - cloud detection
 - cloud base detection
+
+Arguments following `--` are treated as literal strings. Use this delimiter if the input or output file names might otherwise be interpreted as non-strings, e.g. purely numerical file names.
 
 Arguments
 ---------

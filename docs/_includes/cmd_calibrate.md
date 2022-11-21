@@ -5,12 +5,14 @@ alcf-calibrate -- Calibrate ALC backscatter.
 Synopsis
 --------
 
-    alcf calibrate <type> <time_periods> <input> <output>
+    alcf calibrate <type> [--] <time_periods> <input> <output>
 
 Description
 -----------
 
 Calibration based the O'Connor et al. (2004) method of lidar ratio (LR) in fully opaque stratocumulus clouds.
+
+Arguments following `--` are treated as literal strings. Use this delimiter if the input or output file names might otherwise be interpreted as non-strings, e.g. purely numerical file names.
 
 Arguments
 ---------
