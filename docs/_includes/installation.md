@@ -144,6 +144,19 @@ the [Semantic Versioning](https://semver.org). Installation instructions
 have been changing with versions. Please follow the installation instructions
 in the documentation of the particular version.
 
+#### [1.2.0](https://github.com/alcf-lidar/alcf/releases/tag/v1.2.0) (2022-11-22)
+
+<details>
+<summary>Release notes</summary>
+<ul>
+<li>Recursive directory processing options in alcf convert, alcf lidar and alcf model.</li>
+<li>Support for double-dash command line delimiter.</li>
+<li>cl51: Reading of files with arbitrary time units.</li>
+<li>alcf simulate NetCDF matadata.</li>
+<li>Improved documentation.</li>
+</ul>
+</details>
+
 #### [1.1.4](https://github.com/alcf-lidar/alcf/releases/tag/v1.1.4) (2021-12-12)
 
 <details>
