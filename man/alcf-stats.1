@@ -1,0 +1,64 @@
+.\" generated with Ronn-NG/v0.9.1
+.\" http://github.com/apjanke/ronn-ng/tree/0.9.1
+.TH "ALCF\-STATS" "1" "November 2022" ""
+.SH "NAME"
+\fBalcf\-stats\fR \- Calculate cloud occurrence statistics\.
+.SH "SYNOPSIS"
+.nf
+alcf stats [<options>] [\-\-] <input> <output>
+.fi
+.SH "DESCRIPTION"
+Arguments following \fB\-\-\fR are treated as literal strings\. Use this delimiter if the input or output file names might otherwise be interpreted as non\-strings, e\.g\. purely numerical file names\.
+.SH "ARGUMENTS"
+.TP
+\fBinput\fR
+Input filename or directory\.
+.TP
+\fBoutput\fR
+Output filename or directory\.
+.SH "OPTIONS"
+.TP
+\fBblim: <value>\fR
+Backscatter histogram limits (1e\-6 m\-1\.sr\-1)\. Default: \fB{ 5 200 }\fR\.
+.TP
+\fBbres: <value>\fR
+Backscatter histogram resolution (1e\-6 m\-1\.sr\-1)\. Default: \fB10\fR\.
+.TP
+\fBbsd_lim: { <low> <high> }\fR
+Backscatter standard deviation histogram limits (1e\-6 m\-1\.sr\-1)\. Default: \fB{ 0\.001 10 }\fR\.
+.TP
+\fBbsd_log: <value>\fR
+Enable/disable logarithmic scale of the backscatter standard deviation histogram (\fBtrue\fR or \fBfalse\fR)\. Default: \fBtrue\fR\.
+.TP
+\fBbsd_res: <value>\fR
+Backscatter standard deviation histogram resolution (1e\-6 m\-1\.sr\-1)\. Default: \fB0\.001\fR\.
+.TP
+\fBbsd_z: <value>\fR
+Backscatter standard deviation histogram height (m)\. Default: \fB8000\fR\.
+.TP
+\fBfilter: <value> | { <value> \|\.\|\.\|\. }\fR
+Filter profiles by condition: \fBcloudy\fR for cloudy profiles only, \fBclear\fR for clear sky profiles only, \fBnight\fR for nighttime profiles, \fBday\fR for daytime profiles, \fBnone\fR for all profiles\. If an array of values is supplied, all conditions must be true\. For \fBnight\fR and \fBday\fR, lidar profiles must contain valid longitude and latitude fields set via the \fBlon\fR and \fBlat\fR arguments of \fBalcf lidar\fR or read implicitly from raw lidar data files if available (mpl, mpl2nc)\. Default: \fBnone\fR\.
+.TP
+\fBtlim: { <start> <end> }\fR
+Time limits (see Time format below)\. Default: \fBnone\fR\.
+.TP
+\fBzlim: { <low> <high> }\fR
+Height limits (m)\. Default: \fB{ 0 15000 }\fR\.
+.TP
+\fBzres: <value>\fR
+Height resolution (m)\. Default: \fB50\fR\.
+.SH "TIME FORMAT"
+\fBYYYY\-MM\-DD[THH:MM[:SS]]\fR, where \fBYYYY\fR is year, \fBMM\fR is month, \fBDD\fR is day, \fBHH\fR is hour, \fBMM\fR is minute, \fBSS\fR is second\. Example: \fB2000\-01\-01T00:00:00\fR\.
+.SH "EXAMPLES"
+Calculate statistics from processed lidar data in \fBalcf_cl51_lidar\fR and store the output in \fBalcf_cl51_stats\.nc\fR\.
+.IP "" 4
+.nf
+alcf stats alcf_cl51_lidar alcf_cl51_stats\.nc
+.fi
+.IP "" 0
+.SH "COPYRIGHT"
+Copyright \(co 2019–2021 Peter Kuma, Adrian J\. McDonald, Olaf Morgenstern, Richard Querel, Israel Silber and Connor J\. Flynn\.
+.SH "BUG REPORTING"
+Report bugs to Peter Kuma (\fIpeter@peterkuma\.net\fR)\.
+.SH "SEE ALSO"
+alcf(1), alcf\-auto(1), alcf\-calibrate(1), alcf\-compare(1), alcf\-convert(1), alcf\-lidar(1), alcf\-model(1), alcf\-plot(1), alcf\-simulate(1)

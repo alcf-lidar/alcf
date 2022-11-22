@@ -1,0 +1,55 @@
+.\" generated with Ronn-NG/v0.9.1
+.\" http://github.com/apjanke/ronn-ng/tree/0.9.1
+.TH "ALCF" "1" "November 2022" ""
+.SH "NAME"
+\fBalcf\fR \- Tool for processing of automatic lidar and ceilometer (ALC) data and intercomparison with atmospheric models\.
+.SH "SYNOPSIS"
+.nf
+alcf <cmd> [<options>]
+alcf <cmd> \-\-help
+.fi
+.SH "ARGUMENTS"
+.TP
+\fBcmd\fR
+See Commands below\.
+.TP
+\fBoptions\fR
+Command options\.
+.SH "COMMANDS"
+.TP
+\fBauto\fR
+Peform automatic processing of model or lidar data\.
+.TP
+\fBcalibrate\fR
+Calibrate lidar backscatter\.
+.TP
+\fBconvert\fR
+Convert input instrument or model data to the ALCF standard NetCDF\.
+.TP
+\fBlidar\fR
+Process lidar data\.
+.TP
+\fBmodel\fR
+Extract model data at a point or along a track\.
+.TP
+\fBplot\fR
+Plot lidar data\.
+.TP
+\fBsimulate\fR
+Simulate lidar measurements from model data using COSP\.
+.TP
+\fBstats\fR
+Calculate cloud occurrence statistics\.
+.SH "OPTIONS"
+.TP
+\fB\-\-help\fR
+Print help for command\.
+.TP
+\fB\-\-debug\fR
+Enable debugging information\.
+.SH "COPYRIGHT"
+Copyright \(co 2019–2021 Peter Kuma, Adrian J\. McDonald, Olaf Morgenstern, Richard Querel, Israel Silber and Connor J\. Flynn\.
+.SH "BUG REPORTING"
+Report bugs to Peter Kuma (\fIpeter@peterkuma\.net\fR)\.
+.SH "SEE ALSO"
+alcf\-auto(1), alcf\-calibrate(1), alcf\-compare(1), alcf\-convert(1), alcf\-lidar(1), alcf\-model(1), alcf\-plot(1), alcf\-simulate(1), alcf\-stats(1)

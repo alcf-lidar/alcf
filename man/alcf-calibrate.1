@@ -1,0 +1,63 @@
+.\" generated with Ronn-NG/v0.9.1
+.\" http://github.com/apjanke/ronn-ng/tree/0.9.1
+.TH "ALCF\-CALIBRATE" "1" "November 2022" ""
+.SH "NAME"
+\fBalcf\-calibrate\fR \- Calibrate ALC backscatter\.
+.SH "SYNOPSIS"
+.nf
+alcf calibrate <type> [\-\-] <time_periods> <input> <output>
+.fi
+.SH "DESCRIPTION"
+Calibration based the O'Connor et al\. (2004) method of lidar ratio (LR) in fully opaque stratocumulus clouds\.
+.P
+Arguments following \fB\-\-\fR are treated as literal strings\. Use this delimiter if the input or output file names might otherwise be interpreted as non\-strings, e\.g\. purely numerical file names\.
+.SH "ARGUMENTS"
+.TP
+\fBtype\fR
+Lidar type (see Types below)\.
+.TP
+\fBtime_periods\fR
+File containing calibration time periods of stratocumulus clouds in the backscatter profiles (see Time periods below)\.
+.TP
+\fBinput\fR
+Input directory containing NetCDF files (the output of \fBalcf lidar\fR)\.
+.TP
+\fBoutput\fR
+Output calibration file\.
+.SH "TYPES"
+.TP
+\fBchm15k\fR
+Lufft CHM 15k\.
+.TP
+\fBcl31\fR
+Vaisala CL31\.
+.TP
+\fBcl51\fR
+Vaisala CL51\.
+.TP
+\fBminimpl\fR
+Sigma Space MiniMPL\.
+.TP
+\fBmpl\fR
+Sigma Space MPL\.
+.SH "FILES"
+Time periods file is a text file containting start and end time (see Time format below) of a time period separated by whitespace, one time period per line:
+.P
+\fB<start> <end> <start> <end> \|\.\|\.\|\.\fR
+.P
+where \fBstart\fR is the start time and \fBend\fR is the end time\.
+.SH "TIME FORMAT"
+\fBYYYY\-MM\-DD[THH:MM[:SS]]\fR, where \fBYYYY\fR is year, \fBMM\fR is month, \fBDD\fR is day, \fBHH\fR is hour, \fBMM\fR is minute, \fBSS\fR is second\. Example: \fB2000\-01\-01T00:00:00\fR\.
+.SH "EXAMPLES"
+Read time periods from \fBtime_periods\.txt\fR, lidar profiles from the directory \fBlidar\fR and write the calibration coefficient to \fBcalibration\.txt\fR\.
+.IP "" 4
+.nf
+alcf calibrate time_periods\.txt lidar calibration\.txt
+.fi
+.IP "" 0
+.SH "COPYRIGHT"
+Copyright \(co 2019–2021 Peter Kuma, Adrian J\. McDonald, Olaf Morgenstern, Richard Querel, Israel Silber and Connor J\. Flynn\.
+.SH "BUG REPORTING"
+Report bugs to Peter Kuma (\fIpeter@peterkuma\.net\fR)\.
+.SH "SEE ALSO"
+alcf(1), alcf\-auto(1), alcf\-compare(1), alcf\-convert(1), alcf\-lidar(1), alcf\-model(1), alcf\-plot(1), alcf\-simulate(1), alcf\-stats(1)

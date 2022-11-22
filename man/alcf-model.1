@@ -1,0 +1,90 @@
+.\" generated with Ronn-NG/v0.9.1
+.\" http://github.com/apjanke/ronn-ng/tree/0.9.1
+.TH "ALCF\-MODEL" "1" "November 2022" ""
+.SH "NAME"
+\fBalcf\-model\fR \- Extract model data at a point or along a track\.
+.SH "SYNOPSIS"
+.nf
+alcf model <type> point: { <lon> <lat> } time: { <start> <end> } [options] [\-\-] <input> <output>
+
+alcf model <type> track: <track> [\-\-] <input> <output>
+.fi
+.SH "DESCRIPTION"
+Arguments following \fB\-\-\fR are treated as literal strings\. Use this delimiter if the input or output file names might otherwise be interpreted as non\-strings, e\.g\. purely numerical file names\.
+.SH "ARGUMENTS"
+.TP
+\fBtype\fR
+Input data type (see Types below)\.
+.TP
+\fBinput\fR
+Input directory\.
+.TP
+\fBoutput\fR
+Output directory\.
+.TP
+\fBlon\fR
+Point longitude\.
+.TP
+\fBlat\fR
+Point latitutde\.
+.TP
+\fBstart\fR
+Start time (see Time format below)\.
+.TP
+\fBend\fR
+End time (see Time format below)\.
+.TP
+\fBtrack\fR
+Track NetCDF file (see Files below)\.
+.TP
+\fBoptions\fR
+See Options below\.
+.SH "OPTIONS"
+.TP
+\fB\-r\fR
+Process the input directory recursively\.
+.TP
+\fB\-\-track_lon_180\fR
+Expect track longitude between \-180 and 180 degrees\.
+.TP
+\fBtrack_override_year: <year>\fR
+Override year in track\. Use if comparing observations with a model statistically\. Default: \fBnone\fR\.
+.SH "TYPES"
+.TP
+\fBamps\fR
+Antarctic Mesoscale Prediction System (AMPS)\.
+.TP
+\fBera5\fR
+ERA5\.
+.TP
+\fBjra55\fR
+JRA\-55\.
+.TP
+\fBmerra2\fR
+Modern\-Era Retrospective Analysis for Research and Applications, Version 2 (MERRA\-2)\.
+.TP
+\fBnzcsm\fR
+New Zealand Convection Scale Model (NZCSM)\.
+.TP
+\fBnzesm\fR
+New Zealand Earth System Model (NZESM)\. [Experimental]
+.TP
+\fBum\fR
+UK Met Office Unified Model (UM)\.
+.SH "TIME FORMAT"
+\fBYYYY\-MM\-DD[THH:MM[:SS]]\fR, where \fBYYYY\fR is year, \fBMM\fR is month, \fBDD\fR is day, \fBHH\fR is hour, \fBMM\fR is minute, \fBSS\fR is second\. Example: \fB2000\-01\-01T00:00:00\fR\.
+.SH "FILES"
+The track file is a NetCDF file containing 1D variables \fBlon\fR, \fBlat\fR, and \fBtime\fR\. \fBtime\fR is time in format conforming with the NetCDF standard, \fBlon\fR is longitude between 0 and 360 degrees and \fBlat\fR is latitude between \-90 and 90 degrees\.
+.SH "EXAMPLES"
+Extract MERRA\-2 model data in \fBM2I3NVASM\.5\.12\.4\fR at 45 S, 170 E between 1 and 2 January 2020 and store the output in the directory \fBalcf_merra2_model\fR\.
+.IP "" 4
+.nf
+alcf model merra2 point: { \-45\.0 170\.0 } time: { 2020\-01\-01 2020\-01\-02 } M2I3NVASM\.5\.12\.4 alcf_merra2_model
+.fi
+.IP "" 0
+.SH "COPYRIGHT"
+Copyright \(co 2019–2021 Peter Kuma, Adrian J\. McDonald, Olaf Morgenstern, Richard Querel, Israel Silber and Connor J\. Flynn\.
+.SH "BUG REPORTING"
+Report bugs to Peter Kuma (\fIpeter@peterkuma\.net\fR)\.
+.SH "SEE ALSO"
+alcf(1), alcf\-auto(1), alcf\-calibrate(1), alcf\-compare(1), alcf\-convert(1), alcf\-lidar(1), alcf\-plot(1), alcf\-simulate(1), alcf\-stats(1)

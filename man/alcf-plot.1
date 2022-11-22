@@ -1,0 +1,162 @@
+.\" generated with Ronn-NG/v0.9.1
+.\" http://github.com/apjanke/ronn-ng/tree/0.9.1
+.TH "ALCF\-PLOT" "1" "November 2022" ""
+.SH "NAME"
+\fBalcf\-plot\fR \- Plot lidar data\.
+.SH "SYNOPSIS"
+.nf
+alcf plot <plot_type> [<options>] [<plot_options>] [\-\-] <input> <output>
+.fi
+.SH "DESCRIPTION"
+Arguments following \fB\-\-\fR are treated as literal strings\. Use this delimiter if the input or output file names might otherwise be interpreted as non\-strings, e\.g\. purely numerical file names\.
+.SH "ARGUMENTS"
+.TP
+\fBplot_type\fR
+Plot type (see Plot types below)\.
+.TP
+\fBinput\fR
+Input filename or directory\.
+.TP
+\fBoutput\fR
+Output filename or directory\.
+.TP
+\fBoptions\fR
+See Options below\.
+.TP
+\fBplot_options\fR
+Plot type specific options\. See Plot options below\.
+.SH "PLOT TYPES"
+.TP
+\fBbackscatter\fR
+Plot backscatter from \fBalcf lidar\fR output\.
+.TP
+\fBbackscatter_hist\fR
+Plot backscatter histogram from \fBalcf stats\fR output\.
+.TP
+\fBbackscatter_sd_hist\fR
+Plot backscatter standard deviation histogram from \fBalcf stats\fR output\.
+.TP
+\fBcl\fR
+Plot model cloud area fraction from \fBalcf lidar\fR output\.
+.TP
+\fBcli\fR
+Plot model mass fraction of cloud ice from \fBalcf lidar\fR output\.
+.TP
+\fBcloud_occurrence\fR
+Plot cloud occurrence from \fBalcf stats\fR output\.
+.TP
+\fBclw\fR
+Plot model mass fraction of cloud liquid water from \fBalcf lidar\fR output\.
+.TP
+\fBclw+cli\fR
+Plot model mass fraction of cloud liquid water and ice from \fBalcf lidar\fR output\.
+.SH "GENERAL OPTIONS"
+.TP
+\fBdpi: <value>\fR
+Resolution in dots per inch (DPI)\. Default: \fB300\fR\.
+.TP
+\fB\-\-grid\fR
+Plot grid\.
+.TP
+\fBheight: <value>\fR
+Plot height (inches)\. Default: \fB5\fR if \fBplot_type\fR is \fBcloud_occurrence\fR or \fBbackscatter_hist\fR else \fB4\fR\.
+.TP
+\fBsubcolumn: <value>\fR
+Model subcolumn to plot\. Default: \fB0\fR\.
+.TP
+\fBtitle: <value>\fR
+Plot title\.
+.TP
+\fBwidth: <value>\fR
+Plot width (inches)\. Default: \fB5\fR if \fBplot_type\fR is \fBcloud_occurrence\fR or \fBbackscatter_hist\fR else \fB10\fR\.
+.SH "BACKSCATTER OPTIONS"
+.TP
+\fBlr: <value>\fR
+Plot effective lidar ratio\. Default: \fBtrue\fR\.
+.TP
+\fBcloud_mask: <value>\fR
+Plot cloud mask\. Default: \fBtrue\fR\.
+.TP
+\fBremove_bmol: <value>\fR
+Remove molecular backscatter (observed data have to be coupled with model data via the \fBcouple\fR option of \fBalcf lidar\fR)\. Default: \fBtrue\fR\.
+.TP
+\fBsigma: <value>\fR
+Remove of number of standard deviations of backscatter from the mean backscatter (real)\. Default: \fB5\fR\.
+.TP
+\fBvlim: { <min> <max }\fR
+Value limits (10^6 m\-1\.sr\-1)\. Default: \fB{ 0\.1 200 }\fR\.
+.TP
+\fBvlog: <value>\fR
+Plot values on logarithmic scale: \fBtrue\fR of \fBfalse\fR\. Default: \fBtrue\fR\.
+.SH "BACKSCATTER_HIST OPTIONS"
+.TP
+\fBvlim: { <min> <max> }\fR
+Value limits (%) or \fBnone\fR for auto\. If \fBnone\fR and \fBvlog\fR is \fBnone\fR, \fBmin\fR is set to 1e\-3 if less or equal to zero\. Default: \fBnone\fR\.
+.TP
+\fB\-\-vlog\fR
+Use logarithmic scale for values\.
+.TP
+\fBxlim: { <min> <max> }\fR
+x axis limits (10^6 m\-1\.sr\-1) or \fBnone\fR for automatic\. Default: \fBnone\fR\.
+.TP
+\fBzlim: { <min> <max> }\fR
+z axis limits (m) or \fBnone\fR for automatic\. Default: \fBnone\fR\.
+.SH "BACKSCATTER_SD_HIST OPTIONS"
+.TP
+\fBxlim: { <min> <max> }\fR
+x axis limits (10^6 m\-1\.sr\-1) or \fBnone\fR for automatic\. Default: \fBnone\fR\.
+.TP
+\fBzlim: { <min> <max> }\fR
+z axis limits (%) or \fBnone\fR for automatic\. Default: \fBnone\fR\.
+.SH "CL OPTIONS"
+.TP
+\fBvlim: { <min> <max> }\fR
+Value limits (%)\. Default: \fB{ 0 100 }\fR\.
+.TP
+\fBvlog: <value>\fR
+Plot values on logarithmic scale: \fBtrue\fR of \fBfalse\fR\. Default: \fBfalse\fR\.
+.TP
+\fBzres: <zres>\fR
+Height resolution (m)\. Default: \fB50\fR\.
+.SH "CLI, CLW, AND CLW+CLI OPTIONS"
+.TP
+\fBvlim: { <min> <max> }\fR
+Value limits (g/kg)\. Default: \fB{ 1e\-3 1 }\fR\.
+.TP
+\fBvlog: <value>\fR
+Plot values on logarithmic scale: \fBtrue\fR of \fBfalse\fR\. Default: \fBtrue\fR\.
+.TP
+\fBzres: <zres>\fR
+Height resolution (m)\. Default: \fB50\fR\.
+.SH "CLOUD_OCCURRENCE OPTIONS"
+.TP
+\fBcolors: { <value>\|\.\|\.\|\. }\fR
+Line colors\. Default: \fB{ #0084c8 #dc0000 #009100 #ffc022 #ba00ff }\fR
+.TP
+\fBlinestyle: { <value> \|\.\|\.\|\. }\fR
+Line style (\fBsolid\fR, \fBdashed\fR, \fBdotted\fR)\. Default: \fBsolid\fR\.
+.TP
+\fBlabels: { <value>\|\.\|\.\|\. }\fR
+Line labels\. Default: \fBnone\fR\.
+.TP
+\fBlw: <value>\fR
+Line width\. Default: \fB1\fR\.
+.TP
+\fBxlim: { <min> <max> }\fR
+x axis limits (%)\. Default: \fB{ 0 100 }\fR\.
+.TP
+\fBzlim: { <min> <max> }\fR
+z axis limits (m)\. Default: \fB{ 0 15 }\fR\.
+.SH "EXAMPLES"
+Plot backscatter from processed Vaisala CL51 data in \fBalcf_cl51_lidar\fR and store the output in the directory \fBalcf_cl51_backscatter\fR\.
+.IP "" 4
+.nf
+alcf plot backscatter alcf_cl51_lidar alcf_cl51_backscatter
+.fi
+.IP "" 0
+.SH "COPYRIGHT"
+Copyright \(co 2019–2021 Peter Kuma, Adrian J\. McDonald, Olaf Morgenstern, Richard Querel, Israel Silber and Connor J\. Flynn\.
+.SH "BUG REPORTING"
+Report bugs to Peter Kuma (\fIpeter@peterkuma\.net\fR)\.
+.SH "SEE ALSO"
+alcf(1), alcf\-auto(1), alcf\-calibrate(1), alcf\-compare(1), alcf\-convert(1), alcf\-lidar(1), alcf\-model(1), alcf\-simulate(1), alcf\-stats(1)
