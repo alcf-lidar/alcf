@@ -77,6 +77,17 @@ Figure 1 shows the Lufft CHM 15k plots.
 See the [ALCF output]({{ "/documentation/alcf_output/" | relative_url }}) for description of the NetCDF
 files.
 
+If the input directory with lidar data files contains subdirectories, add the
+`-r` option at the end of the `alcf auto` command to process all subdirectorie
+recursively in alphabetical order.
+
+Some lidars (Vaisala CL31, CL51) produce data files in a custom data format
+which has to be converted to NetCDF before using `alcf auto` or `alcf lidar`.
+Use the command `alcf convert cl51 <input> <output>` to convert the DAT files
+to NetCDF, where `input` is an input directory with DAT files and `output`
+is an output directory where the NetCDF files are to be written. The `-r`
+option can be used to process the input directory recursively.
+
 <figure>
 <div class="img-flex nospace">
 <div style="text-align: center"><strong>Backscatter profile</strong><a href="chm15k/plot/backscatter/2016-07-04T000000.png"><img alt="Backscatter profile" src="chm15k/plot/backscatter/2016-07-04T000000.png" height="200" /></a></div>
@@ -117,6 +128,17 @@ The output will be stored in `processed/merra2`:
 Figure 2 shows the MERRA-2 plots.
 See the [ALCF output]({{ "/documentation/alcf_output/" | relative_url }}) for description of the NetCDF
 files.
+
+If the input directory with model data files contains subdirectories, add the
+`-r` option at the end of the `alcf auto` command to process all subdirectorie
+recursively in alphabetical order.
+
+Some model (JRA-55) produce data files in a custom data format which has to be
+converted to NetCDF before using `alcf auto` or `alcf model`. Use the command
+`alcf convert jra55 <input> <output>` to convert the GRIB files to NetCDF,
+where `input` is an input directory with GRIB files and `output` is an output
+directory where the NetCDF files are to be written. The `-r` option can be used
+to process the input directory recursively.
 
 <figure>
 <div class="img-flex nospace">
