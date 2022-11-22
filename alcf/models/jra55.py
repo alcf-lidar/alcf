@@ -35,7 +35,7 @@ TRANS = {
 	'sp': 'ps',
 }
 
-def read(dirname, track, warnings=[], step=6./24.):
+def read(dirname, track, warnings=[], step=6./24., recursive=False):
 	d_ll = ds.read(os.path.join(dirname, 'LL125.nc'), [
 		'latitude',
 		'longitude',
@@ -50,6 +50,7 @@ def read(dirname, track, warnings=[], step=6./24.):
 		jd=True,
 		full=True,
 		warnings=warnings,
+		recursive=recursive,
 	)
 	start_time = track['time'][0]
 	end_time = track['time'][-1]

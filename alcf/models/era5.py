@@ -44,12 +44,13 @@ TRANS_SURF = {
 	'sp': 'ps',
 }
 
-def read0(type_, dirname, track, warnings=[], step=1./24.):
+def read0(type_, dirname, track, warnings=[], step=1./24., recursive=False):
 	dd_idx = ds.readdir(dirname,
 		variables=['time', 'latitude', 'longitude'],
 		jd=True,
 		full=True,
 		warnings=warnings,
+		recursive=recursive,
 	)
 	start_time = track['time'][0]
 	end_time = track['time'][-1]
@@ -118,9 +119,11 @@ def read0(type_, dirname, track, warnings=[], step=1./24.):
 	d['.'] = META
 	return d
 
-def read(dirname, track, warnings=[]):
-	d_surf = read0('surf', os.path.join(dirname, 'surf'), track, warnings)
-	d_plev = read0('plev', os.path.join(dirname, 'plev'), track, warnings)
+def read(dirname, track, warnings=[], recursive=False):
+	d_surf = read0('surf', os.path.join(dirname, 'surf'), track, warnings,
+		recursive=recursive)
+	d_plev = read0('plev', os.path.join(dirname, 'plev'), track, warnings,
+		recursive=recursive)
 	d = {**d_surf, **d_plev}
 	d['.'] = META
 	return d

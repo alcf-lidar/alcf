@@ -26,14 +26,16 @@ def get_track_segment(track, t1, t2):
 		'.': track['.']
 	}
 
-def model(type_, input_, point=None, time=None, track=None, debug=False):
+def model(type_, input_, point=None, time=None, track=None, debug=False,
+	recursive=False):
 	model = MODELS.get(type_)
 	warnings = []
 	if model is None:
 		raise ValueError('Invalid type: %s' % type_)
 	if track is not None:
 		track_segment = get_track_segment(track, time[0], time[1])
-		d = model.read(input_, track_segment, warnings=warnings)
+		d = model.read(input_, track_segment, warnings=warnings,
+			recursive=recursive)
 	else:
 		lon = np.array([point[0], point[0]], dtype=np.float64)
 		lat = np.array([point[1], point[1]], dtype=np.float64)
@@ -43,7 +45,7 @@ def model(type_, input_, point=None, time=None, track=None, debug=False):
 			'lat': lat,
 			'time': time,
 		}
-		d = model.read(input_, track, warnings=warnings)
+		d = model.read(input_, track, warnings=warnings, recursive=recursive)
 	for w in warnings:
 		if len(w) == 2:
 			print('Warning: %s' % w[0], file=sys.stderr)
@@ -60,6 +62,7 @@ def run(type_, input_, output,
 	track_override_year=None,
 	track_lon_180=False,
 	debug=False,
+	r=False,
 	**kwargs
 ):
 	'''
@@ -94,6 +97,7 @@ Arguments
 Options
 -------
 
+- `-r`: Process the input directory recursively.
 - `--track_lon_180`: Expect track longitude between -180 and 180 degrees.
 - `track_override_year: <year>`: Override year in track. Use if comparing observations with a model statistically. Default: `none`.
 
@@ -158,7 +162,7 @@ Extract MERRA-2 model data in `M2I3NVASM.5.12.4` at 45 S, 170 E between 1 and 2 
 		output_filename = os.path.join(output, '%s.nc' % \
 			aq.to_iso(t).replace(':', ''))
 		d = model(type_, input_, point, time=[t, t + 1.],
-			track=track1, debug=debug)
+			track=track1, debug=debug, recursive=r)
 		if d is not None:
 			ds.write(output_filename, d)
 			print('-> %s' % output_filename)

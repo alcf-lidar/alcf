@@ -17,9 +17,9 @@ VARIABLES = [
 
 GRACE_TIME = 1/24.
 
-def read(dirname, track, warnings=[], step=1./24.):
+def read(dirname, track, warnings=[], step=1./24., recursive=False):
 	dd_index = ds.readdir(dirname, variables=['time0', 'latitude', 'longitude'],
-		jd=True)
+		jd=True, recursive=recursive)
 	start_time = track['time'][0]
 	end_time = track['time'][1]
 	dd = []

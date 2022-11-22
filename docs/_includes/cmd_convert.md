@@ -5,7 +5,7 @@ alcf-convert -- Convert input instrument or model data to NetCDF.
 Synopsis
 --------
 
-    alcf convert <type> [--] <input> <output>
+    alcf convert [options] <type> [--] <input> <output>
 
 Description
 -----------
@@ -16,14 +16,19 @@ Arguments
 ---------
 
 - `type`: Input data type (see Types below).
-- `input`: Input filename or dirname. If `input` is a directory, all data files in `input` are converted to corresponding .nc files in the directory `output`.
+- `input`: Input filename or dirname. If `input` is a directory, all data files ending with the correct file extension (see Types below) in `input` are converted to corresponding `.nc` files in the directory `output`. If the option `-r` is supplied, the directory is processed recursively.
 - `output`: Output filename or dirname.
+
+Options
+-------
+
+- `-r`: Process the input directory recursively. The same directory structure is created under `output`.
 
 Types
 -----
 
-- `cl51`: Vaisala CL51 (converted with cl2nc).
-- `jra55`: JRA-55 (converted with grib_to_netcdf).
+- `cl51`: Vaisala CL51 (converted with cl2nc). File extension `.DAT`.
+- `jra55`: JRA-55 (converted with grib_to_netcdf). No file extension.
 
 Examples
 --------
