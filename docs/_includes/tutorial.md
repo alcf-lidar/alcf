@@ -8,7 +8,7 @@ at the Birdlings Flat site in Canterbury, New Zeland on 4 July 2016,
 and the corresponding Antarctic Mesoscale Prediction System (AMPS)
 numerical weather prediction (NWP) model and MERRA-2 renalaysis output.
 To start, download the dataset archive
-[alcf-tutorial-datasets.zip](https://ucliveac-my.sharepoint.com/:u:/g/personal/pku33_uclive_ac_nz/EUWuGIHN6m9CgyoEJi5nf7wBX32C-YaXaCDln8OwxL_aKA?e=H47qEa) (4.3 GB).
+[alcf-tutorial-datasets.zip](https://pub.peterkuma.net/zi2lw2h66k/alcf-tutorial-datasets.zip) (4.3 GB).
 
 **Note:** Normally, you would want to compare more than 24 hours of
 measurements, such as one month or one year. This tutorial uses 24 hours of
