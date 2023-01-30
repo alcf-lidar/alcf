@@ -41,6 +41,9 @@ The instructions below assume that you enter the commands in the terminal.
     pip3 install alcf --upgrade --user
     ```
 
+	Note that depending on the distribution you might have to replace `pip3`
+	above with `pip`.
+
 ### Windows
 
 It is recommended to run ALCF on [Linux](#linux).
@@ -121,8 +124,10 @@ in the source code directory:
 ```sh
 ./download_cosp
 pip3 install .
-# Replace "pip3" with "pip" if you are using Anaconda.
 ```
+
+Note that depending on the distribution you might have to replace `pip3` above
+with `pip`.
 
 This will download and unpack [ALCF-COSP](https://github.com/alcf-lidar/alcf-cosp)
 (a version of COSP with support for ground-based lidars), and compile and
@@ -134,8 +139,10 @@ changes applied in the alcf command without re-installing:
 
 ```sh
 python3 setup.py develop
-# Replace "python3" with "python" if you are using Anaconda.
 ```
+
+Note that depending on the distribution you might have to replace `python3`
+above with `python`.
 
 ## Releases
 
