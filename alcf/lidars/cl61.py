@@ -28,7 +28,10 @@ def read(filename, vars, altitude=None, lon=None, lat=None, **kwargs):
 		dx['time'] = d['time']/86400. + 2440587.5
 		dx['time_bnds'] = misc.time_bnds(dx['time'], dx['time'][1] - dx['time'][0])
 	if 'altitude' in vars:
-		dx['altitude'] = d['elevation']
+		if d['elevation'].ndim == 0:
+			dx['altitude'] = np.full(n, d['elevation'], np.float64)
+		else:
+			dx['altitude'] = d['elevation']
 	if 'zfull' in vars:
 		dx['zfull'] = np.tile(d['range'], (n, 1))
 		dx['zfull'] = (dx['zfull'].T + dx['altitude']).T
