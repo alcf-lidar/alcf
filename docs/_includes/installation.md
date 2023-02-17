@@ -116,6 +116,17 @@ should output:
 {% include cmd_main.md %}
 ```
 
+### How to uninstall ALCF
+
+To uninstall ALCF:
+
+```sh
+pip3 uninstall alcf
+```
+
+Note that depending on the distribution you might have to replace `pip3` above
+with `pip`.
+
 ### Building from the source code
 
 If you want to build the ALCF from the source code, run the following commands
