@@ -75,14 +75,14 @@ the Max Planck Institute for Meteorology.
 
 The following fields on model levels are required:
 
-- 'cli' (specific cloud ice content)
-- 'clw' (specific cloud water content)
-- 'pfull' (air pressure)
-- 'ta' (air temperature)
+- `cli` (specific cloud ice content)
+- `clw` (specific cloud water content)
+- `pfull` (air pressure)
+- `ta` (air temperature)
 
 The following fields on the surface level are required:
 
-- 'ps' (surface air pressure)
+- `ps` (surface air pressure)
 
 The files should be all contained in the input directory. The vertical grid
 file should be placed in the input directory with a name `vgrid.nc`. No other
