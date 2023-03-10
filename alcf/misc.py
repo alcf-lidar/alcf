@@ -18,7 +18,7 @@ def parse_time(time):
 def aggregate(dd, state, period, epsilon=1./86400.):
 	dd = state.get('dd', []) + dd
 	state['dd'] = []
-	
+
 	if len(dd) == 0 or dd[0] is None:
 		return dd
 
@@ -30,7 +30,7 @@ def aggregate(dd, state, period, epsilon=1./86400.):
 			if dx['time_bnds'][-1,1] > dx['time_bnds'][0,0]:
 				return [dx]
 		return []
-	
+
 	ddo = []
 	ddb = []
 	t = dd[0]['time_bnds'][0,0]
@@ -113,3 +113,16 @@ def require_vars(d, variables):
 	for v in variables:
 		if v not in d:
 			raise ValueError('Variable "%s" is required' % v)
+
+def geo_distance(lon1, lat1, lon2, lat2, method='gc'):
+	lon1, lat1, lon2, lat2 = [x/180*np.pi for x in (lon1, lat1, lon2, lat2)]
+	if method == 'gc':
+		return 6371*(np.arccos(np.sin(lat1)*np.sin(lat2) + \
+			np.cos(lat1)*np.cos(lat2)*np.cos(lon1 - lon2)))
+	elif method == 'hs':
+		dlon = lon2 - lon1
+		dlat = lat2 - lat1
+		a = np.sin(dlat/2)**2 + np.cos(lat1)*np.cos(lat2)*np.sin(dlon/2)**2
+		return 2*6371*np.arcsin(np.sqrt(a))
+	else:
+		raise ValueError('Unrecognized method "%s"' % method)

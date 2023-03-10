@@ -4,6 +4,7 @@ The following GCM, NWP models and reanalyses are supported:
 
 - [AMPS](http://www2.mmm.ucar.edu/rt/amps/)
 - [ERA5](https://www.ecmwf.int/en/forecasts/datasets/reanalysis-datasets/era5)
+- [ICON](https://mpimet.mpg.de/en/science/modeling)
 - [JRA-55](https://jra.kishou.go.jp/JRA-55/index_en.html)
 - [MERRA2](https://gmao.gsfc.nasa.gov/reanalysis/MERRA-2/)
 - [NZCSM](https://www.nesi.org.nz/case-studies/improving-new-zealands-weather-forecasting-ability)
@@ -64,6 +65,32 @@ ERA5 reanalysis data can be downloaded from [Copernicus](https://cds.climate.cop
 Save the pressure-level files in a directory named `plev` and the surface-level
 files in a directory named `surf`. Pass the path to the parent directory
 to `alcf model` or `alcf auto model`.
+
+### ICON
+
+**Source:** `alcf/models/icon.py`
+
+ICON is a weather and climate model developed by the German Weather Service and
+the Max Planck Institute for Meteorology.
+
+The following fields on model levels are required:
+
+- 'cli' (specific cloud ice content)
+- 'clw' (specific cloud water content)
+- 'pfull' (air pressure)
+- 'ta' (air temperature)
+
+The following fields on the surface level are required:
+
+- 'ps' (surface air pressure)
+
+The files should be all contained in the input directory. The vertical grid
+file should be placed in the input directory with a name `vgrid.nc`. No other
+files should be present in the input directory. The time frequency of the model
+level and surface level files does not have to be the same, in which case a
+subset of intersecting time steps is processed. The horizontal grid file is not
+required. The input files are expected the be on the unstructured grid (a set
+of cells).
 
 ### JRA-55
 
