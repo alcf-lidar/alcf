@@ -149,7 +149,7 @@ You can also use the following command to continusly change code and have
 changes immediately applied in the alcf commands:
 
 ```sh
-pip3 install -e alcf
+pip3 install -e .
 ```
 
 Note that depending on the distribution you might have to replace `python3`
