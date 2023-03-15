@@ -162,6 +162,16 @@ the [Semantic Versioning](https://semver.org). Installation instructions
 have been changing with versions. Please follow the installation instructions
 in the documentation of the particular version.
 
+#### [1.3.0](https://github.com/alcf-lidar/alcf/releases/tag/v1.3.0) (2023-03-15)
+
+<details>
+<summary>Release notes</summary>
+<ul>
+<li>Support for the ICON model.</li>
+<li>Minor improvements in documentation.</li>
+</ul>
+</details>
+
 #### [1.2.1](https://github.com/alcf-lidar/alcf/releases/tag/v1.2.1) (2023-01-30)
 
 <details>
