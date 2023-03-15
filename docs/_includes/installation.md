@@ -146,10 +146,10 @@ install the ALCF. Use this option if you want to customise any parts of the
 ALCF.
 
 You can also use the following command to continusly change code and have
-changes applied in the alcf command without re-installing:
+changes immediately applied in the alcf commands:
 
 ```sh
-python3 setup.py develop
+pip3 install -e alcf
 ```
 
 Note that depending on the distribution you might have to replace `python3`
