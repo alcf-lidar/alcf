@@ -19,14 +19,26 @@ VARS = {
 	'lat': ['time'],
 }
 
-def read(filename, vars, altitude=None, lon=None, lat=None, **kwargs):
+def read(filename, vars, altitude=None, lon=None, lat=None, time=None, **kwargs):
+	sel = None
+	tres = None
+	if time is not None:
+		d = ds.read(filename, 'time')
+		d['time'] = d['time']/86400. + 2440587.5
+		tres = d['time'][1] - d['time'][0]
+		d['time_bnds'] = misc.time_bnds(d['time'], tres)
+		mask = misc.time_mask(d['time_bnds'], time[0], time[1])
+		if np.sum(mask) == 0: return None
+		sel = { 'timeDim': mask }
+
 	dep_vars = list(set([y for x in vars if x in VARS for y in VARS[x]]))
-	d = ds.read(filename, dep_vars)
+	d = ds.read(filename, dep_vars, sel=sel)
 	dx = {}
 	if 'time' in vars:
 		n = len(d['time'])
 		dx['time'] = d['time']/86400. + 2440587.5
-		dx['time_bnds'] = misc.time_bnds(dx['time'], dx['time'][1] - dx['time'][0])
+		if tres is None: tres = dx['time'][1] - dx['time'][0]
+		dx['time_bnds'] = misc.time_bnds(dx['time'], tres)
 	if 'altitude' in vars:
 		dx['altitude'] = d['altitude'][:,0].astype(np.float64).filled(np.nan)
 	if 'zfull' in vars:

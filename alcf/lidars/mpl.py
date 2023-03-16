@@ -16,15 +16,18 @@ VARS = {
 	'backscatter_y': ['copol_nrb', 'crosspol_nrb'],
 }
 
-DEFAULT_VARS = [
-	'range_nrb',
-	'elevation_angle',
+TIME_VARS = [
 	'year',
 	'month',
 	'day',
 	'hour',
 	'minute',
 	'second',
+]
+
+DEFAULT_VARS = TIME_VARS + [
+	'range_nrb',
+	'elevation_angle',
 	'altitude',
 	'latitude',
 	'longitude',
@@ -49,13 +52,29 @@ def parse_temporal_resolution(s):
 			return f*item[1]
 	raise ValueError(errmsg)
 
-def read(filename, vars, altitude=None, lon=None, lat=None, **kwargs):
+def convert_time(d):
+	time = np.array([
+		(dt.datetime(y, m, day, H, M, S) - dt.datetime(1970, 1, 1)).total_seconds()/(24*60*60) + 2440587.5
+		for y, m, day, H, M, S
+		in zip(d['year'], d['month'], d['day'], d['hour'], d['minute'], d['second'])
+	], np.float64)
+	tres = parse_temporal_resolution(d['.']['.']['temporal_resolution'])
+	time_bnds = misc.time_bnds(time, tres)
+	return time, time_bnds, tres
+
+def read(filename, vars, altitude=None, lon=None, lat=None, time=None, **kwargs):
+	sel = None
+	tres = None
+	if time is not None:
+		d = ds.read(filename, TIME_VARS)
+		d['time'], d['time_bnds'], tres = convert_time(d)
+		mask = misc.time_mask(d['time_bnds'], time[0], time[1])
+		if np.sum(mask) == 0: return None
+		sel = {'time': mask}
+
 	dep_vars = list(set([y for x in vars if x in VARS for y in VARS[x]]))
 	required_vars = dep_vars + DEFAULT_VARS
-	d = ds.from_netcdf(
-		filename,
-		required_vars
-	)
+	d = ds.read(filename, required_vars, sel=sel)
 	mask = d['elevation_angle'] == 0.0
 	dx = {}
 	n = len(d['year'])
@@ -68,13 +87,7 @@ def read(filename, vars, altitude=None, lon=None, lat=None, **kwargs):
 		np.full(n, lat, np.float64)
 
 	if 'time' in vars:
-		dx['time'] = np.array([
-			(dt.datetime(y, m, day, H, M, S) - dt.datetime(1970, 1, 1)).total_seconds()/(24.0*60.0*60.0) + 2440587.5
-			for y, m, day, H, M, S
-			in zip(d['year'], d['month'], d['day'], d['hour'], d['minute'], d['second'])
-		], np.float64)
-		tres = parse_temporal_resolution(d['.']['.']['temporal_resolution'])
-		dx['time_bnds'] = misc.time_bnds(dx['time'], tres)
+		dx['time'], dx['time_bnds'], tres = convert_time(d)
 		# dx['time'] += 13.0/24.0
 	if 'zfull' in vars:
 		zfull1 = np.outer(

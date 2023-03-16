@@ -35,7 +35,7 @@ def read_calibration_file(filename):
 def run(type_, input_, output,
 	altitude=None,
 	tres=300,
-	tlim=None,
+	time=None,
 	tshift=0.,
 	zres=50,
 	zlim=[0., 15000.],
@@ -115,7 +115,7 @@ Options
 - `noise_removal: <algorithm>`: Noise removal algorithm. Available algorithms: `default`, `none`.  Default: `default`.
 - `output_sampling: <period>`: Output sampling period (seconds). Default: `86400` (24 hours).
 - `-r`: Process the input directory recursively.
-- `tlim: { <low> <high> }`: Time limits (see Time format below). Default: `none`.
+- `time: { <low> <high> }`: Time limits (see Time format below). Default: `none`.
 - `tres: <tres>`: Time resolution (seconds). Default: `300` (5 min).
 - `tshift: <tshift>`: Time shift (seconds). Default: `0`.
 - `zlim: { <low> <high> }`: Height limits (m). Default: `{ 0 15000 }`.
@@ -179,6 +179,14 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 	lidar = LIDARS.get(type_)
 	if lidar is None:
 		raise ValueError('Invalid type: %s' % type_)
+
+	time1 = None
+	if time is not None:
+		time1 = [None, None]
+		for i in 0, 1:
+			time1[i] = aq.from_iso(time[i])
+			if time1[i] is None:
+				raise ValueError('Invalid time format: %s' % time[i])
 
 	noise_removal_mod = None
 	calibration_mod = None
@@ -256,8 +264,8 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 			dd = calibration_mod.stream(dd, state['calibration'], **options)
 		if zres is not None or zlim is not None:
 			dd = zsample.stream(dd, state['zsample'], zres=zres, zlim=zlim)
-		if tres is not None or tlim is not None:
-			dd = tsample.stream(dd, state['tsample'], tres=tres/86400., tlim=tlim)
+		if tres is not None or time is not None:
+			dd = tsample.stream(dd, state['tsample'], tres=tres/86400.)
 		if output_sampling is not None:
 			dd = output_sample.stream(dd, state['output_sample'],
 				tres=tres/86400.,
@@ -293,7 +301,9 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 					lat=lat,
 					fix_cl_range=fix_cl_range,
 					cl_crit_range=cl_crit_range,
+					time=time1,
 				)
+				if d is None: continue
 				dd = process([d], state, **options)
 			except SystemExit:
 				raise
