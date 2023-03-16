@@ -93,14 +93,14 @@ def stats_map(d, state,
 	if tlim is not None:
 		mask = (d['time'] >= tlim[0]) & (d['time'] < tlim[1])
 	else:
-		mask = np.ones(n, dtype=np.bool)
+		mask = np.ones(n, dtype=bool)
 
 	if l > 0:
 		mask &= np.all(~np.isnan(d['backscatter']), axis=(1, 2))
 	else:
 		mask &= np.all(~np.isnan(d['backscatter']), axis=(1,))
 
-	filter_mask = np.ones(filter_mask_dims, dtype=np.bool)
+	filter_mask = np.ones(filter_mask_dims, dtype=bool)
 	if 'cloudy' in filter:
 		filter_mask &= np.any(d['cloud_mask'], axis=1)
 	if 'clear' in filter:

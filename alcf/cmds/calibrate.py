@@ -83,7 +83,7 @@ Read time periods from `time_periods.txt`, lidar profiles from the directory `li
 		filename = os.path.join(input_, file_)
 		print('<- %s' % filename)
 		d = ds.read(filename, ['time'])
-		mask = np.zeros(len(d['time']), dtype=np.bool)
+		mask = np.zeros(len(d['time']), dtype=bool)
 		for period in tp:
 			mask |= (d['time'] >= period[0]) & \
 				(d['time'] < period[1])
