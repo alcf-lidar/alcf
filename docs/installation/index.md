@@ -160,6 +160,18 @@ pip3 install -e .
 Note that depending on the distribution you might have to replace `python3`
 above with `python`.
 
+### Preparing a source distribution
+
+To prepare a source distribution:
+
+```sh
+./download_cosp
+python3 setup.py sdist
+```
+
+The resulting package can be found in `dist/alcf-<version>.tar.gz`. This is the
+type of package available on [PyPI](https://pypi.org/).
+
 ## Releases
 
 Below is a list of releases of the ALCF. The version numbers follow
