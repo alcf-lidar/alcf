@@ -28,18 +28,27 @@ def read(filename, vars,
 	calibration_coeff=CALIBRATION_COEFF,
 	fix_cl_range=False,
 	cl_crit_range=6000,
+	time=None,
 	**kwargs
 ):
+	sel = None
+	tres = None
+	if time is not None:
+		d = ds.read(filename, 'time', jd=True)
+		tres = d['time'][1] - d['time'][0]
+		d['time_bnds'] = misc.time_bnds(d['time'], tres)
+		mask = misc.time_mask(d['time_bnds'], time[0], time[1])
+		if np.sum(mask) == 0: return None
+		sel = {'time': mask}
+
 	dep_vars = list(set([y for x in vars if x in VARS for y in VARS[x]]))
 	required_vars = dep_vars + DEFAULT_VARS
-	d = ds.read(
-		filename,
-		required_vars,
-		jd=True
-	)
+
+	d = ds.read(filename, required_vars, jd=True, sel=sel)
 	dx = {}
 	dx['time'] = d['time']
-	dx['time_bnds'] = misc.time_bnds(dx['time'], dx['time'][1] - dx['time'][0])
+	if tres is None: tres = dx['time'][1] - dx['time'][0]
+	dx['time_bnds'] = misc.time_bnds(dx['time'], tres)
 
 	n = len(dx['time'])
 	range_ = d['vertical_resolution'][0]*d['level']

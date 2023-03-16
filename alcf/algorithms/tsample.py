@@ -30,7 +30,7 @@ def tsample(d, tres):
 		shape[i] = 1
 		d[var] = d[var].reshape(shape)
 
-def stream(dd, state, tres=None, tlim=None, **options):
+def stream(dd, state, tres=None, **options):
 	if tres is not None:
 		state['aggregate_state'] = state.get('aggregate_state', {})
 		dd = misc.aggregate(dd, state['aggregate_state'], tres)

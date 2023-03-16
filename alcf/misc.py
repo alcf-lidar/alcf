@@ -126,3 +126,7 @@ def geo_distance(lon1, lat1, lon2, lat2, method='gc'):
 		return 2*6371*np.arcsin(np.sqrt(a))
 	else:
 		raise ValueError('Unrecognized method "%s"' % method)
+
+def time_mask(bnds, t1, t2):
+	return ~(((bnds[:,0] < t1) & (bnds[:,1] < t1)) |
+	         ((bnds[:,0] > t2) & (bnds[:,1] > t2)))

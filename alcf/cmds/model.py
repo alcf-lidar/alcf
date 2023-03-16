@@ -151,11 +151,11 @@ Extract MERRA-2 model data in `M2I3NVASM.5.12.4` at 45 S, 170 E between 1 and 2 
 		raise ValueError('Point and time or track is required')
 
 	if time is not None:
-			time1 = [None, None]
-			for i in 0, 1:
-				time1[i] = aq.from_iso(time[i])
-				if time1[i] is None:
-					raise ValueError('Invalid time format: %s' % time[i])
+		time1 = [None, None]
+		for i in 0, 1:
+			time1[i] = aq.from_iso(time[i])
+			if time1[i] is None:
+				raise ValueError('Invalid time format: %s' % time[i])
 
 	# if os.path.isdir(output):
 	t1, t2 = time1[0], time1[1]

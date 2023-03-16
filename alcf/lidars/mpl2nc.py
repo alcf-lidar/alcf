@@ -22,8 +22,18 @@ VARIABLES = [
 	'gps_latitude',
 ]
 
-def read(filename, vars, altitude=None, lon=None, lat=None, **kwargs):
-	d = ds.read(filename, VARIABLES, jd=True)
+def read(filename, vars, altitude=None, lon=None, lat=None, time=None, **kwargs):
+	sel = None
+	tres = None
+	if time is not None:
+		d = ds.read(filename, 'time', jd=True)
+		tres = d['time'][1] - d['time'][0]
+		d['time_bnds'] = misc.time_bnds(d['time'], tres)
+		mask = misc.time_mask(d['time_bnds'], time[0], time[1])
+		if np.sum(mask) == 0: return None
+		sel = {'profile': mask}
+
+	d = ds.read(filename, VARIABLES, jd=True, sel=sel)
 	mask = d['elevation_angle'] == 0.0
 	dx = {}
 	n, m = d['nrb_copol'].shape
@@ -37,7 +47,8 @@ def read(filename, vars, altitude=None, lon=None, lat=None, **kwargs):
 
 	if 'time' in vars:
 		dx['time'] = d['time']
-		dx['time_bnds'] = misc.time_bnds(dx['time'], dx['time'][1] - dx['time'][0])
+		if tres is None: tres = dx['time'][1] - dx['time'][0]
+		dx['time_bnds'] = misc.time_bnds(dx['time'], tres)
 	if 'zfull' in vars:
 		dx['zfull'] = np.full((n, m), np.nan, np.float64)
 		for i in range(n):
