@@ -21,6 +21,7 @@ VARS = {
 
 def read(filename, vars, altitude=None, lon=None, lat=None, time=None, **kwargs):
 	sel = None
+	tres = None
 	if time is not None:
 		d = ds.read(filename, 'time', jd=True)
 		tres = d['time'][1] - d['time'][0]
