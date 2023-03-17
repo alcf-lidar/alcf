@@ -2,6 +2,7 @@
 
 from setuptools import setup, find_packages
 from setuptools.command.build_py import build_py
+from Cython.Build import cythonize
 import os
 import os.path
 import subprocess
@@ -21,11 +22,15 @@ setup(
 	license='MIT',
 	scripts=['bin/alcf'],
 	packages=find_packages(),
+	ext_modules=cythonize('alcf/algorithms/interp.pyx', language_level=3),
 	zip_safe=False,
 	package_data={'alcf': ['cosp_alcf'] + \
 		[os.path.join('fonts', x) for x in os.listdir('alcf/fonts')]},
 	data_files=[('share/man/man1',
 		[os.path.join('man', x) for x in os.listdir('man')])],
+	setup_requires=[
+		'cython',
+	],
 	install_requires=[
 		'numpy>=1.16.2',
 		'scipy>=1.1.0',
@@ -47,6 +52,7 @@ setup(
 		'License :: OSI Approved :: MIT License',
 		'Operating System :: POSIX',
 		'Programming Language :: Python :: 3',
+		'Programming Language :: Cython',
 		'Programming Language :: Fortran',
 		'Topic :: Scientific/Engineering :: Atmospheric Science',
 		'Topic :: Scientific/Engineering :: Physics',

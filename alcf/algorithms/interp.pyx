@@ -1,12 +1,20 @@
+cimport cython
+cimport numpy as np
 import numpy as np
 
-def interp(xhalf, y, xhalf2):
-	"""Interpolate y(x) on x2"""
-	n = len(xhalf)
-	n2 = len(xhalf2)
-	y2 = np.zeros(n2-1, dtype=np.float64)
-	i = 0
-	i2 = 0
+def interp(
+	np.ndarray[double, ndim=1, mode='c'] xhalf not None,
+	np.ndarray[double, ndim=1, mode='c'] y not None,
+	np.ndarray[double, ndim=1, mode='c'] xhalf2 not None
+):
+	'''Interpolate y(x) on x2'''
+	cdef long n = len(xhalf)
+	cdef long n2 = len(xhalf2)
+	cdef np.ndarray[double, ndim=1, mode='c'] y2 = np.zeros(n2-1, dtype=np.float64)
+	cdef long i = 0
+	cdef long i2 = 0
+	cdef double dx = 0
+	cdef double dx2 = 0
 	while i < n-1 and xhalf[i] < xhalf2[0]:
 		i += 1
 	if xhalf[i] < xhalf2[0]:
