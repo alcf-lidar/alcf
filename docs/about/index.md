@@ -26,7 +26,39 @@ Peter Kuma<sup>1</sup>, Adrian J. McDonald<sup>1</sup>, Olaf Morgenstern<sup>2</
 <sup>5</sup> Pacific Northwest National Laboratory, Richland, WA, USA
 </p>
 
-Atmospheric lidar measurements are a well-established tool for remote sensing of clouds. For over a decade, spaceborne lidar measurements produced by the CALIOP instrument on the CALIPSO satellite and CATS on the International Space Station have proven invaluable for model cloud evaluation in general circulation and numerical weather forecasting models. They have revealed the vertical structure of clouds, particularly in combination with radar instruments, which is impossible to obtain with passive remote sensing instruments. However, the measurements are limited by rapid attenuation of the lidar signal in thick clouds. Ground-based lidar measurements are becoming more common due to greater availability of instruments such as ceilometers installed on a wide scale globally. They can provide much needed lidar measurements of clouds "from below", but processing of lidar data and model evaluation using this data is not well-developed compared to satellite measurements. We present an open source tool called the Automatic Lidar and Ceilometer Framework (ALCF) which implements common lidar processing steps such as resampling, noise removal, cloud detection, calculation of statistics, as well as model—observation intercomparison by bundling the COSP/ACTSIM lidar simulator and allowing it to produce corresponding "curtain" lidar pseudo-measurements from model output of various models (MERRA-2, AMPS, CMIP5) for ground-based and shipborne instruments (Vaisala CL31, CL51, Lufft CHM 15k, Sigma Space MiniMPL). These pseudo-measurements can be compared in an ‘apples to apples’ comparison with observations. We hope this tool will enable ground-based lidars to be used more commonly for model evaluation and improvement efforts.
+Automatic lidars and ceilometers (ALCs) provide valuable information on cloud
+and aerosols but have not been systematically used in the evaluation of general
+circulation models (GCMs) and numerical weather prediction (NWP) models.
+Obstacles associated with the diversity of instruments, a lack of
+standardisation of data products and open processing tools mean that the value
+of large ALC networks worldwide is not being realised. We discuss a tool,
+called the Automatic Lidar and Ceilometer Framework (ALCF), that overcomes
+these problems and also includes a ground-based lidar simulator, which
+calculates the radiative transfer of laser radiation and allows one-to-one
+comparison with models. Our ground-based lidar simulator is based on the Cloud
+Feedback Model Intercomparison Project (CFMIP) Observation Simulator Package
+(COSP), which has been extensively used for spaceborne lidar intercomparisons.
+The ALCF implements all steps needed to transform and calibrate raw ALC data
+and create simulated attenuated volume backscattering coefficient profiles for
+one-to-one comparison and complete statistical analysis of clouds. The
+framework supports multiple common commercial ALCs (Vaisala CL31, CL51, Lufft
+CHM 15k and Droplet Measurement Technologies MiniMPL), reanalyses (JRA-55, ERA5
+and MERRA-2) and models (the Unified Model and AMPS – the Antarctic Mesoscale
+Prediction System). To demonstrate its capabilities, we present case studies
+evaluating cloud in the supported reanalyses and models using CL31, CL51, CHM
+15k and MiniMPL observations at three sites in New Zealand. We show that the
+reanalyses and models generally underestimate cloud fraction. If sufficiently
+high-temporal-resolution model output is available (better than 6-hourly), a
+direct comparison of individual clouds is also possible. We demonstrate that
+the ALCF can be used as a generic evaluation tool to examine cloud occurrence
+and cloud properties in reanalyses, NWP models, and GCMs, potentially utilising
+the large amounts of ALC data already available. This tool is likely to be
+particularly useful for the analysis and improvement of low-level cloud
+simulations which are not well monitored from space. This has previously been
+identified as a critical deficiency in contemporary models, limiting the
+accuracy of weather forecasts and future climate projections. While the current
+focus of the framework is on clouds, support for aerosol in the lidar simulator
+is planned in the future.
 
 ### See also
 
