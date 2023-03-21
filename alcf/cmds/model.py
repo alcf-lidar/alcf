@@ -1,5 +1,6 @@
 import sys
 import os
+from concurrent.futures import ProcessPoolExecutor, as_completed
 import numpy as np
 import aquarius_time as aq
 import ds_format as ds
@@ -26,15 +27,11 @@ def get_track_segment(track, t1, t2):
 		'.': track['.']
 	}
 
-def model(type_, input_, point=None, time=None, track=None, debug=False,
-	recursive=False):
-	model = MODELS.get(type_)
-	warnings = []
-	if model is None:
-		raise ValueError('Invalid type: %s' % type_)
+def process_model(model, input_, index, point=None, time=None, track=None,
+	debug=False, recursive=False, warnings=[]):
 	if track is not None:
 		track_segment = get_track_segment(track, time[0], time[1])
-		d = model.read(input_, track_segment, warnings=warnings,
+		d = model.read(input_, index, track_segment, warnings=warnings,
 			recursive=recursive)
 	else:
 		lon = np.array([point[0], point[0]], dtype=np.float64)
@@ -45,15 +42,24 @@ def model(type_, input_, point=None, time=None, track=None, debug=False,
 			'lat': lat,
 			'time': time,
 		}
-		d = model.read(input_, track, warnings=warnings, recursive=recursive)
-	for w in warnings:
-		if len(w) == 2:
-			print('Warning: %s' % w[0], file=sys.stderr)
-			if debug: print(w[1], file=sys.stderr)
-			else: print('Use --debug to print debugging information.', file=sys.stderr)
-		else:
-			print('Warning: %s' % w, file=sys.stderr)
+		d = model.read(input_, index, track, warnings=warnings,
+			recursive=recursive)
 	return d
+
+def worker(type_, input_, index, output, point, t, track1, debug, r):
+	try:
+		model = MODELS[type_]
+		output_filename = os.path.join(output, '%s.nc' % \
+			aq.to_iso(t).replace(':', ''))
+		warnings = []
+		d = process_model(model, input_, index, point, time=[t, t + 1.],
+			track=track1, debug=debug, recursive=r, warnings=warnings)
+		if d is not None:
+			ds.write(output_filename, d)
+			print('-> %s' % output_filename)
+	except Exception as e:
+		warnings += [(str(e), traceback.format_exc())]
+	return warnings
 
 def run(type_, input_, output,
 	point=None,
@@ -63,6 +69,7 @@ def run(type_, input_, output,
 	track_lon_180=False,
 	debug=False,
 	r=False,
+	njobs=None,
 	**kwargs
 ):
 	'''
@@ -97,6 +104,7 @@ Arguments
 Options
 -------
 
+- `njobs: <n>`: Number of parallel jobs. Default: number of CPU cores.
 - `-r`: Process the input directory recursively.
 - `--track_lon_180`: Expect track longitude between -180 and 180 degrees.
 - `track_override_year: <year>`: Override year in track. Use if comparing observations with a model statistically. Default: `none`.
@@ -158,17 +166,34 @@ Extract MERRA-2 model data in `M2I3NVASM.5.12.4` at 45 S, 170 E between 1 and 2 
 				raise ValueError('Invalid time format: %s' % time[i])
 
 	# if os.path.isdir(output):
+
+	model = MODELS.get(type_)
+	if model is None:
+		raise ValueError('Invalid type: %s' % type_)
+
 	t1, t2 = time1[0], time1[1]
-	for t in np.arange(np.floor(t1 - 0.5), np.ceil(t2 - 0.5)) + 0.5:
-		output_filename = os.path.join(output, '%s.nc' % \
-			aq.to_iso(t).replace(':', ''))
-		d = model(type_, input_, point, time=[t, t + 1.],
-			track=track1, debug=debug, recursive=r)
-		if d is not None:
-			ds.write(output_filename, d)
-			print('-> %s' % output_filename)
-	# else:
-	# 	d = model(type_, input_, point, time=time1, track=track1)
-	# 	if d is not None:
-	# 		ds.to_netcdf(output, d)
-	# 		print('-> %s' % output)
+
+	warnings = []
+	index = None
+	if hasattr(model, 'index'):
+		index = model.index(input_, warnings=warnings, recursive=r)
+
+	if njobs is None: njobs = os.cpu_count()
+
+	with ProcessPoolExecutor(max_workers=njobs) as ex:
+		fs = []
+		for t in np.arange(np.floor(t1 - 0.5), np.ceil(t2 - 0.5)) + 0.5:
+			f = ex.submit(worker,
+				type_, input_, index, output, point, t, track1, debug, r)
+			fs += [f]
+		for f in as_completed(fs):
+			ws = f.result()
+			warnings += ws
+
+	for w in warnings:
+		if len(w) == 2:
+			print('Warning: %s' % w[0], file=sys.stderr)
+			if debug: print(w[1], file=sys.stderr)
+			else: print('Use --debug to print debugging information.', file=sys.stderr)
+		else:
+			print('Warning: %s' % w, file=sys.stderr)
