@@ -14,12 +14,30 @@ VARS = [
 	'ps',
 ]
 
-def read(dirname, track, warnings=[], step=6./24., recursive=False):
+def index(dirname, warnings=[], recursive=False):
+	dd = ds.readdir(dirname,
+		variables=['time'],
+		jd=True,
+		full=True,
+		warnings=warnings,
+		recursive=recursive,
+		parallel=True,
+	)
+
 	d_g = ds.read(os.path.join(dirname, 'vgrid.nc'), [
 		'clon', 'clat'
 	], full=True)
 	d_g['clon'] *= 180/np.pi
 	d_g['clat'] *= 180/np.pi
+
+	return [dd, d_g]
+
+def read(dirname, index, track, warnings=[], step=6./24., recursive=False):
+	start_time = track['time'][0]
+	end_time = track['time'][-1]
+	dd_out = []
+
+	dd_idx, d_g = index
 
 	n = len(track['time'])
 	ncells = ds.dim(d_g, 'ncells')
@@ -40,20 +58,7 @@ def read(dirname, track, warnings=[], step=6./24., recursive=False):
 		'height': ds.dim(d_g, 'height') - 1,
 	})
 
-	dd_idx = ds.readdir(dirname,
-		variables=['time'],
-		jd=True,
-		full=True,
-		warnings=warnings,
-		recursive=recursive,
-	)
-
-	start_time = track['time'][0]
-	end_time = track['time'][-1]
-	dd_out = []
-
 	for var in VARS:
-		print(var)
 		dd = []
 		for d_idx in dd_idx:
 			if var not in d_idx['.']:
@@ -68,7 +73,6 @@ def read(dirname, track, warnings=[], step=6./24., recursive=False):
 				i2 = np.argmin(np.abs(track['time'] - time[i]))
 				lat0 = track['lat'][i2]
 				lon0 = track['lon'][i2]
-				print(filename)
 				d = ds.read(filename, [var],
 					sel={
 						'time': [i],
