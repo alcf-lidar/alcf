@@ -3,14 +3,14 @@ cimport numpy as np
 import numpy as np
 
 def interp(
-	np.ndarray[double, ndim=1, mode='c'] xhalf not None,
-	np.ndarray[double, ndim=1, mode='c'] y not None,
-	np.ndarray[double, ndim=1, mode='c'] xhalf2 not None
+	np.ndarray[double, ndim=1] xhalf not None,
+	np.ndarray[double, ndim=1] y not None,
+	np.ndarray[double, ndim=1] xhalf2 not None
 ):
 	'''Interpolate y(x) on x2'''
 	cdef long n = len(xhalf)
 	cdef long n2 = len(xhalf2)
-	cdef np.ndarray[double, ndim=1, mode='c'] y2 = np.zeros(n2-1, dtype=np.float64)
+	cdef np.ndarray[double, ndim=1] y2 = np.zeros(n2-1, dtype=np.float64)
 	cdef long i = 0
 	cdef long i2 = 0
 	cdef double dx = 0
