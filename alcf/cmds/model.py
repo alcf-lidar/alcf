@@ -129,7 +129,7 @@ Time format
 Files
 -----
 
-The track file is a NetCDF file containing 1D variables `lon`, `lat`, and `time`. `time` is time in format conforming with the NetCDF standard, `lon` is longitude between 0 and 360 degrees and `lat` is latitude between -90 and 90 degrees.
+The track file is a NetCDF file containing 1D variables `lon`, `lat`, and `time`. `time` is time in format conforming with the CF Conventions, `lon` is longitude between 0 and 360 degrees and `lat` is latitude between -90 and 90 degrees.
 
 Examples
 --------
