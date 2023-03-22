@@ -59,7 +59,7 @@ Options
 - `noise_removal: <algorithm>`: Noise removal algorithm. Available algorithms: `default`, `none`.  Default: `default`.
 - `output_sampling: <period>`: Output sampling period (seconds). Default: `86400` (24 hours).
 - `-r`: Process the input directory recursively.
-- `tlim: { <low> <high> }`: Time limits (see Time format below). Default: `none`.
+- `time: { <low> <high> }`: Time limits (see Time format below). Default: `none`.
 - `tres: <tres>`: Time resolution (seconds). Default: `300` (5 min).
 - `tshift: <tshift>`: Time shift (seconds). Default: `0`.
 - `zlim: { <low> <high> }`: Height limits (m). Default: `{ 0 15000 }`.

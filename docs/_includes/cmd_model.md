@@ -30,6 +30,7 @@ Arguments
 Options
 -------
 
+- `njobs: <n>`: Number of parallel jobs. Default: number of CPU cores.
 - `-r`: Process the input directory recursively.
 - `--track_lon_180`: Expect track longitude between -180 and 180 degrees.
 - `track_override_year: <year>`: Override year in track. Use if comparing observations with a model statistically. Default: `none`.
@@ -54,7 +55,7 @@ Time format
 Files
 -----
 
-The track file is a NetCDF file containing 1D variables `lon`, `lat`, and `time`. `time` is time in format conforming with the NetCDF standard, `lon` is longitude between 0 and 360 degrees and `lat` is latitude between -90 and 90 degrees.
+The track file is a NetCDF file containing 1D variables `lon`, `lat`, and `time`. `time` is time in format conforming with the CF Conventions, `lon` is longitude between 0 and 360 degrees and `lat` is latitude between -90 and 90 degrees.
 
 Examples
 --------

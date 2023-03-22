@@ -41,6 +41,9 @@ Track NetCDF file (see Files below)\.
 See Options below\.
 .SH "OPTIONS"
 .TP
+\fBnjobs: <n>\fR
+Number of parallel jobs\. Default: number of CPU cores\.
+.TP
 \fB\-r\fR
 Process the input directory recursively\.
 .TP
@@ -77,7 +80,7 @@ UK Met Office Unified Model (UM)\.
 .SH "TIME FORMAT"
 \fBYYYY\-MM\-DD[THH:MM[:SS]]\fR, where \fBYYYY\fR is year, \fBMM\fR is month, \fBDD\fR is day, \fBHH\fR is hour, \fBMM\fR is minute, \fBSS\fR is second\. Example: \fB2000\-01\-01T00:00:00\fR\.
 .SH "FILES"
-The track file is a NetCDF file containing 1D variables \fBlon\fR, \fBlat\fR, and \fBtime\fR\. \fBtime\fR is time in format conforming with the NetCDF standard, \fBlon\fR is longitude between 0 and 360 degrees and \fBlat\fR is latitude between \-90 and 90 degrees\.
+The track file is a NetCDF file containing 1D variables \fBlon\fR, \fBlat\fR, and \fBtime\fR\. \fBtime\fR is time in format conforming with the CF Conventions, \fBlon\fR is longitude between 0 and 360 degrees and \fBlat\fR is latitude between \-90 and 90 degrees\.
 .SH "EXAMPLES"
 Extract MERRA\-2 model data in \fBM2I3NVASM\.5\.12\.4\fR at 45 S, 170 E between 1 and 2 January 2020 and store the output in the directory \fBalcf_merra2_model\fR\.
 .IP "" 4
