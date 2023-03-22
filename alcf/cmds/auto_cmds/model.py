@@ -31,4 +31,4 @@ def run(model_type, lidar_type, input_, output, *args, skip=None, **kwargs):
 		except OSError: pass
 		print('! alcf simulate')
 		simulate.run(lidar_type, model_dir, simulate_dir)
-	auto_lidar.run('cosp', simulate_dir, output, *args, **kwargs)
+	auto_lidar.run('cosp', simulate_dir, output, *args, skip=skip, **kwargs)
