@@ -62,7 +62,9 @@ def read(filename, vars,
 		if altitude is not None:
 			dx['zfull'] += altitude
 	if 'backscatter' in vars:
-		dx['backscatter'] = d['backscatter']*calibration_coeff
+		factor = 1e-4 if (d['.']['backscatter']['units'] == '1/(sr*km*10000)') \
+			else 1 # Factor of 1e-4 if ARM CL51 format.
+		dx['backscatter'] = d['backscatter']*calibration_coeff*factor
 		mask = range_ > 6000
 		if fix_cl_range is True:
 			for i in range(n):
