@@ -17,6 +17,7 @@ VARS = {
 DEFAULT_VARS = [
 	'vertical_resolution',
 	'level',
+	'range',
 	'time',
 	'detection_status',
 ]
@@ -51,7 +52,10 @@ def read(filename, vars,
 	dx['time_bnds'] = misc.time_bnds(dx['time'], tres)
 
 	n = len(dx['time'])
-	range_ = d['vertical_resolution'][0]*d['level']
+	if 'range' in d: # ARM CL51 format.
+		range_ = d['range']
+	else: # Generic CL51 format.
+		range_ = d['vertical_resolution'][0]*d['level']
 	if 'zfull' in vars:
 		zfull1 = range_
 		dx['zfull'] = np.tile(zfull1, (n, 1))

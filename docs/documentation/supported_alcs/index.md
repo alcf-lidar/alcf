@@ -39,6 +39,9 @@ vapour absorption lines ([Wiegner et al.,
 not support simulating water vapour absorption, and it is not taken into
 account in the calibration process.
 
+The types `cl31` and `cl51` also support reading a format of CL51 NetCDF files
+(`ceil`) produced by the Atmospheric Radiation Measurement (ARM) campaigns.
+
 ### Sigma Space MiniMPL
 
 **Type:** `mpl` (`mpl2nc`)
