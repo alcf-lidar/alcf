@@ -1,5 +1,6 @@
 import sys
 import os
+import traceback
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import numpy as np
 import aquarius_time as aq
@@ -54,12 +55,20 @@ def worker(type_, input_, index, output, point, t, track1, debug, r):
 		warnings = []
 		d = process_model(model, input_, index, point, time=[t, t + 1.],
 			track=track1, debug=debug, recursive=r, warnings=warnings)
+			for w in warnings:
+				if len(w) == 2:
+					print('Warning: %s' % w[0], file=sys.stderr)
+					if debug: print(w[1], file=sys.stderr)
+					else: print('Use --debug to print debugging information.', file=sys.stderr)
+				else:
+					print('Warning: %s' % w, file=sys.stderr)
 		if d is not None:
 			ds.write(output_filename, d)
 			print('-> %s' % output_filename)
 	except Exception as e:
-		warnings += [(str(e), traceback.format_exc())]
-	return warnings
+		print('Warning: %s' % str(e), file=sys.stderr)
+		if debug: print(traceback.format_exc(), file=sys.stderr)
+		else: print('Use --debug to print debugging information.', file=sys.stderr)
 
 def run(type_, input_, output,
 	point=None,
@@ -173,12 +182,12 @@ Extract MERRA-2 model data in `M2I3NVASM.5.12.4` at 45 S, 170 E between 1 and 2 
 
 	t1, t2 = time1[0], time1[1]
 
+	if njobs is None: njobs = os.cpu_count()
+
 	warnings = []
 	index = None
 	if hasattr(model, 'index'):
-		index = model.index(input_, warnings=warnings, recursive=r)
-
-	if njobs is None: njobs = os.cpu_count()
+		index = model.index(input_, warnings=warnings, recursive=r, njobs=njobs)
 
 	with ProcessPoolExecutor(max_workers=njobs) as ex:
 		fs = []
@@ -186,9 +195,6 @@ Extract MERRA-2 model data in `M2I3NVASM.5.12.4` at 45 S, 170 E between 1 and 2 
 			f = ex.submit(worker,
 				type_, input_, index, output, point, t, track1, debug, r)
 			fs += [f]
-		for f in as_completed(fs):
-			ws = f.result()
-			warnings += ws
 
 	for w in warnings:
 		if len(w) == 2:

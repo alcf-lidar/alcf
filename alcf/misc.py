@@ -117,8 +117,9 @@ def require_vars(d, variables):
 def geo_distance(lon1, lat1, lon2, lat2, method='gc'):
 	lon1, lat1, lon2, lat2 = [x/180*np.pi for x in (lon1, lat1, lon2, lat2)]
 	if method == 'gc':
-		return 6371*(np.arccos(np.sin(lat1)*np.sin(lat2) + \
-			np.cos(lat1)*np.cos(lat2)*np.cos(lon1 - lon2)))
+		x = np.sin(lat1)*np.sin(lat2) + \
+			np.cos(lat1)*np.cos(lat2)*np.cos(lon1 - lon2)
+		return 6371*(np.arccos(np.maximum(np.minimum(x, 1), -1)))
 	elif method == 'hs':
 		dlon = lon2 - lon1
 		dlat = lat2 - lat1
@@ -130,3 +131,20 @@ def geo_distance(lon1, lat1, lon2, lat2, method='gc'):
 def time_mask(bnds, t1, t2):
 	return ~(((bnds[:,0] < t1) & (bnds[:,1] < t1)) |
 	         ((bnds[:,0] > t2) & (bnds[:,1] > t2)))
+
+def track_at(track, t):
+	ii = np.arange(len(track['time']))
+	i = np.interp(t, track['time'], ii, left=np.nan, right=np.nan)
+	mask = np.isnan(i)
+	i = np.where(mask, 0, i)
+	ilow = np.floor(i).astype(int)
+	ihigh = np.ceil(i).astype(int)
+	ires = i % 1
+	return [
+		np.where(
+			mask,
+			np.nan,
+			(1 - ires)*track[k][ilow] + ires*track[k][ihigh]
+		)
+		for k in ['lon', 'lat']
+	]

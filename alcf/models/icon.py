@@ -14,14 +14,15 @@ VARS = [
 	'ps',
 ]
 
-def index(dirname, warnings=[], recursive=False):
+def index(dirname, warnings=[], recursive=False, njobs=1):
 	dd = ds.readdir(dirname,
 		variables=['time'],
 		jd=True,
 		full=True,
 		warnings=warnings,
 		recursive=recursive,
-		parallel=True,
+		parallel=(njobs > 1),
+		njobs=njobs,
 	)
 
 	d_g = ds.read(os.path.join(dirname, 'vgrid.nc'), [
@@ -35,28 +36,10 @@ def index(dirname, warnings=[], recursive=False):
 def read(dirname, index, track, warnings=[], step=6./24., recursive=False):
 	start_time = track['time'][0]
 	end_time = track['time'][-1]
+	vgrid_filename = os.path.join(dirname, 'vgrid.nc')
 	dd_out = []
-
 	dd_idx, d_g = index
-
-	n = len(track['time'])
 	ncells = ds.dim(d_g, 'ncells')
-	cell = np.zeros(n, np.int64)
-
-	for i in range(n):
-		dist = misc.geo_distance(
-			np.full(ncells, track['lon'][i]),
-			np.full(ncells, track['lat'][i]),
-			d_g['clon'],
-			d_g['clat'],
-			method='gc'
-		)
-		cell[i] = np.argmin(dist)
-
-	d_g2 = ds.read(os.path.join(dirname, 'vgrid.nc'), ['zg', 'zghalf'], sel={
-		'ncells': cell,
-		'height': ds.dim(d_g, 'height') - 1,
-	})
 
 	for var in VARS:
 		dd = []
@@ -70,22 +53,34 @@ def read(dirname, index, track, warnings=[], step=6./24., recursive=False):
 				(time < end_time + step*0.5)
 			)[0]
 			for i in ii:
-				i2 = np.argmin(np.abs(track['time'] - time[i]))
-				lat0 = track['lat'][i2]
-				lon0 = track['lon'][i2]
+				lon0, lat0 = misc.track_at(track, time[i])
+				dist = misc.geo_distance(
+					np.full(ncells, lon0),
+					np.full(ncells, lat0),
+					d_g['clon'],
+					d_g['clat'],
+					method='gc'
+				)
+				cell = np.argmin(dist)
+
+				d_g2 = ds.read(vgrid_filename, ['zg', 'zghalf'], sel={
+					'ncells': cell,
+					'height': ds.dim(d_g, 'height') - 1,
+				})
+
 				d = ds.read(filename, [var],
 					sel={
 						'time': [i],
-						'ncells': cell[i2],
+						'ncells': cell,
 					},
 					jd=True,
 				)
 				ds.rename_dim(d, 'height', 'level')
 				d['time'] = np.array([time[i]])
-				d['lat'] = np.array([d_g['clat'][cell[i2]]])
-				d['lon'] = np.array([d_g['clon'][cell[i2]]])
-				d['orog'] = np.array([d_g2['zghalf'][i2]])
-				d['zfull'] = d_g2['zg'][::-1,i2]
+				d['lat'] = np.array([d_g['clat'][cell]])
+				d['lon'] = np.array([d_g['clon'][cell]])
+				d['orog'] = np.array([d_g2['zghalf']])
+				d['zfull'] = d_g2['zg'][::-1]
 				d['zfull'] = d['zfull'].reshape((1, len(d['zfull'])))
 				ds.dims(d, 'time', ['time'])
 				ds.dims(d, 'lat', ['time'])
