@@ -55,13 +55,13 @@ def worker(type_, input_, index, output, point, t, track1, debug, r):
 		warnings = []
 		d = process_model(model, input_, index, point, time=[t, t + 1.],
 			track=track1, debug=debug, recursive=r, warnings=warnings)
-			for w in warnings:
-				if len(w) == 2:
-					print('Warning: %s' % w[0], file=sys.stderr)
-					if debug: print(w[1], file=sys.stderr)
-					else: print('Use --debug to print debugging information.', file=sys.stderr)
-				else:
-					print('Warning: %s' % w, file=sys.stderr)
+		for w in warnings:
+			if len(w) == 2:
+				print('Warning: %s' % w[0], file=sys.stderr)
+				if debug: print(w[1], file=sys.stderr)
+				else: print('Use --debug to print debugging information.', file=sys.stderr)
+			else:
+				print('Warning: %s' % w, file=sys.stderr)
 		if d is not None:
 			ds.write(output_filename, d)
 			print('-> %s' % output_filename)
