@@ -18,7 +18,7 @@ VARS = [
 	'CLOUD',
 ]
 
-def read(dirname, track, warnings=[], step=3./24., recursive=False):
+def read(dirname, index, track, warnings=[], step=3./24., recursive=False):
 	dd_index = ds.readdir(dirname, variables=['time', 'lat', 'lon'], jd=True,
 		recursive=recursive)
 	start_time = track['time'][0]

@@ -119,7 +119,7 @@ def read0(type_, dirname, track, warnings=[], step=1./24., recursive=False):
 	d['.'] = META
 	return d
 
-def read(dirname, track, warnings=[], recursive=False):
+def read(dirname, index, track, warnings=[], recursive=False):
 	d_surf = read0('surf', os.path.join(dirname, 'surf'), track, warnings,
 		recursive=recursive)
 	d_plev = read0('plev', os.path.join(dirname, 'plev'), track, warnings,

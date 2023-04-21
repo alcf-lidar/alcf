@@ -23,7 +23,7 @@ VARS = [
 	'T',
 ]
 
-def read(dirname, track, warnings=[], step=3./24., recursive=False):
+def read(dirname, index, track, warnings=[], step=3./24., recursive=False):
 	dd_index = ds.readdir(dirname, variables=['XTIME'], jd=True,
 		recursive=recursive)
 	start_time = track['time'][0]
