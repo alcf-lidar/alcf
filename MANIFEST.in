@@ -1,4 +1,5 @@
 include Makefile download_cosp build_doc README.md LICENSE.md .editorconfig
+global-include *.pyx
 recursive-include src *
 recursive-include cosp *
 recursive-include mie-scattering *
