@@ -21,7 +21,6 @@ VARS = [
 	'XLONG',
 	'XLAT',
 	'T',
-	'T00',
 ]
 
 def read(dirname, track, warnings=[], step=3./24., recursive=False):
@@ -54,7 +53,7 @@ def read(dirname, track, warnings=[], step=3./24., recursive=False):
 			pfull = d['PB'][:,i,j] + d['P'][:,i,j]
 			zfull = (d['PHB'][:,i,j] + d['PH'][:,i,j])/9.81
 			zfull = 0.5*(zfull[1:] + zfull[:-1])
-			theta = d['T'][:,i,j] + d['T00']
+			theta = d['T'][:,i,j] + 300
 			ta = theta*(pfull/ps)**KAPPA
 			newshape3 = [1] + list(clw.shape)
 			newshape2 = [1] + list(ps.shape)
