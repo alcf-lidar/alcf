@@ -179,6 +179,22 @@ the [Semantic Versioning](https://semver.org). Installation instructions
 have been changing with versions. Please follow the installation instructions
 in the documentation of the particular version.
 
+#### [1.4.0](https://github.com/alcf-lidar/alcf/releases/tag/v1.4.0) (2023-04-21)
+
+<details>
+<summary>Release notes</summary>
+<ul>
+<li>IMPORTANT: Fixed temperature reading in the AMPS driver. Temperature was read as 32 K colder than it should, resulting in a relatively small but potentially significant error in lidar cloud occurrence calculated from AMPS data.</li>
+<li>Fixed skip option handling.</li>
+<li>Added support for ARM format of CL51 data.</li>
+<li>Parallel processing of model input.</li>
+<li>Partial time limiting support in lidar drivers using the time option.</li>
+<li>Faster interpolation implemented in Cython.</li>
+<li>Speed improvements in the ICON driver.</li>
+<li>Improvements in documentation.</li>
+</ul>
+</details>
+
 #### [1.3.1](https://github.com/alcf-lidar/alcf/releases/tag/v1.3.1) (2023-03-16)
 
 <details>
