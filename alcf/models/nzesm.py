@@ -105,6 +105,6 @@ def read(dirname, index, track, warnings=[], step=6./24.):
 		for i in range(n):
 			d['orog'][i] = 2*d['zfull'][i,0] - d['zfull'][i,1]
 	if 'time' in d:
-		d['time_bnds'] = misc.time_bnds(d['time'], step)
+		d['time_bnds'] = misc.time_bnds(d['time'], step, start_time, end_time)
 	d['.'] = META
 	return d

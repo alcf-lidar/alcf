@@ -67,5 +67,5 @@ def read(dirname, index, track, warnings=[], step=1./24., recursive=False):
 			dd.append(d_new)
 	d = ds.op.merge(dd, 'time')
 	if 'time' in d:
-		d['time_bnds'] = misc.time_bnds(d['time'], step)
+		d['time_bnds'] = misc.time_bnds(d['time'], step, start_time, end_time)
 	return d

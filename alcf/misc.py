@@ -93,10 +93,6 @@ def time_bnds(time, step, start=None, end=None):
 	bnds[:,1] = time + step*0.5
 	bnds[1:,0] = np.maximum(bnds[:-1,1], bnds[1:,0])
 	bnds[:-1,1] = np.minimum(bnds[1:,0], bnds[:-1,1])
-	if start is not None:
-		bnds[0,0] = start
-	if end is not None:
-		bnds[-1,1] = end
 	return bnds
 
 def sun_altitude(t, lon, lat):

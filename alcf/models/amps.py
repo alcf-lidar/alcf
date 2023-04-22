@@ -82,6 +82,5 @@ def read(dirname, index, track, warnings=[], step=3./24., recursive=False):
 	d = ds.op.merge(dd, 'time')
 	if 'time' in d:
 		d['time_bnds'] = misc.time_bnds(d['time'], step, start_time, end_time)
-		d['time'] = np.mean(d['time_bnds'], axis=1)
 	d['.'] = META
 	return d

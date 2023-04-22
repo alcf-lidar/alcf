@@ -112,6 +112,5 @@ def read(dirname, index, track, warnings=[], step=6./24., recursive=False):
 	d_out['pfull'] = d_out['pfull']*1e2
 	if 'time' in d_out:
 		d_out['time_bnds'] = misc.time_bnds(d_out['time'], step, start_time, end_time)
-		d_out['time'] = np.mean(d_out['time_bnds'], axis=1)
 	d_out['.'] = META
 	return d_out

@@ -93,6 +93,5 @@ def read(dirname, index, track, warnings=[], step=1./24., recursive=False):
 	d['cl'] *= 100.
 	if 'time' in d:
 		d['time_bnds'] = misc.time_bnds(d['time'], step, start_time, end_time)
-		d['time'] = np.mean(d['time_bnds'], axis=1)
 	d['.'] = META
 	return d
