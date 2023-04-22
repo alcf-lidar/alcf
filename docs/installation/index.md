@@ -179,6 +179,18 @@ the [Semantic Versioning](https://semver.org). Installation instructions
 have been changing with versions. Please follow the installation instructions
 in the documentation of the particular version.
 
+#### [1.5.0](https://github.com/alcf-lidar/alcf/releases/tag/v1.5.0) (2023-04-22)
+
+<details>
+<summary>Release notes</summary>
+<ul>
+<li>Fixed calculation of time and time bounds in model drivers.</li>
+<li>Require ds-format 3.6.1, which fixes an issue with readdir.</li>
+<li>Support for index reading in the AMPS model driver.</li>
+<li>Less verbose output from the COSP simulator.</li>
+</ul>
+</details>
+
 #### [1.4.1](https://github.com/alcf-lidar/alcf/releases/tag/v1.4.1) (2023-04-21)
 
 <details>
