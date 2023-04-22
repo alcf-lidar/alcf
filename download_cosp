@@ -1,5 +1,5 @@
 #!/bin/sh
-version=1.0.0
+version=1.1.0
 if [ -e cosp ]; then
 	echo "cosp directory already exists. Nothing to do."
 	exit 0
