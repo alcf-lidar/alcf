@@ -68,6 +68,7 @@ contains
         input%npoints = npoints
         input%nlevels = nlev
         input%emsfc_lw = 1.
+        input%Reff = 10e-6
         input%time = 1.
         input%lon = lon
         input%lat = lat
