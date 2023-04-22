@@ -23,13 +23,20 @@ VARS = [
 	'T',
 ]
 
+def index(dirname, warnings=[], recursive=False, njobs=1):
+	return ds.readdir(dirname, ['XTIME'],
+		jd=True,
+		recursive=recursive,
+		warnings=warnings,
+		parallel=(njobs > 1),
+		njobs=njobs,
+	)
+
 def read(dirname, index, track, warnings=[], step=3./24., recursive=False):
-	dd_index = ds.readdir(dirname, variables=['XTIME'], jd=True,
-		recursive=recursive)
 	start_time = track['time'][0]
 	end_time = track['time'][-1]
 	dd = []
-	for d_index in dd_index:
+	for d_index in index:
 		time = d_index['XTIME'][0]
 		time0 = d_index['.']['.']['SIMULATION_START_DATE']
 		time0 = aq.from_iso(time0.replace('_', 'T'))
