@@ -15,6 +15,16 @@ def noise_removal(d, **options):
 		c = (1.0*zfull[i,:]/zfull[i,-1])**2
 		b2[i,:] = b[i,:] - noise_m*c
 		b_sd[i,:] = noise_sd*c
+	nn_scale, nn_range = options.get('near_noise', [0, 0])
+	if nn_scale > 0 and nn_range > 0:
+		nn_lambda = np.log(2)/nn_range
+		for i in range(n):
+			near_noise = nn_scale*np.exp(-zfull[i,:]*nn_lambda)
+			b_sd[i,:] += near_noise
+	elif nn_scale == 0:
+		pass
+	else:
+		raise ValueError('Near-range noise scale must non-negative and range must be positive')
 	d['backscatter'] = b2
 	d['backscatter_sd'] = b_sd
 	d['.']['backscatter_sd'] = {
