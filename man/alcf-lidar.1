@@ -1,6 +1,6 @@
 .\" generated with Ronn-NG/v0.9.1
 .\" http://github.com/apjanke/ronn-ng/tree/0.9.1
-.TH "ALCF\-LIDAR" "1" "April 2023" ""
+.TH "ALCF\-LIDAR" "1" "August 2023" ""
 .SH "NAME"
 \fBalcf\-lidar\fR \- Process lidar data\.
 .SH "SYNOPSIS"
@@ -163,9 +163,11 @@ Noise removal based on noise distribution on the highest level\.
 \fBnone\fR
 Disable noise removal\.
 .SH "NOISE REMOVAL DEFAULT OPTIONS"
-.TP
-\fBnoise_removal_sampling: <period>\fR
-Sampling period for noise removal (seconds)\. Default: 300\.
+.IP "\[ci]" 4
+\fBnoise_removal_sampling: <period>\fR: Sampling period for noise removal (seconds)\. Default: 300\.
+.IP "\[ci]" 4
+\fBnear_noise: { <scale> <range> }\fR : Assume additional exponentially\-decaying near\-range noise\. The first argument is the value at zero range (sr^\-1\.m^\-1)\. The second argument is range at which the function decays to a half (m)\. Default: \fB{ 0 0 }\fR\.
+.IP "" 0
 .SH "TIME FORMAT"
 \fBYYYY\-MM\-DD[THH:MM[:SS]]\fR, where \fBYYYY\fR is year, \fBMM\fR is month, \fBDD\fR is day, \fBHH\fR is hour, \fBMM\fR is minute, \fBSS\fR is second\. Example: \fB2000\-01\-01T00:00:00\fR\.
 .SH "EXAMPLES"

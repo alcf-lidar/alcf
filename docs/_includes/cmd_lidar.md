@@ -104,6 +104,7 @@ Noise removal default options
 -----------------------------
 
 - `noise_removal_sampling: <period>`: Sampling period for noise removal (seconds). Default: 300.
+- `near_noise: { <scale> <range> }` : Assume additional exponentially-decaying near-range noise. The first argument is the value at zero range (sr^-1.m^-1). The second argument is range at which the function decays to a half (m). Default: `{ 0 0 }`.
 
 Time format
 -----------

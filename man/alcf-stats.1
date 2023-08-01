@@ -1,6 +1,6 @@
 .\" generated with Ronn-NG/v0.9.1
 .\" http://github.com/apjanke/ronn-ng/tree/0.9.1
-.TH "ALCF\-STATS" "1" "April 2023" ""
+.TH "ALCF\-STATS" "1" "August 2023" ""
 .SH "NAME"
 \fBalcf\-stats\fR \- Calculate cloud occurrence statistics\.
 .SH "SYNOPSIS"
@@ -38,6 +38,12 @@ Backscatter standard deviation histogram height (m)\. Default: \fB8000\fR\.
 .TP
 \fBfilter: <value> | { <value> \|\.\|\.\|\. }\fR
 Filter profiles by condition: \fBcloudy\fR for cloudy profiles only, \fBclear\fR for clear sky profiles only, \fBnight\fR for nighttime profiles, \fBday\fR for daytime profiles, \fBnone\fR for all profiles\. If an array of values is supplied, all conditions must be true\. For \fBnight\fR and \fBday\fR, lidar profiles must contain valid longitude and latitude fields set via the \fBlon\fR and \fBlat\fR arguments of \fBalcf lidar\fR or read implicitly from raw lidar data files if available (mpl, mpl2nc)\. Default: \fBnone\fR\.
+.TP
+\fBfilter_exclude: <value>\fR
+Filter by a mask defined in a file (NetCDF)\. The file must define a variable \fBtime_bnds\fR (int64), which are time intervals to be excluded from the result\. \fBtime_bnds\fR must have two dimensions \fBtime\fR of an arbitrary size and \fBbnds\fR of size 2\. \fBtime_bnds\fR must be a valid time in accordance with the CF Conventions\.
+.TP
+\fBfilter_include: <value>\fR
+The same as \fBfilter_exclude\fR, but with time intervals to be included in the result\. If both are defined, \fBfilter_include\fR takes precedence\.
 .TP
 \fBtlim: { <start> <end> }\fR
 Time limits (see Time format below)\. Default: \fBnone\fR\.
