@@ -11,6 +11,8 @@ def stats_map(d, state,
 	bsd_res=None,
 	bsd_z=None,
 	filter=None,
+	filter_exclude=None,
+	filter_include=None,
 	zlim=None,
 	zres=None,
 	**kwargs
@@ -111,6 +113,24 @@ def stats_map(d, state,
 		filter_mask &= filter_mask_0
 	if 'night' in filter:
 		filter_mask_0 = misc.sun_altitude(d['time'], d['lon'], d['lat']) < 0
+		if l > 0: filter_mask_0 = np.tile(filter_mask_0, [l, 1]).T
+		filter_mask &= filter_mask_0
+
+	if filter_exclude is not None:
+		filter_mask_0 = np.ones(n, dtype=bool)
+		n2 = filter_exclude.shape[0]
+		for i in range(n2):
+			t1, t2 = filter_exclude[i]
+			filter_mask_0 &= ~((d['time'] >= t1) & (d['time'] < t2))
+		if l > 0: filter_mask_0 = np.tile(filter_mask_0, [l, 1]).T
+		filter_mask &= filter_mask_0
+
+	if filter_include is not None:
+		filter_mask_0 = np.zeros(n, dtype=bool)
+		n2 = filter_include.shape[0]
+		for i in range(n2):
+			t1, t2 = filter_include[i]
+			filter_mask_0 |= (d['time'] >= t1) & (d['time'] < t2)
 		if l > 0: filter_mask_0 = np.tile(filter_mask_0, [l, 1]).T
 		filter_mask &= filter_mask_0
 
