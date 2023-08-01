@@ -62,7 +62,7 @@ Options
 - `bsd_res: <value>`: Backscatter standard deviation histogram resolution (1e-6 m-1.sr-1). Default: `0.001`.
 - `bsd_z: <value>`: Backscatter standard deviation histogram height (m). Default: `8000`.
 - `filter: <value> | { <value> ... }`: Filter profiles by condition: `cloudy` for cloudy profiles only, `clear` for clear sky profiles only, `night` for nighttime profiles, `day` for daytime profiles, `none` for all profiles. If an array of values is supplied, all conditions must be true. For `night` and `day`, lidar profiles must contain valid longitude and latitude fields set via the `lon` and `lat` arguments of `alcf lidar` or read implicitly from raw lidar data files if available (mpl, mpl2nc). Default: `none`.
-- `filter_exclude: <value>`: Filter by a mask defined in a file (NetCDF). The file must define a variable `time_bnds` (int64), which are time intervals to be excluded from the result. `time_bnds` must have two dimensions `time` of an arbitrary size and `bnds` of size 2. `time_bnds` must be a valid time in accordance with the CF Conventions.
+- `filter_exclude: <value>`: Filter by a mask defined in a NetCDF file, described below under Filter file.
 - `filter_include: <value>`: The same as `filter_exclude`, but with time intervals to be included in the result. If both are defined, `filter_include` takes precedence.
 - `tlim: { <start> <end> }`: Time limits (see Time format below). Default: `none`.
 - `zlim: { <low> <high> }`: Height limits (m). Default: `{ 0 15000 }`.
@@ -72,6 +72,11 @@ Time format
 -----------
 
 `YYYY-MM-DD[THH:MM[:SS]]`, where `YYYY` is year, `MM` is month, `DD` is day, `HH` is hour, `MM` is minute, `SS` is second. Example: `2000-01-01T00:00:00`.
+
+Filter file
+----------
+
+The NetCDF file must define a variable `time_bnds` (float64), which are time intervals to be excluded from the result. `time_bnds` must have two dimensions `time` of an arbitrary size and `bnds` of size 2. The first and second column of the variable should contain the start and end of the interval, respectively. `time_bnds` must be valid time in accordance with the CF Conventions.
 
 Examples
 --------
