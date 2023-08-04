@@ -6,6 +6,7 @@ import logging
 import traceback
 import copy
 import numpy as np
+import datetime as dt
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
@@ -148,8 +149,16 @@ def plot_profile(plot_type, d,
 	else:
 		norm = Normalize(vlim[0], vlim[1])
 
-	t1 = time[0] - 0.5*(time[1] - time[0])
-	t2 = time[-1] + 0.5*(time[-1] - time[-2])
+	time_dt = aq.to_datetime(time)
+	for i, t in enumerate(time_dt):
+		if t.microsecond >= 0.5e6:
+			t += dt.timedelta(microseconds=(1e6 - t.microsecond))
+		else:
+			t -= dt.timedelta(microseconds=t.microsecond)
+		time_dt[i] = t
+
+	t1 = time_dt[0] - 0.5*(time_dt[1] - time_dt[0])
+	t2 = time_dt[-1] + 0.5*(time_dt[-1] - time_dt[-2])
 	z1 = zfull[0] - 0.5*(zfull[1] - zfull[0])
 	z2 = zfull[-1] + 0.5*(zfull[-1] - zfull[-2])
 
@@ -176,14 +185,16 @@ def plot_profile(plot_type, d,
 	plt.xlabel('Time (UTC)')
 	plt.ylabel('Height (km)')
 
-	formatter = plt.FuncFormatter(lambda t, p: \
-		aq.to_datetime(t).strftime('%d/%m\n%H:%M'))
+	def format_func(t, p):
+		return mpl.dates.num2date(t).strftime('%d/%m\n%H:%M')
+
+	formatter = plt.FuncFormatter(format_func)
 	locator = AutoDateLocator()
 	plt.gca().xaxis.set_major_formatter(formatter)
 	plt.gca().xaxis.set_major_locator(locator)
 
 	if plot_type == 'backscatter' and opts.get('cloud_mask'):
-		cf = plt.contour(d['time'], d['zfull']*1e-3, cloud_mask.T,
+		cf = plt.contour(time_dt, d['zfull']*1e-3, cloud_mask.T,
 			colors='red',
 			linewidths=1,
 			linestyles='dashed',
@@ -197,7 +208,7 @@ def plot_profile(plot_type, d,
 		)
 
 	if 'altitude' in d:
-		plt.plot(d['time'], d['altitude']*1e-3, color='red', lw=0.5)
+		plt.plot(time_dt, d['altitude']*1e-3, color='red', lw=0.5)
 
 def plot_lr(d, subcolumn=0, **opts):
 	lr = d['lr'][:,subcolumn] if d['lr'].ndim == 2 else d['lr'][:]
