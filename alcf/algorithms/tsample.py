@@ -10,7 +10,7 @@ def tsample(d, tres):
 		np.amin(d['time_bnds'][:,0]),
 		np.amax(d['time_bnds'][:,1])
 	]])
-	d['time'] = np.array([np.mean(d['time_bnds'], axis=1)])
+	d['time'] = np.array(np.mean(d['time_bnds'], axis=1))
 	if 'backscatter_sd' in d:
 		n, m = d['backscatter_sd'].shape
 		d['backscatter_sd'] = np.sqrt(1./n*np.average(

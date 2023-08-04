@@ -34,8 +34,8 @@ def aggregate(dd, state, period, epsilon=1./86400.):
 	ddo = []
 	ddb = []
 	t = dd[0]['time_bnds'][0,0]
-	r = (t + 0.5) % period
-	t1 = state.get('t1', t - r)
+	r = (t + 0.5 + epsilon) % period
+	t1 = state.get('t1', t - r + epsilon)
 	t2 = state.get('t2', t1 + period)
 	for d in dd:
 		if d is None:
@@ -44,7 +44,7 @@ def aggregate(dd, state, period, epsilon=1./86400.):
 		i1 = 0
 		i = 0
 		while i < len(d['time']):
-			if not (d['time_bnds'][i,1] >= t2):
+			if not (d['time_bnds'][i,1] - t2 > epsilon):
 				i += 1
 				continue
 			ii = np.arange(i1, i + (t2 - d['time_bnds'][i,0] > epsilon))
@@ -55,8 +55,8 @@ def aggregate(dd, state, period, epsilon=1./86400.):
 			ddo += merge(ddb, t1, t2)
 			i1 = i
 			t = d['time_bnds'][i,0]
-			r = (t + 0.5) % period
-			t1 = max(t2, t - r)
+			r = (t + 0.5 + epsilon) % period
+			t1 = max(t2, t - r + epsilon)
 			t2 = t1 + period
 			ddb = []
 		ii = np.arange(i1, len(d['time']))
