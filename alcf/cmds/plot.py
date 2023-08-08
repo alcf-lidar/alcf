@@ -66,6 +66,7 @@ def plot_profile(plot_type, d,
 	vlog=None,
 	zres=50,
 	zlim=None,
+	render='antialiased',
 	**opts
 ):
 	if plot_type == 'backscatter':
@@ -162,12 +163,21 @@ def plot_profile(plot_type, d,
 	z1 = zfull[0] - 0.5*(zfull[1] - zfull[0])
 	z2 = zfull[-1] + 0.5*(zfull[-1] - zfull[-2])
 
+	try:
+		interpolation = {
+			'antialiased': 'antialiased',
+			'standard': 'none',
+		}[render]
+	except KeyError:
+		raise ValueError('Invalid rendering method "%s"' % render) from None
+
 	im = plt.imshow(x.T,
 		extent=(t1, t2, z1*1e-3, z2*1e-3),
 		aspect='auto',
 		origin='lower',
 		norm=norm,
 		cmap=cmap,
+		interpolation=interpolation,
 	)
 	im.cmap.set_under(under)
 
@@ -447,6 +457,7 @@ def run(plot_type, *args,
 	cloud_mask=True,
 	title=None,
 	zres=50,
+	render='antialiased',
 	**kwargs
 ):
 	'''
@@ -493,6 +504,7 @@ General options
 - `subcolumn: <value>`: Model subcolumn to plot. Default: `0`.
 - `title: <value>`: Plot title.
 - `width: <value>`: Plot width (inches). Default: `5` if `plot_type` is `cloud_occurrence` or `backscatter_hist` else `10`.
+- `render: <value>`: Render profiles anti-aliased (`antialiased`) or standard (`standard`). Standard is more suitable for short time intervals. Default: `antialiased`.
 
 backscatter options
 -------------------
@@ -573,6 +585,7 @@ Plot backscatter from processed Vaisala CL51 data in `alcf_cl51_lidar` and store
 		'cloud_mask': cloud_mask,
 		'width': width,
 		'height': height,
+		'render': render,
 	}
 
 	if xlim is not None: opts['xlim'] = xlim
