@@ -50,6 +50,16 @@ VARIABLES = [
 	'cli',
 ]
 
+def time_to_dt(time):
+	time_dt = aq.to_datetime(time)
+	for i, t in enumerate(time_dt):
+		if t.microsecond >= 0.5e6:
+			t += dt.timedelta(microseconds=(1e6 - t.microsecond))
+		else:
+			t -= dt.timedelta(microseconds=t.microsecond)
+		time_dt[i] = t
+	return time_dt
+
 def plot_legend(*args, theme='light', **kwargs):
 	legend = plt.legend(*args, fontsize=8, **kwargs)
 	f = legend.get_frame()
@@ -95,7 +105,6 @@ def plot_profile(plot_type, d,
 			b[mask] -= bmol[mask]
 		x = b*1e6
 		x[x <= 0.] = 0.5*vlim[0] # A value below the limit.
-		time = d['time']
 		zfull = d['zfull']
 	elif plot_type in ('clw', 'cli', 'cl'):
 		cmap = copy.copy(mpl.cm.get_cmap({
@@ -141,7 +150,6 @@ def plot_profile(plot_type, d,
 				zhalfi, x[i,:], zhalf
 			)
 		x = xp
-		time = d['time']
 	else:
 		raise ValueError('Invalid plot type "%s"' % plot_type)
 
@@ -149,14 +157,9 @@ def plot_profile(plot_type, d,
 		norm = LogNorm(vlim[0], vlim[1])
 	else:
 		norm = Normalize(vlim[0], vlim[1])
-
-	time_dt = aq.to_datetime(time)
-	for i, t in enumerate(time_dt):
-		if t.microsecond >= 0.5e6:
-			t += dt.timedelta(microseconds=(1e6 - t.microsecond))
-		else:
-			t -= dt.timedelta(microseconds=t.microsecond)
-		time_dt[i] = t
+	
+	time = d['time']
+	time_dt = time_to_dt(time)
 
 	t1 = time_dt[0] - 0.5*(time_dt[1] - time_dt[0])
 	t2 = time_dt[-1] + 0.5*(time_dt[-1] - time_dt[-2])
@@ -204,7 +207,13 @@ def plot_profile(plot_type, d,
 	plt.gca().xaxis.set_major_locator(locator)
 
 	if plot_type == 'backscatter' and opts.get('cloud_mask'):
-		cf = plt.contour(time_dt, d['zfull']*1e-3, cloud_mask.T,
+		time_dt_exp = np.array([t1] + time_dt.tolist() + [t2])
+		cloud_mask_exp = np.concatenate((
+			cloud_mask[0:1,:],
+			cloud_mask,
+			cloud_mask[-2:-1,:],
+		))
+		cf = plt.contour(time_dt_exp, d['zfull']*1e-3, cloud_mask_exp.T,
 			colors='red',
 			linewidths=1,
 			linestyles='dashed',
