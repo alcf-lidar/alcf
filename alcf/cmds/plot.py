@@ -426,7 +426,6 @@ def plot(plot_type, d, output,
 		plt.title(title)
 
 	plt.savefig(output, bbox_inches='tight', dpi=dpi)
-	plt.close()
 
 def run(plot_type, *args,
 	lr=True,
@@ -622,6 +621,8 @@ Plot backscatter from processed Vaisala CL51 data in `alcf_cl51_lidar` and store
 						sys.exit(1)
 					except:
 						logging.warning(traceback.format_exc())
+					finally:
+						plt.close()
 			else:
 				print('<- %s' % input1)
 				d = ds.read(input1, VARIABLES)
