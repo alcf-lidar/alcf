@@ -21,9 +21,9 @@ def couple(d, d_idx):
 		couple_bsd = True
 		d['backscatter_sd'] = np.full(dims, np.nan, np.float64)
 		d['.']['backscatter_sd'] = {
-			'.dims': ['time', 'range', 'column'] \
+			'.dims': ['time', 'level', 'column'] \
 				if len(dims) == 3 \
-				else ['time', 'range'],
+				else ['time', 'level'],
 			'long_name': 'total_attenuated_backscatter_coefficient_standard_deviation',
 			'units': 'm-1 sr-1',
 		}
@@ -31,9 +31,9 @@ def couple(d, d_idx):
 		couple_bmol = True
 		d['backscatter_mol'] = np.full(dims, np.nan, np.float64)
 		d['.']['backscatter_mol'] = {
-			'.dims': ['time', 'range', 'column'] \
+			'.dims': ['time', 'level', 'column'] \
 				if len(dims) == 3 \
-				else ['time', 'range'],
+				else ['time', 'level'],
 			'long_name': 'total_attenuated_molecular_backscatter_coefficient',
 			'units': 'm-1 sr-1',
 		}

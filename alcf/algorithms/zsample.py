@@ -22,8 +22,6 @@ def zsample(d, zres=None, zlim=None):
 		zhalf[i,:] = misc.half(zfull[i,:]) \
 			if zfull.ndim == 2 \
 			else misc.half(zfull)
-	r = d['range'] if 'range' in d \
-		else np.zeros(m, dtype=np.float64)
 	if m == 0:
 		return
 	zhalf2 = np.arange(zlim[0], zlim[-1] + zres, zres)
@@ -34,7 +32,6 @@ def zsample(d, zres=None, zlim=None):
 	b2 = np.zeros(dims2, dtype=np.float64)
 	b_sd2 = np.zeros(dims2, dtype=np.float64)
 	bmol2 = np.zeros(dims_mol2, dtype=np.float64)
-	# r2 = np.zeros(m2, dtype=np.float64)
 	if l == 0:
 		for i in range(n):
 			b2[i,:] = interp(zhalf[i,:], b[i,:], zhalf2)
@@ -47,7 +44,6 @@ def zsample(d, zres=None, zlim=None):
 	if 'backscatter_mol' in d:
 		for i in range(n):
 			bmol2[i,:] = interp(zhalf[i,:], bmol[i,:], zhalf2)
-	# d['range'] = r2
 	d['zfull'] = zfull2
 	d['backscatter'] = b2
 	if 'backscatter_mol' in d:

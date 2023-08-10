@@ -59,10 +59,10 @@ backscatter at a given location over a length of time or along a ship track.
 
 Variable | Description | Dimensions | Units
 --- | --- | --- | ---
-backscatter | total attenuated volume backscattering coefficient | time, range | m<sup>-1</sup>.sr<sup>-1</sup>
-backscatter_sd | total attenuated volume backscattering coefficient standard deviation | time, range | m<sup>-1</sup>.sr<sup>-1</sup>
+backscatter | total attenuated volume backscattering coefficient | time, level | m<sup>-1</sup>.sr<sup>-1</sup>
+backscatter_sd | total attenuated volume backscattering coefficient standard deviation | time, level | m<sup>-1</sup>.sr<sup>-1</sup>
 cbh | cloud base height | time | m
-cloud_mask | cloud mask | time, range | 1
+cloud_mask | cloud mask | time, level | 1
 lr | lidar ratio | time | sr
 time | time | time | days since -4713-11-24 12:00 UTC (`proleptic_gregorian` calendar)
 time_bnds | time bounds | time, bnds | days since -4713-11-24 12:00 UTC (`proleptic_gregorian` calendar)

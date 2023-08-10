@@ -28,7 +28,7 @@ def noise_removal(d, **options):
 	d['backscatter'] = b2
 	d['backscatter_sd'] = b_sd
 	d['.']['backscatter_sd'] = {
-		'.dims': ['time', 'range'],
+		'.dims': ['time', 'level'],
 		'long_name': 'total attenuated volume backscattering coefficient standard deviation',
 		'units': 'm-1 sr-1',
 	}

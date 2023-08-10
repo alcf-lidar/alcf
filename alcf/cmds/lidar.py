@@ -25,7 +25,6 @@ VARIABLES = [
 	'altitude',
 	'lon',
 	'lat',
-	# 'range',
 ]
 
 def read_calibration_file(filename):
