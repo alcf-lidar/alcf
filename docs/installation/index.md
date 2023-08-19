@@ -18,36 +18,30 @@ if you want to modify any of its parts.
 
 The instructions below assume that you enter the commands in the terminal.
 
-1. Install required programs and libraries:
+1. Install required system packages.
 
     On Debian-based Linux distributions (Ubuntu, Debian, Devuan, ...), install
     dependencies with:
 
     ```sh
     sudo apt install gcc make gfortran libhdf5-dev libnetcdf-dev \
-        libnetcdff-dev python3 python3-setuptools python3-pip cython
+        libnetcdff-dev python3 python3-setuptools python3-pip cython pipx
     ```
 
     On Fedora, install dependencies with:
 
     ```sh
     sudo yum install make gcc gfortran hdf5-devel netcdf-devel \
-        netcdf-fortran-devel python3-setuptools python3-pip python3-Cython
+        netcdf-fortran-devel python3-setuptools python3-pip python3-Cython pipx
     ```
 
 2. Install the ALCF with:
 
     ```sh
-    # To install globally:
-    sudo pip3 install alcf --upgrade
-
-    # To install in the user's home directory
-    # (make sure "$HOME/.local/bin" is in the PATH environment variable):
-    pip3 install alcf --upgrade --user
+    pipx install alcf
     ```
 
-	Note that depending on the distribution you might have to replace `pip3`
-	above with `pip`.
+    Make sure "$HOME/.local/bin" is in the PATH environment variable.
 
 ### Windows
 
@@ -123,14 +117,17 @@ should output:
 
 ### How to uninstall ALCF
 
-To uninstall ALCF:
+To uninstall ALCF on Linux:
 
 ```sh
-pip3 uninstall alcf
+pipx uninstall alcf
 ```
 
-Note that depending on the distribution you might have to replace `pip3` above
-with `pip`.
+To uninstall ALCF on macOS with Anaconda:
+
+```
+pip uninstall alcf
+```
 
 ### Building from the source code
 
@@ -139,26 +136,13 @@ in the source code directory:
 
 ```sh
 ./download_cosp
-pip3 install .
+pipx install . # Replace pipx with pip for installation in Anaconda.
 ```
-
-Note that depending on the distribution you might have to replace `pip3` above
-with `pip`.
 
 This will download and unpack [ALCF-COSP](https://github.com/alcf-lidar/alcf-cosp)
 (a version of COSP with support for ground-based lidars), and compile and
 install the ALCF. Use this option if you want to customise any parts of the
 ALCF.
-
-You can also use the following command to continusly change code and have
-changes immediately applied in the alcf commands:
-
-```sh
-pip3 install -e .
-```
-
-Note that depending on the distribution you might have to replace `python3`
-above with `python`.
 
 ### Preparing a source distribution
 
@@ -167,6 +151,8 @@ To prepare a source distribution:
 ```sh
 ./download_cosp
 python3 setup.py sdist
+# You might have to replace python3 with python depending on the Python
+# distribution.
 ```
 
 The resulting package can be found in `dist/alcf-<version>.tar.gz`. This is the
