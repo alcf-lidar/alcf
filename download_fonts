@@ -1,0 +1,14 @@
+#!/bin/sh
+URL="https://github.com/uswds/public-sans/raw/v2.000/"
+if [ -e alcf/fonts ]; then
+	echo "alcf/fonts directory already exists. Nothing to do."
+	exit 0
+fi
+mkdir -p alcf/fonts
+cd alcf/fonts
+wget "$URL/LICENSE.md"
+wget "$URL/fonts/otf/PublicSans-Regular.otf"
+wget "$URL/fonts/otf/PublicSans-Bold.otf"
+wget "$URL/fonts/otf/PublicSans-Italic.otf"
+wget "$URL/fonts/otf/PublicSans-BoldItalic.otf"
+echo "Finished downloading fonts"
