@@ -25,7 +25,7 @@ The instructions below assume that you enter the commands in the terminal.
 
     ```sh
     sudo apt install gcc make gfortran libhdf5-dev libnetcdf-dev \
-        libnetcdff-dev python3 python3-setuptools python3-pip cython pipx
+        libnetcdff-dev python3 python3-setuptools python3-pip cython3 pipx
     ```
 
     On Fedora, install dependencies with:
