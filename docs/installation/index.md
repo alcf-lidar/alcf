@@ -166,6 +166,23 @@ the [Semantic Versioning](https://semver.org). Installation instructions
 have been changing with versions. Please follow the installation instructions
 in the documentation of the particular version.
 
+#### [1.5.1](https://github.com/alcf-lidar/alcf/releases/tag/v1.5.1) (2023-08-19)
+
+<details>
+<summary>Release notes</summary>
+<ul>
+<li>alcf plot: New render option.</li>
+<li>alcf plot: Fixed closing of temporary plot objects.</li>
+<li>alcf plot: Fixed time axis tick locations.</li>
+<li>alcf stats: Support for filtering by file.</li>
+<li>alcf lidar: Support for adding near-range noise.</li>
+<li>Fixes related to short output time intervals.</li>
+<li>Support for installation with pipx.</li>
+<li>Fixed output metadata.</li>
+<li>Imporved documentation.</li>
+</ul>
+</details>
+
 #### [1.5.0](https://github.com/alcf-lidar/alcf/releases/tag/v1.5.0) (2023-04-22)
 
 <details>
