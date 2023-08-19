@@ -71,7 +71,7 @@ Installation on Windows is possible under the "Windows Subsystem for Linux".
 It is recommended to run ALCF on [Linux](#linux).
 
 The installation has been tested on macOS Monterey Intel. Installation on Apple
-M1 may be possible but is untested.
+ARM (M1 CPUs and later) may be possible but is untested.
 
 1. Install [Anaconda](https://www.anaconda.com).
 
