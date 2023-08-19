@@ -41,7 +41,7 @@ The instructions below assume that you enter the commands in the terminal.
     pipx install alcf
     ```
 
-    Make sure "$HOME/.local/bin" is in the PATH environment variable.
+    Make sure that `$HOME/.local/bin` is in the PATH environment variable.
 
 ### Windows
 
@@ -151,9 +151,10 @@ To prepare a source distribution:
 ```sh
 ./download_cosp
 python3 setup.py sdist
-# You might have to replace python3 with python depending on the Python
-# distribution.
 ```
+
+You might have to replace python3 with python depending on the Python
+distribution.
 
 The resulting package can be found in `dist/alcf-<version>.tar.gz`. This is the
 type of package available on [PyPI](https://pypi.org/).
