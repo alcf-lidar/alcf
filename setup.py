@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, Extension
 from setuptools.command.build_py import build_py
-from Cython.Build import cythonize
 import os
 import os.path
 import subprocess
@@ -22,7 +21,12 @@ setup(
 	license='MIT',
 	scripts=['bin/alcf'],
 	packages=find_packages(),
-	ext_modules=cythonize('alcf/algorithms/interp.pyx', language_level=3),
+	ext_modules=[
+		Extension(
+			'alcf.algorithms.interp',
+			['alcf/algorithms/interp.pyx'],
+		),
+	],
 	zip_safe=False,
 	package_data={'alcf': ['cosp_alcf'] + \
 		[os.path.join('fonts', x) for x in os.listdir('alcf/fonts')]},
