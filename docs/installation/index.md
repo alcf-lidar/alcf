@@ -153,7 +153,7 @@ To prepare a source distribution:
 python3 setup.py sdist
 ```
 
-You might have to replace python3 with python depending on the Python
+You might have to replace `python3` with `python` depending on the Python
 distribution.
 
 The resulting package can be found in `dist/alcf-<version>.tar.gz`. This is the
