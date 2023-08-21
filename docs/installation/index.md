@@ -39,6 +39,8 @@ The instructions below assume that you enter the commands in the terminal.
 
     ```sh
     pipx install alcf
+    mkdir -p ~/.local/share/man/man1
+    ln -s ~/.local/pipx/venvs/alcf/share/man/man1/alcf*.1 ~/.local/share/man/man1/
     ```
 
     Make sure that `$HOME/.local/bin` is in the PATH environment variable.
@@ -121,6 +123,7 @@ To uninstall ALCF on Linux:
 
 ```sh
 pipx uninstall alcf
+rm ~/.local/share/man/man1/alcf*.1
 ```
 
 To uninstall ALCF on macOS with Anaconda:
@@ -137,6 +140,8 @@ in the source code directory:
 ```sh
 ./download_cosp
 pipx install . # Replace pipx with pip for installation in Anaconda.
+mkdir -p ~/.local/share/man/man1
+ln -s ~/.local/pipx/venvs/alcf/share/man/man1/alcf*.1 ~/.local/share/man/man1/
 ```
 
 This will download and unpack [ALCF-COSP](https://github.com/alcf-lidar/alcf-cosp)
