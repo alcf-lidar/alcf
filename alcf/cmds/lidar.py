@@ -272,7 +272,7 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 				tres=tres/86400.,
 				output_sampling=output_sampling/86400.,
 			)
-			dd = misc.aggregate(dd, state['output_sample_2'], output_sampling/86400., report=True)
+			dd = misc.aggregate(dd, state['output_sample_2'], output_sampling/86400.)
 		if cloud_detection_mod is not None:
 			dd = cloud_detection_mod.stream(dd, state['cloud_detection'], **options)
 		if cloud_base_detection_mod is not None:
