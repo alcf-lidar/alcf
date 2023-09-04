@@ -19,7 +19,9 @@ setup(
 	author='Peter Kuma, Adrian J. McDonald, Olaf Morgenstern, Richard Querel, Israel Silber, Connor J. Flynn',
 	author_email='peter@peterkuma.net',
 	license='MIT',
-	scripts=['bin/alcf'],
+	entry_points={
+		'console_scripts': 'alcf = alcf.bin.alcf:main_wrapper',
+	},
 	packages=find_packages(),
 	ext_modules=[
 		Extension(
