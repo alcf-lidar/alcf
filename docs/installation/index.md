@@ -82,7 +82,13 @@ Apple ARM (M1 CPUs and later) may be possible but is untested.
     sudo port select --set gcc mp-gcc12
     ```
 
-3. Install the ALCF with:
+3. Install required Python packages:
+
+    ```sh
+    python3 -m pip install numpy
+    ```
+
+4. Install the ALCF:
 
     ```sh
     python3 -m pip install alcf
