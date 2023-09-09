@@ -6,6 +6,12 @@ import os
 import os.path
 import subprocess
 
+try:
+	import numpy as np
+	numpy_include_dirs = [np.get_include()]
+except ModuleNotFoundError:
+	numpy_include_dirs = []
+
 class BuildCOSP(build_py):
 	def run(self):
 		subprocess.run('make', cwd='cosp', check=True)
@@ -19,12 +25,15 @@ setup(
 	author='Peter Kuma, Adrian J. McDonald, Olaf Morgenstern, Richard Querel, Israel Silber, Connor J. Flynn',
 	author_email='peter@peterkuma.net',
 	license='MIT',
-	scripts=['bin/alcf'],
+	entry_points={
+		'console_scripts': 'alcf = alcf.bin.alcf:main_wrapper',
+	},
 	packages=find_packages(),
 	ext_modules=[
 		Extension(
 			'alcf.algorithms.interp',
 			['alcf/algorithms/interp.pyx'],
+			include_dirs = numpy_include_dirs,
 		),
 	],
 	zip_safe=False,
@@ -34,6 +43,7 @@ setup(
 		[os.path.join('man', x) for x in os.listdir('man')])],
 	setup_requires=[
 		'cython',
+		'numpy',
 	],
 	install_requires=[
 		'numpy>=1.16.2',

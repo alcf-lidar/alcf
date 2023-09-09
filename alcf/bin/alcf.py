@@ -8,7 +8,10 @@ import sys
 import pst
 from alcf.cmds import main
 
-if __name__ == '__main__':
+def main_wrapper():
 	args, kwargs = pst.decode_argv(sys.argv, as_unicode=True)
 	ret = main.run(*args[1:], **kwargs)
 	sys.exit(ret)
+
+if __name__ == '__main__':
+	main_wrapper()

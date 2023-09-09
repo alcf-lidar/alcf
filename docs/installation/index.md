@@ -70,27 +70,33 @@ Installation on Windows is possible under the "Windows Subsystem for Linux".
 
 ### macOS
 
-It is recommended to run ALCF on [Linux](#linux).
+The installation has been tested on macOS Ventura on Intel. Installation on
+Apple ARM (M1 CPUs and later) may be possible but is untested.
 
-The installation has been tested on macOS Monterey Intel. Installation on Apple
-ARM (M1 CPUs and later) may be possible but is untested.
+1. Install [MacPorts](https://www.macports.org).
 
-1. Install [Anaconda](https://www.anaconda.com).
-
-2. Install [MacPorts](https://www.macports.org).
-
-3. Install required MacPorts packages:
+2. Install required MacPorts packages:
 
     ```sh
-    sudo port install gcc11 hdf5 netcdf netcdf-fortran
-    sudo port select --set gcc mp-gcc11
+    sudo port install gcc12 hdf5 netcdf netcdf-fortran
+    sudo port select --set gcc mp-gcc12
     ```
 
-4. Install the ALCF with:
+3. Install the ALCF with:
 
     ```sh
-    pip install alcf
+    python3 -m pip install alcf
     ```
+
+Make sure that `/Users/<user>/Library/Python/<version>/bin` is included in the
+`PATH` environment variable if not already, where `<user>` is your system
+user name and `<version>` is the Python version. This path should be printed
+by the above command. This can be done by adding this line to the file
+`.zprofile` in your home directory and restart the Terminal:
+
+```
+PATH="$PATH:/Users/<user>/Library/Python/<version>/bin"
+```
 
 On macOS, the default shell zsh does not work with the command-line syntax
 of the ALCF. It is highly recommeded to run any `alcf` commands in the `bash`
