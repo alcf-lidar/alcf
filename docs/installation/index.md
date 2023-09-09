@@ -177,6 +177,18 @@ the [Semantic Versioning](https://semver.org). Installation instructions
 have been changing with versions. Please follow the installation instructions
 in the documentation of the particular version.
 
+#### [1.5.2](https://github.com/alcf-lidar/alcf/releases/tag/v1.5.2) (2023-09-09)
+
+<details>
+<summary>Release notes</summary>
+<ul>
+<li>Fixed installation of manual pages.</li>
+<li>Fixed output aggregation with short time intervals.</li>
+<li>Fixed installation on macOS Ventura.</li>
+<li>aclf lidar: Fixed an array type error with certain values of zres.</li>
+</ul>
+</details>
+
 #### [1.5.1](https://github.com/alcf-lidar/alcf/releases/tag/v1.5.1) (2023-08-19)
 
 <details>
