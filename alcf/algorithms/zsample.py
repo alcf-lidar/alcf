@@ -24,7 +24,7 @@ def zsample(d, zres=None, zlim=None):
 			else misc.half(zfull)
 	if m == 0:
 		return
-	zhalf2 = np.arange(zlim[0], zlim[-1] + zres, zres)
+	zhalf2 = np.arange(zlim[0], zlim[-1] + zres, zres, np.float64)
 	zfull2 = (zhalf2[1:] + zhalf2[:-1])*0.5
 	m2 = len(zfull2)
 	dims2 = (n, m2, l) if len(b.shape) == 3 else (n, m2)
