@@ -157,7 +157,7 @@ def plot_profile(plot_type, d,
 		norm = LogNorm(vlim[0], vlim[1])
 	else:
 		norm = Normalize(vlim[0], vlim[1])
-	
+
 	time = d['time']
 	time_dt = time_to_dt(time)
 
@@ -175,7 +175,7 @@ def plot_profile(plot_type, d,
 		raise ValueError('Invalid rendering method "%s"' % render) from None
 
 	im = plt.imshow(x.T,
-		extent=(mpl.dates.date2num(t1), mpl.dates.date2num(t2), z1, z2),
+		extent=(date2num(t1), date2num(t2), z1*1e-3, z2*1e-3),
 		aspect='auto',
 		origin='lower',
 		norm=norm,
@@ -213,7 +213,10 @@ def plot_profile(plot_type, d,
 			cloud_mask,
 			cloud_mask[-2:-1,:],
 		))
-		cf = plt.contour(time_dt_exp, d['zfull']*1e-3, cloud_mask_exp.T,
+		cf = plt.contour(
+			date2num(time_dt_exp),
+			d['zfull']*1e-3,
+			cloud_mask_exp.T,
 			colors='red',
 			linewidths=1,
 			linestyles='dashed',
@@ -227,7 +230,7 @@ def plot_profile(plot_type, d,
 		)
 
 	if 'altitude' in d:
-		plt.plot(time_dt, d['altitude']*1e-3, color='red', lw=0.5)
+		plt.plot(date2num(time_dt), d['altitude']*1e-3, color='red', lw=0.5)
 
 def plot_lr(d, subcolumn=0, **opts):
 	lr = d['lr'][:,subcolumn] if d['lr'].ndim == 2 else d['lr'][:]
