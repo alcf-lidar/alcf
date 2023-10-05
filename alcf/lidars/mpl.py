@@ -54,7 +54,10 @@ def parse_temporal_resolution(s):
 
 def convert_time(d):
 	time = np.array([
-		(dt.datetime(y, m, day, H, M, S) - dt.datetime(1970, 1, 1)).total_seconds()/(24*60*60) + 2440587.5
+		(
+			dt.datetime(int(y), int(m), int(day), int(H), int(M), int(S)) -
+			dt.datetime(1970, 1, 1)
+		).total_seconds()/(24*60*60) + 2440587.5
 		for y, m, day, H, M, S
 		in zip(d['year'], d['month'], d['day'], d['hour'], d['minute'], d['second'])
 	], np.float64)
