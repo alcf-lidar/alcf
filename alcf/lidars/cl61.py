@@ -11,15 +11,24 @@ MAX_RANGE = 15400 # m
 
 VARS = {
 	'backscatter': ['beta_att'],
-	'time': ['time'],
-	'time_bnds': ['time'],
-	'zfull': ['time', 'range', 'elevation'],
-	'altitude': ['time', 'elevation'],
-	'lon': ['time'],
-	'lat': ['time'],
+	'zfull': ['range', 'elevation'],
+	'altitude': ['elevation'],
 }
 
-def read(filename, vars, altitude=None, lon=None, lat=None, time=None, **kwargs):
+DEFAULT_VARS = [
+	'time'
+]
+
+def read(
+	filename,
+	vars,
+	altitude=None,
+	lon=None,
+	lat=None,
+	time=None,
+	keep_vars=[],
+	**kwargs
+):
 	sel = None
 	tres = None
 	if time is not None:
@@ -30,14 +39,18 @@ def read(filename, vars, altitude=None, lon=None, lat=None, time=None, **kwargs)
 		if np.sum(mask) == 0: return None
 		sel = {'time': mask}
 
-	dep_vars = list(set([y for x in vars if x in VARS for y in VARS[x]]))
-	d = ds.read(filename, dep_vars, sel=sel)
+	dep_vars = misc.dep_vars(VARS, vars)
+	req_vars = dep_vars + DEFAULT_VARS + keep_vars
+	d = ds.read(filename, req_vars, sel=sel, full=True)
 	dx = {}
+	misc.populate_meta(dx, META, set(vars) & set(VARS))
+	n = ds.dim(d, 'profile')
+	time = d['time']/86400. + 2440587.5
 	if 'time' in vars:
-		n = len(d['time'])
-		dx['time'] = d['time']/86400. + 2440587.5
-		if tres is None: tres = dx['time'][1] - dx['time'][0]
-		dx['time_bnds'] = misc.time_bnds(dx['time'], tres)
+		dx['time'] = time
+	if 'time_bnds' in vars:
+		if tres is None: tres = time[1] - time[0]
+		dx['time_bnds'] = misc.time_bnds(time, tres)
 	if 'altitude' in vars:
 		if d['elevation'].ndim == 0:
 			dx['altitude'] = np.full(n, d['elevation'], np.float64)
@@ -52,10 +65,6 @@ def read(filename, vars, altitude=None, lon=None, lat=None, time=None, **kwargs)
 		dx['lat'] = np.full(n, lat, np.float64)
 	if 'backscatter' in vars:
 		dx['backscatter'] = d['beta_att']*CALIBRATION_COEFF
-	dx['.'] = META
-	dx['.'] = {
-		x: dx['.'][x]
-		for x in vars
-		if x in VARS
-	}
+	for var in keep_vars:
+		misc.keep_var(var, d, dx)
 	return dx

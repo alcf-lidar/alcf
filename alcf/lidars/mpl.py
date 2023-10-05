@@ -62,7 +62,16 @@ def convert_time(d):
 	time_bnds = misc.time_bnds(time, tres)
 	return time, time_bnds, tres
 
-def read(filename, vars, altitude=None, lon=None, lat=None, time=None, **kwargs):
+def read(
+	filename,
+	vars,
+	altitude=None,
+	lon=None,
+	lat=None,
+	time=None,
+	keep_vars=[],
+	**kwargs
+):
 	sel = None
 	tres = None
 	if time is not None:
@@ -72,23 +81,24 @@ def read(filename, vars, altitude=None, lon=None, lat=None, time=None, **kwargs)
 		if np.sum(mask) == 0: return None
 		sel = {'time': mask}
 
-	dep_vars = list(set([y for x in vars if x in VARS for y in VARS[x]]))
-	required_vars = dep_vars + DEFAULT_VARS
-	d = ds.read(filename, required_vars, sel=sel)
-	mask = d['elevation_angle'] == 0.0
+	dep_vars = misc.dep_vars(VARS, vars)
+	req_vars = dep_vars + DEFAULT_VARS + keep_vars
+	d = ds.read(filename, req_vars, sel=sel, full=True)
 	dx = {}
-	n = len(d['year'])
-
+	misc.populate_meta(dx, META, set(vars) & set(VARS))
+	n = ds.dim(d, 'time')
 	altitude = d['altitude'] if altitude is None else \
 		np.full(n, altitude, np.float64)
 	lon = d['longitude'] if lon is None else \
 		np.full(n, lon, np.float64)
 	lat = d['latitude'] if lat is None else \
 		np.full(n, lat, np.float64)
-
+	time, time_bnds, tres = convert_time(d)
 	if 'time' in vars:
-		dx['time'], dx['time_bnds'], tres = convert_time(d)
+		dx['time'] = time
 		# dx['time'] += 13.0/24.0
+	if 'time_bnds' in vars:
+		dx['time_bnds'] = time_bnds
 	if 'zfull' in vars:
 		zfull1 = np.outer(
 			np.sin(d['elevation_angle']/180.0*np.pi),
@@ -109,7 +119,6 @@ def read(filename, vars, altitude=None, lon=None, lat=None, time=None, **kwargs)
 	# 	dx['backscatter_x'] = d['copol_nrb']*CALIBRATION_COEFF
 	# if 'backscatter_y' in vars:
 	# 	dx['backscatter_y'] = d['crosspol_nrb']*CALIBRATION_COEFF
-	dx['.'] = META
 		# 'backscatter_x': {
 		# 	'.dims': ['time', 'level'],
 		# 	'long_name': 'copolarized_attenuated_backscatter_coefficient',
@@ -120,9 +129,6 @@ def read(filename, vars, altitude=None, lon=None, lat=None, time=None, **kwargs)
 		# 	'long_name': 'crosspolarized_attenuated_backscatter_coefficient',
 		# 	'units': 'm-1 sr-1',
 		# },
-	dx['.'] = {
-		x: dx['.'][x]
-		for x in vars
-		if x in dx['.']
-	}
+	for var in keep_vars:
+		misc.keep_var(var, d, dx)
 	return dx

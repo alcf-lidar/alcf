@@ -51,6 +51,7 @@ def run(type_, input_, output,
 	lat=None,
 	lon=None,
 	r=False,
+	keep_vars=[],
 	**options
 ):
 	"""
@@ -109,6 +110,7 @@ Options
 - `cloud_detection: <algorithm>`: Cloud detection algorithm. Available algorithms: `default`, `none`. Default: `default`.
 - `cloud_base_detection: <algorithm>`: Cloud base detection algorithm. Available algorithms: `default`, `none`. Default: `default`.
 - `--fix_cl_range`: Fix CL31/CL51 range correction (if `noise_h2` firmware option if off). The critical range is taken from `cl_crit_range`.
+- `keep_vars: { <var>... }`: Keep the listed input variables. The variable must be numerical and have a time dimension. The variable is resampled in the same way as backscatter along their time and level dimensions, its name is prefixed with `input_`, and its type is changed to float64. Default: `{ }`.
 - `lat: <lat>`: Latitude of the instrument (degrees North). Default: Taken from lidar data or `none` if not available.
 - `lon: <lon>`: Longitude of the instrument (degrees East). Default: Taken from lidar data or `none` if not available.
 - `noise_removal: <algorithm>`: Noise removal algorithm. Available algorithms: `default`, `none`.  Default: `default`.
@@ -303,6 +305,7 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 					fix_cl_range=fix_cl_range,
 					cl_crit_range=cl_crit_range,
 					time=time1,
+					keep_vars=keep_vars,
 				)
 				if d is None: continue
 				dd = process([d], state, **options)
@@ -321,5 +324,7 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 			lat=lat,
 			fix_cl_range=fix_cl_range,
 			cl_crit_range=cl_crit_range,
+			time=time1,
+			keep_vars=keep_vars,
 		)
 		dd = process([d, None], state, **options)

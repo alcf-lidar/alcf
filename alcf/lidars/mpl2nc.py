@@ -10,19 +10,29 @@ SURFACE_LIDAR = True
 SC_LR = 16.0 # sr
 MAX_RANGE = 30000 # m
 
-VARIABLES = [
-	'nrb_copol',
-	'nrb_crosspol',
-	'c',
-	'bin_time',
+VARS = {
+	'backscatter': ['nrb_copol', 'nrb_crosspol'],
+	'zfull': ['bin_time', 'c'],
+}
+
+DEFAULT_VARS = [
 	'time',
 	'elevation_angle',
 	'gps_altitude',
-	'gps_longitude',
 	'gps_latitude',
+	'gps_longitude',
 ]
 
-def read(filename, vars, altitude=None, lon=None, lat=None, time=None, **kwargs):
+def read(
+	filename,
+	vars,
+	altitude=None,
+	lon=None,
+	lat=None,
+	time=None,
+	keep_vars=[],
+	**kwargs
+):
 	sel = None
 	tres = None
 	if time is not None:
@@ -33,22 +43,26 @@ def read(filename, vars, altitude=None, lon=None, lat=None, time=None, **kwargs)
 		if np.sum(mask) == 0: return None
 		sel = {'profile': mask}
 
-	d = ds.read(filename, VARIABLES, jd=True, sel=sel)
+	dep_vars = misc.dep_vars(VARS, vars)
+	req_vars = dep_vars + DEFAULT_VARS + keep_vars
+	d = ds.read(filename, req_vars, jd=True, sel=sel, full=True)
 	mask = d['elevation_angle'] == 0.0
 	dx = {}
-	n, m = d['nrb_copol'].shape
-
+	misc.populate_meta(dx, META, set(vars) & set(VARS))
+	n = ds.dims(d, 'profile')
+	m = ds.dims(d, 'range')
 	altitude = d['gps_altitude'] if altitude is None else \
 		np.full(n, altitude, np.float64)
 	lon = d['gps_longitude'] if lon is None else \
 		np.full(n, lon, np.float64)
 	lat = d['gps_latitude'] if lat is None else \
 		np.full(n, lat, np.float64)
-
+	time = d['time']
 	if 'time' in vars:
-		dx['time'] = d['time']
-		if tres is None: tres = dx['time'][1] - dx['time'][0]
-		dx['time_bnds'] = misc.time_bnds(dx['time'], tres)
+		dx['time'] = time
+	if 'time_bnds' in vars:
+		if tres is None: tres = time[1] - time[0]
+		dx['time_bnds'] = misc.time_bnds(time, tres)
 	if 'zfull' in vars:
 		dx['zfull'] = np.full((n, m), np.nan, np.float64)
 		for i in range(n):
@@ -63,10 +77,6 @@ def read(filename, vars, altitude=None, lon=None, lat=None, time=None, **kwargs)
 		dx['lon'] = lon
 	if 'lat' in vars:
 		dx['lat'] = lat
-	dx['.'] = META
-	dx['.'] = {
-		x: dx['.'][x]
-		for x in vars
-		if x in dx['.']
-	}
+	for var in keep_vars:
+		misc.keep_var(var, d, dx)
 	return dx

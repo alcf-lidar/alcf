@@ -175,7 +175,7 @@ def plot_profile(plot_type, d,
 		raise ValueError('Invalid rendering method "%s"' % render) from None
 
 	im = plt.imshow(x.T,
-		extent=(t1, t2, z1*1e-3, z2*1e-3),
+		extent=(mpl.dates.date2num(t1), mpl.dates.date2num(t2), z1, z2),
 		aspect='auto',
 		origin='lower',
 		norm=norm,

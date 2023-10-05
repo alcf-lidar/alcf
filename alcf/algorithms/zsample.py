@@ -1,56 +1,52 @@
 import numpy as np
+import ds_format as ds
 from alcf import misc
 from alcf.algorithms import interp
 
 def zsample(d, zres=None, zlim=None):
-	b = d['backscatter']
-	if 'backscatter_mol' in d:
-		bmol = d['backscatter_mol']
-	if len(b.shape) == 3:
-		n, m, l = b.shape
-		dims = (n, m, l)
-	else:
-		n, m = b.shape
-		l = 0
-		dims = (n, m)
-	dims_mol = (n, m)
-	b_sd = d['backscatter_sd'] if 'backscatter_sd' in d \
-		else np.zeros(dims, dtype=np.float64)
+	n = ds.dim(d, 'time')
+	m = ds.dim(d, 'level')
+	l = ds.dim(d, 'column')
+	if m == 0:
+		return
+
 	zfull = d['zfull']
 	zhalf = np.zeros((n, m+1), dtype=np.float64)
 	for i in range(n):
 		zhalf[i,:] = misc.half(zfull[i,:]) \
 			if zfull.ndim == 2 \
 			else misc.half(zfull)
-	if m == 0:
-		return
 	zhalf2 = np.arange(zlim[0], zlim[-1] + zres, zres, np.float64)
 	zfull2 = (zhalf2[1:] + zhalf2[:-1])*0.5
 	m2 = len(zfull2)
-	dims2 = (n, m2, l) if len(b.shape) == 3 else (n, m2)
-	dims_mol2 = (n, m2)
-	b2 = np.zeros(dims2, dtype=np.float64)
-	b_sd2 = np.zeros(dims2, dtype=np.float64)
-	bmol2 = np.zeros(dims_mol2, dtype=np.float64)
-	if l == 0:
-		for i in range(n):
-			b2[i,:] = interp(zhalf[i,:], b[i,:], zhalf2)
-			b_sd2[i,:] = interp(zhalf[i,:], b_sd[i,:], zhalf2)
-	else:
-		for i in range(n):
-			for j in range(l):
-				b2[i,:,j] = interp(zhalf[i,:], b[i,:,j], zhalf2)
-				b_sd2[i,:,j] = interp(zhalf[i,:], b_sd[i,:,j], zhalf2)
-	if 'backscatter_mol' in d:
-		for i in range(n):
-			bmol2[i,:] = interp(zhalf[i,:], bmol[i,:], zhalf2)
-	d['zfull'] = zfull2
-	d['backscatter'] = b2
-	if 'backscatter_mol' in d:
-		d['backscatter_mol'] = bmol2
-	if 'backscatter_sd' in d:
-		d['backscatter_sd'] = b_sd2
-	d['.']['zfull']['.dims'] = ['level']
+
+	for var in ds.vars(d):
+		dims = ds.dims(d, var)
+		if var == 'zfull' or 'level' not in dims:
+			continue
+		x = ds.var(d, var)
+		i = dims.index('time')
+		j = dims.index('level')
+		x = np.moveaxis(x, [i, j], [0, 1])
+		shape = list(x.shape)
+		x = x.reshape(n, m, -1)
+		shape2 = list(x.shape)
+		shape2[1] = m2
+		l = shape2[2]
+		x2 = np.zeros(shape2, dtype=x.dtype)
+		if var == 'backscatter_sd':
+			x = x**2
+		for i2 in range(n):
+			for j2 in range(l):
+				x2[i2,:,j2] = interp(zhalf[i2,:], x[i2,:,j2], zhalf2)
+		if var == 'backscatter_sd':
+			x2 = np.sqrt(x2)
+		x2 = x2.reshape([n, m2] + shape[2:])
+		x2 = np.moveaxis(x2, [0, 1], [i, j])
+		ds.var(d, var, x2)
+
+	ds.var(d, 'zfull', zfull2)
+	ds.dims(d, 'zfull', ['level'])
 
 def stream(dd, state, zres=None, zlim=None, **options):
 	return misc.stream(dd, state, zsample, zres=zres, zlim=zlim)

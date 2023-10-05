@@ -30,6 +30,7 @@ def read(filename, vars,
 	fix_cl_range=False,
 	cl_crit_range=6000,
 	time=None,
+	keep_vars=[],
 	**kwargs
 ):
 	sel = None
@@ -42,16 +43,18 @@ def read(filename, vars,
 		if np.sum(mask) == 0: return None
 		sel = {'time': mask}
 
-	dep_vars = list(set([y for x in vars if x in VARS for y in VARS[x]]))
-	required_vars = dep_vars + DEFAULT_VARS
-
-	d = ds.read(filename, required_vars, jd=True, sel=sel)
+	dep_vars = misc.dep_vars(VARS, vars)
+	req_vars = dep_vars + DEFAULT_VARS + keep_vars
+	d = ds.read(filename, req_vars, jd=True, sel=sel, full=True)
 	dx = {}
-	dx['time'] = d['time']
-	if tres is None: tres = dx['time'][1] - dx['time'][0]
-	dx['time_bnds'] = misc.time_bnds(dx['time'], tres)
-
-	n = len(dx['time'])
+	misc.populate_meta(dx, META, set(vars) & set(VARS))
+	n = ds.dim(d, 'time')
+	time = d['time']
+	if 'time' in vars:
+		dx['time'] = time
+	if 'time_bnds' in vars:
+		if tres is None: tres = time[1] - time[0]
+		dx['time_bnds'] = misc.time_bnds(time, tres)
 	if 'range' in d: # ARM CL51 format.
 		range_ = d['range']
 	else: # Generic CL51 format.
@@ -76,10 +79,6 @@ def read(filename, vars,
 		dx['lon'] = np.full(n, lon, np.float64)
 	if 'lat' in vars:
 		dx['lat'] = np.full(n, lat, np.float64)
-	dx['.'] = META
-	dx['.'] = {
-		x: dx['.'][x]
-		for x in vars
-		if x in dx['.']
-	}
+	for var in keep_vars:
+		misc.keep_var(var, d, dx)
 	return dx

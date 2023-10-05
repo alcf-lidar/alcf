@@ -148,3 +148,21 @@ def track_at(track, t):
 		)
 		for k in ['lon', 'lat']
 	]
+
+def populate_meta(d, meta, vars):
+	d_tmp = {'.': meta}
+	for var in vars:
+		ds.meta(d, var, ds.meta(d_tmp, var))
+	ds.meta(d, None, ds.meta(d_tmp))
+
+def keep_var(var, d, do, dim_map={'time': 'time'}):
+	if var in ds.vars(d) and dim_map['time'] in ds.dims(d, var):
+		name = 'input_' + var
+		ds.var(do, name, ds.var(d, var).astype(np.float64))
+		dims = [dim_map.get(dim, dim) for dim in ds.dims(d, var)]
+		ds.dims(do, name, dims)
+		ds.attrs(do, name, ds.attrs(d, var))
+		ds.rm_attr(do, '_FillValue', name)
+
+def dep_vars(mapping, vars):
+	return list(set([y for x in vars if x in mapping for y in mapping[x]]))
