@@ -49,8 +49,8 @@ def read(
 	mask = d['elevation_angle'] == 0.0
 	dx = {}
 	misc.populate_meta(dx, META, set(vars) & set(VARS))
-	n = ds.dims(d, 'profile')
-	m = ds.dims(d, 'range')
+	n = ds.dim(d, 'profile')
+	m = ds.dim(d, 'range')
 	altitude = d['gps_altitude'] if altitude is None else \
 		np.full(n, altitude, np.float64)
 	lon = d['gps_longitude'] if lon is None else \
