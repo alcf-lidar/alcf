@@ -133,5 +133,5 @@ def read(
 		# 	'units': 'm-1 sr-1',
 		# },
 	for var in keep_vars:
-		misc.keep_var(var, d, dx)
+		misc.keep_var(var, d, dx, {'level': 'range_nrb'})
 	return dx

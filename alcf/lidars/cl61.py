@@ -66,5 +66,5 @@ def read(
 	if 'backscatter' in vars:
 		dx['backscatter'] = d['beta_att']*CALIBRATION_COEFF
 	for var in keep_vars:
-		misc.keep_var(var, d, dx)
+		misc.keep_var(var, d, dx, {'time': 'profile', 'level': 'range'})
 	return dx

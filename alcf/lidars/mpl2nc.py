@@ -78,5 +78,5 @@ def read(
 	if 'lat' in vars:
 		dx['lat'] = lat
 	for var in keep_vars:
-		misc.keep_var(var, d, dx)
+		misc.keep_var(var, d, dx, {'level': 'range'})
 	return dx

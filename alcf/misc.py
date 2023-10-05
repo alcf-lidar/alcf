@@ -155,11 +155,12 @@ def populate_meta(d, meta, vars):
 		ds.meta(d, var, ds.meta(d_tmp, var))
 	ds.meta(d, None, ds.meta(d_tmp))
 
-def keep_var(var, d, do, dim_map={'time': 'time'}):
-	if var in ds.vars(d) and dim_map['time'] in ds.dims(d, var):
+def keep_var(var, d, do, dim_map={}):
+	dim_map_rev = dict((v, k) for k, v in dim_map.items())
+	if var in ds.vars(d) and dim_map.get('time', 'time') in ds.dims(d, var):
 		name = 'input_' + var
 		ds.var(do, name, ds.var(d, var).astype(np.float64))
-		dims = [dim_map.get(dim, dim) for dim in ds.dims(d, var)]
+		dims = [dim_map_rev.get(dim, dim) for dim in ds.dims(d, var)]
 		ds.dims(do, name, dims)
 		ds.attrs(do, name, ds.attrs(d, var))
 		ds.rm_attr(do, '_FillValue', name)

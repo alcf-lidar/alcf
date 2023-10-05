@@ -46,6 +46,7 @@ def read(
 	dx = {}
 	misc.populate_meta(dx, META, set(vars) & set(VARS))
 	n = ds.dim(d, 'timeDim')
+	m = ds.dim(d, 'range')
 	time = d['time']/86400. + 2440587.5
 	if 'time' in vars:
 		dx['time'] = time
@@ -65,11 +66,10 @@ def read(
 	if 'backscatter' in vars:
 		profile_data = d['profile_data'].astype(np.float64).filled(np.nan)
 		dx['backscatter'] = profile_data*CALIBRATION_COEFF
-		n, m = dx['backscatter'].shape
 		j = np.max(np.nonzero(np.any(np.isfinite(dx['backscatter']), axis=0)))
 		dx['backscatter'] = dx['backscatter'][:,:(j + 1)]
 		if 'zfull' in vars:
 			dx['zfull'] = dx['zfull'][:,:(j + 1)]
 	for var in keep_vars:
-		misc.keep_var(var, d, dx)
+		misc.keep_var(var, d, dx, {'time': 'timeDim', 'level': 'range'})
 	return dx
