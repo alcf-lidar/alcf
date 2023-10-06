@@ -52,6 +52,7 @@ def run(type_, input_, output,
 	lon=None,
 	r=False,
 	keep_vars=[],
+	align_output=True,
 	**options
 ):
 	"""
@@ -103,6 +104,7 @@ Types
 Options
 -------
 
+- `align_output: <value>`: Align output time periods to the nearest multiple of output_sampling. Default: `true`.
 - `altitude: <altitude>`: Altitude of the instrument (m). Default: Taken from lidar data or `0` if not available.
 - `calibration: <algorithm>`: Backscatter calibration algorithm. Available algorithms: `default`, `none`. Default: `default`.
 - `couple: <directory>`: Couple to other lidar data. Default: `none`.
@@ -232,11 +234,6 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 		return []
 
 	def output_stream(dd, state, output_sampling=None, **options):
-		# if output_sampling is not None:
-		# 	state['aggregate_state'] = state.get('aggregate_state', {})
-		# 	dd = misc.aggregate(dd, state['aggregate_state'],
-		# 		output_sampling/60./60./24.
-		# 	)
 		return misc.stream(dd, state, write, output=output)
 
 	def preprocess(d, tshift=None):
@@ -262,25 +259,46 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 		if couple is not None:
 			dd = couple_mod.stream(dd, state['couple'], couple)
 		if noise_removal_mod is not None:
-			dd = noise_removal_mod.stream(dd, state['noise_removal'], **options)
+			dd = noise_removal_mod.stream(dd, state['noise_removal'],
+				align=align_output,
+				**options
+			)
 		if calibration_mod is not None:
 			dd = calibration_mod.stream(dd, state['calibration'], **options)
 		if zres is not None or zlim is not None:
 			dd = zsample.stream(dd, state['zsample'], zres=zres, zlim=zlim)
 		if tres is not None or time is not None:
-			dd = tsample.stream(dd, state['tsample'], tres=tres/86400.)
+			dd = tsample.stream(dd, state['tsample'],
+				tres=tres/86400.,
+				align=align_output
+			)
 		if output_sampling is not None:
 			dd = output_sample.stream(dd, state['output_sample'],
 				tres=tres/86400.,
 				output_sampling=output_sampling/86400.,
+				align=align_output,
 			)
-			dd = misc.aggregate(dd, state['output_sample_2'], output_sampling/86400.)
+			dd = misc.aggregate(
+				dd,
+				state['output_sample_2'],
+				output_sampling/86400.,
+				align=align_output,
+			)
+		#for d in dd:
+		#	if d is not None:
+		#		print(aq.to_iso(d['time_bnds'][0,0]), aq.to_iso(d['time_bnds'][-1,1]))
 		if cloud_detection_mod is not None:
-			dd = cloud_detection_mod.stream(dd, state['cloud_detection'], **options)
+			dd = cloud_detection_mod.stream(dd, state['cloud_detection'],
+				**options
+			)
 		if cloud_base_detection_mod is not None:
-			dd = cloud_base_detection_mod.stream(dd, state['cloud_base_detection'], **options)
+			dd = cloud_base_detection_mod.stream(
+				dd,
+				state['cloud_base_detection'],
+				**options
+			)
 		dd = lidar_ratio.stream(dd, state['lidar_ratio'])
-		dd = output_stream(dd, state['output']) #, output_sampling=output_sampling)
+		dd = output_stream(dd, state['output'])
 		return dd
 
 	options['output'] = output
@@ -304,7 +322,7 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 					lat=lat,
 					fix_cl_range=fix_cl_range,
 					cl_crit_range=cl_crit_range,
-					time=time1,
+					tlim=time1,
 					keep_vars=keep_vars,
 				)
 				if d is None: continue
@@ -324,7 +342,7 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 			lat=lat,
 			fix_cl_range=fix_cl_range,
 			cl_crit_range=cl_crit_range,
-			time=time1,
+			tlim=time1,
 			keep_vars=keep_vars,
 		)
 		dd = process([d, None], state, **options)

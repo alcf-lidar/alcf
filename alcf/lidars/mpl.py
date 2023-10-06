@@ -52,7 +52,7 @@ def parse_temporal_resolution(s):
 			return f*item[1]
 	raise ValueError(errmsg)
 
-def convert_time(d):
+def convert_time(d, tlim):
 	time = np.array([
 		(
 			dt.datetime(int(y), int(m), int(day), int(H), int(M), int(S)) -
@@ -62,7 +62,8 @@ def convert_time(d):
 		in zip(d['year'], d['month'], d['day'], d['hour'], d['minute'], d['second'])
 	], np.float64)
 	tres = parse_temporal_resolution(d['.']['.']['temporal_resolution'])
-	time_bnds = misc.time_bnds(time, tres)
+	args = [] if tlim is None else [tlim[0], tlim[1]]
+	time_bnds = misc.time_bnds(time, tres, *args)
 	return time, time_bnds, tres
 
 def read(
@@ -71,16 +72,16 @@ def read(
 	altitude=None,
 	lon=None,
 	lat=None,
-	time=None,
+	tlim=None,
 	keep_vars=[],
 	**kwargs
 ):
 	sel = None
 	tres = None
-	if time is not None:
+	if tlim is not None:
 		d = ds.read(filename, TIME_VARS)
 		d['time'], d['time_bnds'], tres = convert_time(d)
-		mask = misc.time_mask(d['time_bnds'], time[0], time[1])
+		mask = misc.time_mask(d['time_bnds'], tlim[0], tlim[1])
 		if np.sum(mask) == 0: return None
 		sel = {'time': mask}
 
@@ -96,7 +97,7 @@ def read(
 		np.full(n, lon, np.float64)
 	lat = d['latitude'] if lat is None else \
 		np.full(n, lat, np.float64)
-	time, time_bnds, tres = convert_time(d)
+	time, time_bnds, tres = convert_time(d, tlim)
 	if 'time' in vars:
 		dx['time'] = time
 		# dx['time'] += 13.0/24.0

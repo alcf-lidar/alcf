@@ -3,11 +3,13 @@ import numpy as np
 from alcf import misc
 import ds_format as ds
 
-def output_sample(d, tres, output_sampling, epsilon=1/86400):
+def output_sample(d, tres, output_sampling, epsilon=1/86400, align=True):
 	t = d['time_bnds'][0,0]
-	r = (t + 0.5 + epsilon) % output_sampling
-
-	t1 = t - r + epsilon
+	if align:
+		r = (t + 0.5 + epsilon) % output_sampling
+		t1 = t - r + epsilon
+	else:
+		t1 = t
 	t2 = t1 + output_sampling
 
 	dims = ds.get_dims(d)
@@ -53,12 +55,20 @@ def output_sample(d, tres, output_sampling, epsilon=1/86400):
 	d['time_bnds'][:,0] = time_half2[:-1]
 	d['time_bnds'][:,1] = time_half2[1:]
 
-def stream(dd, state, tres=None, tlim=None, output_sampling=None, **options):
+def stream(dd, state,
+	tres=None,
+	tlim=None,
+	output_sampling=None,
+	align=True,
+	**options,
+):
 	if tres is not None:
 		state['aggregate_state'] = state.get('aggregate_state', {})
-		dd = misc.aggregate(dd, state['aggregate_state'], output_sampling)
+		dd = misc.aggregate(dd, state['aggregate_state'], output_sampling,
+			align=align)
 		return misc.stream(dd, state, output_sample,
 			tres=tres,
-			output_sampling=output_sampling
+			output_sampling=output_sampling,
+			align=align,
 		)
 	return dd

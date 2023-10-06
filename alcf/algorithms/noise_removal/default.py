@@ -33,9 +33,12 @@ def noise_removal(d, **options):
 		'units': 'm-1 sr-1',
 	}
 
-def stream(dd, state, noise_removal_sampling=300, **options):
+def stream(dd, state, noise_removal_sampling=300, align=True, **options):
 	state['aggregate_state'] = state.get('aggregate_state', {})
-	dd = misc.aggregate(dd, state['aggregate_state'],
-		noise_removal_sampling/60./60./24.
+	dd = misc.aggregate(
+		dd,
+		state['aggregate_state'],
+		noise_removal_sampling/60./60./24.,
+		align=align,
 	)
 	return misc.stream(dd, state, noise_removal, **options)

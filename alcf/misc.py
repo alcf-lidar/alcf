@@ -15,7 +15,7 @@ def parse_time(time):
 		raise ValueError('Invalid time: %s' % time)
 	return [start, end]
 
-def aggregate(dd, state, period, epsilon=1./86400.):
+def aggregate(dd, state, period, epsilon=1./86400., align=True):
 	dd = state.get('dd', []) + dd
 	state['dd'] = []
 
@@ -34,8 +34,11 @@ def aggregate(dd, state, period, epsilon=1./86400.):
 	ddo = []
 	ddb = []
 	t = dd[0]['time_bnds'][0,0]
-	r = (t + 0.5 + epsilon) % period
-	t1 = state.get('t1', t - r + epsilon)
+	if align:
+		r = (t + 0.5 + epsilon) % period
+		t1 = state.get('t1', t - r + epsilon)
+	else:
+		t1 = state.get('t1', t)
 	t2 = state.get('t2', t1 + period)
 	for d in dd:
 		if d is None:
@@ -55,8 +58,11 @@ def aggregate(dd, state, period, epsilon=1./86400.):
 			ddo += merge(ddb, t1, t2)
 			i1 = i
 			t = d['time_bnds'][i,0]
-			r = (t + 0.5 + epsilon) % period
-			t1 = max(t2, t - r + epsilon)
+			if align:
+				r = (t + 0.5 + epsilon) % period
+				t1 = max(t2, t - r + epsilon)
+			else:
+				t1 = max(t2, t)
 			t2 = t1 + period
 			ddb = []
 		ii = np.arange(i1, len(d['time']))

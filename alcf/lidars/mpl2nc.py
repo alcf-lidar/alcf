@@ -29,17 +29,17 @@ def read(
 	altitude=None,
 	lon=None,
 	lat=None,
-	time=None,
+	tlim=None,
 	keep_vars=[],
 	**kwargs
 ):
 	sel = None
 	tres = None
-	if time is not None:
+	if tlim is not None:
 		d = ds.read(filename, 'time', jd=True)
 		tres = d['time'][1] - d['time'][0]
 		d['time_bnds'] = misc.time_bnds(d['time'], tres)
-		mask = misc.time_mask(d['time_bnds'], time[0], time[1])
+		mask = misc.time_mask(d['time_bnds'], tlim[0], tlim[1])
 		if np.sum(mask) == 0: return None
 		sel = {'profile': mask}
 
@@ -57,12 +57,12 @@ def read(
 		np.full(n, lon, np.float64)
 	lat = d['gps_latitude'] if lat is None else \
 		np.full(n, lat, np.float64)
-	time = d['time']
 	if 'time' in vars:
-		dx['time'] = time
+		dx['time'] = d['time']
 	if 'time_bnds' in vars:
-		if tres is None: tres = time[1] - time[0]
-		dx['time_bnds'] = misc.time_bnds(time, tres)
+		if tres is None: tres = d['time'][1] - d['time'][0]
+		args = [] if tlim is None else [tlim[0], tlim[1]]
+		dx['time_bnds'] = misc.time_bnds(d['time'], tres, *args)
 	if 'zfull' in vars:
 		dx['zfull'] = np.full((n, m), np.nan, np.float64)
 		for i in range(n):

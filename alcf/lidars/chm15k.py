@@ -25,17 +25,17 @@ def read(
 	altitude=None,
 	lon=None,
 	lat=None,
-	time=None,
+	tlim=None,
 	keep_vars=[],
 	**kwargs
 ):
 	sel = None
 	tres = None
-	if time is not None:
+	if tlim is not None:
 		d = ds.read(filename, 'time', jd=True)
 		tres = d['time'][1] - d['time'][0]
 		d['time_bnds'] = misc.time_bnds(d['time'], tres)
-		mask = misc.time_mask(d['time_bnds'], time[0], time[1])
+		mask = misc.time_mask(d['time_bnds'], tlim[0], tlim[1])
 		if np.sum(mask) == 0: return None
 		sel = {'time': mask}
 
@@ -46,14 +46,14 @@ def read(
 	misc.populate_meta(dx, META, set(vars) & set(VARS))
 	n = ds.dim(d, 'time')
 	m = ds.dim(d, 'range')
-	time = d['time']
 	if altitude is None:
 		altitude = d['altitude']
 	if 'time' in vars:
-		dx['time'] = time
+		dx['time'] = d['time']
 	if 'time_bnds' in vars:
-		if tres is None: tres = time[1] - time[0]
-		dx['time_bnds'] = misc.time_bnds(time, tres)
+		if tres is None: tres = d['time'][1] - d['time'][0]
+		args = [] if tlim is None else [tlim[0], tlim[1]]
+		dx['time_bnds'] = misc.time_bnds(d['time'], tres, *args)
 	if 'backscatter' in vars:
 		dx['backscatter'] = d['beta_raw']*1e-11*CALIBRATION_COEFF
 	if 'zfull' in vars:
