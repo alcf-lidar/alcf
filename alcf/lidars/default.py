@@ -20,9 +20,9 @@ def read(filename, vars, altitude=None, lon=None, lat=None, time=None, **kwargs)
 	n = d['backscatter'].shape[0]
 	d['altitude'] = d['altitude'] if altitude is None and 'altitude' in d else \
 		np.full(n, altitude, np.float64)
-	d['lon'] = d['lon'] if lon is None and 'longitude' in d else \
+	d['lon'] = d['lon'] if lon is None and 'lon' in d else \
 		np.full(n, lon, np.float64)
-	d['lat'] = d['lat'] if lat is None and 'latitude' in d else \
+	d['lat'] = d['lat'] if lat is None and 'lat' in d else \
 		np.full(n, lat, np.float64)
 	d['.']['altitude'] = META['altitude']
 	d['.']['lon'] = META['lon']
