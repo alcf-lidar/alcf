@@ -12,13 +12,14 @@ def tsample(d, tres):
 	]])
 	d['time'] = np.array(np.mean(d['time_bnds'], axis=1))
 	if 'backscatter_sd' in d:
-		n, m = d['backscatter_sd'].shape
+		n = d['backscatter_sd'].shape[0]
+		shape1 = list(d['backscatter_sd'].shape[1:])
 		d['backscatter_sd'] = np.sqrt(1./n*np.average(
 			d['backscatter_sd']**2,
 			axis=0,
 			weights=w,
 		))
-		d['backscatter_sd'] = d['backscatter_sd'].reshape([1, m])
+		d['backscatter_sd'] = d['backscatter_sd'].reshape([1] + shape1)
 	for var in ds.get_vars(d):
 		if var in ('time', 'time_bnds', 'backscatter_sd'):
 			continue

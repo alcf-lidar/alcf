@@ -27,13 +27,11 @@ def couple(d, d_idx):
 			'long_name': 'total_attenuated_backscatter_coefficient_standard_deviation',
 			'units': 'm-1 sr-1',
 		}
-	if 'backsatter_mol' not in d:
+	if 'backscatter_mol' not in d:
 		couple_bmol = True
 		d['backscatter_mol'] = np.full(dims, np.nan, np.float64)
 		d['.']['backscatter_mol'] = {
-			'.dims': ['time', 'level', 'column'] \
-				if len(dims) == 3 \
-				else ['time', 'level'],
+			'.dims': ['time', 'level'],
 			'long_name': 'total_attenuated_molecular_backscatter_coefficient',
 			'units': 'm-1 sr-1',
 		}
@@ -57,11 +55,7 @@ def couple(d, d_idx):
 				d['backscatter_sd'][i,:] = b_sd
 		if couple_bmol and 'backscatter_mol' in d1:
 			b_mol = interp(zhalf1, d1['backscatter_mol'], zhalf)
-			if len(dims) == 3:
-				for k in range(l):
-					d['backscatter_mol'][i,:,k] = b_mol
-			else:
-				d['backscatter_mol'][i,:] = b_mol
+			d['backscatter_mol'][i,:] = b_mol
 
 def stream(dd, state, dirname):
 	if 'd_idx' not in state:
