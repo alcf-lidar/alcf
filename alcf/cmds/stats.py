@@ -55,11 +55,11 @@ Arguments
 Options
 -------
 
-- `blim: <value>`: Backscatter histogram limits (1e-6 m-1.sr-1). Default: `{ 5 200 }`.
-- `bres: <value>`: Backscatter histogram resolution (1e-6 m-1.sr-1). Default: `10`.
-- `bsd_lim: { <low> <high> }`: Backscatter standard deviation histogram limits (1e-6 m-1.sr-1). Default: `{ 0.001 10 }`.
+- `blim: <value>`: Backscatter histogram limits (10^-6 m-1.sr-1). Default: `{ 5 200 }`.
+- `bres: <value>`: Backscatter histogram resolution (10^-6 m-1.sr-1). Default: `10`.
+- `bsd_lim: { <low> <high> }`: Backscatter standard deviation histogram limits (10^-6 m-1.sr-1). Default: `{ 0.001 10 }`.
 - `bsd_log: <value>`: Enable/disable logarithmic scale of the backscatter standard deviation histogram (`true` or `false`). Default: `true`.
-- `bsd_res: <value>`: Backscatter standard deviation histogram resolution (1e-6 m-1.sr-1). Default: `0.001`.
+- `bsd_res: <value>`: Backscatter standard deviation histogram resolution (10^-6 m-1.sr-1). Default: `0.001`.
 - `bsd_z: <value>`: Backscatter standard deviation histogram height (m). Default: `8000`.
 - `filter: <value> | { <value> ... }`: Filter profiles by condition: `cloudy` for cloudy profiles only, `clear` for clear sky profiles only, `night` for nighttime profiles, `day` for daytime profiles, `none` for all profiles. If an array of values is supplied, all conditions must be true. For `night` and `day`, lidar profiles must contain valid longitude and latitude fields set via the `lon` and `lat` arguments of `alcf lidar` or read implicitly from raw lidar data files if available (mpl, mpl2nc). Default: `none`.
 - `filter_exclude: <value>`: Filter by a mask defined in a NetCDF file, described below under Filter file.

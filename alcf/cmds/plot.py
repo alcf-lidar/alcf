@@ -525,7 +525,7 @@ backscatter options
 - `cloud_mask: <value>`: Plot cloud mask. Default: `true`.
 - `remove_bmol: <value>`: Remove molecular backscatter (observed data have to be coupled with model data via the `couple` option of `alcf lidar`). Default: `true`.
 - `sigma: <value>`: Remove of number of standard deviations of backscatter from the mean backscatter (real). Default: `5`.
-- `vlim: { <min> <max }`: Value limits (10^6 m-1.sr-1). Default: `{ 0.1 200 }`.
+- `vlim: { <min> <max }`: Value limits (10^-6 m-1.sr-1). Default: `{ 0.1 200 }`.
 - `vlog: <value>`: Plot values on logarithmic scale: `true` of `false`. Default: `true`.
 
 backscatter_hist options
@@ -533,13 +533,13 @@ backscatter_hist options
 
 - `vlim: { <min> <max> }`: Value limits (%) or `none` for auto. If `none` and `vlog` is `none`, `min` is set to 1e-3 if less or equal to zero. Default: `none`.
 - `--vlog`: Use logarithmic scale for values.
-- `xlim: { <min> <max> }`: x axis limits (10^6 m-1.sr-1) or `none` for automatic. Default: `none`.
+- `xlim: { <min> <max> }`: x axis limits (10^-6 m-1.sr-1) or `none` for automatic. Default: `none`.
 - `zlim: { <min> <max> }`: z axis limits (m) or `none` for automatic. Default: `none`.
 
 backscatter_sd_hist options
 ---------------------------
 
-- `xlim: { <min> <max> }`: x axis limits (10^6 m-1.sr-1) or `none` for automatic. Default: `none`.
+- `xlim: { <min> <max> }`: x axis limits (10^-6 m-1.sr-1) or `none` for automatic. Default: `none`.
 - `zlim: { <min> <max> }`: z axis limits (%) or `none` for automatic. Default: `none`.
 
 cl options
