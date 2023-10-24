@@ -7,13 +7,28 @@ from scipy.stats import norm
 from scipy.optimize import minimize_scalar
 from alcf import misc
 
-def cloud_detection(d, cloud_threshold=2e-6, cloud_nsd=5, **options):
+def cloud_detection(d,
+	cloud_threshold=2e-6,
+	cloud_nsd=5,
+	bsd=None,
+	bsd_z=8000,
+	**options
+):
 	b = d['backscatter']
-	bsd = d.get('backscatter_sd')
+	if bsd is None:
+		bsd2 = d.get('backscatter_sd')
+	else:
+		bsd2 = np.full(b.shape, bsd, np.float64)
+		f = (d['zfull']/bsd_z)**2
+		if b.ndim == 3:
+			for i in range(b.shape[2]):
+				bsd2[:,:,i] *= f
+		else:
+			bsd2 *= f
 	bmol = d.get('backscatter_mol')
 	x = np.copy(b)
-	if bsd is not None:
-		x -= cloud_nsd*bsd
+	if bsd2 is not None:
+		x -= cloud_nsd*bsd2
 	if bmol is not None:
 		if len(x.shape) == 3:
 			for i in range(x.shape[2]):
