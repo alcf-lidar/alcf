@@ -9,12 +9,18 @@ from alcf import misc
 
 def cloud_detection(d,
 	cloud_threshold=2e-6,
+	cloud_threshold_exp=None,
 	cloud_nsd=5,
 	bsd=None,
 	bsd_z=8000,
 	**options
 ):
 	b = d['backscatter']
+	if b.ndim == 3:
+		n, m, l = b.shape
+	else:
+		n, m = b.shape
+
 	if bsd is None:
 		bsd2 = d.get('backscatter_sd')
 	else:
@@ -35,7 +41,23 @@ def cloud_detection(d,
 				x[:,:,i] -= bmol
 		else:
 			x -= bmol
-	cloud_mask = (x >= cloud_threshold).astype(np.byte)
+
+	cloud_mask = np.zeros(x.shape, np.byte)
+	if cloud_threshold_exp is not None:
+		ct_x, ct_y, ct_h = cloud_threshold_exp
+		for i in range(n):
+			alt = 0 if np.isnan(d['altitude'][i]) else d['altitude'][i]
+			height = d['zfull'] - alt
+			height[height < 0] = 0
+			ct = ct_y + (ct_x - ct_y)*0.5**(height/ct_h)
+			if x.ndim == 3:
+				for k in range(l):
+					cloud_mask[i,:,k] = x[i,:,k] >= ct
+			else:
+				cloud_mask[i,:] = x[i,:] >= ct
+	else:
+		cloud_mask[::] = x >= cloud_threshold
+
 	d['cloud_mask'] = cloud_mask
 	d['.']['cloud_mask'] = {
 		'.dims': d['.']['backscatter']['.dims'],
