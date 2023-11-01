@@ -137,6 +137,7 @@ Cloud detection default options
 
 - `cloud_nsd: <n>`: Number of noise standard deviations to subtract. Default: `5`.
 - `cloud_threshold: <threshold>`: Cloud detection threshold (m^-1.sr^-1). Default: `2e-6`.
+- `cloud_threshold_exp: { <x> <y> <h> }`: Cloud detection threshold exponentially decaying with height (sr^-1.m^-1). If not `none`, this supersedes `cloud_threshold`. The threshold is `<x>` at surface level, decaying exponentially to `<y>` at infinite height with half-height `<h>`. Default: `none`.
 
 Cloud base detection options
 ----------------------------
