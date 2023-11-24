@@ -85,4 +85,5 @@ backscatter_sd_z | total attenuated volume backscattering coefficient standard d
 cl | cloud area fraction | zfull | %
 clt | total cloud fraction | | %
 n | number of profiles | | 1
+time_total | total time | | s
 zfull | altitude of model full-levels | zfull | m

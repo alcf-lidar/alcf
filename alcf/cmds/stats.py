@@ -11,6 +11,7 @@ VARIABLES = [
 	'cloud_mask',
 	'zfull',
 	'time',
+	'time_bnds',
 	'backscatter',
 	'backscatter_sd',
 	'backscatter_mol',

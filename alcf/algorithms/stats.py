@@ -79,6 +79,9 @@ def stats_map(d, state,
 	state['n'] = state.get('n',
 		0 if l == 0 else np.zeros(l, dtype=np.int64)
 	)
+	state['time_total'] = state.get('time_total',
+		0 if l == 0 else np.zeros(l, dtype=np.int64)
+	)
 	state['backscatter_avg'] = state.get(
 		'backscatter_avg',
 		np.zeros(dims2, dtype=np.float64)
@@ -191,6 +194,8 @@ def stats_map(d, state,
 				if 'backscatter_mol' in d:
 					backscatter_mol_avg_tmp[:,k] += d['backscatter_mol'][i,:]
 				state['n'][k] += 1
+				state['time_total'][k] += \
+					24*60*60*(d['time_bnds'][i,1] - d['time_bnds'][i,0])
 				state['clt'][k] += np.any(d['cloud_mask'][i,:,k])
 		else:
 			if not filter_mask[i]:
@@ -200,6 +205,8 @@ def stats_map(d, state,
 			if 'backscatter_mol' in d:
 				backscatter_mol_avg_tmp[:] += d['backscatter_mol'][i,:]
 			state['n'] += 1
+			state['time_total'] += \
+				24*60*60*(d['time_bnds'][i,1] - d['time_bnds'][i,0])
 			state['clt'] += np.any(d['cloud_mask'][i,:])
 	if l > 0:
 		for k in range(l):
@@ -257,6 +264,7 @@ def stats_reduce(state, bsd_z=None, **kwargs):
 		'clt': 100.*state['clt'],
 		'zfull': state['zfull2'],
 		'n': state['n'],
+		'time_total': state['time_total'],
 		'backscatter_avg': state['backscatter_avg'],
 		'backscatter_mol_avg': state['backscatter_mol_avg'],
 		'backscatter_full': state['backscatter_full'],
@@ -294,6 +302,14 @@ def stats_reduce(state, bsd_z=None, **kwargs):
 				else [],
 			'long_name': 'number of profiles',
 			'units': '1',
+		},
+		'time_total': {
+			'.dims': ['column'] \
+				if len(state['cl'].shape) == 2 \
+				else [],
+			'long_name': 'total time',
+			'standard_name': 'time',
+			'units': 's',
 		},
 		'backscatter_avg': {
 			'.dims': ['zfull', 'column'] \
@@ -338,7 +354,7 @@ def stats_reduce(state, bsd_z=None, **kwargs):
 			'.dims': [],
 			'long_name': 'total attenuated volume backscattering coefficient standard deviation height above reference ellipsoid',
 			'units': 'm',
-		}
+		},
 	}
 	return do
 
