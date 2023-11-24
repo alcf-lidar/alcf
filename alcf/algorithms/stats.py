@@ -2,6 +2,22 @@ import numpy as np
 from alcf.algorithms import interp
 from alcf import misc
 
+def calc_filter_mask(filters, time, l):
+	n = len(time)
+	if len(filters) == 0:
+		filter_mask = np.zeros(n, dtype=bool)
+	else:
+		filter_mask = np.ones(n, dtype=bool)
+	for filter_ in filters:
+		filter_mask_tmp = np.zeros(n, dtype=bool)
+		m = filter_.shape[0]
+		for i in range(m):
+			t1, t2 = filter_[i]
+			filter_mask_tmp |= (time >= t1) & (time < t2)
+		filter_mask &= filter_mask_tmp
+	if l > 0: filter_mask = np.tile(filter_mask, [l, 1]).T
+	return filter_mask
+
 def stats_map(d, state,
 	tlim=None,
 	blim=None,
@@ -11,8 +27,8 @@ def stats_map(d, state,
 	bsd_res=None,
 	bsd_z=None,
 	filter=None,
-	filter_exclude=None,
-	filter_include=None,
+	filters_exclude=None,
+	filters_include=None,
 	zlim=None,
 	zres=None,
 	**kwargs
@@ -116,23 +132,11 @@ def stats_map(d, state,
 		if l > 0: filter_mask_0 = np.tile(filter_mask_0, [l, 1]).T
 		filter_mask &= filter_mask_0
 
-	if filter_exclude is not None:
-		filter_mask_0 = np.ones(n, dtype=bool)
-		n2 = filter_exclude.shape[0]
-		for i in range(n2):
-			t1, t2 = filter_exclude[i]
-			filter_mask_0 &= ~((d['time'] >= t1) & (d['time'] < t2))
-		if l > 0: filter_mask_0 = np.tile(filter_mask_0, [l, 1]).T
-		filter_mask &= filter_mask_0
+	if filters_exclude is not None:
+		filter_mask &= ~calc_filter_mask(filters_exclude, d['time'], l)
 
-	if filter_include is not None:
-		filter_mask_0 = np.zeros(n, dtype=bool)
-		n2 = filter_include.shape[0]
-		for i in range(n2):
-			t1, t2 = filter_include[i]
-			filter_mask_0 |= (d['time'] >= t1) & (d['time'] < t2)
-		if l > 0: filter_mask_0 = np.tile(filter_mask_0, [l, 1]).T
-		filter_mask &= filter_mask_0
+	if filters_include is not None:
+		filter_mask &= calc_filter_mask(filters_include, d['time'], l)
 
 	if not np.any(mask):
 		return
