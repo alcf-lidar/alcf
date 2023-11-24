@@ -1,5 +1,6 @@
 import os
 import sys
+from collections.abc import Iterable
 import numpy as np
 import ds_format as ds
 from alcf.algorithms import interp
@@ -16,6 +17,12 @@ VARIABLES = [
 	'lon',
 	'lat',
 ]
+
+def read_filters(filters):
+	if isinstance(filters, Iterable):
+		return [ds.read(filename) for filename in filters]
+	else:
+		return [ds.read(filters)]
 
 def run(input_, output,
 	tlim=None,
@@ -62,8 +69,8 @@ Options
 - `bsd_res: <value>`: Backscatter standard deviation histogram resolution (10^-6 m-1.sr-1). Default: `0.001`.
 - `bsd_z: <value>`: Backscatter standard deviation histogram height (m). Default: `8000`.
 - `filter: <value> | { <value> ... }`: Filter profiles by condition: `cloudy` for cloudy profiles only, `clear` for clear sky profiles only, `night` for nighttime profiles, `day` for daytime profiles, `none` for all profiles. If an array of values is supplied, all conditions must be true. For `night` and `day`, lidar profiles must contain valid longitude and latitude fields set via the `lon` and `lat` arguments of `alcf lidar` or read implicitly from raw lidar data files if available (mpl, mpl2nc). Default: `none`.
-- `filter_exclude: <value>`: Filter by a mask defined in a NetCDF file, described below under Filter file.
-- `filter_include: <value>`: The same as `filter_exclude`, but with time intervals to be included in the result. If both are defined, `filter_include` takes precedence.
+- `filter_exclude: <value> | { <value>... }`: Filter by a mask defined in a NetCDF file, described below under Filter file. If multiple files are supplied, they must all apply for a profile to be excluded.
+- `filter_include: <value> | { <value>... }`: The same as `filter_exclude`, but with time intervals to be included in the result. If both are defined, `filter_include` takes precedence. If multiple files are supplied, they must all apply for a profile to be included.
 - `tlim: { <start> <end> }`: Time limits (see Time format below). Default: `none`.
 - `zlim: { <low> <high> }`: Height limits (m). Default: `{ 0 15000 }`.
 - `zres: <value>`: Height resolution (m). Default: `50`.
@@ -76,7 +83,7 @@ Time format
 Filter file
 ----------
 
-The NetCDF file must define a variable `time_bnds` (float64), which are time intervals to be excluded from the result. `time_bnds` must have two dimensions `time` of an arbitrary size and `bnds` of size 2. The first and second column of the variable should contain the start and end of the interval, respectively. `time_bnds` must be valid time in accordance with the CF Conventions.
+The NetCDF file must define a variable `time_bnds` (float64), which are time intervals to be excluded from or included in the result. `time_bnds` must have two dimensions `time` of an arbitrary size and `bnds` of size 2. The first and second column of the variable should contain the start and end of the interval, respectively. `time_bnds` must be valid time in accordance with the CF Conventions.
 
 Examples
 --------
@@ -101,12 +108,12 @@ Calculate statistics from processed lidar data in `alcf_cl51_lidar` and store th
 	}
 
 	if filter_exclude is not None:
-		d = ds.read(filter_exclude)
-		options['filter_exclude'] = d['time_bnds']
+		dd = read_filters(filter_exclude)
+		options['filters_exclude'] = [d['time_bnds'] for d in dd]
 
 	if filter_include is not None:
-		d = ds.read(filter_include)
-		options['filter_include'] = d['time_bnds']
+		dd = read_filters(filter_include)
+		options['filters_include'] = [d['time_bnds'] for d in dd]
 
 	if os.path.isdir(input_):
 		files = sorted(os.listdir(input_))
