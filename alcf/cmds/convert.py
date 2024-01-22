@@ -5,9 +5,22 @@ import re
 import glob
 
 TYPES = {
-	'cl51': ('DAT', lambda infile, outfile: ['cl2nc', infile, outfile]),
-	'jra55': (None, lambda infile, outfile: ['grib_to_netcdf', '-o', outfile, infile]),
-	'mpl': ('mpl', lambda infile, outfile: ['mpl2nc', infile, outfile]),
+	'cl31': {
+		'ext': ['dat', 'DAT', 'asc', 'ASC'],
+		'cmdf': lambda infile, outfile: ['cl2nc', infile, outfile],
+	},
+	'cl51': {
+		'ext': ['dat', 'DAT', 'asc', 'ASC'],
+		'cmdf': lambda infile, outfile: ['cl2nc', infile, outfile],
+	},
+	'jra55': {
+		'ext': [None],
+		'cmdf': lambda infile, outfile: ['grib_to_netcdf', '-o', outfile, infile],
+	},
+	'mpl': {
+		'ext': ['mpl', 'MPL'],
+		'cmdf': lambda infile, outfile: ['mpl2nc', infile, outfile],
+	},
 }
 
 def find(input_, output, inext, outext, recursive=False):
@@ -65,8 +78,10 @@ Options
 Types
 -----
 
-- `cl51`: Vaisala CL51 (converted with cl2nc). File extension `.DAT`.
+- `cl31`: Vaisala CL31. Input file extension `.dat`, `.DAT`, `.asc` or `.ASC`.
+- `cl51`: Vaisala CL51. Input file extension `.dat`, `.DAT`, `.asc` or `.ASC`.
 - `jra55`: JRA-55 (converted with grib_to_netcdf). No file extension.
+- `mpl`: MiniMPL or MPL. Input file extension `.mpl` or `.MPL`.
 
 Examples
 --------
@@ -83,27 +98,32 @@ Convert JRA-55 data in `jra55_grib` to NetCDF and store the output in the direct
 
 	if type_ not in TYPES:
 		raise ValueError('Invalid type: %s' % type_)
-
-	ext, cmdf = TYPES.get(type_)
+	desc = TYPES[type_]
 
 	if os.path.isdir(input_) and not os.path.isdir(output):
 		raise IOError('%s: the output path does not exist or is not a directory' % output)
 
 	if os.path.isfile(input_) and os.path.isdir(output):
 		basename = os.path.basename(input_)
-		if ext is not None and basename.endswith('.' + ext):
-			basename = basename[:-len(ext)] + 'nc'
-		else:
-			basename += '.nc'
-		output = os.path.join(output, basename)
+		for ext in desc['ext']:
+			if ext is not None and basename.endswith('.' + ext):
+				basename = basename[:-(len(ext) + 1)]
+				break
+		output = os.path.join(output, basename + '.nc')
 
 	if os.path.isdir(input_):
-		input2, output2 = find(input_, output, ext, 'nc', recursive=recursive)
+		input2 = []
+		output2 = []
+		for ext in desc['ext']:
+			in_, out = find(input_, output, ext, 'nc',
+				recursive=recursive)
+			input2 += in_
+			output2 += out
 	else:
 		input2, output2 = [input_], [output]
 
 	for infile, outfile in zip(input2, output2):
-		cmd = cmdf(infile, outfile)
+		cmd = desc['cmdf'](infile, outfile)
 		if recursive:
 			os.makedirs(os.path.dirname(outfile), exist_ok=True)
 		print(' '.join(cmd))
