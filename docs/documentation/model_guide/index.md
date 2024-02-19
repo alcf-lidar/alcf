@@ -15,6 +15,7 @@ The following GCM, NWP models and reanalyses are supported:
 - [JRA-55](https://jra.kishou.go.jp/JRA-55/index_en.html)
 - [MERRA2](https://gmao.gsfc.nasa.gov/reanalysis/MERRA-2/)
 - [NZCSM](https://www.nesi.org.nz/case-studies/improving-new-zealands-weather-forecasting-ability)
+- [NZESM](https://doi.org/10.2307/26779386) (experimental)
 - [UM](https://www.metoffice.gov.uk/research/approach/modelling-systems/unified-model/index)
 
 **Note:** The ERA-Interim reanalysis is not supported due to the required fields
@@ -172,10 +173,6 @@ CMIP5 model output can be downloaded from the [CMIP5 Earth System Grid (ESG) arc
 - ta
 - zfull
 - zhalf
-
-### JRA-55
-
-TODO
 
 -->
 

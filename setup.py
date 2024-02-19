@@ -51,6 +51,7 @@ setup(
 		'matplotlib>=3.0.2',
 		'netCDF4>=1.2.9',
 		'cl2nc>=3.3.0',
+		'mpl2nc>=1.3.6',
 		'aquarius-time>=0.1.0',
 		'ds-format>=3.6.1',
 		'pst-format>=2.0.0',
