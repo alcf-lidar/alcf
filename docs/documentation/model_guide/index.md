@@ -135,6 +135,9 @@ where `<model>` is the model name, `<run>` is the model run, `<timestep>` is the
 model time step, and `<zoom>` is the zoom level. For example
 `https://data.nextgems-h2020.eu/catalog.yaml|ICON|ngc3028|PT3H|10`.
 
+This module requires the `intake` and `healpy` Python packages to be installed
+manually.
+
 ### JRA-55
 
 **Source:** `alcf/models/jra55.py`
