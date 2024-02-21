@@ -17,11 +17,11 @@ VARIABLES = [
 
 GRACE_TIME = 1/24.
 
-def read(dirname, index, track, warnings=[], step=1./24., recursive=False):
+def read(dirname, index, track, t1, t2,
+	warnings=[], step=1/24, recursive=False):
+
 	dd_index = ds.readdir(dirname, variables=['time0', 'latitude', 'longitude'],
 		jd=True, recursive=recursive)
-	start_time = track['time'][0]
-	end_time = track['time'][1]
 	dd = []
 	for d_index in dd_index:
 		time = d_index['time0']
@@ -29,11 +29,11 @@ def read(dirname, index, track, warnings=[], step=1./24., recursive=False):
 		lon = np.where(lon < 0., 360. + lon, lon)
 		lat = d_index['latitude']
 		filename = d_index['filename']
-		ii = np.where((time >= start_time - GRACE_TIME) & (time <= end_time + GRACE_TIME))[0]
+		ii = np.where((time >= t1 - GRACE_TIME) & (time <= t2 + GRACE_TIME))[0]
 		for i in ii:
-			i2 = np.argmin(np.abs(track['time'] - time[i]))
-			lon0 = track['lon'][i2]
-			lat0 = track['lat'][i2]
+			lon0, lat0 = track(time[i])
+			if np.isnan(lon0) or np.isnan(lat0):
+				continue
 			l = np.argmin((lon - lon0)**2 + (lat - lat0)**2)
 			j, k = np.unravel_index(l, lon.shape)
 			# print('<- %s' % filename)
@@ -66,6 +66,4 @@ def read(dirname, index, track, warnings=[], step=1./24., recursive=False):
 			}
 			dd.append(d_new)
 	d = ds.op.merge(dd, 'time')
-	if 'time' in d:
-		d['time_bnds'] = misc.time_bnds(d['time'], step, start_time, end_time)
 	return d

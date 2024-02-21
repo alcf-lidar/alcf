@@ -44,7 +44,9 @@ TRANS_SURF = {
 	'sp': 'ps',
 }
 
-def read0(type_, dirname, track, warnings=[], step=1./24., recursive=False):
+def read0(type_, dirname, track, t1, t2,
+	warnings=[], step=1/24, recursive=False):
+
 	dd_idx = ds.readdir(dirname,
 		variables=['time', 'latitude', 'longitude'],
 		jd=True,
@@ -52,8 +54,6 @@ def read0(type_, dirname, track, warnings=[], step=1./24., recursive=False):
 		warnings=warnings,
 		recursive=recursive,
 	)
-	start_time = track['time'][0]
-	end_time = track['time'][-1]
 
 	vars = {
 		'surf': VARS_SURF,
@@ -73,14 +73,14 @@ def read0(type_, dirname, track, warnings=[], step=1./24., recursive=False):
 		filename = d_idx['filename']
 
 		ii = np.nonzero(
-			(time >= start_time - step*0.5) &
-			(time < end_time + step*0.5)
+			(time >= t1 - step*0.5) &
+			(time < t2 + step*0.5)
 		)[0]
 		for i in ii:
 			t = time[i]
-			i2 = np.argmin(np.abs(track['time'] - time[i]))
-			lat0 = track['lat'][i2]
-			lon0 = track['lon'][i2]
+			lon0, lat0 = track(time[i])
+			if np.isnan(lon0) or np.isnan(lat0):
+				continue
 			j = np.argmin(np.abs(lat - lat0))
 			k = np.argmin(np.abs(lon - lon0))
 			d = ds.read(filename, vars,
@@ -105,8 +105,6 @@ def read0(type_, dirname, track, warnings=[], step=1./24., recursive=False):
 				d['pfull'] = d['pfull'][:,::-1]
 			dd.append(d)
 	d = ds.op.merge(dd, 'time')
-	if 'time' in d:
-		d['time_bnds'] = misc.time_bnds(d['time'], step, start_time, end_time)
 	if 'pfull' in d:
 		d['pfull'] = 1e2*d['pfull']
 	if 'zfull' in d:
@@ -115,14 +113,15 @@ def read0(type_, dirname, track, warnings=[], step=1./24., recursive=False):
 		d['orog'] /= 9.80665
 	if 'cl' in d:
 		d['cl'] *= 100.
-	d['.'] = META
 	return d
 
-def read(dirname, index, track, warnings=[], recursive=False):
-	d_surf = read0('surf', os.path.join(dirname, 'surf'), track, warnings,
-		recursive=recursive)
-	d_plev = read0('plev', os.path.join(dirname, 'plev'), track, warnings,
-		recursive=recursive)
+def read(dirname, index, track, t1, t2,
+	warnings=[], step=1/24, recursive=False):
+
+	d_surf = read0('surf', os.path.join(dirname, 'surf'), track, t1, t2,
+		warnings=warnings, step=step, recursive=recursive)
+	d_plev = read0('plev', os.path.join(dirname, 'plev'), track, t1, t2,
+		warnings=warnings, step=step, recursive=recursive)
 	d = {**d_surf, **d_plev}
 	d['.'] = META
 	return d

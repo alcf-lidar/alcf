@@ -22,15 +22,13 @@ TRANS = {
 	'cloud_volume_fraction_in_atmosphere_layer': 'cl',
 }
 
-def read(dirname, index, track, warnings=[], step=6./24.):
+def read(dirname, index, track, t1, t2, warnings=[], step=6/24):
 	dd_index = ds.readdir(dirname,
 		variables=['time', 'latitude', 'longitude', 'level_height'],
 		jd=True,
 		full=True,
 		warnings=warnings,
 	)
-	start_time = track['time'][0]
-	end_time = track['time'][-1]
 	d_var = {}
 	for var in VARIABLES:
 		dd = []
@@ -43,12 +41,12 @@ def read(dirname, index, track, warnings=[], step=6./24.):
 			lon = d_index['longitude']
 			level_height = d_index['level_height']
 			filename = d_index['filename']
-			ii = np.nonzero((time_half[1:] >= start_time) & (time_half[:-1] < end_time))[0]
+			ii = np.nonzero((time_half[1:] >= t1) & (time_half[:-1] < t2))[0]
 			for i in ii:
 				t = time[i]
-				i2 = np.argmin(np.abs(track['time'] - time[i]))
-				lat0 = track['lat'][i2]
-				lon0 = track['lon'][i2]
+				lon0, lat0 = track(time[i])
+				if np.isnan(lon0) or np.isnan(lat0):
+					continue
 				j = np.argmin(np.abs(lat - lat0))
 				k = np.argmin(np.abs(lon - lon0))
 				d = ds.read(filename, variables=[var],
@@ -104,7 +102,4 @@ def read(dirname, index, track, warnings=[], step=6./24.):
 		d['orog'] = np.full(n, np.nan, dtype=np.float64)
 		for i in range(n):
 			d['orog'][i] = 2*d['zfull'][i,0] - d['zfull'][i,1]
-	if 'time' in d:
-		d['time_bnds'] = misc.time_bnds(d['time'], step, start_time, end_time)
-	d['.'] = META
 	return d

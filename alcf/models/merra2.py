@@ -18,11 +18,11 @@ VARS = [
 	'CLOUD',
 ]
 
-def read(dirname, index, track, warnings=[], step=3./24., recursive=False):
+def read(dirname, index, track, t1, t2,
+	warnings=[], step=3/24, recursive=False):
+
 	dd_index = ds.readdir(dirname, variables=['time', 'lat', 'lon'], jd=True,
 		recursive=recursive)
-	start_time = track['time'][0]
-	end_time = track['time'][-1]
 	dd = []
 	for d_index in dd_index:
 		time = d_index['time']
@@ -31,14 +31,14 @@ def read(dirname, index, track, warnings=[], step=3./24., recursive=False):
 		lon = np.where(lon < 0., 360. + lon, lon)
 		filename = d_index['filename']
 		ii = np.nonzero(
-			(time >= start_time - step*0.5) &
-			(time < end_time + step*0.5)
+			(time >= t1 - step*0.5) &
+			(time < t2 + step*0.5)
 		)[0]
 		for i in ii:
 			t = time[i]
-			i2 = np.argmin(np.abs(track['time'] - time[i]))
-			lat0 = track['lat'][i2]
-			lon0 = track['lon'][i2]
+			lon0, lat0 = track(time[i])
+			if np.isnan(lon0) or np.isnan(lat0):
+				continue
 			j = np.argmin(np.abs(lat - lat0))
 			k = np.argmin(np.abs(lon - lon0))
 			d = ds.read(filename, variables=VARS,
@@ -71,7 +71,4 @@ def read(dirname, index, track, warnings=[], step=3./24., recursive=False):
 			}
 			dd.append(d_new)
 	d = ds.op.merge(dd, 'time')
-	if 'time' in d:
-		d['time_bnds'] = misc.time_bnds(d['time'], step, start_time, end_time)
-	d['.'] = META
 	return d

@@ -32,7 +32,9 @@ TRANS = {
 	'STASH_m01s16i004': 'ta',
 }
 
-def read(dirname, index, track, warnings=[], step=1./24., recursive=False):
+def read(dirname, index, track, t1, t2,
+	warnings=[], step=1/24, recursive=False):
+
 	d_orog = ds.read(os.path.join(dirname, 'qrparm.orog.nc'), [
 		'latitude',
 		'longitude',
@@ -46,8 +48,6 @@ def read(dirname, index, track, warnings=[], step=1./24., recursive=False):
 		warnings=warnings,
 		recursive=recursive,
 	)
-	start_time = track['time'][0]
-	end_time = track['time'][-1]
 
 	dd = []
 	for d_idx in dd_idx:
@@ -60,14 +60,14 @@ def read(dirname, index, track, warnings=[], step=1./24., recursive=False):
 		filename = d_idx['filename']
 
 		ii = np.nonzero(
-			(time >= start_time - step*0.5) &
-			(time < end_time + step*0.5)
+			(time >= t1 - step*0.5) &
+			(time < t2 + step*0.5)
 		)[0]
 		for i in ii:
 			t = time[i]
-			i2 = np.argmin(np.abs(track['time'] - time[i]))
-			lat0 = track['lat'][i2]
-			lon0 = track['lon'][i2]
+			lon0, lat0 = track(time[i])
+			if np.isnan(lon0) or np.isnan(lat0):
+				continue
 			j = np.argmin(np.abs(lat - lat0))
 			k = np.argmin(np.abs(lon - lon0))
 			d = ds.read(filename, VARS,
@@ -91,7 +91,4 @@ def read(dirname, index, track, warnings=[], step=1./24., recursive=False):
 			dd.append(d)
 	d = ds.op.merge(dd, 'time')
 	d['cl'] *= 100.
-	if 'time' in d:
-		d['time_bnds'] = misc.time_bnds(d['time'], step, start_time, end_time)
-	d['.'] = META
 	return d

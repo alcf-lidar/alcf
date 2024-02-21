@@ -138,22 +138,16 @@ def time_mask(bnds, t1, t2):
 	return ~(((bnds[:,0] < t1) & (bnds[:,1] < t1)) |
 	         ((bnds[:,0] > t2) & (bnds[:,1] > t2)))
 
-def track_at(track, t):
-	ii = np.arange(len(track['time']))
-	i = np.interp(t, track['time'], ii, left=np.nan, right=np.nan)
-	mask = np.isnan(i)
-	i = np.where(mask, 0, i)
-	ilow = np.floor(i).astype(int)
-	ihigh = np.ceil(i).astype(int)
-	ires = i % 1
-	return [
-		np.where(
-			mask,
-			np.nan,
-			(1 - ires)*track[k][ilow] + ires*track[k][ihigh]
-		)
-		for k in ['lon', 'lat']
-	]
+def track_at(d, t, epsilon=1/86400):
+	i = np.searchsorted(d['time_bnds'][:,0], t, side='right')
+	if i == 0:
+		if t >= d['time_bnds'][0,0] - epsilon:
+			return d['lon'][0], d['lat'][0]
+		else:
+			return np.nan, np.nan
+	if t <= d['time_bnds'][i-1,1] + epsilon:
+		return d['lon'][i-1], d['lat'][i-1]
+	return np.nan, np.nan
 
 def populate_meta(d, meta, vars):
 	d_tmp = {'.': meta}

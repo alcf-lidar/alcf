@@ -32,9 +32,9 @@ def index(dirname, warnings=[], recursive=False, njobs=1):
 		njobs=njobs,
 	)
 
-def read(dirname, index, track, warnings=[], step=3./24., recursive=False):
-	start_time = track['time'][0]
-	end_time = track['time'][-1]
+def read(dirname, index, track, t1, t2,
+	warnings=[], step=3/24, recursive=False):
+
 	dd = []
 	for d_index in index:
 		time = d_index['XTIME'][0]
@@ -43,10 +43,10 @@ def read(dirname, index, track, warnings=[], step=3./24., recursive=False):
 		if time < 2000000.:
 			time = time0 + time/(24.*60.)
 		filename = d_index['filename']
-		if (time >= start_time - step*0.5) & (time < end_time + step*0.5):
-			k = np.argmin(np.abs(track['time'] - time))
-			lon0 = track['lon'][k]
-			lat0 = track['lat'][k]
+		if (time >= t1 - step*0.5) & (time < t2 + step*0.5):
+			lon0, lat0 = track(time)
+			if np.isnan(lon0) or np.isnan(lat0):
+				continue
 			d = ds.read(filename, variables=VARS, sel={'Time': 0})
 			lon = np.where(d['XLONG'] < 0., 360. + d['XLONG'], d['XLONG'])
 			lat = d['XLAT']
@@ -80,7 +80,4 @@ def read(dirname, index, track, warnings=[], step=3./24., recursive=False):
 			}
 			dd.append(d_new)
 	d = ds.op.merge(dd, 'time')
-	if 'time' in d:
-		d['time_bnds'] = misc.time_bnds(d['time'], step, start_time, end_time)
-	d['.'] = META
 	return d

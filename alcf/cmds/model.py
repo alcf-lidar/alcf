@@ -5,56 +5,107 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 import numpy as np
 import aquarius_time as aq
 import ds_format as ds
-from alcf.models import MODELS
+from alcf.models import MODELS, META
+from alcf import misc
 
-def get_track_segment(track, t1, t2):
-	mask = (track['time'] >= t1) & (track['time'] < t2)
-	n = np.sum(mask)
-	lon1, lon2 = np.interp([t1, t2], track['time'], track['lon'])
-	lat1, lat2 = np.interp([t1, t2], track['time'], track['lat'])
-	time = np.full(n + 2, np.nan, np.float64)
-	lon = np.full(n + 2, np.nan, np.float64)
-	lat = np.full(n + 2, np.nan, np.float64)
-	time[1:-1] = track['time'][mask]
-	lon[1:-1] = track['lon'][mask]
-	lat[1:-1] = track['lat'][mask]
-	time[0], time[-1] = t1, t2
-	lon[0], lon[-1] = lon1, lon2
-	lat[0], lat[-1] = lat1, lat2
+def point_to_track(point, time):
+	time_mid = 0.5*(time[0] + time[1])
 	return {
-		'time': time,
-		'lon': lon,
-		'lat': lat,
-		'.': track['.']
+		'lon': np.array([point[0], point[0]], dtype=np.float64),
+		'lat': np.array([point[1], point[1]], dtype=np.float64),
+		'time': np.array([time[0], time[1]], dtype=np.float64),
+		'time_bnds': np.array([[time[0], time_mid], [time_mid, time[1]]],
+			dtype=np.float64),
 	}
 
-def process_model(model, input_, index, point=None, time=None, track=None,
-	debug=False, recursive=False, warnings=[]):
-	if track is not None:
-		track_segment = get_track_segment(track, time[0], time[1])
-		d = model.read(input_, index, track_segment, warnings=warnings,
-			recursive=recursive)
-	else:
-		lon = np.array([point[0], point[0]], dtype=np.float64)
-		lat = np.array([point[1], point[1]], dtype=np.float64)
-		time = np.array([time[0], time[1]], dtype=np.float64)
-		track = {
-			'lon': lon,
-			'lat': lat,
-			'time': time,
-		}
-		d = model.read(input_, index, track, warnings=warnings,
-			recursive=recursive)
+def track_auto_time_bnds(time):
+	n = len(time)
+	time_bnds = np.full((n, 2), np.nan, np.float64)
+	time_bnds[0,0] = time[0]
+	time_bnds[-1,1] = time[-1]
+	time_avg = 0.5*(time[:-1] + time[1:])
+	time_bnds[1:,0] = time_avg
+	time_bnds[:-1,1] = time_avg
+	return time_bnds
+
+def read_track(filenames, lon_180=False):
+	iterable = False
+	try: iterable = iter(filenames)
+	except Exception: pass
+	else: filenames = [filenames]
+	dd = []
+	for filename in filenames:
+		d = ds.read(filename, jd=True)
+		if len(d['time']) < 2:
+			raise ValueError('%s: Track must contain at least two records', filename)
+		if 'time_bnds' not in d:
+			d['time_bnds'] = track_auto_time_bnds(d['time'])
+			d['.']['time_bnds'] = {
+				'.dims': ['time', 'bnds'],
+				'long_name': 'time bounds',
+				'standard_name': 'time',
+				'units': 'days since -4713-11-24 12:00 UTC',
+				'calendar': 'proleptic_gregorian',
+			}
+		dd += [d]
+	d = ds.merge(dd, 'time')
+	if lon_180:
+		d['lon'] = np.where(d['lon'] > 0, d['lon'], 360. + d['lon'])
 	return d
 
-def worker(type_, input_, index, output, point, t, track1, debug, r):
+def override_year_in_time(time, year):
+	try: len(time)
+	except:	return override_year_in_time(np.array([time]), year)[0]
+	date = aq.to_date(time)
+	y = date[1]
+	n = len(y)
+	if np.all(y == year):
+		return time
+	ones = np.ones(n, int)
+	zeros = np.zeros(n, int)
+	start_old = aq.from_date([ones, y, ones, ones, zeros, zeros, zeros, zeros])
+	start_new_1 = aq.from_date([1, year, 1, 1, 0, 0, 0])
+	start_new = np.full(n, start_new_1)
+	dt = time - start_old
+	time_new = start_new + dt
+	# Do this again in case the day overflows because of the old year is a leap
+	# year while the new is not, and the time as near the end of the year.
+	return override_year_in_time(time_new, year)
+
+#def override_year_in_track(d, year):
+#	year_start = aq.from_date([1, year, 1, 1, 0, 0, 0])
+#	year_end = aq.from_date([1, year + 1, 1, 1, 0, 0, 0])
+#	time_bnds_rel = d['time_bnds'] - d['time']
+#	d['time'] = override_year_in_time(d['time'], year)
+#	d['time_bnds'] = d['time'] + time_bnds_rel
+#	d['time_bnds'][d['time_bnds'] < year_start] = year_start
+#	d['time_bnds'][d['time_bnds'] > year_end] = year_end
+
+def track_has_seg(track, t1, t2):
+	mask = (track['time_bnds'][:,0] < t2) & (track['time_bnds'][:,1] >= t1)
+	return np.any(mask)
+
+def worker(type_, input_, index, output, track, start, debug, r,
+	override_year=None):
 	try:
+		if override_year is not None:
+			t1 = override_year_in_time(start, override_year)
+		else:
+			t1 = start
+		t2 = t1 + 1
+
+		def track_f(t):
+			dt = t - t1
+			return misc.track_at(track, start + dt)
+
 		model = MODELS[type_]
 		output_filename = os.path.join(output, '%s.nc' % \
-			aq.to_iso(t).replace(':', ''))
+			aq.to_iso(start).replace(':', ''))
 		warnings = []
-		d = process_model(model, input_, index, point, time=[t, t + 1.],
-			track=track1, debug=debug, recursive=r, warnings=warnings)
+		d = model.read(input_, index, track_f, t1, t2,
+			warnings=warnings,
+			recursive=r,
+		)
 		for w in warnings:
 			if len(w) == 2:
 				print('Warning: %s' % w[0], file=sys.stderr)
@@ -63,6 +114,12 @@ def worker(type_, input_, index, output, point, t, track1, debug, r):
 			else:
 				print('Warning: %s' % w, file=sys.stderr)
 		if d is not None:
+			if 'time_bnds' not in d and 'time' in d:
+				d['time_bnds'] = misc.time_bnds(d['time'], step, t1, t2)
+			for var in ['time', 'time_bnds']:
+				if 'time' in d:
+					d[var] = start + (d[var] - t1)
+			d['.'] = META
 			ds.write(output_filename, d)
 			print('-> %s' % output_filename)
 	except Exception as e:
@@ -74,7 +131,7 @@ def run(type_, input_, output,
 	point=None,
 	time=None,
 	track=None,
-	track_override_year=None,
+	override_year=None,
 	track_lon_180=False,
 	debug=False,
 	r=False,
@@ -107,7 +164,7 @@ Arguments
 - `lat`: Point latitutde.
 - `start`: Start time (see Time format below).
 - `end`: End time (see Time format below).
-- `track`: Track NetCDF file (see Files below).
+- `track: <file>`, `track: { <file>... }`: One or more track NetCDF files (see Files below). If multiple files are supplied and `time_bnds` is not present in the files, they are assumed to be multiple segments of a discontinous track unless the last and first time of adjacent tracks are the same.
 - `options`: See Options below.
 
 Options
@@ -116,7 +173,7 @@ Options
 - `njobs: <n>`: Number of parallel jobs. Default: number of CPU cores.
 - `-r`: Process the input directory recursively.
 - `--track_lon_180`: Expect track longitude between -180 and 180 degrees.
-- `track_override_year: <year>`: Override year in track. Use if comparing observations with a model statistically. Default: `none`.
+- `override_year: <year>`: Override year in the track. Use if comparing observations with a model statistically and the model output does not have a corresponding year available. The observation time is converted to the same time relative to the start of the year in the specified year. Note that if the original year is a leap year and the override year is not, as a consequence of the above 31 December is mapped to 1 January. The output retains the original year as in the track, even though the model data come from the override year. Default: `none`.
 
 Types
 -----
@@ -138,7 +195,7 @@ Time format
 Files
 -----
 
-The track file is a NetCDF file containing 1D variables `lon`, `lat`, and `time`. `time` is time in format conforming with the CF Conventions (has a valid `units` attribute), `lon` is longitude between 0 and 360 degrees and `lat` is latitude between -90 and 90 degrees.
+The track file is a NetCDF file containing 1D variables `lon`, `lat`, `time`, and optionally `time_bnds`. `time` and `time_bnds` are time in format conforming with the CF Conventions (has a valid `units` attribute and optional `calendar` attribute), `lon` is longitude between 0 and 360 degrees and `lat` is latitude between -90 and 90 degrees. If `time_bnds` is provided, discontinous track segments can be specified if adjacent time bounds are not coincident. The variables `lon`, `lat` and `time` have a single dimension `time`. The variable `time_bnds` has dimensions (`time`, `bnds`).
 
 Examples
 --------
@@ -147,40 +204,29 @@ Extract MERRA-2 model data in `M2I3NVASM.5.12.4` at 45 S, 170 E between 1 and 2 
 
     alcf model merra2 point: { -45.0 170.0 } time: { 2020-01-01 2020-01-02 } M2I3NVASM.5.12.4 alcf_merra2_model
 	'''
-	time1 = None
-	track1 = None
+	time_lim = [-np.inf, np.inf]
+	if time is not None:
+		for i in [0, 1]:
+			time_lim[i] = aq.from_iso(time[i])
+			if time_lim[i] is None:
+				raise ValueError('Invalid time format: %s' % time[i])
+
+	d_track = None
 	if track is not None:
-		track1 = ds.read(track)
-		if track_override_year is not None:
-			date = aq.to_date(track1['time'])
-			date[1][:] = track_override_year
-			track1['time'] = aq.from_date(date)
-		if track_lon_180:
-			track1['lon'] = np.where(
-				track1['lon'] > 0,
-				track1['lon'],
-				360. + track1['lon']
-			)
-		time1 = track1['time'][0], track1['time'][-1]
+		d_track = read_track(track, track_lon_180)
 	elif point is not None and time is not None:
-		pass
+		d_track = point_to_track(point, time_lim)
 	else:
 		raise ValueError('Point and time or track is required')
 
-	if time is not None:
-		time1 = [None, None]
-		for i in 0, 1:
-			time1[i] = aq.from_iso(time[i])
-			if time1[i] is None:
-				raise ValueError('Invalid time format: %s' % time[i])
+	time_start = max(d_track['time_bnds'][0,0], time_lim[0])
+	time_end = min(d_track['time_bnds'][-1,1], time_lim[1])
 
 	# if os.path.isdir(output):
 
 	model = MODELS.get(type_)
 	if model is None:
 		raise ValueError('Invalid type: %s' % type_)
-
-	t1, t2 = time1[0], time1[1]
 
 	if njobs is None: njobs = os.cpu_count()
 
@@ -191,11 +237,13 @@ Extract MERRA-2 model data in `M2I3NVASM.5.12.4` at 45 S, 170 E between 1 and 2 
 
 	with ProcessPoolExecutor(max_workers=njobs) as ex:
 		fs = []
-		for t in np.arange(np.floor(t1 - 0.5), np.ceil(t2 - 0.5)) + 0.5:
-			f = ex.submit(worker,
-				type_, input_, index, output, point, t, track1, debug, r)
+		tt = np.arange(np.floor(time_start - 0.5), np.ceil(time_end - 0.5)) + 0.5
+		for t in tt:
+			if not track_has_seg(d_track, t, t + 1):
+				continue
+			f = ex.submit(worker, type_, input_, index, output, d_track, t,
+				debug, r, override_year)
 			fs += [f]
-
 	for w in warnings:
 		if len(w) == 2:
 			print('Warning: %s' % w[0], file=sys.stderr)

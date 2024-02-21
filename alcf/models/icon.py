@@ -33,9 +33,9 @@ def index(dirname, warnings=[], recursive=False, njobs=1):
 
 	return [dd, d_g]
 
-def read(dirname, index, track, warnings=[], step=6./24., recursive=False):
-	start_time = track['time'][0]
-	end_time = track['time'][-1]
+def read(dirname, index, track, t1, t2,
+	warnings=[], step=6/24, recursive=False):
+
 	vgrid_filename = os.path.join(dirname, 'vgrid.nc')
 	dd_out = []
 	dd_idx, d_g = index
@@ -49,11 +49,13 @@ def read(dirname, index, track, warnings=[], step=6./24., recursive=False):
 			time = d_idx['time']
 			filename = d_idx['filename']
 			ii = np.nonzero(
-				(time >= start_time - step*0.5) &
-				(time < end_time + step*0.5)
+				(time >= t1 - step*0.5) &
+				(time < t2 + step*0.5)
 			)[0]
 			for i in ii:
-				lon0, lat0 = misc.track_at(track, time[i])
+				lon0, lat0 = track(time[i])
+				if np.isnan(lon0) or np.isnan(lat0):
+					continue
 				dist = misc.geo_distance(
 					np.full(ncells, lon0),
 					np.full(ncells, lat0),
@@ -101,8 +103,5 @@ def read(dirname, index, track, warnings=[], step=6./24., recursive=False):
 		d_out.update(d)
 
 	d_out['cl'] = np.full(d_out['cli'].shape, 100., np.float64)
-	if 'time' in d_out:
-		d_out['time_bnds'] = misc.time_bnds(d_out['time'], step, start_time, end_time)
-	d_out['.'] = META
 
 	return d_out

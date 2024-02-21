@@ -35,7 +35,9 @@ TRANS = {
 	'sp': 'ps',
 }
 
-def read(dirname, index, track, warnings=[], step=6./24., recursive=False):
+def read(dirname, index, track, t1, t2,
+	warnings=[], step=6/24, recursive=False):
+
 	d_ll = ds.read(os.path.join(dirname, 'LL125.nc'), [
 		'latitude',
 		'longitude',
@@ -52,8 +54,6 @@ def read(dirname, index, track, warnings=[], step=6./24., recursive=False):
 		warnings=warnings,
 		recursive=recursive,
 	)
-	start_time = track['time'][0]
-	end_time = track['time'][-1]
 	d_out = {}
 	for var in VARS:
 		dd = []
@@ -66,14 +66,14 @@ def read(dirname, index, track, warnings=[], step=6./24., recursive=False):
 			lon = d_idx['longitude']
 			filename = d_idx['filename']
 			ii = np.nonzero(
-				(time >= start_time - step*0.5) &
-				(time < end_time + step*0.5)
+				(time >= t1 - step*0.5) &
+				(time < t2 + step*0.5)
 			)[0]
 			for i in ii:
 				t = time[i]
-				i2 = np.argmin(np.abs(track['time'] - time[i]))
-				lat0 = track['lat'][i2]
-				lon0 = track['lon'][i2]
+				lon0, lat0 = track(time[i])
+				if np.isnan(lon0) or np.isnan(lat0):
+					continue
 				j = np.argmin(np.abs(lat - lat0))
 				k = np.argmin(np.abs(lon - lon0))
 				j_ll = np.argmin(np.abs(lat_ll - lat0))
@@ -110,7 +110,4 @@ def read(dirname, index, track, warnings=[], step=6./24., recursive=False):
 				raise ValueError('%s: Field differs between input files' % TRANS[var_aux])
 		d_out.update(d)
 	d_out['pfull'] = d_out['pfull']*1e2
-	if 'time' in d_out:
-		d_out['time_bnds'] = misc.time_bnds(d_out['time'], step, start_time, end_time)
-	d_out['.'] = META
 	return d_out
