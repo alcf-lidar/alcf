@@ -81,6 +81,11 @@ to `alcf model` or `alcf auto model`.
 ICON is a weather and climate model developed by the German Weather Service and
 the Max Planck Institute for Meteorology.
 
+This module is for a high-resolution configuration of the model where grid cell
+cloud fraction is not specified, and is implicitly 100% in every grid cell and
+level. If you need cloud fraction to be taken into account, you have to modify
+the `icon.py` module.
+
 The following fields on model levels are required:
 
 - `cli` (specific cloud ice content)
@@ -99,6 +104,36 @@ level and surface level files does not have to be the same, in which case a
 subset of intersecting time steps is processed. The horizontal grid file is not
 required. The input files are expected the be on the unstructured grid (a set
 of cells).
+
+### ICON through Intake-ESM on HEALPix grid
+
+**Source:** `alcf/models/icon_intake_healpix.py`
+
+This is the same as the above, but the data are retrieved through
+[Intake-ESM](https://intake.readthedocs.io) and are expected to be mapped on an
+[HEALPix](https://healpy.readthedocs.io) grid. This type of configuration is in
+use at [DKRZ](https://www.dkrz.de/de).
+
+This module is for a high-resolution configuration of the model where grid cell
+cloud fraction is not specified, and is implicitly 100% in every grid cell and
+level. If you need cloud fraction to be taken into account, you have to modify
+the `icon_intake_healpix.py` module.
+
+The following variables are required:
+
+- `cli`
+- `clw`
+- `pfull`
+- `phalf`
+- `ta`
+- `zg`
+- `zghalf`
+
+The input file should be specified as an Intake-ESM catalog URL followed by
+parameters separated by `|`, in the format `<url>|<model>|<run>|<timestep>|<zoom>`,
+where `<model>` is the model name, `<run>` is the model run, `<timestep>` is the
+model time step, and `<zoom>` is the zoom level. For example
+`https://data.nextgems-h2020.eu/catalog.yaml|ICON|ngc3028|PT3H|10`.
 
 ### JRA-55
 

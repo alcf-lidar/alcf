@@ -84,6 +84,7 @@ from . import nzcsm
 from . import nzesm
 from . import um
 from . import icon
+from . import icon_intake_healpix
 
 MODELS = {
 	'amps': amps,
@@ -95,4 +96,5 @@ MODELS = {
 	'nzesm': nzesm,
 	'um': um,
 	'icon': icon,
+	'icon_intake_healpix': icon_intake_healpix,
 }
