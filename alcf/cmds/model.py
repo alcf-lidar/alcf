@@ -72,15 +72,6 @@ def override_year_in_time(time, year):
 	# year while the new is not, and the time as near the end of the year.
 	return override_year_in_time(time_new, year)
 
-#def override_year_in_track(d, year):
-#	year_start = aq.from_date([1, year, 1, 1, 0, 0, 0])
-#	year_end = aq.from_date([1, year + 1, 1, 1, 0, 0, 0])
-#	time_bnds_rel = d['time_bnds'] - d['time']
-#	d['time'] = override_year_in_time(d['time'], year)
-#	d['time_bnds'] = d['time'] + time_bnds_rel
-#	d['time_bnds'][d['time_bnds'] < year_start] = year_start
-#	d['time_bnds'][d['time_bnds'] > year_end] = year_end
-
 def track_has_seg(track, t1, t2):
 	mask = (track['time_bnds'][:,0] < t2) & (track['time_bnds'][:,1] >= t1)
 	return np.any(mask)
