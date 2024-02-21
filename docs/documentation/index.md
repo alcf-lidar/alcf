@@ -1,5 +1,5 @@
 ---
-title: Documnetation
+title: Documentation
 layout: default
 ---
 
