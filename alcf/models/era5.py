@@ -44,8 +44,10 @@ TRANS_SURF = {
 	'sp': 'ps',
 }
 
+STEP = 1/24
+
 def read0(type_, dirname, track, t1, t2,
-	warnings=[], step=1/24, recursive=False):
+	warnings=[], step=STEP, recursive=False):
 
 	dd_idx = ds.readdir(dirname,
 		variables=['time', 'latitude', 'longitude'],
@@ -116,7 +118,7 @@ def read0(type_, dirname, track, t1, t2,
 	return d
 
 def read(dirname, index, track, t1, t2,
-	warnings=[], step=1/24, recursive=False):
+	warnings=[], step=STEP, recursive=False):
 
 	d_surf = read0('surf', os.path.join(dirname, 'surf'), track, t1, t2,
 		warnings=warnings, step=step, recursive=recursive)

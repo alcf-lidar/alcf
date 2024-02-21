@@ -23,6 +23,8 @@ VARS = [
 	'T',
 ]
 
+STEP = 3/24
+
 def index(dirname, warnings=[], recursive=False, njobs=1):
 	return ds.readdir(dirname, ['XTIME'],
 		jd=True,
@@ -33,7 +35,7 @@ def index(dirname, warnings=[], recursive=False, njobs=1):
 	)
 
 def read(dirname, index, track, t1, t2,
-	warnings=[], step=3/24, recursive=False):
+	warnings=[], step=STEP, recursive=False):
 
 	dd = []
 	for d_index in index:

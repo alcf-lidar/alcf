@@ -14,6 +14,8 @@ VARS = [
 	'ps',
 ]
 
+STEP = 6/24
+
 def index(dirname, warnings=[], recursive=False, njobs=1):
 	dd = ds.readdir(dirname,
 		variables=['time'],
@@ -34,7 +36,7 @@ def index(dirname, warnings=[], recursive=False, njobs=1):
 	return [dd, d_g]
 
 def read(dirname, index, track, t1, t2,
-	warnings=[], step=6/24, recursive=False):
+	warnings=[], step=STEP, recursive=False):
 
 	vgrid_filename = os.path.join(dirname, 'vgrid.nc')
 	dd_out = []

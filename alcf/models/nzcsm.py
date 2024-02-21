@@ -15,10 +15,10 @@ VARIABLES = [
 	'time0',
 ]
 
-GRACE_TIME = 1/24.
+STEP = 2/24
 
 def read(dirname, index, track, t1, t2,
-	warnings=[], step=1/24, recursive=False):
+	warnings=[], step=STEP, recursive=False):
 
 	dd_index = ds.readdir(dirname, variables=['time0', 'latitude', 'longitude'],
 		jd=True, recursive=recursive)
@@ -29,7 +29,7 @@ def read(dirname, index, track, t1, t2,
 		lon = np.where(lon < 0., 360. + lon, lon)
 		lat = d_index['latitude']
 		filename = d_index['filename']
-		ii = np.where((time >= t1 - GRACE_TIME) & (time <= t2 + GRACE_TIME))[0]
+		ii = np.where((time >= t1 - step*0.5) & (time <= t2 + step*0.5))[0]
 		for i in ii:
 			lon0, lat0 = track(time[i])
 			if np.isnan(lon0) or np.isnan(lat0):

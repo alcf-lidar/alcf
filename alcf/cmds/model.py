@@ -106,7 +106,7 @@ def worker(type_, input_, index, output, track, start, debug, r,
 				print('Warning: %s' % w, file=sys.stderr)
 		if d is not None:
 			if 'time_bnds' not in d and 'time' in d:
-				d['time_bnds'] = misc.time_bnds(d['time'], step, t1, t2)
+				d['time_bnds'] = misc.time_bnds(d['time'], model.STEP, t1, t2)
 			for var in ['time', 'time_bnds']:
 				if 'time' in d:
 					d[var] = start + (d[var] - t1)

@@ -32,8 +32,10 @@ TRANS = {
 	'STASH_m01s16i004': 'ta',
 }
 
+STEP = 1/24
+
 def read(dirname, index, track, t1, t2,
-	warnings=[], step=1/24, recursive=False):
+	warnings=[], step=STEP, recursive=False):
 
 	d_orog = ds.read(os.path.join(dirname, 'qrparm.orog.nc'), [
 		'latitude',

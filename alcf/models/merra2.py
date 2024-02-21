@@ -18,8 +18,10 @@ VARS = [
 	'CLOUD',
 ]
 
+STEP=3/24
+
 def read(dirname, index, track, t1, t2,
-	warnings=[], step=3/24, recursive=False):
+	warnings=[], step=STEP, recursive=False):
 
 	dd_index = ds.readdir(dirname, variables=['time', 'lat', 'lon'], jd=True,
 		recursive=recursive)

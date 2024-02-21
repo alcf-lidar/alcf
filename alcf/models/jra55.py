@@ -35,8 +35,10 @@ TRANS = {
 	'sp': 'ps',
 }
 
+STEP = 6/24
+
 def read(dirname, index, track, t1, t2,
-	warnings=[], step=6/24, recursive=False):
+	warnings=[], step=STEP, recursive=False):
 
 	d_ll = ds.read(os.path.join(dirname, 'LL125.nc'), [
 		'latitude',

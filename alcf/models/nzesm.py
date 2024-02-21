@@ -22,7 +22,9 @@ TRANS = {
 	'cloud_volume_fraction_in_atmosphere_layer': 'cl',
 }
 
-def read(dirname, index, track, t1, t2, warnings=[], step=6/24):
+STEP = 6/24
+
+def read(dirname, index, track, t1, t2, warnings=[], step=STEP):
 	dd_index = ds.readdir(dirname,
 		variables=['time', 'latitude', 'longitude', 'level_height'],
 		jd=True,
