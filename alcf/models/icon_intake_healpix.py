@@ -5,8 +5,6 @@ import numpy as np
 from alcf.models import META
 from alcf import misc
 import aquarius_time as aq
-import intake
-import healpy
 
 VARS = [
 	'cli',
@@ -21,6 +19,7 @@ VARS = [
 STEP = 3/24
 
 def index(dirname, warnings=[], recursive=False, njobs=1):
+	import intake
 	try: path, model, run, timestep, zoom = dirname
 	except Exception as e:
 		raise ValueError('Invalid input format: "%s"' % dirname) from e
@@ -37,6 +36,7 @@ def index(dirname, warnings=[], recursive=False, njobs=1):
 def read(dirname, index, track, t1, t2,
 	warnings=[], step=STEP, recursive=False):
 
+	import healpy
 	ids = index['ids']
 	time = index['time']
 	nest = ids.crs.healpix_order == 'nest'
