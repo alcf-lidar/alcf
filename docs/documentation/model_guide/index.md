@@ -129,11 +129,11 @@ The following variables are required:
 - `zg`
 - `zghalf`
 
-The input file should be specified as an Intake-ESM catalog URL followed by
-parameters separated by `|`, in the format `<url>|<model>|<run>|<timestep>|<zoom>`,
-where `<model>` is the model name, `<run>` is the model run, `<timestep>` is the
-model time step, and `<zoom>` is the zoom level. For example
-`https://data.nextgems-h2020.eu/catalog.yaml|ICON|ngc3028|PT3H|10`.
+The input file should be specified as an Intake-ESM catalog path followed by
+parameters in the format `{ <path> <model> <run> <timestep> <zoom> }`, where
+`<model>` is the model name, `<run>` is the model run, `<timestep>` is the model
+time step, and `<zoom>` is the zoom level. For example
+`{ https://data.nextgems-h2020.eu/catalog.yaml ICON ngc3028 PT3H 10 }`.
 
 This module requires the `intake` and `healpy` Python packages to be installed
 manually.

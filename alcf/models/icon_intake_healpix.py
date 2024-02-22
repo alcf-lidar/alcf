@@ -21,7 +21,7 @@ VARS = [
 STEP = 3/24
 
 def index(dirname, warnings=[], recursive=False, njobs=1):
-	try: path, model, run, timestep, zoom = dirname.split('|')
+	try: path, model, run, timestep, zoom = dirname
 	except Exception as e:
 		raise ValueError('Invalid input format: "%s"' % dirname) from e
 	cat = intake.open_catalog(path)
