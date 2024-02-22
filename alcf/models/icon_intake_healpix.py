@@ -48,6 +48,8 @@ def read(dirname, index, track, t1, t2,
 	for i in ii:
 		t = time[i]
 		lon, lat = track(t)
+		if np.isnan(lon) or np.isnan(lat):
+			continue
 		j = healpy.ang2pix(ids.crs.healpix_nside, lon, lat,
 			lonlat=True,
 			nest=nest
