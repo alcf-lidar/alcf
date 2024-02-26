@@ -156,8 +156,10 @@ The following fields are required by the ALCF:
 
 Download files for the period of interest all into the same directory.
 The JRA-55 GRIB files have to be converted to NetCDF before they can be
-used with the ALCF. Use [grib_to_netcdf](https://confluence.ecmwf.int/display/ECC/grib_to_netcdf)
-to convert the data. All data files should reside in the same directory.
+used with the ALCF. Use
+[alcf convert]({{ "/documentation/cli/cmd_convert.html" | relative_url }}) or
+[grib_to_netcdf](https://confluence.ecmwf.int/display/ECC/grib_to_netcdf) to
+convert the data. All data files should reside in the same directory.
 
 ### MERRA-2
 
