@@ -31,23 +31,35 @@ split among the output files.
 
 **Source:** `alcf/models/amps.py`
 
-The ALCF is compatible with the NetCDF AMPS output. You can find the
+This module is compatible with the NetCDF AMPS output, which seems discontinued,
+and with GRIB output converted to NetCDF. The GRIB output files can be downloaded
+from the
 [AMPS archive](https://www.earthsystemgrid.org/project/amps.html) on the
 Earth System Grid (ESG) website. The following files conver 24 hours of model
 output:
 
-    wrfout_dxx_YYYYmmdd00_f003.nc
-    wrfout_dxx_YYYYmmdd00_f006.nc
-    wrfout_dxx_YYYYmmdd00_f009.nc
-    wrfout_dxx_YYYYmmdd00_f012.nc
-    wrfout_dxx_YYYYmmdd12_f003.nc
-    wrfout_dxx_YYYYmmdd12_f006.nc
-    wrfout_dxx_YYYYmmdd12_f009.nc
-    wrfout_dxx_YYYYmmdd12_f012.nc
+    wrfout_dxx_YYYYmmdd00_f003.grb
+    wrfout_dxx_YYYYmmdd00_f006.grb
+    wrfout_dxx_YYYYmmdd00_f009.grb
+    wrfout_dxx_YYYYmmdd00_f012.grb
+    wrfout_dxx_YYYYmmdd12_f003.grb
+    wrfout_dxx_YYYYmmdd12_f006.grb
+    wrfout_dxx_YYYYmmdd12_f009.grb
+    wrfout_dxx_YYYYmmdd12_f012.grb
 
-where `xx` is the [AMPS grid](http://www2.mmm.ucar.edu/rt/amps/information/configuration/maps_2017101012/maps.html), `YYYYmmdd` is the year (`YYYY`), month (`mm`) and day (`dd`). The `*_f000.nc`
-files are not suitable for use with the ALCF as they do not contain all required
-variables.
+where `xx` is the
+[AMPS grid](http://www2.mmm.ucar.edu/rt/amps/information/configuration/maps_2017101012/maps.html),
+`YYYYmmdd` is the year (`YYYY`), month (`mm`) and day (`dd`). The `f000` files
+are not suitable for use with the ALCF as they do not contain all required
+variables. Files for hours other than `00` and `12` and for forecast times other
+than `003`, `006`, `009` and `012` are not needed.
+
+The GRIB files can be converted to NetCDF either with
+[alcf convert]({{ "/documentation/cli/cmd_convert.html" | relative_url }})
+or
+[ncl_convert2nc](https://www.ncl.ucar.edu/Document/Tools/ncl_convert2nc.shtml).
+Other programs for conversion to NetCDF exist, but this module only supports
+to output as produced by these two methods.
 
 ### ERA5
 
