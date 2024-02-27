@@ -25,14 +25,14 @@ The instructions below assume that you enter the commands in the terminal.
 
     ```sh
     sudo apt install gcc make gfortran libhdf5-dev libnetcdf-dev \
-        libnetcdff-dev python3 python3-setuptools python3-pip cython3 pipx libeccodes-tools
+        libnetcdff-dev python3 python3-setuptools python3-pip cython3 pipx libeccodes-tools ncl-ncarg
     ```
 
     On Fedora, install dependencies with:
 
     ```sh
     sudo yum install make gcc gfortran hdf5-devel netcdf-devel \
-        netcdf-fortran-devel python3-setuptools python3-pip python3-Cython pipx eccodes
+        netcdf-fortran-devel python3-setuptools python3-pip python3-Cython pipx eccodes ncl
     ```
 
 2. Install the ALCF with:

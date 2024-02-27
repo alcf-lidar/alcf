@@ -3,8 +3,15 @@ import sys
 import os
 import re
 import glob
+import tempfile
+import shutil
 
 TYPES = {
+	'amps': {
+		'ext': ['grb'],
+		'outfile_is_directory': True,
+		'cmdf': lambda infile, outfile: ['ncl_convert2nc', infile, '-o', outfile],
+	},
 	'cl31': {
 		'ext': ['dat', 'DAT', 'asc', 'ASC'],
 		'cmdf': lambda infile, outfile: ['cl2nc', infile, outfile],
@@ -78,6 +85,7 @@ Options
 Types
 -----
 
+- `amps`: Antarctic Mesoscale Prediction System (AMPS) GRIB files. Input file extension `.grb`.
 - `cl31`: Vaisala CL31. Input file extension `.dat`, `.DAT`, `.asc` or `.ASC`.
 - `cl51`: Vaisala CL51. Input file extension `.dat`, `.DAT`, `.asc` or `.ASC`.
 - `jra55`: JRA-55 reanalysis. No input file extension.
@@ -123,8 +131,17 @@ Convert JRA-55 data in `jra55_grib` to NetCDF and store the output in the direct
 		input2, output2 = [input_], [output]
 
 	for infile, outfile in zip(input2, output2):
-		cmd = desc['cmdf'](infile, outfile)
 		if recursive:
 			os.makedirs(os.path.dirname(outfile), exist_ok=True)
-		print(' '.join(cmd))
-		call(cmd, stdout=sys.stdout, stderr=sys.stderr)
+		if desc.get('outfile_is_directory'):
+			with tempfile.TemporaryDirectory() as tmpdir:
+				cmd = desc['cmdf'](infile, tmpdir)
+				print(' '.join(cmd))
+				call(cmd, stdout=sys.stdout, stderr=sys.stderr)
+				name = os.path.splitext(os.path.basename(infile))[0]
+				filename = os.path.join(tmpdir, name + '.nc')
+				shutil.move(filename, outfile)
+		else:
+			cmd = desc['cmdf'](infile, outfile)
+			print(' '.join(cmd))
+			call(cmd, stdout=sys.stdout, stderr=sys.stderr)
