@@ -59,7 +59,7 @@ The GRIB files can be converted to NetCDF either with
 or
 [ncl_convert2nc](https://www.ncl.ucar.edu/Document/Tools/ncl_convert2nc.shtml).
 Other programs for conversion to NetCDF exist, but this module only supports
-to output as produced by these two methods.
+output produced by these two methods.
 
 ### ERA5
 
