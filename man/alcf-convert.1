@@ -1,6 +1,6 @@
 .\" generated with Ronn-NG/v0.9.1
 .\" http://github.com/apjanke/ronn-ng/tree/0.9.1
-.TH "ALCF\-CONVERT" "1" "August 2023" ""
+.TH "ALCF\-CONVERT" "1" "February 2024" ""
 .SH "NAME"
 \fBalcf\-convert\fR \- Convert input instrument or model data to NetCDF\.
 .SH "SYNOPSIS"
@@ -25,11 +25,20 @@ Output filename or dirname\.
 Process the input directory recursively\. The same directory structure is created under \fBoutput\fR\.
 .SH "TYPES"
 .TP
+\fBamps\fR
+Antarctic Mesoscale Prediction System (AMPS) GRIB files\. Input file extension \fB\.grb\fR\.
+.TP
+\fBcl31\fR
+Vaisala CL31\. Input file extension \fB\.dat\fR, \fB\.DAT\fR, \fB\.asc\fR or \fB\.ASC\fR\.
+.TP
 \fBcl51\fR
-Vaisala CL51 (converted with cl2nc)\. File extension \fB\.DAT\fR\.
+Vaisala CL51\. Input file extension \fB\.dat\fR, \fB\.DAT\fR, \fB\.asc\fR or \fB\.ASC\fR\.
 .TP
 \fBjra55\fR
-JRA\-55 (converted with grib_to_netcdf)\. No file extension\.
+JRA\-55 reanalysis\. No input file extension\.
+.TP
+\fBmpl\fR
+MiniMPL or MPL\. Input file extension \fB\.mpl\fR or \fB\.MPL\fR\.
 .SH "EXAMPLES"
 Convert raw Vaisala CL51 data in \fBcl51_dat\fR to NetCDF and store the output in the directory \fBcl51_nc\fR\.
 .IP "" 4

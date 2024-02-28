@@ -42,6 +42,7 @@ General options
 - `subcolumn: <value>`: Model subcolumn to plot. Default: `0`.
 - `title: <value>`: Plot title.
 - `width: <value>`: Plot width (inches). Default: `5` if `plot_type` is `cloud_occurrence` or `backscatter_hist` else `10`.
+- `render: <value>`: Render profiles anti-aliased (`antialiased`) or standard (`standard`). Standard is more suitable for short time intervals. Default: `antialiased`.
 
 backscatter options
 -------------------

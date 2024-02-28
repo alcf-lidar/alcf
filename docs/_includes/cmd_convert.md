@@ -27,8 +27,11 @@ Options
 Types
 -----
 
-- `cl51`: Vaisala CL51 (converted with cl2nc). File extension `.DAT`.
-- `jra55`: JRA-55 (converted with grib_to_netcdf). No file extension.
+- `amps`: Antarctic Mesoscale Prediction System (AMPS) GRIB files. Input file extension `.grb`.
+- `cl31`: Vaisala CL31. Input file extension `.dat`, `.DAT`, `.asc` or `.ASC`.
+- `cl51`: Vaisala CL51. Input file extension `.dat`, `.DAT`, `.asc` or `.ASC`.
+- `jra55`: JRA-55 reanalysis. No input file extension.
+- `mpl`: MiniMPL or MPL. Input file extension `.mpl` or `.MPL`.
 
 Examples
 --------

@@ -1,6 +1,6 @@
 .\" generated with Ronn-NG/v0.9.1
 .\" http://github.com/apjanke/ronn-ng/tree/0.9.1
-.TH "ALCF\-PLOT" "1" "August 2023" ""
+.TH "ALCF\-PLOT" "1" "February 2024" ""
 .SH "NAME"
 \fBalcf\-plot\fR \- Plot lidar data\.
 .SH "SYNOPSIS"
@@ -69,6 +69,9 @@ Plot title\.
 .TP
 \fBwidth: <value>\fR
 Plot width (inches)\. Default: \fB5\fR if \fBplot_type\fR is \fBcloud_occurrence\fR or \fBbackscatter_hist\fR else \fB10\fR\.
+.TP
+\fBrender: <value>\fR
+Render profiles anti\-aliased (\fBantialiased\fR) or standard (\fBstandard\fR)\. Standard is more suitable for short time intervals\. Default: \fBantialiased\fR\.
 .SH "BACKSCATTER OPTIONS"
 .TP
 \fBlr: <value>\fR
@@ -84,7 +87,7 @@ Remove molecular backscatter (observed data have to be coupled with model data v
 Remove of number of standard deviations of backscatter from the mean backscatter (real)\. Default: \fB5\fR\.
 .TP
 \fBvlim: { <min> <max }\fR
-Value limits (10^6 m\-1\.sr\-1)\. Default: \fB{ 0\.1 200 }\fR\.
+Value limits (10^\-6 m\-1\.sr\-1)\. Default: \fB{ 0\.1 200 }\fR\.
 .TP
 \fBvlog: <value>\fR
 Plot values on logarithmic scale: \fBtrue\fR of \fBfalse\fR\. Default: \fBtrue\fR\.
@@ -97,14 +100,14 @@ Value limits (%) or \fBnone\fR for auto\. If \fBnone\fR and \fBvlog\fR is \fBnon
 Use logarithmic scale for values\.
 .TP
 \fBxlim: { <min> <max> }\fR
-x axis limits (10^6 m\-1\.sr\-1) or \fBnone\fR for automatic\. Default: \fBnone\fR\.
+x axis limits (10^\-6 m\-1\.sr\-1) or \fBnone\fR for automatic\. Default: \fBnone\fR\.
 .TP
 \fBzlim: { <min> <max> }\fR
 z axis limits (m) or \fBnone\fR for automatic\. Default: \fBnone\fR\.
 .SH "BACKSCATTER_SD_HIST OPTIONS"
 .TP
 \fBxlim: { <min> <max> }\fR
-x axis limits (10^6 m\-1\.sr\-1) or \fBnone\fR for automatic\. Default: \fBnone\fR\.
+x axis limits (10^\-6 m\-1\.sr\-1) or \fBnone\fR for automatic\. Default: \fBnone\fR\.
 .TP
 \fBzlim: { <min> <max> }\fR
 z axis limits (%) or \fBnone\fR for automatic\. Default: \fBnone\fR\.
