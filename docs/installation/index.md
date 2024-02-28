@@ -189,18 +189,18 @@ in the documentation of the particular version.
 <summary>Release notes</summary>
 <ul>
 <li>alcf model: Support for overriding year for situations when model time is different from observation time.</li>
-<li>alcf model: Support for AMPS GRIB format converted to NetCDF with ncl\_convert2nc.</li>
-<li>alcf model: Support for ICON via Intake-ESM on HEALpix grid (icon\_intake\_healpix).</li>
+<li>alcf model: Support for AMPS GRIB format converted to NetCDF with ncl_convert2nc.</li>
+<li>alcf model: Support for ICON via Intake-ESM on HEALpix grid (icon_intake_healpix).</li>
 <li>alcf model: Add support for caching of vgrid files in the icon module.</li>
-<li>alcf convert: Support for converting AMPS GRIB to NetCDF with ncl\_convert2nc.</li>
+<li>alcf convert: Support for converting AMPS GRIB to NetCDF with ncl_convert2nc.</li>
 <li>alcf convert: Support for more file extensions, such as .asc for CL31.</li>
-<li>alcf lidar: New cloud\_threshold\_exp option for exponentially varying cloud detection threshold.</li>
-<li>alcf lidar: New options bsd and bsd\_z for specifying explicit standard deviation of noise for cloud detection.</li>
-<li>alcf lidar: New align\_output option.</li>
-<li>alcf lidar: New keep\_vars option for keeping specified lidar variables.</li>
+<li>alcf lidar: New cloud_threshold_exp option for exponentially varying cloud detection threshold.</li>
+<li>alcf lidar: New options bsd and bsd_z for specifying explicit standard deviation of noise for cloud detection.</li>
+<li>alcf lidar: New align_output option.</li>
+<li>alcf lidar: New keep_vars option for keeping specified lidar variables.</li>
 <li>alcf lidar: Fixed backscatter coupling.</li>
 <li>alcf lidar: Fixed reading of lon and lat in the default lidar driver.</li>
-<li>alcf stats: Added time\_total output variable.</li>
+<li>alcf stats: Added time_total output variable.</li>
 <li>alcf stats: Specifying multiple filters is now supported.</li>
 <li>Improved documentation.</li>
 <li>eccodes is now a required package (required by alcf convert jra55).</li>
