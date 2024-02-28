@@ -190,7 +190,7 @@ in the documentation of the particular version.
 <ul>
 <li>alcf model: Support for overriding year for situations when model time is different from observation time.</li>
 <li>alcf model: Support for AMPS GRIB format converted to NetCDF with ncl_convert2nc.</li>
-<li>alcf model: Support for ICON via Intake-ESM on HEALpix grid (icon_intake_healpix).</li>
+<li>alcf model: Support for ICON via Intake-ESM on HEALPix grid (icon_intake_healpix).</li>
 <li>alcf model: Add support for caching of vgrid files in the icon module.</li>
 <li>alcf convert: Support for converting AMPS GRIB to NetCDF with ncl_convert2nc.</li>
 <li>alcf convert: Support for more file extensions, such as .asc for CL31.</li>
