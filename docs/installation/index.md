@@ -183,6 +183,31 @@ the [Semantic Versioning](https://semver.org). Installation instructions
 have been changing with versions. Please follow the installation instructions
 in the documentation of the particular version.
 
+#### [1.6.0](https://github.com/alcf-lidar/alcf/releases/tag/v1.6.0) (2024-02-28)
+
+<details>
+<summary>Release notes</summary>
+<ul>
+<li>alcf model: Support for overriding year for situations when model time is different from observation time.</li>
+<li>alcf model: Support for AMPS GRIB format converted to NetCDF with ncl\_convert2nc.</li>
+<li>alcf model: Support for ICON via Intake-ESM on HEALpix grid (icon\_intake\_healpix).</li>
+<li>alcf model: Add support for caching of vgrid files in the icon module.</li>
+<li>alcf convert: Support for converting AMPS GRIB to NetCDF with ncl\_convert2nc.</li>
+<li>alcf convert: Support for more file extensions, such as .asc for CL31.</li>
+<li>alcf lidar: New cloud\_threshold\_exp option for exponentially varying cloud detection threshold.</li>
+<li>alcf lidar: New options bsd and bsd\_z for specifying explicit standard deviation of noise for cloud detection.</li>
+<li>alcf lidar: New align\_output option.</li>
+<li>alcf lidar: New keep\_vars option for keeping specified lidar variables.</li>
+<li>alcf lidar: Fixed backscatter coupling.</li>
+<li>alcf lidar: Fixed reading of lon and lat in the default lidar driver.</li>
+<li>alcf stats: Added time\_total output variable.</li>
+<li>alcf stats: Specifying multiple filters is now supported.</li>
+<li>Improved documentation.</li>
+<li>eccodes is now a required package (required by alcf convert jra55).</li>
+<li>mpl2nc is now a required package (required by alcf convert mpl).</li>
+</ul>
+</details>
+
 #### [1.5.2](https://github.com/alcf-lidar/alcf/releases/tag/v1.5.2) (2023-09-09)
 
 <details>
