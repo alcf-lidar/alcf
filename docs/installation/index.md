@@ -78,7 +78,7 @@ Apple ARM (M1 CPUs and later) may be possible but is untested.
 2. Install required MacPorts packages:
 
     ```sh
-    sudo port install gcc12 hdf5 netcdf netcdf-fortran
+    sudo port install gcc12 hdf5 netcdf netcdf-fortran ecCodes ncarg
     sudo port select --set gcc mp-gcc12
     ```
 
