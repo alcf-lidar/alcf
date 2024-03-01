@@ -97,9 +97,9 @@ Types
 - `cl61`: Vaisala CL61.
 - `cosp`: COSP simulated lidar.
 - `default`: The same format as the output of `alcf lidar`.
-- `minimpl`: Sigma Space MiniMPL.
+- `minimpl`: Sigma Space MiniMPL (converted via SigmaMPL).
 - `mpl`: Sigma Space MPL (converted via SigmaMPL).
-- `mpl2nc`: Sigma Space MPL (converted via mpl2nc).
+- `mpl2nc`: Sigma Space MPL and MiniMPL (converted via mpl2nc).
 
 Options
 -------
