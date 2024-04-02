@@ -18,7 +18,7 @@ def point_to_track(point, time):
 			dtype=np.float64),
 	}
 
-def track_auto_time_bnds(time):
+def track_auto_time_bnds(time, track_gap=None):
 	n = len(time)
 	time_bnds = np.full((n, 2), np.nan, np.float64)
 	time_bnds[0,0] = time[0]
@@ -26,9 +26,17 @@ def track_auto_time_bnds(time):
 	time_avg = 0.5*(time[:-1] + time[1:])
 	time_bnds[1:,0] = time_avg
 	time_bnds[:-1,1] = time_avg
+	if track_gap is not None:
+		time_diff = time[1:] - time[:-1]
+		mask1 = np.full(n, False, bool)
+		mask2 = np.full(n, False, bool)
+		mask1[:-1] = time_diff > track_gap
+		mask2[1:] = time_diff > track_gap
+		time_bnds[mask1,1] = time[mask1]
+		time_bnds[mask2,0] = time[mask2]
 	return time_bnds
 
-def read_track(filenames, lon_180=False):
+def read_track(filenames, lon_180=False, track_gap=None):
 	iterable = False
 	try: iterable = iter(filenames)
 	except Exception: pass
@@ -39,7 +47,7 @@ def read_track(filenames, lon_180=False):
 		if len(d['time']) < 2:
 			raise ValueError('%s: Track must contain at least two records', filename)
 		if 'time_bnds' not in d:
-			d['time_bnds'] = track_auto_time_bnds(d['time'])
+			d['time_bnds'] = track_auto_time_bnds(d['time'], track_gap)
 			d['.']['time_bnds'] = {
 				'.dims': ['time', 'bnds'],
 				'long_name': 'time bounds',
@@ -122,6 +130,7 @@ def run(type_, input_, output,
 	point=None,
 	time=None,
 	track=None,
+	track_gap=21600,
 	override_year=None,
 	track_lon_180=False,
 	debug=False,
@@ -156,6 +165,7 @@ Arguments
 - `start`: Start time (see Time format below).
 - `end`: End time (see Time format below).
 - `track: <file>`, `track: { <file>... }`: One or more track NetCDF files (see Files below). If multiple files are supplied and `time_bnds` is not present in the files, they are assumed to be multiple segments of a discontinous track unless the last and first time of adjacent tracks are the same.
+- `track_gap: <interval>`: If a track file is supplied, the `time_bnds` variable is not defined in the file and any two adjacent points are separated by more than the specified time interval (seconds), a gap is assumed to be present between the two data points, instead of interpolating location between the two points. Default: `21600` (6 hours).
 - `options`: See Options below.
 
 Options
@@ -205,7 +215,7 @@ Extract MERRA-2 model data in `M2I3NVASM.5.12.4` at 45 S, 170 E between 1 and 2 
 
 	d_track = None
 	if track is not None:
-		d_track = read_track(track, track_lon_180)
+		d_track = read_track(track, track_lon_180, track_gap/86400.)
 	elif point is not None and time is not None:
 		d_track = point_to_track(point, time_lim)
 	else:
