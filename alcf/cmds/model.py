@@ -18,7 +18,7 @@ def point_to_track(point, time):
 			dtype=np.float64),
 	}
 
-def track_auto_time_bnds(time, track_gap=None):
+def track_auto_time_bnds(time, track_gap=0):
 	n = len(time)
 	time_bnds = np.full((n, 2), np.nan, np.float64)
 	time_bnds[0,0] = time[0]
@@ -26,7 +26,7 @@ def track_auto_time_bnds(time, track_gap=None):
 	time_avg = 0.5*(time[:-1] + time[1:])
 	time_bnds[1:,0] = time_avg
 	time_bnds[:-1,1] = time_avg
-	if track_gap is not None:
+	if track_gap != 0:
 		time_diff = time[1:] - time[:-1]
 		mask1 = np.full(n, False, bool)
 		mask2 = np.full(n, False, bool)
@@ -36,7 +36,7 @@ def track_auto_time_bnds(time, track_gap=None):
 		time_bnds[mask2,0] = time[mask2]
 	return time_bnds
 
-def read_track(filenames, lon_180=False, track_gap=None):
+def read_track(filenames, lon_180=False, track_gap=0):
 	iterable = False
 	try: iterable = iter(filenames)
 	except Exception: pass
@@ -165,7 +165,7 @@ Arguments
 - `start`: Start time (see Time format below).
 - `end`: End time (see Time format below).
 - `track: <file>`, `track: { <file>... }`: One or more track NetCDF files (see Files below). If multiple files are supplied and `time_bnds` is not present in the files, they are assumed to be multiple segments of a discontinous track unless the last and first time of adjacent tracks are the same.
-- `track_gap: <interval>`: If the interval is not `none`, a track file is supplied, the `time_bnds` variable is not defined in the file and any two adjacent points are separated by more than the specified time interval (seconds), then a gap is assumed to be present between the two data points, instead of interpolating location between the two points. Default: `21600` (6 hours).
+- `track_gap: <interval>`: If the interval is not 0, a track file is supplied, the `time_bnds` variable is not defined in the file and any two adjacent points are separated by more than the specified time interval (seconds), then a gap is assumed to be present between the two data points, instead of interpolating location between the two points. Default: `21600` (6 hours).
 - `options`: See Options below.
 
 Options
