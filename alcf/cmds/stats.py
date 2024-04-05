@@ -19,7 +19,7 @@ VARIABLES = [
 ]
 
 def read_filters(filters):
-	if type(filter) in [list, tuple]:
+	if type(filters) in [list, tuple]:
 		return [ds.read(filename) for filename in filters]
 	else:
 		return [ds.read(filters)]
