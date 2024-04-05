@@ -1,6 +1,5 @@
 import os
 import sys
-from collections.abc import Iterable
 import numpy as np
 import ds_format as ds
 from alcf.algorithms import interp
@@ -20,7 +19,7 @@ VARIABLES = [
 ]
 
 def read_filters(filters):
-	if isinstance(filters, Iterable):
+	if type(filter) in [list, tuple]:
 		return [ds.read(filename) for filename in filters]
 	else:
 		return [ds.read(filters)]
