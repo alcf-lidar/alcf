@@ -37,10 +37,8 @@ def track_auto_time_bnds(time, track_gap=0):
 	return time_bnds
 
 def read_track(filenames, lon_180=False, track_gap=0):
-	iterable = False
-	try: iterable = iter(filenames)
-	except Exception: pass
-	else: filenames = [filenames]
+	if type(filenames) not in [list, tuple]:
+		filenames = [filenames]
 	dd = []
 	for filename in filenames:
 		d = ds.read(filename, jd=True)
