@@ -39,6 +39,7 @@ VARIABLES = [
 	'backscatter_sd_hist',
 	'zfull',
 	'lr',
+	'cbh',
 	'cl',
 	'clt',
 	'n',
@@ -247,7 +248,7 @@ def plot_lr(d, subcolumn=0, **opts):
 	plt.ylabel('Eff. lidar ratio (sr)')
 	plt.xlabel('Time (UTC)')
 
-def plot_cloud_occurrence(dd,
+def plot_cloud_dist(plot_type, dd,
 	colors=COLORS,
 	linestyle=LINESTYLE,
 	lw=None,
@@ -257,18 +258,22 @@ def plot_cloud_occurrence(dd,
 	zlim=[0., 15000],
 	**kwargs
 ):
+	var = {
+		'cbh': 'cbh',
+		'cloud_occurrence': 'cl',
+	}[plot_type]
 	for i, d in enumerate(dd):
 		zfull = d['zfull']
-		cl = d['cl'][:,subcolumn] \
-			if len(d['cl'].shape) == 2 \
-			else d['cl']
-		clt = d['clt'][subcolumn] \
-			if len(d['clt'].shape) == 1 \
-			else d['clt']
-		n = d['n']
+		x = d[var][:,subcolumn] \
+			if len(d[var].shape) == 2 \
+			else d[var]
 		label = (labels[i] if labels is not None else '')
-		label += ' | CF: %d%%' % clt
-		plt.plot(cl, 1e-3*zfull,
+		if plot_type == 'cloud_occurrence':
+			clt = d['clt'][subcolumn] \
+				if len(d['clt'].shape) == 1 \
+				else d['clt']
+			label += ' | CF: %d%%' % clt
+		plt.plot(x, 1e-3*zfull,
 			color=colors[i],
 			linestyle=(linestyle[i] if type(linestyle) is list else linestyle),
 			lw=lw,
@@ -276,7 +281,10 @@ def plot_cloud_occurrence(dd,
 		)
 	plt.xlim(xlim[0], xlim[1])
 	plt.ylim(zlim[0]*1e-3, zlim[1]*1e-3)
-	plt.xlabel('Cloud occurrence (%)')
+	plt.xlabel({
+		'cbh': 'Cloud base height distribution (%)',
+		'cloud_occurrence': 'Cloud occurrence (%)',
+	}[plot_type])
 	plt.ylabel('Height (km)')
 
 	if labels is not None:
@@ -432,8 +440,8 @@ def plot(plot_type, d, output,
 		ax = plt.subplot(gs[0])
 		plot_profile('clw', d, cax1, alpha=0.5, **kwargs)
 		plot_profile('cli', d, cax2, alpha=0.5, **kwargs)
-	elif plot_type == 'cloud_occurrence':
-		plot_cloud_occurrence(d, **kwargs)
+	elif plot_type in ('cbh', 'cloud_occurrence'):
+		plot_cloud_dist(plot_type, d, **kwargs)
 	elif plot_type == 'backscatter_hist':
 		plot_backscatter_hist(d, **kwargs)
 	elif plot_type == 'backscatter_sd_hist':
@@ -501,6 +509,7 @@ Plot types
 - `backscatter`: Plot backscatter from `alcf lidar` output on time-height axes.
 - `backscatter_hist`: Plot backscatter histogram from `alcf stats` output on backscatter-height axes.
 - `backscatter_sd_hist`: Plot backscatter standard deviation histogram from `alcf stats` output.
+- `cbh`: Plot cloud base height distribution from `alcf stats` output.
 - `cl`: Plot model cloud area fraction from `alcf lidar` output on time-height axes.
 - `cli`: Plot model mass fraction of cloud ice from `alcf lidar` output on time-height axes.
 - `cloud_occurrence`: Plot cloud occurrence by height from `alcf stats` output.
@@ -556,8 +565,8 @@ cli, clw, and clw+cli options
 - `vlog: <value>`: Plot values on logarithmic scale: `true` of `false`. Default: `true`.
 - `zres: <zres>`: Height resolution (m). Default: `50`.
 
-cloud_occurrence options
-------------------------
+cbh and cloud_occurrence options
+--------------------------------
 
 - `colors: { <value>... }`: Line colors. Default: `{ #0084c8 #dc0000 #009100 #ffc022 #ba00ff }`
 - `linestyle: { <value> ... }`: Line style (`solid`, `dashed`, `dotted`). Default: `solid`.
@@ -576,7 +585,7 @@ Plot backscatter from processed Vaisala CL51 data in `alcf_cl51_lidar` and store
 	input_ = args[:-1]
 	output = args[-1]
 
-	if plot_type in ('backscatter_hist', 'backscatter_sd_hist', 'cloud_occurrence'):
+	if plot_type in ('backscatter_hist', 'backscatter_sd_hist', 'cbh', 'cloud_occurrence'):
 		width = width if width is not None else 5
 		height = height if height is not None else 5
 	else:
@@ -607,7 +616,7 @@ Plot backscatter from processed Vaisala CL51 data in `alcf_cl51_lidar` and store
 	if zres is not None: opts['zres'] = zres
 
 	state = {}
-	if plot_type in ('cloud_occurrence', 'backscatter_sd_hist'):
+	if plot_type in ('cbh', 'cloud_occurrence', 'backscatter_sd_hist'):
 		dd = []
 		for file in input_:
 			print('<- %s' % file)
