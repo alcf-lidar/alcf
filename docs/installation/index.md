@@ -183,6 +183,18 @@ the [Semantic Versioning](https://semver.org). Installation instructions
 have been changing with versions. Please follow the installation instructions
 in the documentation of the particular version.
 
+#### [1.7.0](https://github.com/alcf-lidar/alcf/releases/tag/v1.7.0) (2024-04-08)
+
+<details>
+<summary>Release notes</summary>
+<ul>
+<li>alcf model: New `track_gap` option to specify how gaps in the track should be detected. This changes the default behaviour to detect gaps for intervals longer than 6 hours. Previously gaps were never detected and the track was interpolated between every adjacent pair of points.</li>
+<li>alcf stats: Fixed parsing of `filter_include` and `filter_exclude` options when only one filter file is supplied.</li>
+<li>alcf stats: Fixed parsing of `track` option when multiple tracks are supplied.</li>
+<li>Improvements in the documentation.</li>
+</ul>
+</details>
+
 #### [1.6.0](https://github.com/alcf-lidar/alcf/releases/tag/v1.6.0) (2024-02-28)
 
 <details>
