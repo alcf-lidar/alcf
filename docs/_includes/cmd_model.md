@@ -20,11 +20,12 @@ Arguments
 - `type`: Input data type (see Types below).
 - `input`: Input directory.
 - `output`: Output directory.
-- `lon`: Point longitude.
-- `lat`: Point latitutde.
+- `lon`: Point longitude (degrees East).
+- `lat`: Point latitutde (degrees North).
 - `start`: Start time (see Time format below).
 - `end`: End time (see Time format below).
 - `track: <file>`, `track: { <file>... }`: One or more track NetCDF files (see Files below). If multiple files are supplied and `time_bnds` is not present in the files, they are assumed to be multiple segments of a discontinous track unless the last and first time of adjacent tracks are the same.
+- `track_gap: <interval>`: If the interval is not 0, a track file is supplied, the `time_bnds` variable is not defined in the file and any two adjacent points are separated by more than the specified time interval (seconds), then a gap is assumed to be present between the two data points, instead of interpolating location between the two points. Default: `21600` (6 hours).
 - `options`: See Options below.
 
 Options
