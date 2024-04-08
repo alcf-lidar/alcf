@@ -28,6 +28,7 @@ Description
     alcf plot backscatter
     alcf plot backscatter_hist
     alcf plot cloud_occurrence
+    alcf plot cbh
 
 `alcf auto lidar` is equivalent to the sequence of commands:
 
@@ -36,6 +37,7 @@ Description
     alcf plot backscatter
     alcf plot backscatter_hist
     alcf plot cloud_occurrence
+    alcf plot cbh
 
 Arguments following `--` are treated as literal strings. Use this delimiter if the input or output file names might otherwise be interpreted as non-strings, e.g. purely numerical file names.
 

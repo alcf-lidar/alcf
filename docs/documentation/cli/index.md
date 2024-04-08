@@ -58,12 +58,13 @@ ALC observations processing:
 1. `alcf convert` – convert raw ALC data to NetCDF (only if not in NetCDF
     already),
 2. `alcf lidar` – produce resampled data,
-3. `alcf plot backscatter` – plot backscatter profiles,
-4. `alcf stats` – calculate summary statistics from resampled
+3. `alcf stats` – calculate summary statistics from resampled
     lidar data from step 2.,
-5. `alcf plot cloud_occurrence` – plot cloud occurrence calculated in step 4.,
-6. `alcf plot backscatter_hist` – plot backscatter histogram calculated in
-    step 4.
+4. `alcf plot backscatter` – plot backscatter profiles,
+5. `alcf plot backscatter_hist` – plot backscatter histogram calculated in
+    step 3.,
+6. `alcf plot cloud_occurrence` – plot cloud occurrence calculated in step 3.,
+7. `alcf plot cbh` – plot cloud base height distribution calculated in step 3.
 
 <!--
 4. `alcf calibrate` (TODO) – calculate calibration coefficient based on opaque
@@ -83,12 +84,13 @@ Model output processing:
     ship track,
 2. `alcf simulate` – simulate backscatter based on data from step 1.,
 3. `alcf lidar` – resample simulated backscatter data from step 2.,
-4. `alcf plot backscatter` – plot simulated backscatter profiles from step 3.,
-5. `alcf stats` – calculate summary statistics from resampled simulated
+4. `alcf stats` – calculate summary statistics from resampled simulated
     backscatter data from step 3.,
-6. `alcf plot cloud_occurrence` – plot cloud occurrence calculated in step 5.,
-7. `alcf plot backscatter_hist` – plot backscatter histogram calculated in
-    step 5.
+5. `alcf plot backscatter` – plot simulated backscatter profiles from step 3.,
+6. `alcf plot backscatter_hist` – plot backscatter histogram calculated in
+    step 4.,
+7. `alcf plot cloud_occurrence` – plot cloud occurrence calculated in step 4.,
+8. `alcf plot cbh` – plot cloud base height distribution calculated in step 4.
 
 NetCDF data files generated in each step are described in the
 [ALCF output]({{ "/documentation/alcf_output/" | relative_url }}) and can be previewed in
