@@ -498,14 +498,14 @@ Arguments
 Plot types
 ----------
 
-- `backscatter`: Plot backscatter from `alcf lidar` output.
-- `backscatter_hist`: Plot backscatter histogram from `alcf stats` output.
+- `backscatter`: Plot backscatter from `alcf lidar` output on time-height axes.
+- `backscatter_hist`: Plot backscatter histogram from `alcf stats` output on backscatter-height axes.
 - `backscatter_sd_hist`: Plot backscatter standard deviation histogram from `alcf stats` output.
-- `cl`: Plot model cloud area fraction from `alcf lidar` output.
-- `cli`: Plot model mass fraction of cloud ice from `alcf lidar` output.
-- `cloud_occurrence`: Plot cloud occurrence from `alcf stats` output.
-- `clw`: Plot model mass fraction of cloud liquid water from `alcf lidar` output.
-- `clw+cli`: Plot model mass fraction of cloud liquid water and ice from `alcf lidar` output.
+- `cl`: Plot model cloud area fraction from `alcf lidar` output on time-height axes.
+- `cli`: Plot model mass fraction of cloud ice from `alcf lidar` output on time-height axes.
+- `cloud_occurrence`: Plot cloud occurrence by height from `alcf stats` output.
+- `clw`: Plot model mass fraction of cloud liquid water from `alcf lidar` output on time-height axes.
+- `clw+cli`: Plot model mass fraction of cloud liquid water and ice from `alcf lidar` output on time-height axes.
 
 General options
 ---------------
