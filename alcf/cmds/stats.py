@@ -8,6 +8,7 @@ from alcf.misc import parse_time
 
 VARIABLES = [
 	'cloud_mask',
+	'cbh',
 	'zfull',
 	'time',
 	'time_bnds',

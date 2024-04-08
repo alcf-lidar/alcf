@@ -94,6 +94,10 @@ def stats_map(d, state,
 		'cl',
 		np.zeros(dims2, dtype=np.float64)
 	)
+	state['cbh'] = state.get(
+		'cbh',
+		np.zeros(dims2, dtype=np.float64)
+	)
 	state['clt'] = state.get(
 		'clt',
 		np.zeros(l, dtype=np.float64) if l > 0 else 0
@@ -190,6 +194,9 @@ def stats_map(d, state,
 				if not filter_mask[i,k]:
 					continue
 				cl_tmp[:,k] += d['cloud_mask'][i,:,k]
+				if np.isfinite(d['cbh'][i,k]):
+					j = np.argmin(np.abs(state['zfull2'] - d['cbh'][i,k]))
+					state['cbh'][j,k] += 1
 				backscatter_avg_tmp[:,k] += d['backscatter'][i,:,k]
 				if 'backscatter_mol' in d:
 					backscatter_mol_avg_tmp[:,k] += d['backscatter_mol'][i,:]
@@ -201,6 +208,9 @@ def stats_map(d, state,
 			if not filter_mask[i]:
 				continue
 			cl_tmp[:] += d['cloud_mask'][i,:]
+			if np.isfinite(d['cbh'][i]):
+				j = np.argmin(np.abs(state['zfull2'] - d['cbh'][i]))
+				state['cbh'][j] += 1
 			backscatter_avg_tmp[:] += d['backscatter'][i,:]
 			if 'backscatter_mol' in d:
 				backscatter_mol_avg_tmp[:] += d['backscatter_mol'][i,:]
@@ -248,6 +258,7 @@ def stats_reduce(state, bsd_z=None, **kwargs):
 			if state['n'][k] > 0:
 				state['backscatter_hist'][:,:,k] /= state['n'][k]
 				state['cl'][:,k] /= state['n'][k]
+				state['cbh'][:,k] /= state['clt'][k]
 				state['clt'][k] /= state['n'][k]
 				state['backscatter_avg'][:,k] /= state['n'][k]
 				state['backscatter_mol_avg'][:,k] /= state['n'][k]
@@ -255,12 +266,14 @@ def stats_reduce(state, bsd_z=None, **kwargs):
 		if state['n'] != 0:
 			state['backscatter_hist'] /= state['n']
 			state['cl'] /= state['n']
+			state['cbh'] /= state['clt']
 			state['clt'] /= state['n']
 			state['backscatter_avg'] /= state['n']
 			state['backscatter_mol_avg'] /= state['n']
 	state['backscatter_sd_hist'] /= state['n']
 	do = {
 		'cl': 100.*state['cl'],
+		'cbh': 100.*state['cbh'],
 		'clt': 100.*state['clt'],
 		'zfull': state['zfull2'],
 		'n': state['n'],
@@ -286,6 +299,13 @@ def stats_reduce(state, bsd_z=None, **kwargs):
 				else ['zfull'],
 			'long_name': 'cloud area fraction',
 			'standard_name': 'cloud_area_fraction_in_atmosphere_layer',
+			'units': '%',
+		},
+		'cbh': {
+			'.dims': ['zfull', 'column'] \
+				if len(state['cl'].shape) == 2 \
+				else ['zfull'],
+			'long_name': 'cloud base height',
 			'units': '%',
 		},
 		'clt': {
