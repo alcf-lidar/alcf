@@ -10,6 +10,7 @@ def run(type_, input_, output, *args, skip=None, **kwargs):
 	plot_dir = os.path.join(output, 'plot')
 	backscatter_dir = os.path.join(plot_dir, 'backscatter')
 	cloud_occurrence_filename = os.path.join(plot_dir, 'cloud_occurrence.png')
+	cbh_filename = os.path.join(plot_dir, 'cbh.png')
 	backscatter_hist_filename = os.path.join(plot_dir, 'backscatter_hist.png')
 
 	if skip is not None:
@@ -46,6 +47,10 @@ def run(type_, input_, output, *args, skip=None, **kwargs):
 		plot.run('backscatter', lidar_dir, backscatter_dir, **kwargs)
 		print('! alcf plot cloud_occurrence')
 		plot.run('cloud_occurrence', stats_filename, cloud_occurrence_filename,
+			**kwargs
+		)
+		print('! alcf plot cbh')
+		plot.run('cbh', stats_filename, cbh_filename,
 			**kwargs
 		)
 		print('! alcf plot backscatter_hist')
