@@ -16,7 +16,8 @@ def lidar_ratio(d):
 		dims = ['time']
 		for i in range(n):
 		 	bint[i] = np.sum(d['backscatter'][i,:]*dz)
-	d['lr'] = 1./(2.*bint) # See O'Connor et al. (2004), Equation 6.
+	with np.errstate(divide='ignore'):
+		d['lr'] = 1./(2.*bint) # See O'Connor et al. (2004), Equation 6.
 	d['.']['lr'] = {
 		'.dims': dims,
 		'long_name': 'effective lidar ratio',
