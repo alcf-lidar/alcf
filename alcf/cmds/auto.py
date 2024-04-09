@@ -25,8 +25,12 @@ Description
     alcf simulate
     alcf lidar
     alcf stats
+    alcf stats (fine-scale)
+    alcf stats (clear-sky fine-scale)
     alcf plot backscatter
     alcf plot backscatter_hist
+    alcf plot backscatter_hist (fine-scale)
+    alcf plot backscatter_hist (clear-sky fine-scale)
     alcf plot cloud_occurrence
     alcf plot cbh
 
@@ -34,8 +38,12 @@ Description
 
     alcf lidar
     alcf stats
+    alcf stats (fine-scale)
+    alcf stats (clear-sky fine-scale)
     alcf plot backscatter
     alcf plot backscatter_hist
+    alcf plot backscatter_hist (fine-scale)
+    alcf plot backscatter_hist (clear-sky fine-scale)
     alcf plot cloud_occurrence
     alcf plot cbh
 
