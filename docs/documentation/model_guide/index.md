@@ -13,7 +13,7 @@ The following GCM, NWP models and reanalyses are supported:
 - [ERA5](https://www.ecmwf.int/en/forecasts/datasets/reanalysis-datasets/era5)
 - [ICON](https://mpimet.mpg.de/en/science/modeling)
 - [JRA-55](https://jra.kishou.go.jp/JRA-55/index_en.html)
-- [MERRA2](https://gmao.gsfc.nasa.gov/reanalysis/MERRA-2/)
+- [MERRA-2](https://gmao.gsfc.nasa.gov/reanalysis/MERRA-2/)
 - [NZCSM](https://www.nesi.org.nz/case-studies/improving-new-zealands-weather-forecasting-ability)
 - [NZESM](https://doi.org/10.2307/26779386) (experimental)
 - [UM](https://www.metoffice.gov.uk/research/approach/modelling-systems/unified-model/index)
