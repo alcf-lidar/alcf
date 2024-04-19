@@ -158,8 +158,9 @@ pip uninstall alcf
 
 ### Building from the source code
 
-If you want to build the ALCF from the source code, run the following commands
-in the source code directory:
+If you want to build the ALCF from the source code, download the source code
+from [GitHub](https://github.com/alcf-lidar/alcf) or one of the [releases
+below](#releases), and run the following commands in the source code directory:
 
 ```sh
 ./download_cosp
