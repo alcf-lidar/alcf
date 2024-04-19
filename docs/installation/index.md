@@ -43,7 +43,7 @@ The instructions below assume that you enter the commands in the terminal.
     sudo dnf install epel-release
     sudo dnf config-manager --set-enabled crb
     sudo dnf install make gcc gfortran hdf5-devel netcdf-devel \
-        netcdf-fortran-devel python3-devel python3-pip python3-setuptools
+        netcdf-fortran-devel python3-devel python3-pip python3-setuptools \
         python3-numpy python3-Cython pipx eccodes ncl
     ```
 
