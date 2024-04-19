@@ -25,14 +25,26 @@ The instructions below assume that you enter the commands in the terminal.
 
     ```sh
     sudo apt install gcc make gfortran libhdf5-dev libnetcdf-dev \
-        libnetcdff-dev python3 python3-setuptools python3-pip cython3 pipx libeccodes-tools ncl-ncarg
+        libnetcdff-dev python3 python3-setuptools python3-pip cython3 pipx \
+        libeccodes-tools ncl-ncarg
     ```
 
     On Fedora, install dependencies with:
 
     ```sh
     sudo yum install make gcc gfortran hdf5-devel netcdf-devel \
-        netcdf-fortran-devel python3-setuptools python3-pip python3-Cython pipx eccodes ncl
+        netcdf-fortran-devel python3-setuptools python3-pip python3-Cython \
+        pipx eccodes ncl
+    ```
+
+    On AlmaLinux 9 (or later), install dependencies with:
+
+    ```sh
+    dnf install epel-release
+    dnf config-manager --set-enabled crb
+    dnf install make gcc gfortran hdf5-devel netcdf-devel \
+        netcdf-fortran-devel python3-devel python3-pip python3-setuptools
+        python3-numpy python3-Cython pipx eccodes ncl
     ```
 
 2. Install the ALCF with:
@@ -61,12 +73,12 @@ Installation on Windows is possible under the "Windows Subsystem for Linux".
     apt upgrade
     ```
 
-	Follow the instructions above for installation on [Linux](#linux)
-	(Debian-based distributions).
+    Follow the instructions above for installation on [Linux](#linux)
+    (Debian-based distributions).
 
-	Note: You can use `cd /mnt/c/Users/<user>`, where `<user>` is your Windows
-	user name to change the current directory to your home directory, and `ls`
-	to list the directory contents.
+    Note: You can use `cd /mnt/c/Users/<user>`, where `<user>` is your Windows
+    user name to change the current directory to your home directory, and `ls`
+    to list the directory contents.
 
 ### macOS
 
