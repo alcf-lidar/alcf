@@ -72,6 +72,7 @@ def read0(type_, dirname, track, t1, t2,
 		time = d_idx['time']
 		lat = d_idx['latitude']
 		lon = d_idx['longitude']
+		lon = np.where(lon < 0, 360 + lon, lon)
 		filename = d_idx['filename']
 
 		ii = np.nonzero(
@@ -94,6 +95,7 @@ def read0(type_, dirname, track, t1, t2,
 					ds.rename(d, a, b)
 			d['lat'] = np.array([d['lat']])
 			d['lon'] = np.array([d['lon']])
+			d['lon'] = np.where(d['lon'] < 0, 360 + d['lon'], d['lon'])
 			d['.']['lat']['.dims'] = ['time']
 			d['.']['lon']['.dims'] = ['time']
 			if type_ == 'plev':
