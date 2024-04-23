@@ -116,6 +116,7 @@ def read0(type_, dirname, track, t1, t2,
 	if 'orog' in d:
 		d['orog'] /= 9.80665
 	if 'cl' in d:
+		d['cl'] = np.minimum(1, np.maximum(0, d['cl']))
 		d['cl'] *= 100.
 	return d
 
