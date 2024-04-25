@@ -145,7 +145,7 @@ Synopsis
 
     alcf model <type> point: { <lon> <lat> } time: { <start> <end> } [options] [--] <input> <output>
 
-    alcf model <type> track: <track> [--] <input> <output>
+    alcf model <type> track: <track> [options] [--] <input> <output>
 
 Description
 -----------
