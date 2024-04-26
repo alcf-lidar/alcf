@@ -10,7 +10,7 @@ from alcf.cmds import main
 MAN_FOOTER = '''
 ## COPYRIGHT
 
-Copyright © 2019–2021 Peter Kuma, Adrian J. McDonald, Olaf Morgenstern, Richard
+Copyright © 2019–2024 Peter Kuma, Adrian J. McDonald, Olaf Morgenstern, Richard
 Querel, Israel Silber and Connor J. Flynn.
 
 ## BUG REPORTING

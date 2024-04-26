@@ -46,6 +46,7 @@ Arguments
 - `end`: End time (see Time format below).
 - `track: <file>`, `track: { <file>... }`: One or more track NetCDF files (see Files below). If multiple files are supplied and `time_bnds` is not present in the files, they are assumed to be multiple segments of a discontinous track unless the last and first time of adjacent tracks are the same.
 - `output`: Output directory.
+- `login_options`: See login options below.
 - `options`: See Options below.
 
 Options
@@ -64,14 +65,14 @@ Login options
 MERRA-2 login options
 ---------------------
 
-- `--user: <value>`: Supply non-interactive user instead of prompting.
-- `--password: <value>`: Supply non-interactive password instead of prompting.
+- `user: <value>`: Supply non-interactive user instead of prompting.
+- `password: <value>`: Supply non-interactive password instead of prompting.
 
 ERA5 login options
 ------------------
 
-- `--uid: <value>`: Supply non-interactive UID instead of prompting.
-- `--key: <value>`: Supply non-interactive API key instead of prompting.
+- `uid: <value>`: Supply non-interactive UID instead of prompting.
+- `key: <value>`: Supply non-interactive API key instead of prompting.
 
 Model types
 -----------

@@ -7,7 +7,7 @@
 .nf
 alcf model <type> point: { <lon> <lat> } time: { <start> <end> } [options] [\-\-] <input> <output>
 
-alcf model <type> track: <track> [\-\-] <input> <output>
+alcf model <type> track: <track> [options] [\-\-] <input> <output>
 .fi
 .SH "DESCRIPTION"
 Arguments following \fB\-\-\fR are treated as literal strings\. Use this delimiter if the input or output file names might otherwise be interpreted as non\-strings, e\.g\. purely numerical file names\.
@@ -29,8 +29,6 @@ Arguments following \fB\-\-\fR are treated as literal strings\. Use this delimit
 .IP "\[ci]" 4
 \fBtrack: <file>\fR, \fBtrack: { <file>\|\.\|\.\|\. }\fR: One or more track NetCDF files (see Files below)\. If multiple files are supplied and \fBtime_bnds\fR is not present in the files, they are assumed to be multiple segments of a discontinous track unless the last and first time of adjacent tracks are the same\.
 .IP "\[ci]" 4
-\fBtrack_gap: <interval>\fR: If the interval is not 0, a track file is supplied, the \fBtime_bnds\fR variable is not defined in the file and any two adjacent points are separated by more than the specified time interval (seconds), then a gap is assumed to be present between the two data points, instead of interpolating location between the two points\. Default: \fB21600\fR (6 hours)\.
-.IP "\[ci]" 4
 \fBoptions\fR: See Options below\.
 .IP "" 0
 .SH "OPTIONS"
@@ -46,6 +44,9 @@ Expect track longitude between \-180 and 180 degrees\.
 .TP
 \fBoverride_year: <year>\fR
 Override year in the track\. Use if comparing observations with a model statistically and the model output does not have a corresponding year available\. The observation time is converted to the same time relative to the start of the year in the specified year\. Note that if the original year is a leap year and the override year is not, as a consequence of the above 31 December is mapped to 1 January\. The output retains the original year as in the track, even though the model data come from the override year\. Default: \fBnone\fR\.
+.TP
+\fBtrack_gap: <interval>\fR
+If the interval is not 0, a track file is supplied, the \fBtime_bnds\fR variable is not defined in the file and any two adjacent points are separated by more than the specified time interval (seconds), then a gap is assumed to be present between the two data points, instead of interpolating location between the two points\. Default: \fB21600\fR (6 hours)\.
 .SH "TYPES"
 .TP
 \fBamps\fR
@@ -86,8 +87,8 @@ alcf model merra2 point: { \-45\.0 170\.0 } time: { 2020\-01\-01 2020\-01\-02 } 
 .fi
 .IP "" 0
 .SH "COPYRIGHT"
-Copyright \(co 2019–2021 Peter Kuma, Adrian J\. McDonald, Olaf Morgenstern, Richard Querel, Israel Silber and Connor J\. Flynn\.
+Copyright \(co 2019–2024 Peter Kuma, Adrian J\. McDonald, Olaf Morgenstern, Richard Querel, Israel Silber and Connor J\. Flynn\.
 .SH "BUG REPORTING"
 Report bugs to Peter Kuma (\fIpeter@peterkuma\.net\fR)\.
 .SH "SEE ALSO"
-alcf(1), alcf\-auto(1), alcf\-calibrate(1), alcf\-compare(1), alcf\-convert(1), alcf\-lidar(1), alcf\-plot(1), alcf\-simulate(1), alcf\-stats(1)
+alcf(1), alcf\-auto(1), alcf\-calibrate(1), alcf\-compare(1), alcf\-convert(1), alcf\-download(1), alcf\-lidar(1), alcf\-plot(1), alcf\-simulate(1), alcf\-stats(1)

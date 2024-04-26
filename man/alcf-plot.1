@@ -28,28 +28,31 @@ Plot type specific options\. See Plot options below\.
 .SH "PLOT TYPES"
 .TP
 \fBbackscatter\fR
-Plot backscatter from \fBalcf lidar\fR output\.
+Plot backscatter from \fBalcf lidar\fR output on time\-height axes\.
 .TP
 \fBbackscatter_hist\fR
-Plot backscatter histogram from \fBalcf stats\fR output\.
+Plot backscatter histogram from \fBalcf stats\fR output on backscatter\-height axes\.
 .TP
 \fBbackscatter_sd_hist\fR
 Plot backscatter standard deviation histogram from \fBalcf stats\fR output\.
 .TP
+\fBcbh\fR
+Plot cloud base height distribution from \fBalcf stats\fR output\.
+.TP
 \fBcl\fR
-Plot model cloud area fraction from \fBalcf lidar\fR output\.
+Plot model cloud area fraction from \fBalcf lidar\fR output on time\-height axes\.
 .TP
 \fBcli\fR
-Plot model mass fraction of cloud ice from \fBalcf lidar\fR output\.
+Plot model mass fraction of cloud ice from \fBalcf lidar\fR output on time\-height axes\.
 .TP
 \fBcloud_occurrence\fR
-Plot cloud occurrence from \fBalcf stats\fR output\.
+Plot cloud occurrence by height from \fBalcf stats\fR output\.
 .TP
 \fBclw\fR
-Plot model mass fraction of cloud liquid water from \fBalcf lidar\fR output\.
+Plot model mass fraction of cloud liquid water from \fBalcf lidar\fR output on time\-height axes\.
 .TP
 \fBclw+cli\fR
-Plot model mass fraction of cloud liquid water and ice from \fBalcf lidar\fR output\.
+Plot model mass fraction of cloud liquid water and ice from \fBalcf lidar\fR output on time\-height axes\.
 .SH "GENERAL OPTIONS"
 .TP
 \fBdpi: <value>\fR
@@ -131,7 +134,7 @@ Plot values on logarithmic scale: \fBtrue\fR of \fBfalse\fR\. Default: \fBtrue\f
 .TP
 \fBzres: <zres>\fR
 Height resolution (m)\. Default: \fB50\fR\.
-.SH "CLOUD_OCCURRENCE OPTIONS"
+.SH "CBH AND CLOUD_OCCURRENCE OPTIONS"
 .TP
 \fBcolors: { <value>\|\.\|\.\|\. }\fR
 Line colors\. Default: \fB{ #0084c8 #dc0000 #009100 #ffc022 #ba00ff }\fR
@@ -158,8 +161,8 @@ alcf plot backscatter alcf_cl51_lidar alcf_cl51_backscatter
 .fi
 .IP "" 0
 .SH "COPYRIGHT"
-Copyright \(co 2019–2021 Peter Kuma, Adrian J\. McDonald, Olaf Morgenstern, Richard Querel, Israel Silber and Connor J\. Flynn\.
+Copyright \(co 2019–2024 Peter Kuma, Adrian J\. McDonald, Olaf Morgenstern, Richard Querel, Israel Silber and Connor J\. Flynn\.
 .SH "BUG REPORTING"
 Report bugs to Peter Kuma (\fIpeter@peterkuma\.net\fR)\.
 .SH "SEE ALSO"
-alcf(1), alcf\-auto(1), alcf\-calibrate(1), alcf\-compare(1), alcf\-convert(1), alcf\-lidar(1), alcf\-model(1), alcf\-simulate(1), alcf\-stats(1)
+alcf(1), alcf\-auto(1), alcf\-calibrate(1), alcf\-compare(1), alcf\-convert(1), alcf\-download(1), alcf\-lidar(1), alcf\-model(1), alcf\-simulate(1), alcf\-stats(1)
