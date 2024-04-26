@@ -196,6 +196,23 @@ the [Semantic Versioning](https://semver.org). Installation instructions
 have been changing with versions. Please follow the installation instructions
 in the documentation of the particular version.
 
+#### [1.8.0](https://github.com/alcf-lidar/alcf/releases/tag/v1.8.0) (2024-04-26)
+
+<details>
+<summary>Release notes</summary>
+<ul>
+<li>alcf download: New command for downloading ERA5 and MERRA-2 data for a point or track.</li>
+<li>alcf stats: Added cloud base height distribution calculation.</li>
+<li>alcf auto: All-sky and clear fine backscatter histograms are now plotted.</li>
+<li>alcf auto: Cloud base height distribution is now plotted.</li>
+<li>alcf model: ERA5 cl variable is now trimmed to [0, 1] (-0.0 sometimes occurs in the data).</li>
+<li>alcf model: Fixed handling of negative longitude.</li>
+<li>alcf model: The option --track_lon_180 is now deprecated. The conversion is done automatically.</li>
+<li>Division by zero warnings in LR calculation are now prevented.</li>
+<li>Improvements in the documentation.</li>
+</ul>
+</details>
+
 #### [1.7.0](https://github.com/alcf-lidar/alcf/releases/tag/v1.7.0) (2024-04-08)
 
 <details>
