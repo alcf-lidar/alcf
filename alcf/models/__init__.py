@@ -1,3 +1,5 @@
+import alcf
+
 META = {
 	'clw': {
 		'.dims': ['time', 'level'],
@@ -73,6 +75,7 @@ META = {
 		'standard_name': 'surface_altitude',
 		'units': 'm',
 	},
+	'.': alcf.META,
 }
 
 from . import amps

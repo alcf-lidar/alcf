@@ -46,7 +46,6 @@ Options
 - `--help`: Print general help or help for a command and exit.
 - `--version`: Print version and exit.
 '''
-
 	if 'version' in kwargs:
 		print(__version__)
 		return 0

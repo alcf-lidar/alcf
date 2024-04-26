@@ -1,3 +1,5 @@
+import alcf
+
 META = {
 	'time': {
 		'.dims': ['time'],
@@ -42,6 +44,7 @@ META = {
 		'standard_name': 'latitude',
 		'units': 'degrees_north',
 	},
+	'.': alcf.META,
 }
 
 from . import chm15k

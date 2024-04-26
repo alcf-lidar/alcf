@@ -215,4 +215,7 @@ Simulate a Vaisala CL51 instrument from model data in `alcf_merra2_model` previo
 				continue
 			print('<- %s' % input_filename)
 			cosp_alcf(config, input_filename, output_filename)
+			d = ds.read(output_filename)
+			d['.']['.'] = alcf.META
+			ds.write(output_filename, d)
 			print('-> %s' % output_filename)
