@@ -1,5 +1,6 @@
 import sys
 import re
+from alcf import __version__
 from alcf.cmds import CMDS
 
 def md_to_text(md):
@@ -39,9 +40,14 @@ Commands
 Options
 -------
 
-- `--help`: Print help for command.
 - `--debug`: Enable debugging information.
+- `--help`: Print general help or help for a command and exit.
+- `--version`: Print version and exit.
 '''
+
+	if 'version' in kwargs:
+		print(__version__)
+		return 0
 
 	if cmd is None:
 		sys.stderr.write(md_to_text(run.__doc__))
