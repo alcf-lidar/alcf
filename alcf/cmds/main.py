@@ -15,14 +15,16 @@ def run(cmd=None, *args, **kwargs):
 Synopsis
 --------
 
-    alcf <cmd> [<options>]
-    alcf <cmd> --help
+    alcf <cmd> [<options>] [<arguments>]
+    alcf [<cmd>] --help
+    alcf --version
 
 Arguments
 ---------
 
 - `cmd`: See Commands below.
-- `options`: Command options.
+- `arguments`: Command arguments. Use `alcf <cmd> --help` for more information.
+- `options`: Command options (see Options below).
 
 Commands
 --------
