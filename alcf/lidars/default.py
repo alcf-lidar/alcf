@@ -8,7 +8,14 @@ CALIBRATION_COEFF = 1.0
 SURFACE_LIDAR = None
 SC_LR = None
 
-def read(filename, vars, altitude=None, lon=None, lat=None, time=None, **kwargs):
+def read(filename, vars,
+	altitude=None,
+	lon=None,
+	lat=None,
+	time=None,
+	keep_vars=[],
+	**kwargs
+):
 	sel = None
 	if time is not None:
 		d = ds.read(filename, 'time_bnds', jd=True)
@@ -18,19 +25,17 @@ def read(filename, vars, altitude=None, lon=None, lat=None, time=None, **kwargs)
 
 	d = ds.read(filename, vars, sel=sel)
 	n = d['backscatter'].shape[0]
-	d['altitude'] = d['altitude'] if altitude is None and 'altitude' in d else \
-		np.full(n, altitude, np.float64)
-	d['lon'] = d['lon'] if lon is None and 'lon' in d else \
-		np.full(n, lon, np.float64)
-	d['lat'] = d['lat'] if lat is None and 'lat' in d else \
-		np.full(n, lat, np.float64)
-	d['.']['altitude'] = META['altitude']
-	d['.']['lon'] = META['lon']
-	d['.']['lat'] = META['lat']
-	d['.'] = {
-		x: d['.'][x]
-		for x in vars
-		if x in d['.']
-	}
+	if 'altitude' in vars:
+		d['altitude'] = d['altitude'] \
+			if altitude is None and 'altitude' in d \
+			else np.full(n, altitude, np.float64)
+		d['.']['altitude'] = META['altitude']
+	if 'lon' in vars:
+		d['lon'] = d['lon'] if lon is None and 'lon' in d else \
+			np.full(n, lon, np.float64)
+		d['.']['lon'] = META['lon']
+	if 'lat' in vars:
+		d['lat'] = d['lat'] if lat is None and 'lat' in d else \
+			np.full(n, lat, np.float64)
+		d['.']['lat'] = META['lat']
 	return d
-
