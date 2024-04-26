@@ -57,6 +57,8 @@ setup(
 		'pst-format>=2.0.0',
 		'astropy>=5.3.2',
 		'cftime>=1.6.2',
+		'requests>=2.31.0',
+		'cdsapi>=0.7.0',
 	],
 	keywords=['alc', 'ceilometer', 'lidar', 'atmosphere', 'model', 'simulator', 'nwp', 'gcm', 'cosp', 'actsim', 'vaisala', 'cl51', 'cl31', 'lufft', 'chm-15k', 'minimpl', 'amps', 'merra-2', 'um'],
 	url='https://alcf.peterkuma.net',
