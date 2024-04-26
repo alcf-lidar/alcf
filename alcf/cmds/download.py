@@ -98,7 +98,7 @@ Log in to the Copernicus CDS (ERA5) service:
 
 Download ERA5 data at 45 S, 170 E between 1 and 2 January 2020 and store the output in the directory `era5`.
 
-    alcf download era5 point: { -45.0 170.0 } time: { 2020-01-01 2020-01-02 } era5
+    alcf download era5 point: { 170.0 -45.0 } time: { 2020-01-01 2020-01-02 } era5
 
 Log in to the NASA Earthdata (MERRA-2) service:
 
