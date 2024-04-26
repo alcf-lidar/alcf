@@ -167,3 +167,74 @@ def keep_var(var, d, do, dim_map={}):
 
 def dep_vars(mapping, vars):
 	return list(set([y for x in vars if x in mapping for y in mapping[x]]))
+
+def point_to_track(point, time):
+	time_mid = 0.5*(time[0] + time[1])
+	return {
+		'lon': np.array([point[0], point[0]], dtype=np.float64),
+		'lat': np.array([point[1], point[1]], dtype=np.float64),
+		'time': np.array([time[0], time[1]], dtype=np.float64),
+		'time_bnds': np.array([[time[0], time_mid], [time_mid, time[1]]],
+			dtype=np.float64),
+	}
+
+def track_auto_time_bnds(time, track_gap=0):
+	n = len(time)
+	time_bnds = np.full((n, 2), np.nan, np.float64)
+	time_bnds[0,0] = time[0]
+	time_bnds[-1,1] = time[-1]
+	time_avg = 0.5*(time[:-1] + time[1:])
+	time_bnds[1:,0] = time_avg
+	time_bnds[:-1,1] = time_avg
+	if track_gap != 0:
+		time_diff = time[1:] - time[:-1]
+		mask1 = np.full(n, False, bool)
+		mask2 = np.full(n, False, bool)
+		mask1[:-1] = time_diff > track_gap
+		mask2[1:] = time_diff > track_gap
+		time_bnds[mask1,1] = time[mask1]
+		time_bnds[mask2,0] = time[mask2]
+	return time_bnds
+
+def read_track(filenames, lon_180=False, track_gap=0):
+	if type(filenames) not in [list, tuple]:
+		filenames = [filenames]
+	dd = []
+	for filename in filenames:
+		d = ds.read(filename, jd=True)
+		if len(d['time']) < 2:
+			raise ValueError('%s: Track must contain at least two records', filename)
+		if 'time_bnds' not in d:
+			d['time_bnds'] = track_auto_time_bnds(d['time'], track_gap)
+			d['.']['time_bnds'] = {
+				'.dims': ['time', 'bnds'],
+				'long_name': 'time bounds',
+				'standard_name': 'time',
+				'units': 'days since -4713-11-24 12:00 UTC',
+				'calendar': 'proleptic_gregorian',
+			}
+		dd += [d]
+	d = ds.merge(dd, 'time')
+	if lon_180:
+		d['lon'] = np.where(d['lon'] > 0, d['lon'], 360. + d['lon'])
+	return d
+
+def track_has_seg(track, t1, t2):
+	mask = (track['time_bnds'][:,0] < t2) & (track['time_bnds'][:,1] >= t1)
+	return np.any(mask)
+
+def cmd_point_or_track(point, time, track, track_lon_180=False, track_gap=0):
+	time_lim = [-np.inf, np.inf]
+	if time is not None:
+		for i in [0, 1]:
+			time_lim[i] = aq.from_iso(time[i])
+			if time_lim[i] is None:
+				raise ValueError('Invalid time format: %s' % time[i])
+	d = None
+	if track is not None:
+		d = read_track(track, track_lon_180, track_gap/86400.)
+	elif point is not None and time is not None:
+		d = point_to_track(point, time_lim)
+	else:
+		raise ValueError('Point and time or track is required')
+	return d, time_lim

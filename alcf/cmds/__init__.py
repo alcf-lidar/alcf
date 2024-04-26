@@ -7,6 +7,7 @@ from . import compare
 from . import plot
 from . import calibrate
 from . import auto
+from . import download
 
 CMDS = {
 	'convert': convert.run,
@@ -18,4 +19,5 @@ CMDS = {
 	'plot': plot.run,
 	'calibrate': calibrate.run,
 	'auto': auto.run,
+	'download': download.run,
 }

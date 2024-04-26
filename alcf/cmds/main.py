@@ -29,6 +29,7 @@ Commands
 - `auto`: Peform automatic processing of model or lidar data.
 - `calibrate`: Calibrate lidar backscatter.
 - `convert`: Convert input instrument or model data to the ALCF standard NetCDF.
+- `download`: Download model data.
 - `lidar`: Process lidar data.
 - `model`: Extract model data at a point or along a track.
 - `plot`: Plot lidar data.
