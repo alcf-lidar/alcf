@@ -3,6 +3,8 @@ import copy
 import tempfile
 from string import Template
 import subprocess
+import ds_format as ds
+import alcf
 from alcf.lidars import LIDARS
 
 CONFIG_TEMPLATE = """
