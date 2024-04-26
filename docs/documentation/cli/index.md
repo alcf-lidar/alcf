@@ -20,6 +20,7 @@ for passing complex command line arguments.
 | [alcf auto](cmd_auto.html) | peform automatic processing of model or lidar data |
 | [alcf calibrate](cmd_calibrate.html) | calibrate lidar backscatter |
 | [alcf convert](cmd_convert.html) | convert input instrument or model data to the ALCF standard NetCDF |
+| [alcf download](cmd_download.html) | download model data |
 | [alcf lidar](cmd_lidar.html) | process lidar data |
 | [alcf model](cmd_model.html) | extract model data at a point or along a track |
 | [alcf plot](cmd_plot.html) | plot lidar data |
