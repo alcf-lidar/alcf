@@ -7,7 +7,7 @@ Synopsis
 
     alcf model <type> point: { <lon> <lat> } time: { <start> <end> } [options] [--] <input> <output>
 
-    alcf model <type> track: <track> [--] <input> <output>
+    alcf model <type> track: <track> [options] [--] <input> <output>
 
 Description
 -----------
@@ -25,7 +25,6 @@ Arguments
 - `start`: Start time (see Time format below).
 - `end`: End time (see Time format below).
 - `track: <file>`, `track: { <file>... }`: One or more track NetCDF files (see Files below). If multiple files are supplied and `time_bnds` is not present in the files, they are assumed to be multiple segments of a discontinous track unless the last and first time of adjacent tracks are the same.
-- `track_gap: <interval>`: If the interval is not 0, a track file is supplied, the `time_bnds` variable is not defined in the file and any two adjacent points are separated by more than the specified time interval (seconds), then a gap is assumed to be present between the two data points, instead of interpolating location between the two points. Default: `21600` (6 hours).
 - `options`: See Options below.
 
 Options
@@ -33,8 +32,9 @@ Options
 
 - `njobs: <n>`: Number of parallel jobs. Default: number of CPU cores.
 - `-r`: Process the input directory recursively.
-- `--track_lon_180`: Expect track longitude between -180 and 180 degrees.
+- `--track_lon_180`: Expect track longitude between -180 and 180 degrees. This option is no longer needed as the conversion is automatically. [deprecated]
 - `override_year: <year>`: Override year in the track. Use if comparing observations with a model statistically and the model output does not have a corresponding year available. The observation time is converted to the same time relative to the start of the year in the specified year. Note that if the original year is a leap year and the override year is not, as a consequence of the above 31 December is mapped to 1 January. The output retains the original year as in the track, even though the model data come from the override year. Default: `none`.
+- `track_gap: <interval>`: If the interval is not 0, a track file is supplied, the `time_bnds` variable is not defined in the file and any two adjacent points are separated by more than the specified time interval (seconds), then a gap is assumed to be present between the two data points, instead of interpolating location between the two points. Default: `21600` (6 hours).
 
 Types
 -----
