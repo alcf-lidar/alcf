@@ -55,7 +55,6 @@ Options
 - `--nocache`: Disable server-side caching of requests, when applicable.
 - `--overwrite`: Overwrite existing files.
 - `track_gap: <interval>`: If the interval is not 0, a track file is supplied, the `time_bnds` variable is not defined in the file and any two adjacent points are separated by more than the specified time interval (seconds), then a gap is assumed to be present between the two data points, instead of interpolating location between the two points. Default: `21600` (6 hours).
-- `--track_lon_180`: Expect track longitude between -180 and 180 degrees.
 
 Login options
 -------------
@@ -122,7 +121,6 @@ Download MERRA-2 data for a ship track `track.nc` and store the output in the di
 	output = args[0]
 
 	d, time_lim = misc.cmd_point_or_track(point, time, track,
-		track_lon_180=track_lon_180,
 		track_gap=track_gap,
 	)
 	time_start = max(d['time_bnds'][0,0], time_lim[0])

@@ -171,7 +171,7 @@ def dep_vars(mapping, vars):
 def point_to_track(point, time):
 	time_mid = 0.5*(time[0] + time[1])
 	return {
-		'lon': np.array([point[0], point[0]], dtype=np.float64),
+		'lon': np.array([point[0] % 360, point[0] % 360], dtype=np.float64),
 		'lat': np.array([point[1], point[1]], dtype=np.float64),
 		'time': np.array([time[0], time[1]], dtype=np.float64),
 		'time_bnds': np.array([[time[0], time_mid], [time_mid, time[1]]],
@@ -215,15 +215,14 @@ def read_track(filenames, lon_180=False, track_gap=0):
 			}
 		dd += [d]
 	d = ds.merge(dd, 'time')
-	if lon_180:
-		d['lon'] = np.where(d['lon'] > 0, d['lon'], 360. + d['lon'])
+	d['lon'] = d['lon'] % 360
 	return d
 
 def track_has_seg(track, t1, t2):
 	mask = (track['time_bnds'][:,0] < t2) & (track['time_bnds'][:,1] >= t1)
 	return np.any(mask)
 
-def cmd_point_or_track(point, time, track, track_lon_180=False, track_gap=0):
+def cmd_point_or_track(point, time, track, track_gap=0):
 	time_lim = [-np.inf, np.inf]
 	if time is not None:
 		for i in [0, 1]:
@@ -232,7 +231,7 @@ def cmd_point_or_track(point, time, track, track_lon_180=False, track_gap=0):
 				raise ValueError('Invalid time format: %s' % time[i])
 	d = None
 	if track is not None:
-		d = read_track(track, track_lon_180, track_gap/86400.)
+		d = read_track(track, track_gap/86400.)
 	elif point is not None and time is not None:
 		d = point_to_track(point, time_lim)
 	else:
