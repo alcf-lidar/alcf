@@ -1,5 +1,6 @@
 import ds_format as ds
 import os
+import warnings as warn
 import numpy as np
 from alcf.models import META
 from alcf import misc
@@ -20,11 +21,19 @@ VARS = [
 
 STEP=3/24
 
+def ignore_warnings():
+	'''Ignore warnings produced by wrong valid_range in MERRA-2 data files.'''
+	warn.filterwarnings('ignore', message='invalid value encountered in cast')
+	warn.filterwarnings('ignore', message='WARNING: valid_range not used since it\ncannot be safely cast to variable data type')
+
 def read(dirname, index, track, t1, t2,
 	warnings=[], step=STEP, recursive=False):
 
-	dd_index = ds.readdir(dirname, variables=['time', 'lat', 'lon'], jd=True,
-		recursive=recursive)
+	with warn.catch_warnings():
+		ignore_warnings()
+		dd_index = ds.readdir(dirname, variables=['time', 'lat', 'lon'], jd=True,
+			recursive=recursive)
+
 	dd = []
 	for d_index in dd_index:
 		time = d_index['time']
@@ -43,9 +52,11 @@ def read(dirname, index, track, t1, t2,
 				continue
 			j = np.argmin(np.abs(lat - lat0))
 			k = np.argmin(np.abs(lon - lon0))
-			d = ds.read(filename, variables=VARS,
-				sel={'time': i, 'lat': j, 'lon': k}
-			)
+			with warn.catch_warnings():
+				ignore_warnings()
+				d = ds.read(filename, variables=VARS,
+					sel={'time': i, 'lat': j, 'lon': k}
+				)
 			clw = d['QL'][::-1]
 			cli = d['QI'][::-1]
 			cl = d['CLOUD'][::-1]*100.
