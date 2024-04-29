@@ -255,10 +255,11 @@ def stats_map(d, state,
 def stats_reduce(state, bsd_z=None, **kwargs):
 	if len(state['cl'].shape) == 2:
 		for k in range(len(state['n'])):
+			if state['clt'][k] > 0:
+				state['cbh'][:,k] /= state['clt'][k]
 			if state['n'][k] > 0:
 				state['backscatter_hist'][:,:,k] /= state['n'][k]
 				state['cl'][:,k] /= state['n'][k]
-				state['cbh'][:,k] /= state['clt'][k]
 				state['clt'][k] /= state['n'][k]
 				state['backscatter_avg'][:,k] /= state['n'][k]
 				state['backscatter_mol_avg'][:,k] /= state['n'][k]
