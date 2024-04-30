@@ -4,7 +4,9 @@ import numpy as np
 from alcf.models import META
 from alcf import misc
 
-VARIABLES = [
+VARS_INDEX = ['time0', 'latitude', 'longitude']
+
+VARS = [
 	'hybridt32',
 	'latitude',
 	'longitude',
@@ -20,10 +22,11 @@ STEP = 2/24
 def read(dirname, index, track, t1, t2,
 	warnings=[], step=STEP, recursive=False):
 
-	dd_index = ds.readdir(dirname, variables=['time0', 'latitude', 'longitude'],
+	dd_index = ds.readdir(dirname, VARS_INDEX,
 		jd=True, recursive=recursive)
 	dd = []
 	for d_index in dd_index:
+		misc.require_vars(d_index, VARS_INDEX)
 		time = d_index['time0']
 		lon = d_index['longitude']
 		lon = np.where(lon < 0., 360. + lon, lon)
@@ -36,10 +39,8 @@ def read(dirname, index, track, t1, t2,
 				continue
 			l = np.argmin((lon - lon0)**2 + (lat - lat0)**2)
 			j, k = np.unravel_index(l, lon.shape)
-			# print('<- %s' % filename)
-			d = ds.read(filename, variables=VARIABLES, sel={'time0': i, 'rlat': j, 'rlon': k})
-			if not set(VARIABLES).issubset(d.keys()):
-				continue
+			d = ds.read(filename, VARS, sel={'time0': i, 'rlat': j, 'rlon': k})
+			misc.require_vars(d, VARS)
 			clw = d['model_qcl']
 			cli = d['model_qcf']
 			cl = 100.*np.ones(len(clw), dtype=np.float64)

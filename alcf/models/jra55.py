@@ -15,6 +15,8 @@ VARS = [
 	'sp',
 ]
 
+VARS_INDEX = ['time', 'latitude', 'longitude']
+
 VARS_AUX = [
 	'level',
 	'time',
@@ -40,17 +42,14 @@ STEP = 6/24
 def read(dirname, index, track, t1, t2,
 	warnings=[], step=STEP, recursive=False):
 
-	d_ll = ds.read(os.path.join(dirname, 'LL125.nc'), [
-		'latitude',
-		'longitude',
-		'z'
-	])
+	req_vars = ['latitude', 'longitude', 'z']
+	d_ll = ds.read(os.path.join(dirname, 'LL125.nc'), req_vars)
+	misc.require_vars(d_ll, req_vars)
 	lat_ll = d_ll['latitude']
 	lon_ll = d_ll['longitude']
 	orog_ll = d_ll['z'][0,:,:]/9.80665
 
-	dd_idx = ds.readdir(dirname,
-		variables=['time', 'latitude', 'longitude'],
+	dd_idx = ds.readdir(dirname, VARS_INDEX,
 		jd=True,
 		full=True,
 		warnings=warnings,
@@ -61,6 +60,7 @@ def read(dirname, index, track, t1, t2,
 		dd = []
 		var2 = TRANS[var]
 		for d_idx in dd_idx:
+			misc.require_vars(d_idx, VARS_INDEX)
 			if var not in d_idx['.']:
 				continue
 			time = d_idx['time']
@@ -80,7 +80,8 @@ def read(dirname, index, track, t1, t2,
 				k = np.argmin(np.abs(lon - lon0))
 				j_ll = np.argmin(np.abs(lat_ll - lat0))
 				k_ll = np.argmin(np.abs(lon_ll - lon0))
-				d = ds.read(filename, VARS_AUX + [var],
+				req_vars = VARS_AUX + [var]
+				d = ds.read(filename, req_vars,
 					sel={
 						'time': [i],
 						'latitude': j,
@@ -88,6 +89,7 @@ def read(dirname, index, track, t1, t2,
 					},
 					jd=True,
 				)
+				misc.require_vars(d, req_vars)
 				for a, b in TRANS.items():
 					if a in d.keys():
 						ds.rename(d, a, b)

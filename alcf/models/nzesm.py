@@ -6,13 +6,15 @@ from alcf.models import META
 from alcf import misc
 import aquarius_time as aq
 
-VARIABLES = [
+VARS = [
 	'air_pressure',
 	'air_temperature',
 	'mass_fraction_of_cloud_liquid_water_in_air',
 	'mass_fraction_of_cloud_ice_in_air',
 	'cloud_volume_fraction_in_atmosphere_layer',
 ]
+
+VARS_INDEX = ['time', 'latitude', 'longitude', 'level_height']
 
 TRANS = {
 	'air_pressure': 'pfull',
@@ -26,17 +28,18 @@ STEP = 6/24
 
 def read(dirname, index, track, t1, t2, warnings=[], step=STEP):
 	dd_index = ds.readdir(dirname,
-		variables=['time', 'latitude', 'longitude', 'level_height'],
+		VARS_INDEX,
 		jd=True,
 		full=True,
 		warnings=warnings,
 	)
 	d_var = {}
-	for var in VARIABLES:
+	for var in VARS:
 		dd = []
 		for d_index in dd_index:
 			if var not in d_index['.']:
 				continue
+			misc.require_vars(d_index, VARS_INDEX)
 			time = d_index['time']
 			time_half = misc.half(time)
 			lat = d_index['latitude']
@@ -51,8 +54,9 @@ def read(dirname, index, track, t1, t2, warnings=[], step=STEP):
 					continue
 				j = np.argmin(np.abs(lat - lat0))
 				k = np.argmin(np.abs(lon - lon0))
-				d = ds.read(filename, variables=[var],
+				d = ds.read(filename, [var],
 					sel={'time': i, 'latitude': j, 'longitude': k})
+				misc.require_vars(d, [var])
 				d_new = {
 					'lat': np.array([lat[j]]),
 					'lon': np.array([lon[k]]),

@@ -6,6 +6,8 @@ from alcf.models import META
 from alcf import misc
 import aquarius_time as aq
 
+VARS_INDEX = ['time', 'latitude', 'longitude']
+
 VARS_PLEV = [
 	'time',
 	'clwc',
@@ -50,14 +52,14 @@ def read0(type_, dirname, track, t1, t2,
 	warnings=[], step=STEP, recursive=False):
 
 	dd_idx = ds.readdir(dirname,
-		variables=['time', 'latitude', 'longitude'],
+		VARS_INDEX,
 		jd=True,
 		full=True,
 		warnings=warnings,
 		recursive=recursive,
 	)
 
-	vars = {
+	req_vars = {
 		'surf': VARS_SURF,
 		'plev': VARS_PLEV,
 	}[type_]
@@ -69,6 +71,7 @@ def read0(type_, dirname, track, t1, t2,
 
 	dd = []
 	for d_idx in dd_idx:
+		misc.require_vars(d_idx, VARS_INDEX)
 		time = d_idx['time']
 		lat = d_idx['latitude']
 		lon = d_idx['longitude']
@@ -86,10 +89,11 @@ def read0(type_, dirname, track, t1, t2,
 				continue
 			j = np.argmin(np.abs(lat - lat0))
 			k = np.argmin(np.abs(lon - lon0))
-			d = ds.read(filename, vars,
+			d = ds.read(filename, req_vars,
 				sel={'time': [i], 'latitude': j, 'longitude': k},
 				jd=True,
 			)
+			misc.require_vars(d, req_vars)
 			for a, b in trans.items():
 				if a in d.keys():
 					ds.rename(d, a, b)

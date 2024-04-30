@@ -60,6 +60,7 @@ def read(dirname, index, track, t1, t2,
 			lonlat=True,
 			nest=nest
 		)
+		misc.require_vars(ids, VARS)
 		for var in VARS:
 			sel = {'cell': j}
 			if 'time' in ids[var].coords:

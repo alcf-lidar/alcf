@@ -58,7 +58,8 @@ def read_nc(d_index, track, t1, t2, step):
 		lon0, lat0 = track(time)
 		if np.isnan(lon0) or np.isnan(lat0):
 			return
-		d = ds.read(d_index['filename'], variables=VARS_NC, sel={'Time': 0})
+		d = ds.read(d_index['filename'], VARS_NC, sel={'Time': 0})
+		misc.require_vars(d, VARS_NC)
 		lon = np.where(d['XLONG'] < 0, 360 + d['XLONG'], d['XLONG'])
 		lat = d['XLAT']
 		l = np.argmin((lon - lon0)**2 + (lat - lat0)**2)
@@ -108,7 +109,9 @@ def read_ncl(d_index, track, t1, t2, step):
 		lon0, lat0 = track(time)
 		if np.isnan(lon0) or np.isnan(lat0):
 			return
-		d = ds.read(d_index['filename'], variables=VARS_NCL + [dim1, dim2])
+		req_vars = VARS_NCL + [dim1, dim2]
+		d = ds.read(d_index['filename'], req_vars)
+		misc.require_vars(d, req_vars)
 		lon = np.where(d['g5_lon_1'] < 0, 360 + d['g5_lon_1'], d['g5_lon_1'])
 		lat = d['g5_lat_0']
 		l = np.argmin((lon - lon0)**2 + (lat - lat0)**2)

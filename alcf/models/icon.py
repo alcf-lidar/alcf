@@ -30,6 +30,7 @@ def index(dirname, warnings=[], recursive=False, njobs=1):
 	d_g = ds.read(os.path.join(dirname, 'vgrid.nc'), [
 		'clon', 'clat'
 	], full=True)
+	misc.require_vars(d_g, ['clon', 'clat'])
 	d_g['clon'] *= 180/np.pi
 	d_g['clat'] *= 180/np.pi
 
@@ -47,6 +48,7 @@ def read(dirname, index, track, t1, t2,
 	for var in VARS:
 		dd = []
 		for d_idx in dd_idx:
+			misc.require_vars(d_idx, ['time'])
 			if var not in d_idx['.']:
 				continue
 			time = d_idx['time']
@@ -75,6 +77,7 @@ def read(dirname, index, track, t1, t2,
 						'ncells': cell,
 						'height': ds.dim(d_g, 'height') - 1,
 					})
+					misc.require_vars(d_g2, ['zg', 'zghalf'])
 					vgrid_cache[cell] = d_g2
 
 				d = ds.read(filename, [var],
@@ -85,6 +88,7 @@ def read(dirname, index, track, t1, t2,
 					},
 					jd=True,
 				)
+				misc.require_vars(d, [var])
 				ds.rename_dim(d, 'height', 'level')
 				d['time'] = np.array([time[i]])
 				d['lat'] = np.array([d_g['clat'][cell]])

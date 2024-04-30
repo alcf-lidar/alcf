@@ -19,6 +19,8 @@ VARS = [
 	'STASH_m01s16i004',
 ]
 
+VARS_INDEX = ['TALLTS', 'latitude_t', 'longitude_t', 'DALLTH_zsea_theta']
+
 TRANS = {
 	'TALLTS': 'time',
 	'latitude_t': 'lat',
@@ -37,14 +39,12 @@ STEP = 1/24
 def read(dirname, index, track, t1, t2,
 	warnings=[], step=STEP, recursive=False):
 
-	d_orog = ds.read(os.path.join(dirname, 'qrparm.orog.nc'), [
-		'latitude',
-		'longitude',
-		'surface_altitude',
-	])
+	req_vars = ['latitude', 'longitude', 'surface_altitude']
+	d_orog = ds.read(os.path.join(dirname, 'qrparm.orog.nc'), req_vars)
+	misc.require_vars(d_orog, req_vars)
 
 	dd_idx = ds.readdir(dirname,
-		variables=['TALLTS', 'latitude_t', 'longitude_t', 'DALLTH_zsea_theta'],
+		VARS_INDEX,
 		jd=True,
 		full=True,
 		warnings=warnings,
@@ -55,6 +55,7 @@ def read(dirname, index, track, t1, t2,
 	for d_idx in dd_idx:
 		if 'TALLTS' not in d_idx:
 			continue
+		misc.require_vars(d_idx, VARS_INDEX)
 
 		time = d_idx['TALLTS']
 		lat = d_idx['latitude_t']
@@ -76,6 +77,7 @@ def read(dirname, index, track, t1, t2,
 				sel={'TALLTS': [i], 'latitude_t': j, 'longitude_t': k},
 				jd=True,
 			)
+			misc.require_vars(d, VARS)
 			for a, b in TRANS.items():
 				if a in d.keys():
 					ds.rename(d, a, b)
