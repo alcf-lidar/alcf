@@ -52,7 +52,7 @@ def worker(type_, input_, index, output, track, start, debug, r,
 		for w in warnings:
 			if len(w) == 2:
 				if debug: warn('%s\n%s' % (w[0], w[1]))
-				else: warn('%s\n%s', % (w[0], 'Use --debug for more information')
+				else: warn('%s\n%s' % (w[0], 'Use --debug for more information'))
 			else:
 				warn(w)
 		if d is not None:
