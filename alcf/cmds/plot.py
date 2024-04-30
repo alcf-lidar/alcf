@@ -2,7 +2,7 @@
 
 import os
 import sys
-import logging
+from warnings import warn
 import traceback
 import copy
 import numpy as np
@@ -653,7 +653,7 @@ Plot backscatter from processed Vaisala CL51 data in `alcf_cl51_lidar` and store
 					except SystemError:
 						raise
 					except:
-						logging.warning(traceback.format_exc())
+						warn(traceback.format_exc())
 					try:
 						plot(plot_type, d, output_filename, **opts)
 						print('-> %s' % output_filename)
@@ -662,7 +662,7 @@ Plot backscatter from processed Vaisala CL51 data in `alcf_cl51_lidar` and store
 					except SystemError:
 						sys.exit(1)
 					except:
-						logging.warning(traceback.format_exc())
+						warn(traceback.format_exc())
 					finally:
 						plt.close()
 			else:

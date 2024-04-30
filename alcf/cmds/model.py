@@ -1,6 +1,7 @@
 import sys
 import os
 import traceback
+from warnings import warn
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import numpy as np
 import aquarius_time as aq
@@ -50,11 +51,10 @@ def worker(type_, input_, index, output, track, start, debug, r,
 		)
 		for w in warnings:
 			if len(w) == 2:
-				print('Warning: %s' % w[0], file=sys.stderr)
-				if debug: print(w[1], file=sys.stderr)
-				else: print('Use --debug to print debugging information.', file=sys.stderr)
+				if debug: warn('%s\n%s' % (w[0], w[1]))
+				else: warn('%s\n%s', % (w[0], 'Use --debug for more information')
 			else:
-				print('Warning: %s' % w, file=sys.stderr)
+				warn(w)
 		if d is not None:
 			if 'time_bnds' not in d and 'time' in d:
 				d['time_bnds'] = misc.time_bnds(d['time'], model.STEP, t1, t2)
@@ -65,9 +65,8 @@ def worker(type_, input_, index, output, track, start, debug, r,
 			ds.write(output_filename, d)
 			print('-> %s' % output_filename)
 	except Exception as e:
-		print('Warning: %s' % str(e), file=sys.stderr)
-		if debug: print(traceback.format_exc(), file=sys.stderr)
-		else: print('Use --debug to print debugging information.', file=sys.stderr)
+		if debug: warn(traceback.format_exc())
+		else: warn('%s\n%s' % (str(e), 'Use --debug for more information'))
 
 def run(type_, input_, output,
 	point=None,
@@ -177,8 +176,7 @@ Extract MERRA-2 model data in `M2I3NVASM.5.12.4` at 45 S, 170 E between 1 and 2 
 			fs += [f]
 	for w in warnings:
 		if len(w) == 2:
-			print('Warning: %s' % w[0], file=sys.stderr)
-			if debug: print(w[1], file=sys.stderr)
-			else: print('Use --debug to print debugging information.', file=sys.stderr)
+			if debug: warn('%s\n%s' % (w[0], w[1]))
+			else: warn('%s\n%s' % (w[0], 'Use --debug for more information'))
 		else:
-			print('Warning: %s' % w, file=sys.stderr)
+			warn(w)
