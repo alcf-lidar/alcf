@@ -33,6 +33,7 @@ def read(dirname, index, track, t1, t2,
 
 	with warn.catch_warnings():
 		ignore_warnings()
+		print('<- %s' % dirname)
 		dd_index = ds.readdir(dirname, VARS_INDEX, jd=True, recursive=recursive)
 
 	dd = []
@@ -56,6 +57,7 @@ def read(dirname, index, track, t1, t2,
 			k = np.argmin(np.abs(lon - lon0))
 			with warn.catch_warnings():
 				ignore_warnings()
+				print('<- %s' % filename)
 				d = ds.read(filename, VARS,
 					sel={'time': i, 'lat': j, 'lon': k}
 				)
