@@ -82,7 +82,7 @@ def plot_profile(plot_type, d,
 ):
 	if plot_type == 'backscatter':
 		misc.require_vars(d, ['time', 'zfull', 'backscatter', 'cloud_mask'])
-		cmap = copy.copy(mpl.cm.get_cmap('viridis'))
+		cmap = copy.copy(mpl.colormaps.get_cmap('viridis'))
 		under = '#222222'
 		label = 'Att. vol. backscattering coef. (×10$^{-6}$ m$^{-1}$sr$^{-1}$)'
 		if vlim is None:
@@ -324,7 +324,7 @@ def plot_backscatter_hist(d,
 		]
 
 	under = '#222222'
-	cmap = copy.copy(mpl.cm.get_cmap('viridis'))
+	cmap = copy.copy(mpl.colormaps.get_cmap('viridis'))
 	cmap.set_under(under)
 	im = plt.imshow(
 		d['backscatter_hist'].T*1e2
