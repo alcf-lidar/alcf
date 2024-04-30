@@ -19,6 +19,8 @@ VARS = [
 	'CLOUD',
 ]
 
+VARS_INDEX = ['time', 'lat', 'lon']
+
 STEP=3/24
 
 def ignore_warnings():
@@ -31,11 +33,11 @@ def read(dirname, index, track, t1, t2,
 
 	with warn.catch_warnings():
 		ignore_warnings()
-		dd_index = ds.readdir(dirname, variables=['time', 'lat', 'lon'], jd=True,
-			recursive=recursive)
+		dd_index = ds.readdir(dirname, VARS_INDEX, jd=True, recursive=recursive)
 
 	dd = []
 	for d_index in dd_index:
+		misc.require_vars(d_index, VARS_INDEX)
 		time = d_index['time']
 		lat = d_index['lat']
 		lon = d_index['lon']
@@ -54,9 +56,10 @@ def read(dirname, index, track, t1, t2,
 			k = np.argmin(np.abs(lon - lon0))
 			with warn.catch_warnings():
 				ignore_warnings()
-				d = ds.read(filename, variables=VARS,
+				d = ds.read(filename, VARS,
 					sel={'time': i, 'lat': j, 'lon': k}
 				)
+				misc.require_vars(d, VARS)
 			clw = d['QL'][::-1]
 			cli = d['QI'][::-1]
 			cl = d['CLOUD'][::-1]*100.
