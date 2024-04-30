@@ -81,6 +81,7 @@ def plot_profile(plot_type, d,
 	**opts
 ):
 	if plot_type == 'backscatter':
+		misc.require_vars(d, ['time', 'zfull', 'backscatter', 'cloud_mask'])
 		cmap = copy.copy(mpl.cm.get_cmap('viridis'))
 		under = '#222222'
 		label = 'Att. vol. backscattering coef. (×10$^{-6}$ m$^{-1}$sr$^{-1}$)'
@@ -108,6 +109,7 @@ def plot_profile(plot_type, d,
 		x[x <= 0.] = 0.5*vlim[0] # A value below the limit.
 		zfull = d['zfull']
 	elif plot_type in ('clw', 'cli', 'cl'):
+		misc.require_vars(d, ['time', 'zfull', plot_type])
 		cmap = copy.copy(mpl.cm.get_cmap({
 			'clw': 'Reds',
 			'cli': 'Blues',
@@ -234,6 +236,7 @@ def plot_profile(plot_type, d,
 		plt.plot(date2num(time_dt), d['altitude']*1e-3, color='red', lw=0.5)
 
 def plot_lr(d, subcolumn=0, **opts):
+	misc.require_vars(d, ['time', 'lr'])
 	lr = d['lr'][:,subcolumn] if d['lr'].ndim == 2 else d['lr'][:]
 	plt.plot(d['time'], lr, lw=0.7, color='#0087ed')
 	locator = AutoDateLocator()
@@ -263,6 +266,7 @@ def plot_cloud_dist(plot_type, dd,
 		'cloud_occurrence': 'cl',
 	}[plot_type]
 	for i, d in enumerate(dd):
+		misc.require_vars(d, ['zfull', 'cloud_occurrence', 'clt'])
 		zfull = d['zfull']
 		x = d[var][:,subcolumn] \
 			if len(d[var].shape) == 2 \
@@ -298,6 +302,8 @@ def plot_backscatter_hist(d,
 	vlog=False,
 	**kwargs
 ):
+	misc.require_vars(d, ['backscatter_hist', 'backscatter_full', 'zfull'])
+
 	if vlim is None:
 		vlim = [
 			np.min(d['backscatter_hist'])*1e2,
@@ -360,6 +366,7 @@ def plot_backscatter_sd_hist(dd,
 	**kwargs
 ):
 	for i, d in enumerate(dd):
+		misc.require_vars(d, ['backscatter_sd_full', 'backscatter_sd_hist'])
 		plt.plot(d['backscatter_sd_full']*1e6, d['backscatter_sd_hist'],
 			lw=1,
 			color=colors[i],

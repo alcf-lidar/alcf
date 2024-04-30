@@ -80,6 +80,7 @@ def read(
 	tres = None
 	if tlim is not None:
 		d = ds.read(filename, TIME_VARS)
+		misc.require_vars(d, ['time'])
 		d['time'], d['time_bnds'], tres = convert_time(d)
 		mask = misc.time_mask(d['time_bnds'], tlim[0], tlim[1])
 		if np.sum(mask) == 0: return None
@@ -88,6 +89,7 @@ def read(
 	dep_vars = misc.dep_vars(VARS, vars)
 	req_vars = dep_vars + DEFAULT_VARS + keep_vars
 	d = ds.read(filename, req_vars, sel=sel, full=True)
+	misc.require_vars(d, req_vars)
 	dx = {}
 	misc.populate_meta(dx, META, set(vars) & set(VARS))
 	n = ds.dim(d, 'time')

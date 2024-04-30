@@ -6,12 +6,25 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 import os
 import sys
 import pst
+import warnings
 from alcf.cmds import main
 
+def formatwarning(message, category, filename, lineno, line=None):
+	return 'Warning: %s\n' % message
+
 def main_wrapper():
+	warnings.simplefilter('always')
+	warnings.formatwarning = formatwarning
 	args, kwargs = pst.decode_argv(sys.argv, as_unicode=True)
-	ret = main.run(*args[1:], **kwargs)
-	sys.exit(ret)
+	try:
+		ret = main.run(*args[1:], **kwargs)
+		sys.exit(ret)
+	except Exception as e:
+		if 'debug' in kwargs:
+			raise e
+		else:
+			print('Error: ' + str(e), file=sys.stderr)
+			print('Use --debug for more information', file=sys.stderr)	
 
 if __name__ == '__main__':
 	main_wrapper()

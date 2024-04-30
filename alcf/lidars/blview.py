@@ -33,6 +33,7 @@ def read(
 	tres = None
 	if tlim is not None:
 		d = ds.read(filename, 'time')
+		misc.require_vars(d, ['time'])
 		d['time'] = d['time']/86400. + 2440587.5
 		tres = d['time'][1] - d['time'][0]
 		d['time_bnds'] = misc.time_bnds(d['time'], tres)
@@ -43,6 +44,7 @@ def read(
 	dep_vars = misc.dep_vars(VARS, vars)
 	req_vars = dep_vars + DEFAULT_VARS + keep_vars
 	d = ds.read(filename, req_vars, sel=sel, full=True)
+	misc.require_vars(d, req_vars)
 	dx = {}
 	misc.populate_meta(dx, META, set(vars) & set(VARS))
 	n = ds.dim(d, 'timeDim')

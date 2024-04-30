@@ -253,6 +253,8 @@ def stats_map(d, state,
 		)
 
 def stats_reduce(state, bsd_z=None, **kwargs):
+	if not 'n' in state:
+		return {}
 	if len(state['cl'].shape) == 2:
 		for k in range(len(state['n'])):
 			if state['clt'][k] > 0:

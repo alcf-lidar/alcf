@@ -2,6 +2,7 @@ import os
 import logging
 import traceback
 import glob
+import warnings
 import numpy as np
 import ds_format as ds
 import aquarius_time as aq
@@ -53,6 +54,7 @@ def run(type_, input_, output,
 	r=False,
 	keep_vars=[],
 	align_output=True,
+	debug=False,
 	**options
 ):
 	"""
@@ -334,8 +336,11 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 				raise
 			except SystemError:
 				raise
-			except:
-				logging.warning(traceback.format_exc())
+			except Exception as e:
+				if debug:
+					warnings.warn(traceback.format_exc())
+				else:
+					warnings.warn('%s\n%s' % (str(e), 'Use --debug for more information'))
 		dd = process([None], state, **options)
 	else:
 		print('<- %s' % input_)
