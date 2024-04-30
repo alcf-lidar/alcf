@@ -17,6 +17,7 @@ VARS = [
 STEP = 6/24
 
 def index(dirname, warnings=[], recursive=False, njobs=1):
+	print('<- %s' % dirname)
 	dd = ds.readdir(dirname,
 		variables=['time'],
 		jd=True,
@@ -27,7 +28,9 @@ def index(dirname, warnings=[], recursive=False, njobs=1):
 		njobs=njobs,
 	)
 
-	d_g = ds.read(os.path.join(dirname, 'vgrid.nc'), [
+	vgrid_filename = os.path.join(dirname, 'vgrid.nc')
+	print('<- %s' % vgrid_filename)
+	d_g = ds.read(vgrid_filename, [
 		'clon', 'clat'
 	], full=True)
 	misc.require_vars(d_g, ['clon', 'clat'])
@@ -73,6 +76,7 @@ def read(dirname, index, track, t1, t2,
 				if cell in vgrid_cache:
 					d_g2 = vgrid_cache[cell]
 				else:
+					print('<- %s' % vgrid_filename)
 					d_g2 = ds.read(vgrid_filename, ['zg', 'zghalf'], sel={
 						'ncells': cell,
 						'height': ds.dim(d_g, 'height') - 1,
@@ -80,6 +84,7 @@ def read(dirname, index, track, t1, t2,
 					misc.require_vars(d_g2, ['zg', 'zghalf'])
 					vgrid_cache[cell] = d_g2
 
+				print('<- %s' % filename)
 				d = ds.read(filename, [var],
 					sel={
 						'time': [i],

@@ -40,9 +40,12 @@ def read(dirname, index, track, t1, t2,
 	warnings=[], step=STEP, recursive=False):
 
 	req_vars = ['latitude', 'longitude', 'surface_altitude']
-	d_orog = ds.read(os.path.join(dirname, 'qrparm.orog.nc'), req_vars)
+	orog_filename = os.path.join(dirname, 'qrparm.orog.nc')
+	print('<- %s' % orog_filename)
+	d_orog = ds.read(orog_filename, req_vars)
 	misc.require_vars(d_orog, req_vars)
 
+	print('<- %s' % dirname)
 	dd_idx = ds.readdir(dirname,
 		VARS_INDEX,
 		jd=True,
@@ -73,6 +76,7 @@ def read(dirname, index, track, t1, t2,
 				continue
 			j = np.argmin(np.abs(lat - lat0))
 			k = np.argmin(np.abs(lon - lon0))
+			print('<- %s' % filename)
 			d = ds.read(filename, VARS,
 				sel={'TALLTS': [i], 'latitude_t': j, 'longitude_t': k},
 				jd=True,

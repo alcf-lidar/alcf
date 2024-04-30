@@ -51,6 +51,7 @@ STEP = 1/24
 def read0(type_, dirname, track, t1, t2,
 	warnings=[], step=STEP, recursive=False):
 
+	print('<- %s' % dirname)
 	dd_idx = ds.readdir(dirname,
 		VARS_INDEX,
 		jd=True,
@@ -89,6 +90,7 @@ def read0(type_, dirname, track, t1, t2,
 				continue
 			j = np.argmin(np.abs(lat - lat0))
 			k = np.argmin(np.abs(lon - lon0))
+			print('<- %s' % filename)
 			d = ds.read(filename, req_vars,
 				sel={'time': [i], 'latitude': j, 'longitude': k},
 				jd=True,

@@ -27,6 +27,7 @@ TRANS = {
 STEP = 6/24
 
 def read(dirname, index, track, t1, t2, warnings=[], step=STEP):
+	print('<- %s' % dirname)
 	dd_index = ds.readdir(dirname,
 		VARS_INDEX,
 		jd=True,
@@ -54,6 +55,7 @@ def read(dirname, index, track, t1, t2, warnings=[], step=STEP):
 					continue
 				j = np.argmin(np.abs(lat - lat0))
 				k = np.argmin(np.abs(lon - lon0))
+				print('<- %s' % filename)
 				d = ds.read(filename, [var],
 					sel={'time': i, 'latitude': j, 'longitude': k})
 				misc.require_vars(d, [var])

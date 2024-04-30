@@ -22,6 +22,7 @@ STEP = 2/24
 def read(dirname, index, track, t1, t2,
 	warnings=[], step=STEP, recursive=False):
 
+	print('<- %s' % dirname)
 	dd_index = ds.readdir(dirname, VARS_INDEX,
 		jd=True, recursive=recursive)
 	dd = []
@@ -39,6 +40,7 @@ def read(dirname, index, track, t1, t2,
 				continue
 			l = np.argmin((lon - lon0)**2 + (lat - lat0)**2)
 			j, k = np.unravel_index(l, lon.shape)
+			print('<- %s' % filename)
 			d = ds.read(filename, VARS, sel={'time0': i, 'rlat': j, 'rlon': k})
 			misc.require_vars(d, VARS)
 			clw = d['model_qcl']
