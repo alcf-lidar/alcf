@@ -266,13 +266,14 @@ def plot_cloud_dist(plot_type, dd,
 		'cloud_occurrence': 'cl',
 	}[plot_type]
 	for i, d in enumerate(dd):
-		misc.require_vars(d, ['zfull', 'cloud_occurrence', 'clt'])
+		misc.require_vars(d, ['zfull'])
 		zfull = d['zfull']
 		x = d[var][:,subcolumn] \
 			if len(d[var].shape) == 2 \
 			else d[var]
 		label = (labels[i] if labels is not None else '')
 		if plot_type == 'cloud_occurrence':
+			misc.require_vars(d, ['clt'])
 			clt = d['clt'][subcolumn] \
 				if len(d['clt'].shape) == 1 \
 				else d['clt']
