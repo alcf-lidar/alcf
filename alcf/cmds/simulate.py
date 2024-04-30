@@ -1,11 +1,28 @@
 import os
 import copy
 import tempfile
+import warnings
 from string import Template
 import subprocess
 import ds_format as ds
 import alcf
+from alcf import misc
 from alcf.lidars import LIDARS
+
+VARS = [
+	'lon',
+	'lat',
+	'time',
+	'time_bnds',
+	'ps',
+	'orog',
+	'zfull',
+	'ta',
+	'pfull',
+	'clw',
+	'cli',
+	'cl',
+]
 
 CONFIG_TEMPLATE = """
 &config_nml
@@ -138,6 +155,7 @@ def cosp_alcf(config, input_, output):
 def run(type_, input_, output,
 	ncolumns=10,
 	overlap='maximum-random',
+	debug=False,
 	**kwargs
 ):
 	'''
@@ -216,7 +234,17 @@ Simulate a Vaisala CL51 instrument from model data in `alcf_merra2_model` previo
 			if not os.path.isfile(input_filename):
 				continue
 			print('<- %s' % input_filename)
+			try:
+				d = ds.read(input_filename, VARS)
+				misc.require_vars(d, VARS)
+			except Exception as e:
+				if debug:
+					warnings.warn(traceback.format_exc())
+				else:
+					warnings.warn('%s\n%s' % (str(e), 'Use --debug for more information'))
+				continue
 			cosp_alcf(config, input_filename, output_filename)
+			print('<- %s' % output_filename)
 			d = ds.read(output_filename)
 			d['.']['.'] = alcf.META
 			ds.write(output_filename, d)
