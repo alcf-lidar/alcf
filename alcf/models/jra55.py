@@ -17,11 +17,14 @@ VARS = [
 
 VARS_INDEX = ['time', 'latitude', 'longitude']
 
-VARS_AUX = [
-	'level',
+VARS_AUX1 = [
 	'time',
 	'latitude',
 	'longitude',
+]
+
+VARS_AUX2 = [
+	'level',
 ]
 
 TRANS = {
@@ -84,8 +87,9 @@ def read(dirname, index, track, t1, t2,
 				k = np.argmin(np.abs(lon - lon0))
 				j_ll = np.argmin(np.abs(lat_ll - lat0))
 				k_ll = np.argmin(np.abs(lon_ll - lon0))
-				req_vars = VARS_AUX + [var]
-				d = ds.read(filename, req_vars,
+				req_vars = VARS_AUX1 + [var]
+				vars_ = req_vars + VARS_AUX2
+				d = ds.read(filename, vars_,
 					sel={
 						'time': [i],
 						'latitude': j,
@@ -111,7 +115,7 @@ def read(dirname, index, track, t1, t2,
 					ds.select(d, {'pfull': np.arange(27)})
 				dd.append(d)
 		d = ds.op.merge(dd, 'time')
-		for var_aux in VARS_AUX:
+		for var_aux in (VARS_AUX1 + VARS_AUX2):
 			if TRANS[var_aux] in ds.get_vars(d_out) \
 				and TRANS[var_aux] in ds.get_vars(d) \
 				and not np.all(d_out[TRANS[var_aux]] == d[TRANS[var_aux]]):
