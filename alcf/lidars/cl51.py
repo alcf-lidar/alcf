@@ -14,12 +14,15 @@ VARS = {
 	'backscatter': ['backscatter'],
 }
 
-DEFAULT_VARS = [
-	'vertical_resolution',
+DEFAULT_VARS1 = [
 	'level',
-	'range',
 	'time',
 	'detection_status',
+]
+
+DEFAULT_VARS2 = [
+	'vertical_resolution',
+	'range',
 ]
 
 def read(filename, vars,
@@ -45,8 +48,9 @@ def read(filename, vars,
 		sel = {'time': mask}
 
 	dep_vars = misc.dep_vars(VARS, vars)
-	req_vars = dep_vars + DEFAULT_VARS + keep_vars
-	d = ds.read(filename, req_vars, jd=True, sel=sel, full=True)
+	req_vars = dep_vars + DEFAULT_VARS1 + keep_vars
+	vars_ = req_vars + DEFAULT_VARS2
+	d = ds.read(filename, vars_, jd=True, sel=sel, full=True)
 	misc.require_vars(d, req_vars)
 	dx = {}
 	misc.populate_meta(dx, META, set(vars) & set(VARS))
@@ -59,8 +63,10 @@ def read(filename, vars,
 		dx['time_bnds'] = misc.time_bnds(d['time'], tres, *args)
 	if 'range' in d: # ARM CL51 format.
 		range_ = d['range']
-	else: # Generic CL51 format.
+	elif 'vertical_resolution' in d: # Generic CL51 format.
 		range_ = d['vertical_resolution'][0]*d['level']
+	else:
+		raise ValueError('Variable "range" or "vertical_resolution" is required')
 	if 'zfull' in vars:
 		zfull1 = range_
 		dx['zfull'] = np.tile(zfull1, (n, 1))
