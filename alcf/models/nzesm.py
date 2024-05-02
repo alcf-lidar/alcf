@@ -48,6 +48,7 @@ def read(dirname, index, track, t1, t2, warnings=[], step=STEP):
 			level_height = d_index['level_height']
 			filename = d_index['filename']
 			ii = np.nonzero((time_half[1:] >= t1) & (time_half[:-1] < t2))[0]
+			print('<- %s' % filename)
 			for i in ii:
 				t = time[i]
 				lon0, lat0 = track(time[i])
@@ -55,7 +56,6 @@ def read(dirname, index, track, t1, t2, warnings=[], step=STEP):
 					continue
 				j = np.argmin(np.abs(lat - lat0))
 				k = np.argmin(np.abs(lon - lon0))
-				print('<- %s' % filename)
 				d = ds.read(filename, [var],
 					sel={'time': i, 'latitude': j, 'longitude': k})
 				misc.require_vars(d, [var])

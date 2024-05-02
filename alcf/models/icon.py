@@ -48,6 +48,7 @@ def read(dirname, index, track, t1, t2,
 	ncells = ds.dim(d_g, 'ncells')
 	vgrid_cache = {}
 
+	print('<- %s' % vgrid_filename)
 	for var in VARS:
 		dd = []
 		for d_idx in dd_idx:
@@ -60,6 +61,7 @@ def read(dirname, index, track, t1, t2,
 				(time >= t1 - step*0.5) &
 				(time < t2 + step*0.5)
 			)[0]
+			print('<- %s' % filename)
 			for i in ii:
 				lon0, lat0 = track(time[i])
 				if np.isnan(lon0) or np.isnan(lat0):
@@ -76,7 +78,6 @@ def read(dirname, index, track, t1, t2,
 				if cell in vgrid_cache:
 					d_g2 = vgrid_cache[cell]
 				else:
-					print('<- %s' % vgrid_filename)
 					d_g2 = ds.read(vgrid_filename, ['zg', 'zghalf'], sel={
 						'ncells': cell,
 						'height': ds.dim(d_g, 'height') - 1,
@@ -84,7 +85,6 @@ def read(dirname, index, track, t1, t2,
 					misc.require_vars(d_g2, ['zg', 'zghalf'])
 					vgrid_cache[cell] = d_g2
 
-				print('<- %s' % filename)
 				d = ds.read(filename, [var],
 					sel={
 						'time': [i],

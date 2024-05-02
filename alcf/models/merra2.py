@@ -48,6 +48,7 @@ def read(dirname, index, track, t1, t2,
 			(time >= t1 - step*0.5) &
 			(time < t2 + step*0.5)
 		)[0]
+		print('<- %s' % filename)
 		for i in ii:
 			t = time[i]
 			lon0, lat0 = track(time[i])
@@ -57,7 +58,6 @@ def read(dirname, index, track, t1, t2,
 			k = np.argmin(np.abs(lon - lon0))
 			with warn.catch_warnings():
 				ignore_warnings()
-				print('<- %s' % filename)
 				d = ds.read(filename, VARS,
 					sel={'time': i, 'lat': j, 'lon': k}
 				)

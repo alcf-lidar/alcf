@@ -34,13 +34,13 @@ def read(dirname, index, track, t1, t2,
 		lat = d_index['latitude']
 		filename = d_index['filename']
 		ii = np.where((time >= t1 - step*0.5) & (time <= t2 + step*0.5))[0]
+		print('<- %s' % filename)
 		for i in ii:
 			lon0, lat0 = track(time[i])
 			if np.isnan(lon0) or np.isnan(lat0):
 				continue
 			l = np.argmin((lon - lon0)**2 + (lat - lat0)**2)
 			j, k = np.unravel_index(l, lon.shape)
-			print('<- %s' % filename)
 			d = ds.read(filename, VARS, sel={'time0': i, 'rlat': j, 'rlon': k})
 			misc.require_vars(d, VARS)
 			clw = d['model_qcl']
