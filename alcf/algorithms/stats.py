@@ -266,10 +266,11 @@ def stats_reduce(state, bsd_z=None, **kwargs):
 				state['backscatter_avg'][:,k] /= state['n'][k]
 				state['backscatter_mol_avg'][:,k] /= state['n'][k]
 	else:
+		if state['clt'] > 0:
+			state['cbh'] /= state['clt']
 		if state['n'] != 0:
 			state['backscatter_hist'] /= state['n']
 			state['cl'] /= state['n']
-			state['cbh'] /= state['clt']
 			state['clt'] /= state['n']
 			state['backscatter_avg'] /= state['n']
 			state['backscatter_mol_avg'] /= state['n']
