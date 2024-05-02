@@ -61,7 +61,7 @@ def read(dirname, index, track, t1, t2,
 		warnings=warnings,
 		recursive=recursive,
 	)
-	d_out = {}
+	do = {}
 	for var in VARS:
 		dd = []
 		var2 = TRANS[var]
@@ -107,7 +107,7 @@ def read(dirname, index, track, t1, t2,
 				d['.']['lat']['.dims'] = ['time']
 				d['.']['lon']['.dims'] = ['time']
 				d['.']['orog'] = {'.dims': ['time']}
-				if 'pfull' in ds.get_vars(d):
+				if 'pfull' in ds.vars(d):
 					d['pfull'] = d['pfull'].reshape([1, len(d['pfull'])])
 					d['.']['pfull']['.dims'] = ['time', 'pfull']
 					d['pfull'] = d['pfull'][:,::-1]
@@ -116,10 +116,11 @@ def read(dirname, index, track, t1, t2,
 				dd.append(d)
 		d = ds.op.merge(dd, 'time')
 		for var_aux in (VARS_AUX1 + VARS_AUX2):
-			if TRANS[var_aux] in ds.get_vars(d_out) \
-				and TRANS[var_aux] in ds.get_vars(d) \
-				and not np.all(d_out[TRANS[var_aux]] == d[TRANS[var_aux]]):
+			if TRANS[var_aux] in ds.vars(do) \
+				and TRANS[var_aux] in ds.vars(d) \
+				and not np.all(do[TRANS[var_aux]] == d[TRANS[var_aux]]):
 				raise ValueError('%s: Field differs between input files' % TRANS[var_aux])
-		d_out.update(d)
-	d_out['pfull'] = d_out['pfull']*1e2
-	return d_out
+		do.update(d)
+	if 'pfull' in do:
+		do['pfull'] = do['pfull']*1e2
+	return do
