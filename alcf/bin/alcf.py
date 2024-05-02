@@ -9,13 +9,20 @@ import pst
 import warnings
 from alcf.cmds import main
 
-def formatwarning(message, category, filename, lineno, line=None):
-	return 'Warning: %s\n' % message
 
 def main_wrapper():
+	args, kwargs = pst.decode_argv(sys.argv, as_unicode=True)
+
+	def formatwarning(message, category, filename, lineno, line=None):
+		if 'debug' in kwargs:
+			s = 'Warning: %s (line %d): %s\n' % (filename, lineno, message)
+			if line is not None: s += line + '\n'
+			return s
+		else:
+			return 'Warning: %s\n%s\n' % (message, 'Use --debug for more information')
 	warnings.simplefilter('always')
 	warnings.formatwarning = formatwarning
-	args, kwargs = pst.decode_argv(sys.argv, as_unicode=True)
+
 	try:
 		ret = main.run(*args[1:], **kwargs)
 		sys.exit(ret)
