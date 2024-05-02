@@ -21,7 +21,7 @@ def output_sample(d, tres, output_sampling, epsilon=1/86400, align=True):
 	time_half2 = np.linspace(t1, t2, n2 + 1)
 	time2 = 0.5*(time_half2[1:] + time_half2[:-1])
 
-	for var in ds.get_vars(d):
+	for var in ds.vars(d):
 		if 'time' not in d['.'][var]['.dims']:
 			continue
 		i = d['.'][var]['.dims'].index('time')

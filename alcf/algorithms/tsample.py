@@ -20,7 +20,7 @@ def tsample(d, tres):
 			weights=w,
 		))
 		d['backscatter_sd'] = d['backscatter_sd'].reshape([1] + shape1)
-	for var in ds.get_vars(d):
+	for var in ds.vars(d):
 		if var in ('time', 'time_bnds', 'backscatter_sd'):
 			continue
 		if 'time' not in d['.'][var]['.dims']:
