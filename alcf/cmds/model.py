@@ -9,6 +9,20 @@ import ds_format as ds
 from alcf.models import MODELS, META
 from alcf import misc
 
+REQ_VARS = [
+	'cl',
+	'cli',
+	'clw',
+	'lat',
+	'lon',
+	'orog',
+	'pfull',
+	'ps',
+	'ta',
+	'time',
+	'zfull',
+]
+
 def override_year_in_time(time, year):
 	try: len(time)
 	except:	return override_year_in_time(np.array([time]), year)[0]
@@ -55,7 +69,8 @@ def worker(type_, input_, index, output, track, start, debug, r,
 				else: warn('%s\n%s' % (w[0], 'Use --debug for more information'))
 			else:
 				warn(w)
-		if d is not None:
+		if d is not None and len(ds.vars(d)) > 0:
+			misc.require_vars(d, REQ_VARS)
 			if 'time_bnds' not in d and 'time' in d:
 				d['time_bnds'] = misc.time_bnds(d['time'], model.STEP, t1, t2)
 			for var in ['time', 'time_bnds']:
