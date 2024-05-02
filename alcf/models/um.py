@@ -56,7 +56,7 @@ def read(dirname, index, track, t1, t2,
 
 	dd = []
 	for d_idx in dd_idx:
-		if 'TALLTS' not in d_idx:
+		if d_idx['filename'] == orog_filename:
 			continue
 		misc.require_vars(d_idx, VARS_INDEX)
 
