@@ -1,20 +1,24 @@
 .\" generated with Ronn-NG/v0.9.1
 .\" http://github.com/apjanke/ronn-ng/tree/0.9.1
-.TH "ALCF" "1" "April 2024" ""
+.TH "ALCF" "1" "May 2024" ""
 .SH "NAME"
 \fBalcf\fR \- Tool for processing of automatic lidar and ceilometer (ALC) data and intercomparison with atmospheric models\.
 .SH "SYNOPSIS"
 .nf
-alcf <cmd> [<options>]
-alcf <cmd> \-\-help
+alcf <cmd> [<options>] [<arguments>]
+alcf [<cmd>] \-\-help
+alcf \-\-version
 .fi
 .SH "ARGUMENTS"
 .TP
 \fBcmd\fR
 See Commands below\.
 .TP
+\fBarguments\fR
+Command arguments\. Use \fBalcf <cmd> \-\-help\fR for more information\.
+.TP
 \fBoptions\fR
-Command options\.
+Command options (see Options below)\.
 .SH "COMMANDS"
 .TP
 \fBauto\fR
@@ -45,11 +49,14 @@ Simulate lidar measurements from model data using COSP\.
 Calculate cloud occurrence statistics\.
 .SH "OPTIONS"
 .TP
-\fB\-\-help\fR
-Print help for command\.
-.TP
 \fB\-\-debug\fR
 Enable debugging information\.
+.TP
+\fB\-\-help\fR
+Print general help or help for a command and exit\.
+.TP
+\fB\-\-version\fR
+Print version and exit\.
 .SH "COPYRIGHT"
 Copyright \(co 2019–2024 Peter Kuma, Adrian J\. McDonald, Olaf Morgenstern, Richard Querel, Israel Silber and Connor J\. Flynn\.
 .SH "BUG REPORTING"
