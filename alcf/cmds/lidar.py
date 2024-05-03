@@ -336,8 +336,8 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 			except SystemError:
 				raise
 			except Exception as e:
-				if debug: warn(traceback.format_exc())
-				else: warn('%s\n%s' % (str(e), 'Use --debug for more information'))
+				if debug: warn('%s: %s' % (file_, traceback.format_exc()))
+				else: warn('%s: %s' % (file_, str(e)))
 		dd = process([None], state, **options)
 	else:
 		print('<- %s' % input_)

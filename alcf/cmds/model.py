@@ -66,7 +66,7 @@ def worker(type_, input_, index, output, track, start, debug, r,
 		for w in warnings:
 			if len(w) == 2:
 				if debug: warn('%s\n%s' % (w[0], w[1]))
-				else: warn('%s\n%s' % (w[0], 'Use --debug for more information'))
+				else: warn(w[0])
 			else:
 				warn(w)
 		if d is not None and len(ds.vars(d)) > 0:
@@ -81,7 +81,7 @@ def worker(type_, input_, index, output, track, start, debug, r,
 			print('-> %s' % output_filename)
 	except Exception as e:
 		if debug: warn(traceback.format_exc())
-		else: warn('%s\n%s' % (str(e), 'Use --debug for more information'))
+		else: warn(str(e))
 
 def run(type_, input_, output,
 	point=None,
@@ -192,6 +192,6 @@ Extract MERRA-2 model data in `M2I3NVASM.5.12.4` at 45 S, 170 E between 1 and 2 
 	for w in warnings:
 		if len(w) == 2:
 			if debug: warn('%s\n%s' % (w[0], w[1]))
-			else: warn('%s\n%s' % (w[0], 'Use --debug for more information'))
+			else: warn(w[0])
 		else:
 			warn(w)

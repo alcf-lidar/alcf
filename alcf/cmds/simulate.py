@@ -238,8 +238,8 @@ Simulate a Vaisala CL51 instrument from model data in `alcf_merra2_model` previo
 				d = ds.read(input_filename, VARS)
 				misc.require_vars(d, VARS)
 			except Exception as e:
-				if debug: warn(traceback.format_exc())
-				else: warn('%s\n%s' % (str(e), 'Use --debug for more information'))
+				if debug: warn('%s: %s' % (file_, traceback.format_exc()))
+				else: warn('%s: %s' % (file_, str(e)))
 				continue
 			cosp_alcf(config, input_filename, output_filename)
 			print('<- %s' % output_filename)

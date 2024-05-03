@@ -652,8 +652,9 @@ Plot backscatter from processed Vaisala CL51 data in `alcf_cl51_lidar` and store
 						raise
 					except SystemError:
 						raise
-					except:
-						warn(traceback.format_exc())
+					except Exception as e:
+						if debug: warn('%s: %s' % (file_, traceback.format_exc()))
+						else: warn('%s: %s' % (file_, str(e)))
 					try:
 						plot(plot_type, d, output_filename, **opts)
 						print('-> %s' % output_filename)
@@ -661,8 +662,9 @@ Plot backscatter from processed Vaisala CL51 data in `alcf_cl51_lidar` and store
 						raise
 					except SystemError:
 						sys.exit(1)
-					except:
-						warn(traceback.format_exc())
+					except Exception as e:
+						if debug: warn('%s: %s' % (file_, traceback.format_exc()))
+						else: warn('%s: %s' % (file_, str(e)))
 					finally:
 						plt.close()
 			else:
