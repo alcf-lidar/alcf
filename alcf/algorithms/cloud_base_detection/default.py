@@ -20,17 +20,17 @@ def cloud_base_detection(d, **options):
 		for j in range(l):
 			x = cloud_mask[i,:,j] if len(dims) == 2 \
 				else cloud_mask[i,:]
-			kk = np.where(x)[0]
-			if len(kk) > 0:
-				if len(dims) == 2:
-					cbh[i,j] = d['zfull'][kk[0]]
-				else:
-					cbh[i] = d['zfull'][kk[0]]
+			kk = np.where(x == 1)[0]
+			if np.any(np.isnan(x)):
+				v = np.nan
+			elif len(kk) > 0:
+				v = d['zfull'][kk[0]]
 			else:
-				if len(dims) == 2:
-					cbh[i,j] = np.inf
-				else:
-					cbh[i] = np.inf
+				v = np.inf
+			if len(dims) == 2:
+				cbh[i,j] = v
+			else:
+				cbh[i] = v
 	d['cbh'] = cbh
 	d['.']['cbh'] = {
 		'.dims': dimnames,

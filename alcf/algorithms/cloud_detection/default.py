@@ -42,7 +42,7 @@ def cloud_detection(d,
 		else:
 			x -= bmol
 
-	cloud_mask = np.zeros(x.shape, np.byte)
+	cloud_mask = np.full(x.shape, np.nan, np.float64)
 	if cloud_threshold_exp is not None:
 		ct_x, ct_y, ct_h = cloud_threshold_exp
 		for i in range(n):
@@ -57,6 +57,7 @@ def cloud_detection(d,
 				cloud_mask[i,:] = x[i,:] >= ct
 	else:
 		cloud_mask[::] = x >= cloud_threshold
+		cloud_mask[np.isnan(x)] = np.nan
 
 	d['cloud_mask'] = cloud_mask
 	d['.']['cloud_mask'] = {
