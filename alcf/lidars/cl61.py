@@ -30,14 +30,10 @@ def read(
 	**kwargs
 ):
 	sel = None
-	tres = None
 	if tlim is not None:
 		d = ds.read(filename, 'time', jd=True)
 		misc.require_vars(d, ['time'])
-		if len(d['time']) < 2:
-			raise ValueError('Too few profiles to determine temporal resolution')
-		tres = d['time'][1] - d['time'][0]
-		d['time_bnds'] = misc.time_bnds(d['time'], tres)
+		d['time_bnds'] = misc.time_bnds(d['time'])
 		mask = misc.time_mask(d['time_bnds'], tlim[0], tlim[1])
 		if np.sum(mask) == 0: return None
 		sel = {'time': mask}
@@ -53,12 +49,8 @@ def read(
 	if 'time' in vars:
 		dx['time'] = d['time']
 	if 'time_bnds' in vars:
-		if tres is None:
-			if len(d['time']) < 2:
-				raise ValueError('Too few profiles to determine temporal resolution')
-			tres = d['time'][1] - d['time'][0]
 		args = [] if tlim is None else [tlim[0], tlim[1]]
-		dx['time_bnds'] = misc.time_bnds(d['time'], tres, *args)
+		dx['time_bnds'] = misc.time_bnds(d['time'], None, *args)
 	if 'altitude' in vars:
 		if d['elevation'].ndim == 0:
 			dx['altitude'] = np.full(n, d['elevation'], np.float64)

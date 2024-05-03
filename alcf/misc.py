@@ -92,8 +92,12 @@ def half(xfull):
 	xhalf[-1] = 2.*xfull[-1] - xfull[-2]
 	return xhalf
 
-def time_bnds(time, step, start=None, end=None):
+def time_bnds(time, step=None, start=None, end=None):
 	n = len(time)
+	if step is None:
+		if len(time) < 2:
+			raise ValueError('Too few profiles to determine temporal resolution')
+		step = time[1] - time[0]
 	bnds = np.full((n, 2), np.nan, time.dtype)
 	bnds[:,0] = time - step*0.5
 	bnds[:,1] = time + step*0.5
