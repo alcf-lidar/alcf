@@ -41,6 +41,8 @@ def read(filename, vars,
 	if tlim is not None:
 		d = ds.read(filename, 'time', jd=True)
 		misc.require_vars(d, ['time'])
+		if len(d['time']) < 2:
+			raise ValueError('Too few profiles to determine temporal resolution')
 		tres = d['time'][1] - d['time'][0]
 		d['time_bnds'] = misc.time_bnds(d['time'], tres)
 		mask = misc.time_mask(d['time_bnds'], tlim[0], tlim[1])
@@ -58,7 +60,10 @@ def read(filename, vars,
 	if 'time' in vars:
 		dx['time'] = d['time']
 	if 'time_bnds' in vars:
-		if tres is None: tres = d['time'][1] - d['time'][0]
+		if tres is None:
+			if len(d['time']) < 2:
+				raise ValueError('Too few profiles to determine temporal resolution')
+			tres = d['time'][1] - d['time'][0]
 		args = [] if tlim is None else [tlim[0], tlim[1]]
 		dx['time_bnds'] = misc.time_bnds(d['time'], tres, *args)
 	if 'range' in d: # ARM CL51 format.
