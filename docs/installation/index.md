@@ -196,6 +196,21 @@ the [Semantic Versioning](https://semver.org). Installation instructions
 have been changing with versions. Please follow the installation instructions
 in the documentation of the particular version.
 
+#### [1.9.0](https://github.com/alcf-lidar/alcf/releases/tag/v1.9.0) (2024-05-03)
+
+<details>
+<summary>Release notes</summary>
+<ul>
+<li>Improvements in logging and error reporting.</li>
+<li>Added --version option to print version and exit.</li>
+<li>Added generic output file attributes (version and software).</li>
+<li>alcf model: Empty files are no longer output.</li>
+<li>alcf model: Check for filename instead of time variable in the UM module to ignore the orography file.</li>
+<li>alcf stats: Avoid division by zero.</li>
+<li>Improvements in the documentation.</li>
+</ul>
+</details>
+
 #### [1.8.1](https://github.com/alcf-lidar/alcf/releases/tag/v1.8.1) (2024-04-26)
 
 <details>
