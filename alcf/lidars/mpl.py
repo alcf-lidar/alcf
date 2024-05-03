@@ -1,6 +1,7 @@
 import numpy as np
 import ds_format as ds
 import datetime as dt
+import warnings
 from alcf import misc
 from alcf.lidars import META
 
@@ -88,7 +89,9 @@ def read(
 
 	dep_vars = misc.dep_vars(VARS, vars)
 	req_vars = dep_vars + DEFAULT_VARS + keep_vars
-	d = ds.read(filename, req_vars, sel=sel, full=True)
+	with warnings.catch_warnings():
+		warnings.filterwarnings('ignore', message='WARNING: valid_range not used since it\ncannot be safely cast to variable data type')
+		d = ds.read(filename, req_vars, sel=sel, full=True)
 	misc.require_vars(d, req_vars)
 	dx = {}
 	misc.populate_meta(dx, META, set(vars) & set(VARS))
