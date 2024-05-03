@@ -15,7 +15,6 @@ VARS = {
 }
 
 DEFAULT_VARS1 = [
-	'level',
 	'time',
 	'detection_status',
 ]
@@ -23,6 +22,7 @@ DEFAULT_VARS1 = [
 DEFAULT_VARS2 = [
 	'vertical_resolution',
 	'range',
+	'level',
 ]
 
 def read(filename, vars,
@@ -63,7 +63,7 @@ def read(filename, vars,
 	elif 'vertical_resolution' in d: # Generic CL51 format.
 		range_ = d['vertical_resolution'][0]*d['level']
 	else:
-		raise ValueError('Variable "range" or "vertical_resolution" is required')
+		raise ValueError('Variable "range" or "level" and "vertical_resolution" is required')
 	if 'zfull' in vars:
 		zfull1 = range_
 		dx['zfull'] = np.tile(zfull1, (n, 1))
