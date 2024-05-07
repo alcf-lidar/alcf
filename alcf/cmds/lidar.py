@@ -27,6 +27,16 @@ VARIABLES = [
 	'lat',
 ]
 
+REQ_VARIABLES = [
+	'backscatter',
+	'time',
+	'time_bnds',
+	'zfull',
+	'altitude',
+	'lon',
+	'lat',
+]
+
 def read_calibration_file(filename):
 	with open(filename, 'rb') as f:
 		return pst.decode(f.read())
@@ -54,6 +64,7 @@ def run(type_, input_, output,
 	keep_vars=[],
 	align_output=True,
 	debug=False,
+	interp='area_block',
 	**options
 ):
 	"""
@@ -115,6 +126,7 @@ Options
 - `cloud_detection: <algorithm>`: Cloud detection algorithm. Available algorithms: `default`, `none`. Default: `default`.
 - `cloud_base_detection: <algorithm>`: Cloud base detection algorithm. Available algorithms: `default`, `none`. Default: `default`.
 - `--fix_cl_range`: Fix CL31/CL51 range correction (if `noise_h2` firmware option if off). The critical range is taken from `cl_crit_range`.
+- `interp: <value>`: Vertical interpolation method. `area_block` for area-weighting with block interpolation, `area_linear` for area-weighting with linear interpolation or `linear` for simple linear interpolation. Default: `area_block`.
 - `keep_vars: { <var>... }`: Keep the listed input variables. The variable must be numerical and have a time dimension. The variable is resampled in the same way as backscatter along their time and level dimensions, its name is prefixed with `input_`, and its type is changed to float64. Default: `{ }`.
 - `lat: <lat>`: Latitude of the instrument (degrees North). Default: Taken from lidar data or `none` if not available.
 - `lon: <lon>`: Longitude of the instrument (degrees East). Default: Taken from lidar data or `none` if not available.
@@ -241,6 +253,10 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 		return misc.stream(dd, state, write, output=output)
 
 	def preprocess(d, tshift=None):
+		misc.require_vars(d, REQ_VARIABLES)
+		for var in VARIABLES:
+			if var in d:
+				d[var] = d[var].astype(np.float64)
 		if tshift is not None:
 			d['time'] += tshift/86400.
 			d['time_bnds'] += tshift/86400.
@@ -261,7 +277,7 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 		state['couple'] = state.get('couple', {})
 		dd = misc.stream(dd, state['preprocess'], preprocess, tshift=tshift)
 		if couple is not None:
-			dd = couple_mod.stream(dd, state['couple'], couple)
+			dd = couple_mod.stream(dd, state['couple'], couple, interp=interp)
 		if noise_removal_mod is not None:
 			dd = noise_removal_mod.stream(dd, state['noise_removal'],
 				align=align_output,
@@ -270,7 +286,8 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 		if calibration_mod is not None:
 			dd = calibration_mod.stream(dd, state['calibration'], **options)
 		if zres is not None or zlim is not None:
-			dd = zsample.stream(dd, state['zsample'], zres=zres, zlim=zlim)
+			dd = zsample.stream(dd, state['zsample'],
+				zres=zres, zlim=zlim, interp=interp)
 		if tres is not None or time is not None:
 			dd = tsample.stream(dd, state['tsample'],
 				tres=tres/86400.,

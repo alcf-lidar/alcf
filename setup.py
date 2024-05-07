@@ -31,8 +31,13 @@ setup(
 	packages=find_packages(),
 	ext_modules=[
 		Extension(
-			'alcf.algorithms.interp',
-			['alcf/algorithms/interp.pyx'],
+			'alcf.algorithms.interp.area_block',
+			['alcf/algorithms/interp/area_block.pyx'],
+			include_dirs = numpy_include_dirs,
+		),
+		Extension(
+			'alcf.algorithms.interp.area_linear',
+			['alcf/algorithms/interp/area_linear.pyx'],
 			include_dirs = numpy_include_dirs,
 		),
 	],

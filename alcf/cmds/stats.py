@@ -3,9 +3,8 @@ import sys
 import numpy as np
 import ds_format as ds
 import alcf
-from alcf.algorithms import interp
 from alcf.algorithms import stats
-from alcf.misc import parse_time
+from alcf import misc
 
 VARIABLES = [
 	'cloud_mask',
@@ -39,6 +38,7 @@ def run(input_, output,
 	filter_include=None,
 	zlim=[0., 15000.],
 	zres=100.,
+	interp='area_block',
 	**kwargs
 ):
 	'''
@@ -73,6 +73,7 @@ Options
 - `filter: <value> | { <value> ... }`: Filter profiles by condition: `cloudy` for cloudy profiles only, `clear` for clear sky profiles only, `night` for nighttime profiles, `day` for daytime profiles, `none` for all profiles. If an array of values is supplied, all conditions must be true. For `night` and `day`, lidar profiles must contain valid longitude and latitude fields set via the `lon` and `lat` arguments of `alcf lidar` or read implicitly from raw lidar data files if available (mpl, mpl2nc). Default: `none`.
 - `filter_exclude: <value> | { <value>... }`: Filter by a mask defined in a NetCDF file, described below under Filter file. If multiple files are supplied, they must all apply for a profile to be excluded.
 - `filter_include: <value> | { <value>... }`: The same as `filter_exclude`, but with time intervals to be included in the result. If both are defined, `filter_include` takes precedence. If multiple files are supplied, they must all apply for a profile to be included.
+- `interp: <value>`: Vertical interpolation method. `area_block` for area-weighting with block interpolation, `area_linear` for area-weighting with linear interpolation or `linear` for simple linear interpolation. Default: `area_block`.
 - `tlim: { <start> <end> }`: Time limits (see Time format below). Default: `none`.
 - `zlim: { <low> <high> }`: Height limits (m). Default: `{ 0 15000 }`.
 - `zres: <value>`: Height resolution (m). Default: `50`.
@@ -94,7 +95,7 @@ Calculate statistics from processed lidar data in `alcf_cl51_lidar` and store th
 
     alcf stats alcf_cl51_lidar alcf_cl51_stats.nc
 	'''
-	tlim_jd = parse_time(tlim) if tlim is not None else None
+	tlim_jd = misc.parse_time(tlim) if tlim is not None else None
 	state = {}
 	options = {
 		'tlim': tlim_jd,
@@ -107,6 +108,7 @@ Calculate statistics from processed lidar data in `alcf_cl51_lidar` and store th
 		'filter': filter if type(filter) is list else [filter],
 		'zlim': zlim,
 		'zres': zres,
+		'interp': interp,
 	}
 
 	if filter_exclude is not None:
