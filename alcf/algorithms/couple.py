@@ -2,8 +2,7 @@ import copy
 import numpy as np
 import ds_format as ds
 import aquarius_time as aq
-from alcf import misc
-from alcf.algorithms import interp
+from alcf import misc, algorithms
 
 VARIABLES = [
 	'zfull',
@@ -11,7 +10,7 @@ VARIABLES = [
 	'backscatter_mol',
 ]
 
-def couple(d, d_idx):
+def couple(d, d_idx, interp=None):
 	dims = d['backscatter'].shape
 	n = dims[0]
 	l = dims[2] if len(dims) == 3 else 0
@@ -47,19 +46,29 @@ def couple(d, d_idx):
 			if d['zfull'].ndim == 2 \
 			else misc.half(d['zfull'])
 		if couple_bsd and 'backscatter_sd' in d1:
-			b_sd = interp(zhalf1, d1['backscatter_sd'], zhalf)
+			b_sd = algorithms.interp(
+				interp,
+				d1['zfull'], zhalf1,
+				d1['backscatter_sd'],
+				d['zfull'][i,:], zhalf
+			)
 			if len(dims) == 3:
 				for k in range(l):
 					d['backscatter_sd'][i,:,k] = b_sd
 			else:
 				d['backscatter_sd'][i,:] = b_sd
 		if couple_bmol and 'backscatter_mol' in d1:
-			b_mol = interp(zhalf1, d1['backscatter_mol'], zhalf)
+			b_mol = algorithms.interp(
+				interp,
+				d1['zfull'], zhalf1,
+				d1['backscatter_mol'],
+				d['zfull'][i,:], zhalf
+			)
 			d['backscatter_mol'][i,:] = b_mol
 
-def stream(dd, state, dirname):
+def stream(dd, state, dirname, interp=None):
 	if 'd_idx' not in state:
 		d_idx = ds.readdir(dirname, ['time'], merge='time')
 		state['d_idx'] = d_idx
-	return misc.stream(dd, state, couple, d_idx=state['d_idx'])
+	return misc.stream(dd, state, couple, d_idx=state['d_idx'], interp=interp)
 

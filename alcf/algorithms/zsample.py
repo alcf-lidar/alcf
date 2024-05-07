@@ -1,9 +1,8 @@
 import numpy as np
 import ds_format as ds
-from alcf import misc
-from alcf.algorithms import interp
+from alcf import misc, algorithms
 
-def zsample(d, zres=None, zlim=None):
+def zsample(d, zres=None, zlim=None, interp=None):
 	n = ds.dim(d, 'time')
 	m = ds.dim(d, 'level')
 	l = ds.dim(d, 'column')
@@ -38,7 +37,12 @@ def zsample(d, zres=None, zlim=None):
 			x = x**2
 		for i2 in range(n):
 			for j2 in range(l):
-				x2[i2,:,j2] = interp(zhalf[i2,:], x[i2,:,j2], zhalf2)
+				x2[i2,:,j2] = algorithms.interp(
+					interp,
+					zfull[i2,:] if zfull.ndim == 2 else zfull, zhalf[i2,:],
+					x[i2,:,j2],
+					zfull2, zhalf2
+				)
 		if var == 'backscatter_sd':
 			x2 = np.sqrt(x2)
 		x2 = x2.reshape([n, m2] + shape[2:])
@@ -48,5 +52,5 @@ def zsample(d, zres=None, zlim=None):
 	ds.var(d, 'zfull', zfull2)
 	ds.dims(d, 'zfull', ['level'])
 
-def stream(dd, state, zres=None, zlim=None, **options):
-	return misc.stream(dd, state, zsample, zres=zres, zlim=zlim)
+def stream(dd, state, zres=None, zlim=None, interp=None, **options):
+	return misc.stream(dd, state, zsample, zres=zres, zlim=zlim, interp=interp)

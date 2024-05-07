@@ -1,6 +1,5 @@
 import numpy as np
-from alcf.algorithms import interp
-from alcf import misc
+from alcf import misc, algorithms
 
 def calc_filter_mask(filters, time, l):
 	n = len(time)
@@ -31,6 +30,7 @@ def stats_map(d, state,
 	filters_include=None,
 	zlim=None,
 	zres=None,
+	interp='area_block',
 	**kwargs
 ):
 	if zlim is not None and zres is not None:
@@ -175,16 +175,18 @@ def stats_map(d, state,
 	for i in range(o):
 		if l > 0:
 			for k in range(l):
-				state['backscatter_hist'][i,:,k] += interp(
-					zhalf,
+				state['backscatter_hist'][i,:,k] += algorithms.interp(
+					interp,
+					d['zfull'], zhalf,
 					backscatter_hist_tmp[i,:,k],
-					zhalf2
+					state['zfull2'], zhalf2
 				)
 		else:
-			state['backscatter_hist'][i,:] += interp(
-				zhalf,
+			state['backscatter_hist'][i,:] += algorithms.interp(
+				interp,
+				d['zfull'], zhalf,
 				backscatter_hist_tmp[i,:],
-				zhalf2
+				state['zfull2'], zhalf2
 			)
 	for i in range(n):
 		if not mask[i]:
@@ -220,36 +222,42 @@ def stats_map(d, state,
 			state['clt'] += np.any(d['cloud_mask'][i,:])
 	if l > 0:
 		for k in range(l):
-			state['cl'][:,k] += interp(
-				zhalf,
+			state['cl'][:,k] += algorithms.interp(
+				interp,
+				d['zfull'], zhalf,
 				cl_tmp[:,k],
-				zhalf2
+				state['zfull2'], zhalf2
 			)
-			state['backscatter_avg'][:,k] += interp(
-				zhalf,
+			state['backscatter_avg'][:,k] += algorithms.interp(
+				interp,
+				d['zfull'], zhalf,
 				backscatter_avg_tmp[:,k],
-				zhalf2
+				state['zfull2'], zhalf2
 			)
-			state['backscatter_mol_avg'][:,k] += interp(
-				zhalf,
+			state['backscatter_mol_avg'][:,k] += algorithms.interp(
+				interp,
+				d['zfull'], zhalf,
 				backscatter_mol_avg_tmp[:,k],
-				zhalf2
+				state['zfull2'], zhalf2
 			)
 	else:
-		state['cl'] += interp(
-			zhalf,
+		state['cl'] += algorithms.interp(
+			interp,
+			d['zfull'], zhalf,
 			cl_tmp,
-			zhalf2
+			state['zfull2'], zhalf2
 		)
-		state['backscatter_avg'] += interp(
-			zhalf,
+		state['backscatter_avg'] += algorithms.interp(
+			interp,
+			d['zfull'], zhalf,
 			backscatter_avg_tmp,
-			zhalf2
+			state['zfull2'], zhalf2
 		)
-		state['backscatter_mol_avg'] += interp(
-			zhalf,
+		state['backscatter_mol_avg'] += algorithms.interp(
+			interp,
+			d['zfull'], zhalf,
 			backscatter_mol_avg_tmp,
-			zhalf2
+			state['zfull2'], zhalf2
 		)
 
 def stats_reduce(state, bsd_z=None, **kwargs):
