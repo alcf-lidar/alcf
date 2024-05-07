@@ -133,6 +133,9 @@ Calculate statistics from processed lidar data in `alcf_cl51_lidar` and store th
 		print('<- %s' % input_)
 		dd = stats.stream([d], state, **options)
 	dd = stats.stream([None], state, **options)
-	print('-> %s' % output)
-	ds.attrs(dd[0], None, alcf.META)
-	ds.write(output, dd[0])
+	if dd[0] == {}:
+		raise RuntimeError('No input files')
+	else:
+		print('-> %s' % output)
+		ds.attrs(dd[0], None, alcf.META)
+		ds.write(output, dd[0])
