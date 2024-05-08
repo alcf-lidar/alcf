@@ -78,7 +78,7 @@ def plot_profile(plot_type, d,
 	zres=50,
 	zlim=None,
 	render='antialiased',
-	interp='area_block',
+	interp='area_linear',
 	**opts
 ):
 	if plot_type == 'backscatter':
@@ -534,7 +534,7 @@ General options
 - `dpi: <value>`: Resolution in dots per inch (DPI). Default: `300`.
 - `--grid`: Plot grid.
 - `height: <value>`: Plot height (inches). Default: `5` if `plot_type` is `cloud_occurrence` or `backscatter_hist` else `4`.
-- `interp: <value>`: Vertical interpolation method. `area_block` for area-weighting with block interpolation, `area_linear` for area-weighting with linear interpolation or `linear` for simple linear interpolation. Default: `area_block`.
+- `interp: <value>`: Vertical interpolation method. `area_block` for area-weighting with block interpolation, `area_linear` for area-weighting with linear interpolation or `linear` for simple linear interpolation. Default: `area_linear`.
 - `render: <value>`: Render profiles anti-aliased (`antialiased`) or standard (`standard`). Standard is more suitable for short time intervals. Default: `antialiased`.
 - `subcolumn: <value>`: Model subcolumn to plot. Default: `0`.
 - `title: <value>`: Plot title.

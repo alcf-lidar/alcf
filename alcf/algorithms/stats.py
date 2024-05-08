@@ -30,7 +30,7 @@ def stats_map(d, state,
 	filters_include=None,
 	zlim=None,
 	zres=None,
-	interp='area_block',
+	interp=None,
 	**kwargs
 ):
 	if zlim is not None and zres is not None:

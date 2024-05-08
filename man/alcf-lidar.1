@@ -104,7 +104,7 @@ Cloud base detection algorithm\. Available algorithms: \fBdefault\fR, \fBnone\fR
 Fix CL31/CL51 range correction (if \fBnoise_h2\fR firmware option if off)\. The critical range is taken from \fBcl_crit_range\fR\.
 .TP
 \fBinterp: <value>\fR
-Vertical interpolation method\. \fBarea_block\fR for area\-weighting with block interpolation, \fBarea_linear\fR for area\-weighting with linear interpolation or \fBlinear\fR for simple linear interpolation\. Default: \fBarea_block\fR\.
+Vertical interpolation method\. \fBarea_block\fR for area\-weighting with block interpolation, \fBarea_linear\fR for area\-weighting with linear interpolation or \fBlinear\fR for simple linear interpolation\. Default: \fBarea_linear\fR\.
 .TP
 \fBkeep_vars: { <\|\.\|\.\|\. }\fR
 Keep the listed input variables\. The variable must be numerical and have a time dimension\. The variable is resampled in the same way as backscatter along their time and level dimensions, its name is prefixed with \fBinput_\fR, and its type is changed to float64\. Default: \fB{ }\fR\.
