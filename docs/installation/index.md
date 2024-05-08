@@ -196,6 +196,20 @@ the [Semantic Versioning](https://semver.org). Installation instructions
 have been changing with versions. Please follow the installation instructions
 in the documentation of the particular version.
 
+#### [2.0.0](https://github.com/alcf-lidar/alcf/releases/tag/v2.0.0) (2024-05-08)
+
+<details>
+<summary>Release notes</summary>
+<ul>
+<li>A choice of vertical interpolation functions: area-block, area-linear and linear.</li>
+<li>New default vertical interpolation function is area-linear (previously area-block).</li>
+<li>Cloud mask is now stored as a floating-point variable. Missing values are stored as NaN. Previously they were stored as 0, which could be confusing.</li>
+<li>alcf model: Default njobs is now limited to 16.</li>
+<li>alcf stats: Now fails with an error when no input files are provided.</li>
+<li>alcf stats: Fixed division by zero.</li>
+</ul>
+</details>
+
 #### [1.9.0](https://github.com/alcf-lidar/alcf/releases/tag/v1.9.0) (2024-05-03)
 
 <details>
