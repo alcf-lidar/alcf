@@ -64,6 +64,12 @@ Plot grid\.
 \fBheight: <value>\fR
 Plot height (inches)\. Default: \fB5\fR if \fBplot_type\fR is \fBcloud_occurrence\fR or \fBbackscatter_hist\fR else \fB4\fR\.
 .TP
+\fBinterp: <value>\fR
+Vertical interpolation method\. \fBarea_block\fR for area\-weighting with block interpolation, \fBarea_linear\fR for area\-weighting with linear interpolation or \fBlinear\fR for simple linear interpolation\. Default: \fBarea_block\fR\.
+.TP
+\fBrender: <value>\fR
+Render profiles anti\-aliased (\fBantialiased\fR) or standard (\fBstandard\fR)\. Standard is more suitable for short time intervals\. Default: \fBantialiased\fR\.
+.TP
 \fBsubcolumn: <value>\fR
 Model subcolumn to plot\. Default: \fB0\fR\.
 .TP
@@ -72,16 +78,13 @@ Plot title\.
 .TP
 \fBwidth: <value>\fR
 Plot width (inches)\. Default: \fB5\fR if \fBplot_type\fR is \fBcloud_occurrence\fR or \fBbackscatter_hist\fR else \fB10\fR\.
-.TP
-\fBrender: <value>\fR
-Render profiles anti\-aliased (\fBantialiased\fR) or standard (\fBstandard\fR)\. Standard is more suitable for short time intervals\. Default: \fBantialiased\fR\.
 .SH "BACKSCATTER OPTIONS"
-.TP
-\fBlr: <value>\fR
-Plot effective lidar ratio\. Default: \fBtrue\fR\.
 .TP
 \fBcloud_mask: <value>\fR
 Plot cloud mask\. Default: \fBtrue\fR\.
+.TP
+\fBlr: <value>\fR
+Plot effective lidar ratio\. Default: \fBtrue\fR\.
 .TP
 \fBremove_bmol: <value>\fR
 Remove molecular backscatter (observed data have to be coupled with model data via the \fBcouple\fR option of \fBalcf lidar\fR)\. Default: \fBtrue\fR\.
@@ -139,11 +142,11 @@ Height resolution (m)\. Default: \fB50\fR\.
 \fBcolors: { <value>\|\.\|\.\|\. }\fR
 Line colors\. Default: \fB{ #0084c8 #dc0000 #009100 #ffc022 #ba00ff }\fR
 .TP
-\fBlinestyle: { <value> \|\.\|\.\|\. }\fR
-Line style (\fBsolid\fR, \fBdashed\fR, \fBdotted\fR)\. Default: \fBsolid\fR\.
-.TP
 \fBlabels: { <value>\|\.\|\.\|\. }\fR
 Line labels\. Default: \fBnone\fR\.
+.TP
+\fBlinestyle: { <value> \|\.\|\.\|\. }\fR
+Line style (\fBsolid\fR, \fBdashed\fR, \fBdotted\fR)\. Default: \fBsolid\fR\.
 .TP
 \fBlw: <value>\fR
 Line width\. Default: \fB1\fR\.

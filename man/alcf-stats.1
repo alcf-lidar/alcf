@@ -45,6 +45,9 @@ Filter by a mask defined in a NetCDF file, described below under Filter file\. I
 \fBfilter_include: <value> | { <value>\|\.\|\.\|\. }\fR
 The same as \fBfilter_exclude\fR, but with time intervals to be included in the result\. If both are defined, \fBfilter_include\fR takes precedence\. If multiple files are supplied, they must all apply for a profile to be included\.
 .TP
+\fBinterp: <value>\fR
+Vertical interpolation method\. \fBarea_block\fR for area\-weighting with block interpolation, \fBarea_linear\fR for area\-weighting with linear interpolation or \fBlinear\fR for simple linear interpolation\. Default: \fBarea_block\fR\.
+.TP
 \fBtlim: { <start> <end> }\fR
 Time limits (see Time format below)\. Default: \fBnone\fR\.
 .TP

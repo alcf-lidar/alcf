@@ -40,16 +40,17 @@ General options
 - `dpi: <value>`: Resolution in dots per inch (DPI). Default: `300`.
 - `--grid`: Plot grid.
 - `height: <value>`: Plot height (inches). Default: `5` if `plot_type` is `cloud_occurrence` or `backscatter_hist` else `4`.
+- `interp: <value>`: Vertical interpolation method. `area_block` for area-weighting with block interpolation, `area_linear` for area-weighting with linear interpolation or `linear` for simple linear interpolation. Default: `area_block`.
+- `render: <value>`: Render profiles anti-aliased (`antialiased`) or standard (`standard`). Standard is more suitable for short time intervals. Default: `antialiased`.
 - `subcolumn: <value>`: Model subcolumn to plot. Default: `0`.
 - `title: <value>`: Plot title.
 - `width: <value>`: Plot width (inches). Default: `5` if `plot_type` is `cloud_occurrence` or `backscatter_hist` else `10`.
-- `render: <value>`: Render profiles anti-aliased (`antialiased`) or standard (`standard`). Standard is more suitable for short time intervals. Default: `antialiased`.
 
 backscatter options
 -------------------
 
-- `lr: <value>`: Plot effective lidar ratio. Default: `true`.
 - `cloud_mask: <value>`: Plot cloud mask. Default: `true`.
+- `lr: <value>`: Plot effective lidar ratio. Default: `true`.
 - `remove_bmol: <value>`: Remove molecular backscatter (observed data have to be coupled with model data via the `couple` option of `alcf lidar`). Default: `true`.
 - `sigma: <value>`: Remove of number of standard deviations of backscatter from the mean backscatter (real). Default: `5`.
 - `vlim: { <min> <max }`: Value limits (10^-6 m-1.sr-1). Default: `{ 0.1 200 }`.
@@ -87,8 +88,8 @@ cbh and cloud_occurrence options
 --------------------------------
 
 - `colors: { <value>... }`: Line colors. Default: `{ #0084c8 #dc0000 #009100 #ffc022 #ba00ff }`
-- `linestyle: { <value> ... }`: Line style (`solid`, `dashed`, `dotted`). Default: `solid`.
 - `labels: { <value>... }`: Line labels. Default: `none`.
+- `linestyle: { <value> ... }`: Line style (`solid`, `dashed`, `dotted`). Default: `solid`.
 - `lw: <value>`: Line width. Default: `1`.
 - `xlim: { <min> <max> }`: x axis limits (%). Default: `{ 0 100 }`.
 - `zlim: { <min> <max> }`: z axis limits (m). Default: `{ 0 15 }`.

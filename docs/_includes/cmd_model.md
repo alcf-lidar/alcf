@@ -30,7 +30,7 @@ Arguments
 Options
 -------
 
-- `njobs: <n>`: Number of parallel jobs. Default: number of CPU cores.
+- `njobs: <n>`: Number of parallel jobs. Default: number of CPU cores capped to 16.
 - `-r`: Process the input directory recursively.
 - `--track_lon_180`: Expect track longitude between -180 and 180 degrees. This option is no longer needed as the conversion is automatically. [deprecated]
 - `override_year: <year>`: Override year in the track. Use if comparing observations with a model statistically and the model output does not have a corresponding year available. The observation time is converted to the same time relative to the start of the year in the specified year. Note that if the original year is a leap year and the override year is not, as a consequence of the above 31 December is mapped to 1 January. The output retains the original year as in the track, even though the model data come from the override year. Default: `none`.
