@@ -5,6 +5,8 @@ layout: default
 
 ## Publications
 
+Whitehead, L. E., McDonald, A. J., & Guyot, A. (2023). Supercooled liquid water cloud classification using lidar backscatter peak properties. *EGUsphere*. [https://doi.org/10.5194/egusphere-2023-1085](https://doi.org/10.5194/egusphere-2023-1085)
+
 Pei, Z., Fiddes, S. L., French, W. J. R., Alexander, S. P., Mallet, M. D., Kuma, P., & McDonald, A. (2023). Assessing the cloud radiative bias at Macquarie Island in the ACCESS-AM2 model. *Atmospheric Chemistry and Physics*, *23*(23), 14691–14714. [https://doi.org/10.5194/acp-23-14691-2023](https://doi.org/10.5194/acp-23-14691-2023)
 
 Guyot, A., Protat, A., Alexander, S. P., Klekociuk, A. R., Kuma, P., & McDonald, A. (2022). Detection of supercooled liquid water containing clouds with ceilometers: development and evaluation of deterministic and data-driven retrievals. *Atmospheric Measurement Techniques*, *15*(12), 3663–3681. [https://doi.org/10.5194/amt-15-3663-2022](https://doi.org/10.5194/amt-15-3663-2022)
