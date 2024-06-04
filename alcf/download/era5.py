@@ -65,6 +65,7 @@ def download(filename, product, year, month, day, lon1, lon2, lat1, lat2,
 	nocache=False
 ):
 	import cdsapi
+	import requests
 	type_ = {
 		'surf': TYPE_SURF,
 		'plev': TYPE_PLEV,
@@ -89,5 +90,9 @@ def download(filename, product, year, month, day, lon1, lon2, lat1, lat2,
 		req['pressure_level'] = PRESSURE_LEVEL
 	if nocache:
 		req['nocache'] = str(random.randint(0, 2147483647))
-	c = cdsapi.Client()
-	c.retrieve(type_, req, filename)
+	s = requests.session()
+	try:
+		c = cdsapi.Client(session=s)
+		c.retrieve(type_, req, filename)
+	finally:
+		s.close()
