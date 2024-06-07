@@ -130,7 +130,10 @@ Download MERRA-2 data for a ship track `track.nc` and store the output in the di
 	except FileExistsError: pass
 
 	with tempfile.TemporaryDirectory() as tmpdir:
-		tt = np.arange(np.floor(time_start - 0.5), np.ceil(time_end - 0.5)) + 0.5
+		tt = np.arange(
+			np.floor(time_start + 0.5),
+			np.floor(time_end + 0.5 + 1)
+		) - 0.5
 		for t in tt:
 			t1 = t
 			t2 = t + 1
