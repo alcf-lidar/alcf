@@ -1,5 +1,6 @@
 import os
 from alcf.cmds import lidar, stats, plot
+from alcf.lidars import LIDARS
 
 STEPS = ['lidar', 'stats', 'plot']
 
@@ -40,15 +41,25 @@ def run(type_, input_, output, *args, skip=None, **kwargs):
 		except OSError: pass
 		print('! alcf stats')
 		stats.run(lidar_dir, stats_filename, **kwargs)
+
+		lidar_mod = LIDARS.get(type_)
+		if lidar_mod is None:
+			raise ValueError('Invalid type: %s' % type_)
+		blim, bres = {
+			532: ([-2.0, 2.0], 0.01),
+			910: ([-1.0, 1.0], 0.005),
+			1064:([-0.5, 0.5], 0.0025),
+		}.get(lidar_mod.WAVELENGTH, [-2.0, 2.0])
+
 		stats.run(lidar_dir, stats_fine_filename,
-			blim=[-1, 1],
-			bres=0.005,
+			blim=blim,
+			bres=bres,
 			**kwargs
 		)
 		stats.run(lidar_dir, stats_clear_fine_filename,
 			filter='clear',
-			blim=[-1, 1],
-			bres=0.005,
+			blim=blim,
+			bres=bres,
 			**kwargs
 		)
 	if i < STEPS.index('plot'):
