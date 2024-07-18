@@ -23,8 +23,6 @@ def read(
 	filename,
 	vars,
 	altitude=None,
-	lon=None,
-	lat=None,
 	tlim=None,
 	keep_vars=[],
 	**kwargs
@@ -51,18 +49,17 @@ def read(
 	if 'time_bnds' in vars:
 		args = [] if tlim is None else [tlim[0], tlim[1]]
 		dx['time_bnds'] = misc.time_bnds(d['time'], None, *args)
-	if 'altitude' in vars:
-		if d['elevation'].ndim == 0:
-			dx['altitude'] = np.full(n, d['elevation'], np.float64)
+	if 'altitude' in vars or 'zfull' in vars:
+		if altitude is not None:
+			dx['altitude'] = np.full(n, altitude, np.float64)
 		else:
-			dx['altitude'] = d['elevation']
+			if d['elevation'].ndim == 0:
+				dx['altitude'] = np.full(n, d['elevation'], np.float64)
+			else:
+				dx['altitude'] = d['elevation']
 	if 'zfull' in vars:
 		dx['zfull'] = np.tile(d['range'], (n, 1))
 		dx['zfull'] = (dx['zfull'].T + dx['altitude']).T
-	if 'lon' in vars:
-		dx['lon'] = np.full(n, lon, np.float64)
-	if 'lat' in vars:
-		dx['lat'] = np.full(n, lat, np.float64)
 	if 'backscatter' in vars:
 		dx['backscatter'] = d['beta_att']*CALIBRATION_COEFF
 	for var in keep_vars:

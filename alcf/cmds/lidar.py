@@ -41,6 +41,38 @@ def read_calibration_file(filename):
 	with open(filename, 'rb') as f:
 		return pst.decode(f.read())
 
+def fill_defaults(d, vars, defaults):
+	for k, v in defaults.items():
+		if k in vars and v is not None:
+			d[k] = np.full(n, v, np.float64)
+			d['.'][k] = META[k]
+
+def fill_track(d, vars, track):
+	if track is None:
+		return
+	if 'lon' in vars or 'lat' in vars:
+		res = [misc.track_at(track, t) for t in d['time']]
+	if 'lon' in vars:
+		d['lon'] = np.array([x[0] for x in res])
+	if 'lat' in vars:
+		d['lat'] = np.array([x[1] for x in res])
+
+def read(lidar, input_, vars, *args,
+	altitude=None,
+	lon=None,
+	lat=None,
+	track=None,
+	**kwargs,
+):
+	d = lidar.read(input_, vars, *args, altitude=altitude, **kwargs)
+	fill_defaults(d, vars, {
+		'altitude': altitude,
+		'lon': lon,
+		'lat': lat,
+	})
+	fill_track(d, vars, track)
+	return d
+
 def run(type_, input_, output,
 	altitude=None,
 	tres=300,
@@ -65,6 +97,8 @@ def run(type_, input_, output,
 	align_output=True,
 	debug=False,
 	interp='area_linear',
+	track=None,
+	track_gap=21600,
 	**options
 ):
 	"""
@@ -134,6 +168,8 @@ Options
 - `output_sampling: <period>`: Output sampling period (seconds). Default: `86400` (24 hours).
 - `-r`: Process the input directory recursively.
 - `time: { <low> <high> }`: Time limits (see Time format below). Default: `none`.
+- `track: <file>`, `track: { <file>... }`: One or more track NetCDF files (see Files below). Longitude and latitude is assigned to the profiles based on the track and profile time. If multiple files are supplied and `time_bnds` is not present in the files, they are assumed to be multiple segments of a discontinous track unless the last and first time of adjacent tracks are the same. `track` takes precedence over `lat` and `lon`. Default: `none`.
+- `track_gap: <interval>`: If the interval is not 0, a track file is supplied, the `time_bnds` variable is not defined in the file and any two adjacent points are separated by more than the specified time interval (seconds), then a gap is assumed to be present between the two data points, instead of interpolating location between the two points. Default: `21600` (6 hours).
 - `tres: <tres>`: Time resolution (seconds). Default: `300` (5 min).
 - `tshift: <tshift>`: Time shift (seconds). Default: `0`.
 - `zlim: { <low> <high> }`: Height limits (m). Default: `{ 0 15000 }`.
@@ -186,6 +222,11 @@ Time format
 
 `YYYY-MM-DD[THH:MM[:SS]]`, where `YYYY` is year, `MM` is month, `DD` is day, `HH` is hour, `MM` is minute, `SS` is second. Example: `2000-01-01T00:00:00`.
 
+Files
+-----
+
+The track file is a NetCDF file containing 1D variables `lon`, `lat`, `time`, and optionally `time_bnds`. `time` and `time_bnds` are time in format conforming with the CF Conventions (has a valid `units` attribute and optional `calendar` attribute), `lon` is longitude between 0 and 360 degrees and `lat` is latitude between -90 and 90 degrees. If `time_bnds` is provided, discontinous track segments can be specified if adjacent time bounds are not coincident. The variables `lon`, `lat` and `time` have a single dimension `time`. The variable `time_bnds` has dimensions (`time`, `bnds`).
+
 Examples
 --------
 
@@ -207,6 +248,9 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 			time1[i] = aq.from_iso(time[i])
 			if time1[i] is None:
 				raise ValueError('Invalid time format: %s' % time[i])
+
+	if track is not None:
+		d_track = misc.read_track(track, track_gap/86400.)
 
 	noise_removal_mod = None
 	calibration_mod = None
@@ -337,10 +381,11 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 				continue
 			print('<- %s' % file_)
 			try:
-				d = lidar.read(file_, VARIABLES,
+				d = read(lidar, file_, VARIABLES,
 					altitude=altitude,
 					lon=lon,
 					lat=lat,
+					track=d_track,
 					fix_cl_range=fix_cl_range,
 					cl_crit_range=cl_crit_range,
 					tlim=time1,
@@ -358,10 +403,11 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 		dd = process([None], state, **options)
 	else:
 		print('<- %s' % input_)
-		d = lidar.read(input_, VARIABLES,
+		d = read(lidar, input_, VARIABLES,
 			altitude=altitude,
 			lon=lon,
 			lat=lat,
+			track=d_track,
 			fix_cl_range=fix_cl_range,
 			cl_crit_range=cl_crit_range,
 			tlim=time1,

@@ -96,12 +96,11 @@ def read(
 	dx = {}
 	misc.populate_meta(dx, META, set(vars) & set(VARS))
 	n = ds.dim(d, 'time')
-	altitude = d['altitude'] if altitude is None else \
-		np.full(n, altitude, np.float64)
-	lon = d['longitude'] if lon is None else \
-		np.full(n, lon, np.float64)
-	lat = d['latitude'] if lat is None else \
-		np.full(n, lat, np.float64)
+	if 'altitude' in vars or 'zfull' in vars:
+		if altitude is not None:
+			dx['altitude'] = np.full(n, altitude, np.float64)
+		else:
+			dx['altitude'] = d['altitude']
 	time, time_bnds, tres = convert_time(d, tlim)
 	if 'time' in vars:
 		dx['time'] = time
@@ -115,15 +114,13 @@ def read(
 		)
 		dx['zfull'] = np.tile(zfull1, (n, 1))
 		for i in range(n):
-			dx['zfull'][i,:] += altitude[i]
+			dx['zfull'][i,:] += dx['altitude'][i]
 	if 'backscatter' in vars:
 		dx['backscatter'] = (d['copol_nrb'] + 2.*d['crosspol_nrb'])*CALIBRATION_COEFF
-	if 'altitude' in vars:
-		dx['altitude'] = altitude
 	if 'lon' in vars:
-		dx['lon'] = lon
+		dx['lon'] = d['longitude']
 	if 'lat' in vars:
-		dx['lat'] = lat
+		dx['lat'] = d['latitude']
 	# if 'backscatter_x' in vars:
 	# 	dx['backscatter_x'] = d['copol_nrb']*CALIBRATION_COEFF
 	# if 'backscatter_y' in vars:

@@ -11,7 +11,7 @@ MAX_RANGE = 15400 # m
 
 VARS = {
 	'backscatter': ['beta_raw'],
-	'zfull': ['range'],
+	'zfull': ['range', 'altitude'],
 }
 
 DEFAULT_VARS = [
@@ -23,8 +23,6 @@ def read(
 	filename,
 	vars,
 	altitude=None,
-	lon=None,
-	lat=None,
 	tlim=None,
 	keep_vars=[],
 	**kwargs
@@ -46,8 +44,11 @@ def read(
 	misc.populate_meta(dx, META, set(vars) & set(VARS))
 	n = ds.dim(d, 'time')
 	m = ds.dim(d, 'range')
-	if altitude is None:
-		altitude = d['altitude']
+	if 'altitude' in vars or 'zfull' in vars:
+		if altitude is not None:
+			dx['altitude'] = np.full(n, altitude, np.float64)
+		else:
+			dx['altitude'] = d['altitude']
 	if 'time' in vars:
 		dx['time'] = d['time']
 	if 'time_bnds' in vars:
@@ -56,14 +57,8 @@ def read(
 	if 'backscatter' in vars:
 		dx['backscatter'] = d['beta_raw']*1e-11*CALIBRATION_COEFF
 	if 'zfull' in vars:
-		zfull1 = d['range'] + altitude
+		zfull1 = d['range'] + dx['altitude']
 		dx['zfull'] = np.tile(zfull1, (n, 1))
-	if 'altitude' in vars:
-		dx['altitude'] = np.full(n, altitude, np.float64)
-	if 'lon' in vars:
-		dx['lon'] = np.full(n, lon, np.float64)
-	if 'lat' in vars:
-		dx['lat'] = np.full(n, lat, np.float64)
 	for var in keep_vars:
 		misc.keep_var(var, d, dx)
 	return dx
