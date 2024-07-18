@@ -30,6 +30,8 @@ def stats_map(d, state,
 	filters_include=None,
 	zlim=None,
 	zres=None,
+	lat_lim=None,
+	lon_lim=None,
 	interp=None,
 	**kwargs
 ):
@@ -118,10 +120,14 @@ def stats_map(d, state,
 	clt_tmp = np.zeros(l, dtype=np.float64) if l > 0 else 0
 	backscatter_avg_tmp = np.zeros(dims, dtype=np.float64)
 	backscatter_mol_avg_tmp = np.zeros(dims, dtype=np.float64)
+	mask = np.ones(n, dtype=bool)
 	if tlim is not None:
-		mask = (d['time'] >= tlim[0]) & (d['time'] < tlim[1])
-	else:
-		mask = np.ones(n, dtype=bool)
+		mask &= (d['time'] >= tlim[0]) & (d['time'] < tlim[1])
+	if lat_lim is not None:
+		mask &= (d['lat'] >= lat_lim[0]) & (d['lat'] < lat_lim[1])
+		print(np.mean(mask))
+	if lon_lim is not None:
+		mask &= (d['lon'] >= lon_lim[0]) & (d['lon'] < lon_lim[1])
 
 	if l > 0:
 		mask &= np.all(~np.isnan(d['backscatter']), axis=(1, 2))

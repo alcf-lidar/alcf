@@ -39,6 +39,8 @@ def run(input_, output,
 	zlim=[0., 15000.],
 	zres=100.,
 	interp='area_linear',
+	lat_lim=None,
+	lon_lim=None,
 	**kwargs
 ):
 	'''
@@ -74,6 +76,8 @@ Options
 - `filter_exclude: <value> | { <value>... }`: Filter by a mask defined in a NetCDF file, described below under Filter file. If multiple files are supplied, they must all apply for a profile to be excluded.
 - `filter_include: <value> | { <value>... }`: The same as `filter_exclude`, but with time intervals to be included in the result. If both are defined, `filter_include` takes precedence. If multiple files are supplied, they must all apply for a profile to be included.
 - `interp: <value>`: Vertical interpolation method. `area_block` for area-weighting with block interpolation, `area_linear` for area-weighting with linear interpolation or `linear` for simple linear interpolation. Default: `area_linear`.
+- `lat_lim: { <from> <to> }`: Latitude limits. Default: `none`.
+- `lon_lim: { <from> <to> }`: Longitude limits. Default: `none`.
 - `tlim: { <start> <end> }`: Time limits (see Time format below). Default: `none`.
 - `zlim: { <low> <high> }`: Height limits (m). Default: `{ 0 15000 }`.
 - `zres: <value>`: Height resolution (m). Default: `50`.
@@ -96,6 +100,10 @@ Calculate statistics from processed lidar data in `alcf_cl51_lidar` and store th
     alcf stats alcf_cl51_lidar alcf_cl51_stats.nc
 	'''
 	tlim_jd = misc.parse_time(tlim) if tlim is not None else None
+
+	if lon_lim is not None:
+		lon_lim = [x % 360 for x in lon_lim]
+
 	state = {}
 	options = {
 		'tlim': tlim_jd,
@@ -109,6 +117,8 @@ Calculate statistics from processed lidar data in `alcf_cl51_lidar` and store th
 		'zlim': zlim,
 		'zres': zres,
 		'interp': interp,
+		'lat_lim': lat_lim,
+		'lon_lim': lon_lim,
 	}
 
 	if filter_exclude is not None:
