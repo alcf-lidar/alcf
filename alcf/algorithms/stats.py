@@ -58,6 +58,7 @@ def stats_map(d, state,
 		0.5*(state['backscatter_sd_half'][1:] + state['backscatter_sd_half'][:-1])
 	)
 	osd = len(state['backscatter_sd_full'])
+	jsd = np.argmin(np.abs(d['zfull'] - bsd_z))
 	m2 = len(state['zfull2'])
 	if len(d['cloud_mask'].shape) == 3:
 		n, m, l = d['cloud_mask'].shape
@@ -110,6 +111,8 @@ def stats_map(d, state,
 		'backscatter_sd_hist',
 		np.zeros(sd_hist_dims, dtype=np.float64)
 	)
+	state['backscatter_sd_z'] = d['zfull'][jsd]
+	
 	backscatter_hist_tmp = np.zeros(hist_dims, dtype=np.float64)
 	cl_tmp = np.zeros(dims, dtype=np.float64)
 	clt_tmp = np.zeros(l, dtype=np.float64) if l > 0 else 0
@@ -157,9 +160,6 @@ def stats_map(d, state,
 			backscatter_hist_tmp[:,j] += np.histogram(
 				d['backscatter'][filter_mask & mask,j],
 				bins=state['backscatter_half'])[0]
-
-	jsd = np.argmin(np.abs(d['zfull'] - bsd_z))
-	state['backscatter_sd_z'] = d['zfull'][jsd]
 
 	if 'backscatter_sd' in d:
 		if l > 0:
