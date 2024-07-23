@@ -151,6 +151,11 @@ def cosp_alcf(config, input_, output):
 		subprocess.call([program, config_filename, input_, output])
 	finally:
 		os.unlink(config_filename)
+	print('<- %s' % output)
+	d = ds.read(output)
+	d['.']['.'] = alcf.META
+	ds.write(output, d)
+	print('-> %s' % output)
 
 def run(type_, input_, output,
 	ncolumns=10,
@@ -242,8 +247,3 @@ Simulate a Vaisala CL51 instrument from model data in `alcf_merra2_model` previo
 				else: warn('%s: %s' % (file_, str(e)))
 				continue
 			cosp_alcf(config, input_filename, output_filename)
-			print('<- %s' % output_filename)
-			d = ds.read(output_filename)
-			d['.']['.'] = alcf.META
-			ds.write(output_filename, d)
-			print('-> %s' % output_filename)
