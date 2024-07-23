@@ -249,8 +249,9 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 			if time1[i] is None:
 				raise ValueError('Invalid time format: %s' % time[i])
 
-	if track is not None:
-		d_track = misc.read_track(track, track_gap/86400.)
+	d_track = misc.read_track(track, track_gap/86400.) \
+		if track is not None \
+		else None
 
 	noise_removal_mod = None
 	calibration_mod = None
