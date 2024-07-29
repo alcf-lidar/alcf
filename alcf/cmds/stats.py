@@ -6,7 +6,7 @@ import alcf
 from alcf.algorithms import stats
 from alcf import misc
 
-VARIABLES = [
+VARS = [
 	'cloud_mask',
 	'cbh',
 	'zfull',
@@ -41,6 +41,7 @@ def run(input_, output,
 	interp='area_linear',
 	lat_lim=None,
 	lon_lim=None,
+	keep_vars=[],
 	**kwargs
 ):
 	'''
@@ -76,6 +77,7 @@ Options
 - `filter_exclude: <value> | { <value>... }`: Filter by a mask defined in a NetCDF file, described below under Filter file. If multiple files are supplied, they must all apply for a profile to be excluded.
 - `filter_include: <value> | { <value>... }`: The same as `filter_exclude`, but with time intervals to be included in the result. If both are defined, `filter_include` takes precedence. If multiple files are supplied, they must all apply for a profile to be included.
 - `interp: <value>`: Vertical interpolation method. `area_block` for area-weighting with block interpolation, `area_linear` for area-weighting with linear interpolation or `linear` for simple linear interpolation. Default: `area_linear`.
+- `keep_vars: { <var>... }`: Keep the listed input variables. The variable must be numerical and have a time dimension. Default: `{ }`.
 - `lat_lim: { <from> <to> }`: Latitude limits. Default: `none`.
 - `lon_lim: { <from> <to> }`: Longitude limits. Default: `none`.
 - `tlim: { <start> <end> }`: Time limits (see Time format below). Default: `none`.
@@ -104,6 +106,9 @@ Calculate statistics from processed lidar data in `alcf_cl51_lidar` and store th
 	if lon_lim is not None:
 		lon_lim = [x % 360 for x in lon_lim]
 
+	keep_vars_prefixed = ['input_' + var for var in keep_vars]
+	vars = VARS + keep_vars_prefixed
+
 	state = {}
 	options = {
 		'tlim': tlim_jd,
@@ -119,6 +124,7 @@ Calculate statistics from processed lidar data in `alcf_cl51_lidar` and store th
 		'interp': interp,
 		'lat_lim': lat_lim,
 		'lon_lim': lon_lim,
+		'keep_vars': keep_vars_prefixed,
 	}
 
 	if filter_exclude is not None:
@@ -135,11 +141,11 @@ Calculate statistics from processed lidar data in `alcf_cl51_lidar` and store th
 			filename = os.path.join(input_, file_)
 			if not os.path.isfile(filename):
 				continue
-			d = ds.read(filename, VARIABLES)
+			d = ds.read(filename, vars)
 			print('<- %s' % filename)
 			dd = stats.stream([d], state, **options)
 	else:
-		d = ds.read(input_, VARIABLES)
+		d = ds.read(input_, vars)
 		print('<- %s' % input_)
 		dd = stats.stream([d], state, **options)
 	dd = stats.stream([None], state, **options)

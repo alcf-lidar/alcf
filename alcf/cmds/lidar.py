@@ -141,7 +141,7 @@ Types
 - `cl31`: Vaisala CL31.
 - `cl51`: Vaisala CL51.
 - `cl61`: Vaisala CL61.
-- `cosp`: COSP simulated lidar.
+- `cosp`: COSP simulated lidar, for processing the output of `alcf simulate`.
 - `default`: The same format as the output of `alcf lidar`.
 - `minimpl`: Sigma Space MiniMPL (converted via SigmaMPL).
 - `mpl`: Sigma Space MPL (converted via SigmaMPL).
@@ -161,7 +161,7 @@ Options
 - `cloud_base_detection: <algorithm>`: Cloud base detection algorithm. Available algorithms: `default`, `none`. Default: `default`.
 - `--fix_cl_range`: Fix CL31/CL51 range correction (if `noise_h2` firmware option if off). The critical range is taken from `cl_crit_range`.
 - `interp: <value>`: Vertical interpolation method. `area_block` for area-weighting with block interpolation, `area_linear` for area-weighting with linear interpolation or `linear` for simple linear interpolation. Default: `area_linear`.
-- `keep_vars: { <var>... }`: Keep the listed input variables. The variable must be numerical and have a time dimension. The variable is resampled in the same way as backscatter along their time and level dimensions, its name is prefixed with `input_`, and its type is changed to float64. Default: `{ }`.
+- `keep_vars: { <var>... }`: Keep the listed input variables. The variable must be numerical and have a time dimension. The variable is resampled in the same way as backscatter along their time and level dimensions. The data type is changed to float64. Its name is prefixed with `input_`, except for type `default`, in which it is expected to be already prefixed in the input. When processing `alcf simulate` output, the variables need to be kept by the model reading module (by changing the code) and by `alcf simulate` (by using the keep_vars option). Default: `{ }`.
 - `lat: <lat>`: Latitude of the instrument (degrees North). Default: Taken from lidar data or `none` if not available.
 - `lon: <lon>`: Longitude of the instrument (degrees East). Default: Taken from lidar data or `none` if not available.
 - `noise_removal: <algorithm>`: Noise removal algorithm. Available algorithms: `default`, `none`.  Default: `default`.

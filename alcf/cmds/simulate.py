@@ -142,7 +142,7 @@ OVERLAP = {
 	'maximum-random': 3,
 }
 
-def cosp_alcf(config, input_, output):
+def cosp_alcf(config, input_, output, keep_vars=[]):
 	_, config_filename = tempfile.mkstemp('.nml', prefix='alcf_config_', text=False)
 	try:
 		with open(config_filename, 'w') as f:
@@ -153,11 +153,17 @@ def cosp_alcf(config, input_, output):
 		os.unlink(config_filename)
 	print('<- %s' % output)
 	d = ds.read(output)
+	if len(keep_vars) > 0:
+		di = ds.read(input_, keep_vars)
+		for var in keep_vars:
+			ds.var(d, var, ds.var(di, var))
+			ds.meta(d, var, ds.meta(di, var))
 	d['.']['.'] = alcf.META
 	ds.write(output, d)
 	print('-> %s' % output)
 
 def run(type_, input_, output,
+	keep_vars=[],
 	ncolumns=10,
 	overlap='maximum-random',
 	debug=False,
@@ -198,6 +204,7 @@ Types
 Options
 -------
 
+- `keep_vars: { <var>... }`: Keep the listed input variables. The variables are expected to be prefixed with `input_` in the input. Default: `{ }`.
 - `ncolumns: <ncolumns>`: Number of SCOPS subcolumns to generate. Default: `10`.
 - `overlap: <overlap>`: Cloud overlap assumption in the SCOPS subcolumn generator. `maximum` for maximum overlap, `random` for random overlap, or `maximum-random` for maximum-random overlap. Default: `maximum-random`.
 
@@ -228,9 +235,13 @@ Simulate a Vaisala CL51 instrument from model data in `alcf_merra2_model` previo
 		surface_lidar=(1 if lidar.SURFACE_LIDAR else 0),
 	)
 
+	keep_vars_prefixed = ['input_' + var for var in keep_vars]
+
 	if os.path.isfile(input_):
 		print('<- %s' % input_)
-		cosp_alcf(config, input_, output)
+		cosp_alcf(config, input_, output,
+			keep_vars=keep_vars_prefixed
+		)
 	else:
 		files = sorted(os.listdir(input_))
 		for file_ in files:
@@ -246,4 +257,6 @@ Simulate a Vaisala CL51 instrument from model data in `alcf_merra2_model` previo
 				if debug: warn('%s: %s' % (file_, traceback.format_exc()))
 				else: warn('%s: %s' % (file_, str(e)))
 				continue
-			cosp_alcf(config, input_filename, output_filename)
+			cosp_alcf(config, input_filename, output_filename,
+				keep_vars=keep_vars_prefixed
+			)

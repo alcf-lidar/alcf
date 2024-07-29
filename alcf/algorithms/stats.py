@@ -1,4 +1,7 @@
+import copy
+from warnings import warn
 import numpy as np
+import ds_format as ds
 from alcf import misc, algorithms
 
 def calc_filter_mask(filters, time, l):
@@ -33,6 +36,7 @@ def stats_map(d, state,
 	lat_lim=None,
 	lon_lim=None,
 	interp=None,
+	keep_vars=[],
 	**kwargs
 ):
 	if zlim is not None and zres is not None:
@@ -114,12 +118,37 @@ def stats_map(d, state,
 		np.zeros(sd_hist_dims, dtype=np.float64)
 	)
 	state['backscatter_sd_z'] = d['zfull'][jsd]
-	
+
 	backscatter_hist_tmp = np.zeros(hist_dims, dtype=np.float64)
 	cl_tmp = np.zeros(dims, dtype=np.float64)
 	clt_tmp = np.zeros(l, dtype=np.float64) if l > 0 else 0
 	backscatter_avg_tmp = np.zeros(dims, dtype=np.float64)
 	backscatter_mol_avg_tmp = np.zeros(dims, dtype=np.float64)
+
+	keep_vars_avg_tmp = {}
+	keep_vars_actual = []
+	for var in keep_vars:
+		if var not in d:
+			continue
+		shape = list(d[var].shape)
+		var_dims = ds.dims(d, var)
+		if var_dims not in [['time'], ['time', 'level']]:
+			warn('variable "%s" must have dimensions ("time") or ("time", "level") in order to be kept' % var)
+			continue
+		keep_vars_actual += [var]
+		del var_dims[0]
+		del shape[0]
+		if l > 0:
+			shape += [l]
+			var_dims += ['column']
+		state[var + '_avg'] = state.get(
+			var + '_avg',
+			np.zeros(shape, dtype=np.float64)
+		)
+		state[var + '_meta'] = copy.deepcopy(d['.'][var])
+		state[var + '_meta']['.dims'] = var_dims
+		keep_vars_avg_tmp[var] = np.zeros(shape, dtype=np.float64)
+
 	mask = np.ones(n, dtype=bool)
 	if tlim is not None:
 		mask &= (d['time'] >= tlim[0]) & (d['time'] < tlim[1])
@@ -212,6 +241,9 @@ def stats_map(d, state,
 				state['time_total'][k] += \
 					24*60*60*(d['time_bnds'][i,1] - d['time_bnds'][i,0])
 				state['clt'][k] += np.any(d['cloud_mask'][i,:,k])
+				for var in keep_vars_actual:
+					if var in d:
+						keep_vars_avg_tmp[var][...,k] += d[var][i]
 		else:
 			if not filter_mask[i]:
 				continue
@@ -226,6 +258,9 @@ def stats_map(d, state,
 			state['time_total'] += \
 				24*60*60*(d['time_bnds'][i,1] - d['time_bnds'][i,0])
 			state['clt'] += np.any(d['cloud_mask'][i,:])
+			for var in keep_vars_actual:
+				if var in d:
+					keep_vars_avg_tmp[var] += d[var][i]
 	if l > 0:
 		for k in range(l):
 			state['cl'][:,k] += algorithms.interp(
@@ -265,8 +300,18 @@ def stats_map(d, state,
 			backscatter_mol_avg_tmp,
 			state['zfull2'], zhalf2
 		)
+	for var in keep_vars_actual:
+		if var in d and len(d[var].shape) == 2:
+			state[var + '_avg'] += algorithms.interp(
+				interp,
+				d['zfull'], zhalf,
+				keep_vars_avg_tmp,
+				state['zfull2'], zhalf2
+			)
+		else:
+			state[var + '_avg'] += keep_vars_avg_tmp[var]
 
-def stats_reduce(state, bsd_z=None, **kwargs):
+def stats_reduce(state, bsd_z=None, keep_vars=[], **kwargs):
 	if not 'n' in state:
 		return {}
 	if len(state['cl'].shape) == 2:
@@ -279,6 +324,17 @@ def stats_reduce(state, bsd_z=None, **kwargs):
 				state['clt'][k] /= state['n'][k]
 				state['backscatter_avg'][:,k] /= state['n'][k]
 				state['backscatter_mol_avg'][:,k] /= state['n'][k]
+				for var in keep_vars:
+					key = var + '_avg'
+					if key in state:
+						state[key][...,k] /= state['n'][k]
+			else:
+				state['backscatter_avg'][:,k] = np.nan
+				state['backscatter_mol_avg'][:,k] = np.nan
+				for var in keep_vars:
+					key = var + '_avg'
+					if key in state:
+						state[key][...,k] = np.nan
 	else:
 		if state['clt'] > 0:
 			state['cbh'] /= state['clt']
@@ -289,6 +345,18 @@ def stats_reduce(state, bsd_z=None, **kwargs):
 			state['backscatter_avg'] /= state['n']
 			state['backscatter_mol_avg'] /= state['n']
 			state['backscatter_sd_hist'] /= state['n']
+			for var in keep_vars:
+				key = var + '_avg'
+				if key in state:
+					state[key] /= state['n']
+		else:
+			state['backscatter_avg'] /= np.nan
+			state['backscatter_mol_avg'] /= np.nan
+			for var in keep_vars:
+				key = var + '_avg'
+				if key in state:
+					state[key] = np.nan
+
 	do = {
 		'cl': 100.*state['cl'],
 		'cbh': 100.*state['cbh'],
@@ -394,6 +462,11 @@ def stats_reduce(state, bsd_z=None, **kwargs):
 			'units': 'm',
 		},
 	}
+	for var in keep_vars:
+		key = var + '_avg'
+		if key in state:
+			do[key] = state[key]
+			do['.'][key] = state[var + '_meta']
 	return do
 
 def stream(dd, state, **options):
