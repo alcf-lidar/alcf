@@ -25,7 +25,76 @@ def read_filters(filters):
 	else:
 		return [ds.read(filters)]
 
-def run(input_, output,
+def get_filenames(input_):
+	filenames = []
+	if os.path.isdir(input_):
+		files = sorted(os.listdir(input_))
+		for file_ in files:
+			filename = os.path.join(input_, file_)
+			if not os.path.isfile(filename):
+				continue
+			filenames += [filename]
+	else:
+		filenames += [input_]
+	return filenames
+
+def create_common_filter(input_):
+	time_bnds = []
+	times = set()
+	for input1 in input_:
+		dd = []
+		for filename in get_filenames(input1):
+			print('<- %s' % filename)
+			d = ds.read(filename, ['time_bnds'])
+			dd += [d]
+		d = ds.merge(dd, 'time')
+		time_bnds += [d['time_bnds']]
+		times |= set(d['time_bnds'].flatten())
+	times = np.array(sorted(times))
+	mask = np.ones(len(times), bool)
+	for time_bnds1 in time_bnds:
+		ii = np.searchsorted(time_bnds1[:,0], times) - 1
+		mask1 = ii == -1
+		ii[mask1] = 0
+		mask &= time_bnds1[:,1][ii] >= times
+		mask[mask1] = 0
+	md = np.diff(mask.astype(int))
+	ii = list(np.where(md == 1)[0])
+	jj = list(np.where(md == -1)[0])
+	if mask[0]:
+		ii = [0] + ii
+	if mask[-1]:
+		jj += [len(times) - 1]
+	n = len(ii)
+	time_bnds = np.full((n, 2), np.nan, np.float64)
+	time_bnds[:,0] = times[ii]
+	time_bnds[:,1] = times[jj]
+	return time_bnds
+
+def create_columns(d, vars, n):
+	for var in vars:
+		x = ds.var(d, var)
+		shape = list(x.shape) + [n]
+		dims = ds.dims(d, var) + ['column']
+		x = np.repeat(x, n).reshape(shape)
+		ds.var(d, var, x)
+		ds.dims(d, var, dims)
+
+def merge(dd):
+	vars = []
+	n = 0
+	for d in dd:
+		for var in ds.vars(d):
+			if 'column' in ds.dims(d, var):
+				n = ds.dim(d, 'column')
+				vars += [var]
+	if n > 0:
+		for d in dd:
+			if 'column' not in ds.dims(d):
+				create_columns(d, vars, n)
+	return ds.merge(dd, 'input')
+
+def run(*args,
 	tlim=None,
 	blim=[5., 200.],
 	bres=5.,
@@ -40,6 +109,7 @@ def run(input_, output,
 	zres=100.,
 	interp='area_linear',
 	lat_lim=None,
+	label=None,
 	lon_lim=None,
 	keep_vars=[],
 	**kwargs
@@ -51,7 +121,7 @@ alcf-stats -- Calculate cloud occurrence statistics.
 Synopsis
 --------
 
-    alcf stats [<options>] [--] <input> <output>
+    alcf stats [<options>] [--] <input>... <output>
 
 Description
 -----------
@@ -79,6 +149,7 @@ Options
 - `interp: <value>`: Vertical interpolation method. `area_block` for area-weighting with block interpolation, `area_linear` for area-weighting with linear interpolation or `linear` for simple linear interpolation. Default: `area_linear`.
 - `keep_vars: { <var>... }`: Keep the listed input variables. The variable must be numerical and have a time dimension. Default: `{ }`.
 - `lat_lim: { <from> <to> }`: Latitude limits. Default: `none`.
+- `label: { <value...> }`: Input labels. Default: `none`.
 - `lon_lim: { <from> <to> }`: Longitude limits. Default: `none`.
 - `tlim: { <start> <end> }`: Time limits (see Time format below). Default: `none`.
 - `zlim: { <low> <high> }`: Height limits (m). Default: `{ 0 15000 }`.
@@ -101,6 +172,11 @@ Calculate statistics from processed lidar data in `alcf_cl51_lidar` and store th
 
     alcf stats alcf_cl51_lidar alcf_cl51_stats.nc
 	'''
+	if len(args) < 2:
+		raise TypeError('invalid arguments')
+	input_ = args[:-1]
+	output = args[-1]
+
 	tlim_jd = misc.parse_time(tlim) if tlim is not None else None
 
 	if lon_lim is not None:
@@ -109,7 +185,6 @@ Calculate statistics from processed lidar data in `alcf_cl51_lidar` and store th
 	keep_vars_prefixed = ['input_' + var for var in keep_vars]
 	vars = VARS + keep_vars_prefixed
 
-	state = {}
 	options = {
 		'tlim': tlim_jd,
 		'blim': np.array(blim, dtype=np.float64)*1e-6,
@@ -135,23 +210,34 @@ Calculate statistics from processed lidar data in `alcf_cl51_lidar` and store th
 		dd = read_filters(filter_include)
 		options['filters_include'] = [d['time_bnds'] for d in dd]
 
-	if os.path.isdir(input_):
-		files = sorted(os.listdir(input_))
-		for file_ in files:
-			filename = os.path.join(input_, file_)
-			if not os.path.isfile(filename):
-				continue
-			d = ds.read(filename, vars)
+	if len(input_) > 1:
+		common_filter = create_common_filter(input_)
+		options['filters_include'] = options.get('filters_include', []) + \
+			[common_filter]
+
+	dd = []
+	for input1 in input_:
+		state = {}
+		dd1 = []
+		for filename in get_filenames(input1):
 			print('<- %s' % filename)
-			dd = stats.stream([d], state, **options)
-	else:
-		d = ds.read(input_, vars)
-		print('<- %s' % input_)
-		dd = stats.stream([d], state, **options)
-	dd = stats.stream([None], state, **options)
-	if dd[0] == {}:
-		raise RuntimeError('No input files')
-	else:
-		print('-> %s' % output)
-		ds.attrs(dd[0], None, alcf.META)
-		ds.write(output, dd[0])
+			d = ds.read(filename, vars)
+			dd1 = stats.stream([d], state, **options)
+		dd1 = stats.stream([None], state, **options)
+		if dd1[0] == {}:
+			raise RuntimeError('%s: no input files' % input1)
+		else:
+			dd += [dd1[0]]
+
+	do = dd[0] if len(dd) == 1 else merge(dd)
+
+	if label is not None:
+		do['label'] = label
+		do['.']['label'] = {
+			'.dims': [] if len(dd) == 1 else ['input'],
+			'long_name': 'input label',
+		}
+
+	print('-> %s' % output)
+	ds.attrs(do, None, alcf.META)
+	ds.write(output, do)
