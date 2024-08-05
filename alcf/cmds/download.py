@@ -117,7 +117,7 @@ Download MERRA-2 data for a ship track `track.nc` and store the output in the di
 		return
 
 	if len(args) != 1:
-		raise TypeError('run() ')
+		raise TypeError('invalid arguments')
 	output = args[0]
 
 	d, time_lim = misc.cmd_point_or_track(point, time, track,

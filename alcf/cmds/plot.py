@@ -595,6 +595,8 @@ Plot backscatter from processed Vaisala CL51 data in `alcf_cl51_lidar` and store
 
     alcf plot backscatter alcf_cl51_lidar alcf_cl51_backscatter
 	'''
+	if len(args) < 2:
+		raise TypeError('invalid arguments')
 	input_ = args[:-1]
 	output = args[-1]
 

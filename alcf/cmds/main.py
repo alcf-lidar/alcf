@@ -60,7 +60,7 @@ Options
 	try:
 		func(*args, **kwargs)
 	except TypeError as e:
-		if str(e).startswith('run() '):
+		if str(e).startswith('run() ') or str(e) == 'invalid arguments':
 			sys.stderr.write(md_to_text(func.__doc__))
 			return 1
 		else:
