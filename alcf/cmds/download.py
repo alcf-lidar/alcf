@@ -140,24 +140,17 @@ Download MERRA-2 data for a ship track `track.nc` and store the output in the di
 			if not misc.track_has_seg(d, t1, t2):
 				continue
 			mask = ((d['time_bnds'][:,0] <= t2) & (d['time_bnds'][:,1] >= t1))
-			lon = d['lon'][mask]
+			lon = d['lon'][mask] % 360
 			lat = d['lat'][mask]
-			lon1 = np.floor(np.min(lon))
-			lon2 = np.ceil(np.max(lon))
-			lat1 = np.floor(np.min(lat))
-			lat2 = np.ceil(np.max(lat))
-			if lon1 == lon2:
-				lon1 -= 1
-				lon2 += 1
-			if lat1 == lat2:
-				lat1 -= 1
-				lat2 += 1
-			for lon12 in [lon1, lon2]:
-				if lon12 < 0: lon12 += 360
-				if lon12 > 360: lon12 -= 360
-			for lat12 in [lat1, lat2]:
-				if lat12 < -90: lat12 = -90
-				if lat12 > 90: lat12 = 90
+			# We assume that the region covered in one day spans less than 180
+			# degrees in longitude.
+			lon0 = lon[0]
+			dlon = (lon - lon0) % 360
+			dlon = np.where(dlon < 180, dlon, dlon - 360)
+			lon1 = np.floor(lon0 + np.min(dlon) - 1) % 360
+			lon2 = np.ceil(lon0 + np.max(dlon) + 1) % 360
+			lat1 = max(np.floor(np.min(lat)) - 1, -90)
+			lat2 = min(np.ceil(np.max(lat)) + 1, 90)
 			date = aq.to_date(t)
 			year, month, day = date[1:4]
 			name = '%04d-%02d-%02d.nc' % (year, month, day)
