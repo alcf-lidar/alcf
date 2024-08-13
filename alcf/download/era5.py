@@ -78,8 +78,7 @@ def download(filename, product, year, month, day, lon1, lon2, lat1, lat2,
 	lon2_180 = lon2 if lon2 < 180 else lon2 - 360
 	req = {
 			'product_type': 'reanalysis',
-			'data_format': 'netcdf',
-			'download_format': 'unarchived',
+			'format': 'netcdf',
 			'variable': vars_,
 			'time': TIME,
 			'area': [lat2, lon1_180, lat1, lon2_180],
