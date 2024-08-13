@@ -78,7 +78,8 @@ def download(filename, product, year, month, day, lon1, lon2, lat1, lat2,
 	lon2_180 = lon2 if lon2 < 180 else lon2 - 360
 	req = {
 			'product_type': 'reanalysis',
-			'format': 'netcdf',
+			'data_format': 'netcdf',
+			'download_format': 'unarchived',
 			'variable': vars_,
 			'time': TIME,
 			'area': [lat2, lon1_180, lat1, lon2_180],
@@ -86,7 +87,7 @@ def download(filename, product, year, month, day, lon1, lon2, lat1, lat2,
 			'month': '%d' % month,
 			'day': '%d' % day,
 	}
-	if type_ == 'surf':
+	if product == 'plev':
 		req['pressure_level'] = PRESSURE_LEVEL
 	if nocache:
 		req['nocache'] = str(random.randint(0, 2147483647))
