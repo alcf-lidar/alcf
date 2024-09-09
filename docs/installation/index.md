@@ -196,7 +196,7 @@ the [Semantic Versioning](https://semver.org). Installation instructions
 have been changing with versions. Please follow the installation instructions
 in the documentation of the particular version.
 
-#### [2.1.0](https://github.com/alcf-lidar/alcf/releases/tag/v2.1.0) (2024-09-09)
+#### [2.1.1](https://github.com/alcf-lidar/alcf/releases/tag/v2.1.1) (2024-09-09)
 
 <details>
 <summary>Release notes</summary>
