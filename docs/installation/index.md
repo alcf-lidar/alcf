@@ -196,6 +196,29 @@ the [Semantic Versioning](https://semver.org). Installation instructions
 have been changing with versions. Please follow the installation instructions
 in the documentation of the particular version.
 
+#### [2.1.0](https://github.com/alcf-lidar/alcf/releases/tag/v2.1.0) (2024-09-09)
+
+<details>
+<summary>Release notes</summary>
+<ul>
+<li>alcf lidar: Fixed handling of required variables.</li>
+<li>alcf lidar: Added track option for specifying a voyage track.</li>
+<li>alcf auto lidar: The default blim is now based on the wavelenght.</li>
+<li>alcf download: Close sessions to prevent memory leaks.</li>
+<li>alcf downlaod: Fixed end time when the end is at midnight.</li>
+<li>alcf download: Fixed ERA5 download requests.</li>
+<li>alcf download: Fixed ERA5 pressure levels in request.</li>
+<li>alcf download: Fixed longitude wrapping.</li>
+<li>alcf stats: Fixed undefined backscatter_sd_z variable.</li>
+<li>alcf stats: Added lon_lim and lat_lim options.</li>
+<li>alcf stats: Added support for multiple inputs [experimental].</li>
+<li>alcf stats: Added keep_vars option for calculating averages of arbitrary variables [experimental].</li>
+<li>alcf simulate: Fixed setting of output metadata.</li>
+<li>Support for keep_vars for keeping variables.</li>
+<li>Improved error handling.</li>
+</ul>
+</details>
+
 #### [2.0.1](https://github.com/alcf-lidar/alcf/releases/tag/v2.0.1) (2024-05-08)
 
 <details>
