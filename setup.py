@@ -51,7 +51,7 @@ setup(
 		'numpy',
 	],
 	install_requires=[
-		'numpy>=1.24.2',
+		'numpy>=1.24.2,<2.0.0',
 		'scipy>=1.10.1',
 		'matplotlib>=3.7.2',
 		'netCDF4>=1.6.4',
