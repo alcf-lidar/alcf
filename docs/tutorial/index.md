@@ -6,13 +6,13 @@ layout: default
 ## Tutorial
 
 This tutorial shows how to use the ALCF to process ceilometer observations,
-simulate lidar from model output and compare the two. As an example,
-we will use 24 hours of Lufft CHM 15k ceilometer observations
-at the Birdlings Flat site in Canterbury, New Zeland on 4 July 2016,
-and the corresponding Antarctic Mesoscale Prediction System (AMPS)
-numerical weather prediction (NWP) model and MERRA-2 renalaysis output.
-To start, download the dataset archive
-[alcf-tutorial-datasets.zip](https://ucliveac-my.sharepoint.com/:u:/g/personal/pku33_uclive_ac_nz/EUWuGIHN6m9CgyoEJi5nf7wBX32C-YaXaCDln8OwxL_aKA?e=H47qEa) (4.3 GB).
+simulate lidar from model output and compare the two. As an example, we will
+use 24 hours of Lufft CHM 15k ceilometer observations at the Birdlings Flat
+site in Canterbury, New Zeland on 4 July 2016, and the corresponding Antarctic
+Mesoscale Prediction System (AMPS) numerical weather prediction (NWP) model and
+MERRA-2 renalaysis output.  To start, download the dataset archive
+[alcf-tutorial-datasets.zip](https://files.peterkuma.net/media/0iheiyl42b/alcf-tutorial-datasets.zip)
+(4.3 GB).
 
 **Note:** Normally, you would want to compare more than 24 hours of
 measurements, such as one month or one year. This tutorial uses 24 hours of
