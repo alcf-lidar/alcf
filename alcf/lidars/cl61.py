@@ -42,7 +42,7 @@ def read(
 	misc.require_vars(d, req_vars)
 	dx = {}
 	misc.populate_meta(dx, META, set(vars) & set(VARS))
-	n = ds.dim(d, 'profile')
+	n = len(d['time'])
 	d['time'] = d['time']/86400. + 2440587.5
 	if 'time' in vars:
 		dx['time'] = d['time']
