@@ -196,6 +196,15 @@ the [Semantic Versioning](https://semver.org). Installation instructions
 have been changing with versions. Please follow the installation instructions
 in the documentation of the particular version.
 
+#### [2.1.2](https://github.com/alcf-lidar/alcf/releases/tag/v2.1.2) (2024-10-18)
+
+<details>
+<summary>Release notes</summary>
+<ul>
+<li>Fix reading certain Vaisala CL61 files, in which the time dimension is "time" instead of "profile".</li>
+</ul>
+</details>
+
 #### [2.1.1](https://github.com/alcf-lidar/alcf/releases/tag/v2.1.1) (2024-09-09)
 
 <details>
