@@ -5,6 +5,8 @@ layout: default
 
 ## Publications
 
+McDonald, A. J., Kuma, P., Panell, M., Petterson, O. Plank, G. E., Rozliaiani, M. A. H., & Whitehead, L. E. (2024). Evaluating Cloud Properties at Scott Base: Comparing Ceilometer Observations with ERA5, JRA55, and MERRA2 Reanalyses Using an Instrument Simulator. *ESS Open Archive*. [https://doi.org/10.22541/essoar.171820795.52152814/v1](https://doi.org/10.22541/essoar.171820795.52152814/v1)
+
 Whitehead, L. E., McDonald, A. J., & Guyot, A. (2023). Supercooled liquid water cloud classification using lidar backscatter peak properties. *EGUsphere*. [https://doi.org/10.5194/egusphere-2023-1085](https://doi.org/10.5194/egusphere-2023-1085)
 
 Pei, Z., Fiddes, S. L., French, W. J. R., Alexander, S. P., Mallet, M. D., Kuma, P., & McDonald, A. (2023). Assessing the cloud radiative bias at Macquarie Island in the ACCESS-AM2 model. *Atmospheric Chemistry and Physics*, *23*(23), 14691–14714. [https://doi.org/10.5194/acp-23-14691-2023](https://doi.org/10.5194/acp-23-14691-2023)
