@@ -65,10 +65,11 @@ def read(lidar, input_, vars, *args,
 	**kwargs,
 ):
 	d = lidar.read(input_, vars, *args, altitude=altitude, **kwargs)
-	fill_default(d, 'altitude', altitude, 0)
-	fill_default(d, 'lon', lon, np.nan)
-	fill_default(d, 'lat', lat, np.nan)
-	fill_track(d, vars, track)
+	if d is not None:
+		fill_default(d, 'altitude', altitude, 0)
+		fill_default(d, 'lon', lon, np.nan)
+		fill_default(d, 'lat', lat, np.nan)
+		fill_track(d, vars, track)
 	return d
 
 def run(type_, input_, output,
