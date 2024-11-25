@@ -29,6 +29,11 @@ The instructions below assume that you enter the commands in the terminal.
         libeccodes-tools ncl-ncarg
     ```
 
+	**Note:** `ncl-ncarg` is not available on Ubuntu 24 and later. You can omit
+	this package, but `alcf convert` for JRA55 will not work unless you install
+	[NCL](https://www.ncl.ucar.edu) (the command `ncl_convert2nc` is required
+	for the conversion).
+
     On Fedora, install dependencies with:
 
     ```sh
