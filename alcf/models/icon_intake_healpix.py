@@ -14,6 +14,12 @@ VARS = [
 	'ta',
 	'zg',
 	'zghalf',
+	'pr',
+	'sic',
+	'tas',
+	'rlut',
+	'rsdt',
+	'rsut',
 ]
 
 STEP = 3/24
@@ -26,10 +32,12 @@ def index(dirname, warnings=[], recursive=False, njobs=1):
 	cat = intake.open_catalog(path)
 	obj = getattr(getattr(cat, model), run)
 	ids = obj(time=timestep, zoom=zoom).to_dask()
+	ids_daily = obj(time='P1D', zoom=zoom).to_dask()
 	time = aq.from_iso('1970-01-01') + \
 		(np.array(ids.time).astype('datetime64[s]').astype('int'))/(24*60*60)
 	return {
 		'ids': ids,
+		'ids_daily': ids,
 		'time': time,
 	}
 
@@ -38,6 +46,7 @@ def read(dirname, index, track, t1, t2,
 
 	import healpy
 	ids = index['ids']
+	ids_daily = index['ids_daily']
 	time = index['time']
 	nest = ids.crs.healpix_order == 'nest'
 	ii = np.nonzero(
@@ -60,12 +69,14 @@ def read(dirname, index, track, t1, t2,
 			lonlat=True,
 			nest=nest
 		)
-		misc.require_vars(ids, VARS)
 		for var in VARS:
 			sel = {'cell': j}
 			if 'time' in ids[var].coords:
 				sel['time'] = i
-			x = np.array(ids[var].isel(**sel))
+			if var in ['rlut', 'rsdt', 'rsut']:
+				x = np.array(ids_daily[var].isel(**sel))
+			else:
+				x = np.array(ids[var].isel(**sel))
 			if var == 'phalf':
 				d['ps'] = x[-1]
 				dims = []
@@ -75,6 +86,9 @@ def read(dirname, index, track, t1, t2,
 			elif var == 'zg':
 				d['zfull'] = x[::-1]
 				dims = ['level']
+			elif var in ['pr', 'sic', 'tas', 'rlut', 'rsdt', 'rsut']:
+				d['input_'+var] = x
+				dims = []
 			else:
 				d[var] = x[::-1]
 				dims = ['level']
