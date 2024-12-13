@@ -77,10 +77,10 @@ Variable | Description | Dimensions | Units
 --- | --- | --- | ---
 backscatter_avg | total attenuated volume backscattering coefficient average | zfull | m<sup>-1</sup>.sr<sup>-1</sup>
 backscatter_full | total attenuated volume backscattering coefficient | backscatter_full | m<sup>-1</sup>.sr<sup>-1</sup>
-backscatter_hist | total attenuated volume backscattering coefficinet histogram | backscatter_full, zfull | %
+backscatter_hist | total attenuated volume backscattering coefficinet histogram | backscatter_full, zfull | 1
 backscatter_mol_avg | total attenuated molecular volume backscattering coefficient average | zfull | m<sup>-1</sup>.sr<sup>-1</sup>
 backscatter_sd_full | total attenuated volume backscattering coefficient standard deviation | backscatter_sd_full | m<sup>-1</sup>.sr<sup>-1</sup>
-backscatter_sd_hist | total attenuated volume backscattering coefficient standard deviation histogram | backscatter_sd_full | %
+backscatter_sd_hist | total attenuated volume backscattering coefficient standard deviation histogram | backscatter_sd_full | 1
 backscatter_sd_z | total attenuated volume backscattering coefficient standard deviation height above reference ellipsoid | m
 cl | cloud area fraction | zfull | %
 clt | total cloud fraction | | %

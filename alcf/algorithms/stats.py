@@ -455,7 +455,7 @@ def stats_reduce(state, bsd_z=None, keep_vars=[], **kwargs):
 				if len(state['backscatter_hist'].shape) == 2 \
 				else ['backscatter_full', 'zfull', 'column'],
 			'long_name': 'total attenuated volume backscattering coefficient histogram',
-			'units': '%',
+			'units': '1',
 		},
 		'backscatter_sd_hist': {
 			'.dims': ['backscatter_sd_full'],
@@ -463,7 +463,7 @@ def stats_reduce(state, bsd_z=None, keep_vars=[], **kwargs):
 				if len(state['backscatter_sd_hist'].shape) == 1 \
 				else ['backscatter_sd_full', 'column'],
 			'long_name': 'total attenuated volume backscattering coefficient standard deviation histogram',
-			'units': '%',
+			'units': '1',
 		},
 		'backscatter_sd_full': {
 			'.dims': ['backscatter_sd_full'],
