@@ -1,4 +1,5 @@
 import copy
+from fractions import Fraction
 import numpy as np
 import astropy.coordinates
 import astropy.time
@@ -241,3 +242,11 @@ def cmd_point_or_track(point, time, track, track_gap=0):
 	else:
 		raise ValueError('Point and time or track is required')
 	return d, time_lim
+
+def bins(a, b, res):
+	if isinstance(res, Fraction):
+		if res.numerator == 1:
+			return np.linspace(a, b, res.denominator + 1)
+		else:
+			res = float(res)*(b - a)
+	return np.arange(a, b + res, res)

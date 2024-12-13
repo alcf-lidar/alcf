@@ -8,6 +8,16 @@ PRODUCTS = ['surf', 'plev']
 VARS_SURF = [
 	'geopotential',
 	'surface_pressure',
+	'2m_temperature',
+	'convective_rain_rate',
+	'large_scale_rain_rate',
+	'sea_ice_cover',
+	'2m_dewpoint_temperature',
+	'sea_surface_temperature',
+	'skin_temperature',
+	'toa_incident_solar_radiation',
+	'top_net_solar_radiation',
+	'top_net_thermal_radiation',
 ]
 
 VARS_PLEV = [
@@ -16,6 +26,9 @@ VARS_PLEV = [
 	'specific_cloud_ice_water_content',
 	'specific_cloud_liquid_water_content',
 	'temperature',
+	'specific_humidity',
+	'u_component_of_wind',
+	'v_component_of_wind',
 ]
 
 TYPE_SURF = 'reanalysis-era5-single-levels'

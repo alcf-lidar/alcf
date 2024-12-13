@@ -1,5 +1,6 @@
 import os
 import sys
+from fractions import Fraction
 import numpy as np
 import ds_format as ds
 import alcf
@@ -102,6 +103,7 @@ def run(*args,
 	bsd_log=True,
 	bsd_res=0.001,
 	bsd_z=8000.,
+	clt_res=Fraction(1, 9),
 	filter=None,
 	filter_exclude=None,
 	filter_include=None,
@@ -145,6 +147,7 @@ Options
 - `bsd_log: <value>`: Enable/disable logarithmic scale of the backscatter standard deviation histogram (`true` or `false`). Default: `true`.
 - `bsd_res: <value>`: Backscatter standard deviation histogram resolution (10^-6 m-1.sr-1). Default: `0.001`.
 - `bsd_z: <value>`: Backscatter standard deviation histogram height (m). Default: `8000`.
+- `clt_res: <value>`: Total cloud fraction histogram resolution (%). Can also be specified as a fraction (`1/<n>`). Default: `1/9`.
 - `filter: <value> | { <value> ... }`: Filter profiles by condition: `cloudy` for cloudy profiles only, `clear` for clear sky profiles only, `night` for nighttime profiles, `day` for daytime profiles, `none` for all profiles. If an array of values is supplied, all conditions must be true. For `night` and `day`, lidar profiles must contain valid longitude and latitude fields set via the `lon` and `lat` arguments of `alcf lidar` or read implicitly from raw lidar data files if available (mpl, mpl2nc). Default: `none`.
 - `filter_exclude: <value> | { <value>... }`: Filter by a mask defined in a NetCDF file, described below under Filter file. If multiple files are supplied, they must all apply for a profile to be excluded.
 - `filter_include: <value> | { <value>... }`: The same as `filter_exclude`, but with time intervals to be included in the result. If both are defined, `filter_include` takes precedence. If multiple files are supplied, they must all apply for a profile to be included.
@@ -187,6 +190,9 @@ Calculate statistics from processed lidar data in `alcf_cl51_lidar` and store th
 	keep_vars_prefixed = ['input_' + var for var in keep_vars]
 	vars = VARS + keep_vars_prefixed
 
+	if isinstance(clt_res, str):
+		clt_res = Fraction(clt_res)
+
 	options = {
 		'tlim': tlim_jd,
 		'blim': np.array(blim, dtype=np.float64)*1e-6,
@@ -195,6 +201,7 @@ Calculate statistics from processed lidar data in `alcf_cl51_lidar` and store th
 		'bsd_log': bsd_log,
 		'bsd_res': bsd_res*1e-6,
 		'bsd_z': bsd_z,
+		'clt_res': clt_res,
 		'filter': filter if type(filter) is list else [filter],
 		'zlim': zlim,
 		'zres': zres,

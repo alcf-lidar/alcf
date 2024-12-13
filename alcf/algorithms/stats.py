@@ -28,6 +28,7 @@ def stats_map(d, state,
 	bsd_log=None,
 	bsd_res=None,
 	bsd_z=None,
+	clt_res=None,
 	filter=None,
 	filters_exclude=None,
 	filters_include=None,
@@ -63,7 +64,12 @@ def stats_map(d, state,
 	state['backscatter_sd_full'] = state.get('backscatter_sd_full',
 		0.5*(state['backscatter_sd_half'][1:] + state['backscatter_sd_half'][:-1])
 	)
+	state['clt_half'] = state.get('clt_half', misc.bins(0, 100, clt_res))
+	state['clt_full'] = state.get('clt_full',
+		0.5*(state['clt_half'][1:] + state['clt_half'][:-1])
+	)
 	osd = len(state['backscatter_sd_full'])
+	oclt = len(state['clt_full'])
 	jsd = np.argmin(np.abs(d['zfull'] - bsd_z))
 	m2 = len(state['zfull2'])
 	if len(d['cloud_mask'].shape) == 3:
@@ -73,6 +79,7 @@ def stats_map(d, state,
 		hist_dims = (o, m, l)
 		hist_dims2 = (o, m2, l)
 		sd_hist_dims = (osd, l)
+		clt_hist_dims = (oclt, l)
 		filter_mask_dims = (n, l)
 	else:
 		n, m = d['cloud_mask'].shape
@@ -82,6 +89,7 @@ def stats_map(d, state,
 		hist_dims = (o, m)
 		hist_dims2 = (o, m2)
 		sd_hist_dims = (osd,)
+		clt_hist_dims = (oclt,)
 		filter_mask_dims = (n,)
 	state['n'] = state.get('n',
 		0 if l == 0 else np.zeros(l, dtype=np.int64)
@@ -116,6 +124,10 @@ def stats_map(d, state,
 	state['backscatter_sd_hist'] = state.get(
 		'backscatter_sd_hist',
 		np.zeros(sd_hist_dims, dtype=np.float64)
+	)
+	state['clt_hist'] = state.get(
+		'clt_hist',
+		np.zeros(clt_hist_dims, dtype=np.float64)
 	)
 	state['backscatter_sd_z'] = d['zfull'][jsd]
 
@@ -277,6 +289,18 @@ def stats_map(d, state,
 					if not np.isnan(d[var][i]):
 						keep_vars_avg_tmp[var] += d[var][i]
 						keep_vars_n_tmp[var] += 1
+
+
+
+	if l > 0:
+		for k in range(l):
+			state['clt_hist'][:,k] += np.histogram(
+				100*state['clt'][k]/np.where(state['n'][k] == 0, 1, state['n'][k]),
+				bins=state['clt_half'])[0]
+	else:
+		state['clt_hist'] += np.histogram(
+			100*state['clt']/np.where(state['n'] == 0, 1, state['n']),
+			bins=state['clt_half'])[0]
 	if l > 0:
 		for k in range(l):
 			state['cl'][:,k] += algorithms.interp(
@@ -332,6 +356,7 @@ def stats_reduce(state, bsd_z=None, keep_vars=[], **kwargs):
 	if not 'n' in state:
 		return {}
 	if len(state['cl'].shape) == 2:
+		extra_dims = ['column']
 		for k in range(len(state['n'])):
 			if state['clt'][k] > 0:
 				state['cbh'][:,k] /= state['clt'][k]
@@ -339,9 +364,9 @@ def stats_reduce(state, bsd_z=None, keep_vars=[], **kwargs):
 				state['backscatter_hist'][:,:,k] /= state['n'][k]
 				state['cl'][:,k] /= state['n'][k]
 				state['clt'][k] /= state['n'][k]
+				state['clt_hist'][:,k] /= np.sum(state['clt_hist'][:,k])
 				state['backscatter_avg'][:,k] /= state['n'][k]
 				state['backscatter_mol_avg'][:,k] /= state['n'][k]
-
 			else:
 				state['backscatter_avg'][:,k] = np.nan
 				state['backscatter_mol_avg'][:,k] = np.nan
@@ -352,12 +377,14 @@ def stats_reduce(state, bsd_z=None, keep_vars=[], **kwargs):
 					else:
 						state[var + '_avg'][...,k] = np.nan
 	else:
+		extra_dims = []
 		if state['clt'] > 0:
 			state['cbh'] /= state['clt']
 		if state['n'] > 0:
 			state['backscatter_hist'] /= state['n']
 			state['cl'] /= state['n']
 			state['clt'] /= state['n']
+			state['clt_hist'] /= np.sum(state['clt_hist'])
 			state['backscatter_avg'] /= state['n']
 			state['backscatter_mol_avg'] /= state['n']
 			state['backscatter_sd_hist'] /= state['n']
@@ -375,6 +402,8 @@ def stats_reduce(state, bsd_z=None, keep_vars=[], **kwargs):
 		'cl': 100.*state['cl'],
 		'cbh': 100.*state['cbh'],
 		'clt': 100.*state['clt'],
+		'clt_full': state['clt_full'],
+		'clt_hist': state['clt_hist'],
 		'zfull': state['zfull2'],
 		'n': state['n'],
 		'time_total': state['time_total'],
@@ -394,54 +423,50 @@ def stats_reduce(state, bsd_z=None, keep_vars=[], **kwargs):
 			'units': 'm',
 		},
 		'cl': {
-			'.dims': ['zfull', 'column'] \
-				if len(state['cl'].shape) == 2 \
-				else ['zfull'],
+			'.dims': ['zfull'] + extra_dims,
 			'long_name': 'cloud area fraction',
 			'standard_name': 'cloud_area_fraction_in_atmosphere_layer',
 			'units': '%',
 		},
 		'cbh': {
-			'.dims': ['zfull', 'column'] \
-				if len(state['cl'].shape) == 2 \
-				else ['zfull'],
+			'.dims': ['zfull'] + extra_dims,
 			'long_name': 'cloud base height',
 			'units': '%',
 		},
 		'clt': {
-			'.dims': ['column'] \
-				if isinstance(state['clt'], np.ndarray) \
-				else [],
+			'.dims': extra_dims,
 			'long_name': 'total cloud fraction',
 			'standard_name': 'cloud_area_fraction',
 			'units': '%',
 		},
+		'clt_full': {
+			'.dims': ['clt_full'],
+			'long_name': 'daily total cloud fraction',
+			'units': '%',
+		},
+		'clt_hist': {
+			'.dims': ['clt_full'] + extra_dims,
+			'long_name': 'daily total cloud fraction histogram',
+			'units': '1',
+		},
 		'n': {
-			'.dims': ['column'] \
-				if len(state['cl'].shape) == 2 \
-				else [],
+			'.dims': extra_dims,
 			'long_name': 'number of profiles',
 			'units': '1',
 		},
 		'time_total': {
-			'.dims': ['column'] \
-				if len(state['cl'].shape) == 2 \
-				else [],
+			'.dims': extra_dims,
 			'long_name': 'total time',
 			'standard_name': 'time',
 			'units': 's',
 		},
 		'backscatter_avg': {
-			'.dims': ['zfull', 'column'] \
-				if len(state['cl'].shape) == 2 \
-				else ['zfull'],
+			'.dims': ['zfull'] + extra_dims,
 			'long_name': 'total attenuated volume backscattering coefficient average',
 			'units': 'm-1 sr-1',
 		},
 		'backscatter_mol_avg': {
-			'.dims': ['zfull', 'column'] \
-				if len(state['cl'].shape) == 2 \
-				else ['zfull'],
+			'.dims': ['zfull'] + extra_dims,
 			'long_name': 'total attenuated molecular volume backscattering coefficient average',
 			'units': 'm-1 sr-1',
 		},
@@ -451,17 +476,13 @@ def stats_reduce(state, bsd_z=None, keep_vars=[], **kwargs):
 			'units': 'm-1 sr-1',
 		},
 		'backscatter_hist': {
-			'.dims': ['backscatter_full', 'zfull'] \
-				if len(state['backscatter_hist'].shape) == 2 \
-				else ['backscatter_full', 'zfull', 'column'],
+			'.dims': ['backscatter_full', 'zfull'] + extra_dims,
 			'long_name': 'total attenuated volume backscattering coefficient histogram',
 			'units': '1',
 		},
 		'backscatter_sd_hist': {
 			'.dims': ['backscatter_sd_full'],
-			'.dims': ['backscatter_sd_full'] \
-				if len(state['backscatter_sd_hist'].shape) == 1 \
-				else ['backscatter_sd_full', 'column'],
+			'.dims': ['backscatter_sd_full'] + extra_dims,
 			'long_name': 'total attenuated volume backscattering coefficient standard deviation histogram',
 			'units': '1',
 		},

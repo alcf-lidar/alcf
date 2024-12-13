@@ -44,6 +44,24 @@ META = {
 		'standard_name': 'latitude',
 		'units': 'degrees_north',
 	},
+	'input_rlut': {
+		'.dims': ['time'],
+		'long_name': 'toa outgoing longwave radiation',
+		'standard_name': 'toa_outgoing_longwave_flux',
+		'units': 'W m-2',
+	},
+	'input_rsdt': {
+		'.dims': ['time'],
+		'long_name': 'toa incident shortwave radiation',
+		'standard_name': 'toa_incoming_shortwave_flux',
+		'units': 'W m-2',
+	},
+	'input_rsut': {
+		'.dims': ['time'],
+		'long_name': 'toa outgoing shortwave radiation',
+		'standard_name': 'toa_outgoing_shortwave_flux',
+		'units': 'W m-2',
+	},
 	'.': alcf.META,
 }
 

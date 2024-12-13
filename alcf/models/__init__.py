@@ -75,6 +75,42 @@ META = {
 		'standard_name': 'surface_altitude',
 		'units': 'm',
 	},
+	'input_pr': {
+		'.dims': ['time'],
+		'long_name': 'precipitation',
+		'standard_name': 'precipitation_flux',
+		'units': 'kg m-2 s-1',
+	},
+	'input_sic': {
+		'.dims': ['time'],
+		'long_name': 'sea ice area fraction',
+		'standard_name': 'sea_ice_area_fraction',
+		'units': '%',
+	},
+	'input_tas': {
+		'.dims': ['time'],
+		'long_name': 'near-surface air temperature',
+		'standard_name': 'air_temperature',
+		'units': 'K',
+	},
+	'input_rlut': {
+		'.dims': ['time'],
+		'long_name': 'toa outgoing longwave radiation',
+		'standard_name': 'toa_outgoing_longwave_flux',
+		'units': 'W m-2',
+	},
+	'input_rsdt': {
+		'.dims': ['time'],
+		'long_name': 'toa incident shortwave radiation',
+		'standard_name': 'toa_incoming_shortwave_flux',
+		'units': 'W m-2',
+	},
+	'input_rsut': {
+		'.dims': ['time'],
+		'long_name': 'toa outgoing shortwave radiation',
+		'standard_name': 'toa_outgoing_shortwave_flux',
+		'units': 'W m-2',
+	},
 	'.': alcf.META,
 }
 

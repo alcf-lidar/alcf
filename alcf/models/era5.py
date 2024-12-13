@@ -6,7 +6,7 @@ from alcf.models import META
 from alcf import misc
 import aquarius_time as aq
 
-VARS_INDEX = ['time', 'latitude', 'longitude']
+VARS_INDEX = ['time', 'valid_time', 'latitude', 'longitude']
 
 VARS_PLEV = [
 	'time',
@@ -16,16 +16,25 @@ VARS_PLEV = [
 	'latitude',
 	'longitude',
 	'level',
+	'pressure_level',
 	't',
 	'z',
 ]
 
 VARS_SURF = [
 	'time',
+	'valid_time',
 	'sp',
 	'z',
 	'latitude',
 	'longitude',
+	'siconc',
+	'crr',
+	'lsrr',
+	't2m',
+	'tisr',
+	'tsr',
+	'ttr',
 ]
 
 TRANS_PLEV = {
@@ -34,6 +43,7 @@ TRANS_PLEV = {
 	'z': 'zfull',
 	'cc': 'cl',
 	'level': 'pfull',
+	'pressure_level': 'pfull',
 	'clwc': 'clw',
 	'ciwc': 'cli',
 	't': 'ta',
@@ -44,6 +54,11 @@ TRANS_SURF = {
 	'longitude': 'lon',
 	'z': 'orog',
 	'sp': 'ps',
+	'siconc': 'input_sic',
+	't2m': 'input_tas',
+	'tisr': 'input_rsdt',
+	'tsr': 'rsnt',
+	'ttr': 'rlnt',
 }
 
 STEP = 1/24
@@ -72,7 +87,8 @@ def read0(type_, dirname, track, t1, t2,
 
 	dd = []
 	for d_idx in dd_idx:
-		misc.require_vars(d_idx, VARS_INDEX)
+		ds.rename(d_idx, 'valid_time', 'time')
+		#misc.require_vars(d_idx, VARS_INDEX)
 		time = d_idx['time']
 		lat = d_idx['latitude']
 		lon = d_idx['longitude']
@@ -92,27 +108,38 @@ def read0(type_, dirname, track, t1, t2,
 			j = np.argmin(np.abs(lat - lat0))
 			k = np.argmin(np.abs(lon - lon0))
 			d = ds.read(filename, req_vars,
-				sel={'time': [i], 'latitude': j, 'longitude': k},
+				sel={'time': [i], 'valid_time': [i], 'latitude': j, 'longitude': k},
 				jd=True,
 			)
-			misc.require_vars(d, req_vars)
+			ds.rename(d, 'valid_time', 'time')
+			#d_alltime = ds.read(filename, req_vars,
+			#	sel={'latitude': j, 'longitude': k},
+			#	jd=True,
+			#)
+			#misc.require_vars(d, req_vars)
 			for a, b in trans.items():
 				if a in d.keys():
 					ds.rename(d, a, b)
+			for var in ['rsdt', 'rsnt', 'rlnt']:
+				if var not in d: continue
+				shape = list(d[var].shape)
+				shape[0] = 1
+				d[var] = np.mean(d[var], axis=0).reshape(shape)
 			d['lat'] = np.array([d['lat']])
 			d['lon'] = np.array([d['lon']])
 			d['lon'] = d['lon'] % 360
 			d['.']['lat']['.dims'] = ['time']
 			d['.']['lon']['.dims'] = ['time']
 			if type_ == 'plev':
+				order = np.argsort(d['pfull'])[::-1]
 				d['pfull'] = d['pfull'].reshape([1, len(d['pfull'])])
 				d['.']['pfull']['.dims'] = ['time', 'level']
-				d['cl'] = d['cl'][:,::-1]
-				d['clw'] = d['clw'][:,::-1]
-				d['cli'] = d['cli'][:,::-1]
-				d['ta'] = d['ta'][:,::-1]
-				d['zfull'] = d['zfull'][:,::-1]
-				d['pfull'] = d['pfull'][:,::-1]
+				d['cl'] = d['cl'][:,order]
+				d['clw'] = d['clw'][:,order]
+				d['cli'] = d['cli'][:,order]
+				d['ta'] = d['ta'][:,order]
+				d['zfull'] = d['zfull'][:,order]
+				d['pfull'] = d['pfull'][:,order]
 			dd.append(d)
 	d = ds.op.merge(dd, 'time')
 	if 'pfull' in d:
@@ -124,6 +151,19 @@ def read0(type_, dirname, track, t1, t2,
 	if 'cl' in d:
 		d['cl'] = np.minimum(1, np.maximum(0, d['cl']))
 		d['cl'] *= 100.
+	if 'input_sic' in d:
+		d['input_sic'] *= 100
+	if 'crr' in d and 'lsrr' in d:
+		d['input_pr'] = d['crr'] + d['lsrr']
+		del d['crr'], d['lsrr']
+	if 'input_rsdt' in d:
+		d['input_rsdt'] /= 3600
+	if 'rsnt' in d and 'input_rsdt' in d:
+		d['input_rsut'] = -d['rsnt']/3600 + d['input_rsdt']
+		del d['rsnt']
+	if 'rlnt' in d:
+		d['input_rlut'] = -d['rlnt']/3600
+		del d['rlnt']
 	return d
 
 def read(dirname, index, track, t1, t2,
