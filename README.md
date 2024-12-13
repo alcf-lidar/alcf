@@ -6,7 +6,7 @@ Automatic Lidar and Ceilometer Framework (ALCF)
 the manuscript "Ship-based lidar evaluation of Southern Ocean clouds in the
 storm-resolving general circulation model ICON, and the ERA5 and MERRA-2
 reanalyses". See also
-[peterkuma/icon-so-2024-alcf](https://github.com/peterkuma/icon-so-2024-alcf).
+[peterkuma/icon-so-2024](https://github.com/peterkuma/icon-so-2024).
 
 ALCF is an open source command line tool for processing of automatic lidar and
 ceilometer (ALC) data and intercomparison with atmospheric models such as
