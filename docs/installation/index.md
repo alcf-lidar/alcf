@@ -56,11 +56,16 @@ The instructions below assume that you enter the commands in the terminal.
 
     ```sh
     pipx install alcf
+	```
+
+    Make sure that `$HOME/.local/bin` is in the PATH environment variable.
+
+	If you use pipx < 1.3.0, install the manual pages with:
+
+	```sh
     mkdir -p ~/.local/share/man/man1
     ln -s ~/.local/pipx/venvs/alcf/share/man/man1/alcf*.1 ~/.local/share/man/man1/
     ```
-
-    Make sure that `$HOME/.local/bin` is in the PATH environment variable.
 
 ### Windows
 
@@ -152,6 +157,11 @@ To uninstall ALCF on Linux:
 
 ```sh
 pipx uninstall alcf
+```
+
+If you have installed manual pages manually:
+
+```sh
 rm ~/.local/share/man/man1/alcf*.1
 ```
 
