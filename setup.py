@@ -20,7 +20,7 @@ class BuildCOSP(build_py):
 
 setup(
 	name='alcf',
-	version='2.1.2',
+	version='2.2.0',
 	description='Automatic Lidar and Ceilometer Framework (ALCF)',
 	author='Peter Kuma, Adrian J. McDonald, Olaf Morgenstern, Richard Querel, Israel Silber, Connor J. Flynn',
 	author_email='peter@peterkuma.net',

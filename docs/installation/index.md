@@ -211,12 +211,23 @@ the [Semantic Versioning](https://semver.org). Installation instructions
 have been changing with versions. Please follow the installation instructions
 in the documentation of the particular version.
 
+#### [2.2.0](https://github.com/alcf-lidar/alcf/releases/tag/v2.2.0) (2024-12-22)
+
+<details>
+<summary>Release notes</summary>
+<ul>
+<li>Fixed handling of the time argument.<li>
+<li>Fixed backscatter_hist and backscatter_sd_hist units in the metadata and documentation.</li>
+<li>Improvements in the documentation.</li>
+</ul>
+</details>
+
 #### [2.1.2](https://github.com/alcf-lidar/alcf/releases/tag/v2.1.2) (2024-10-18)
 
 <details>
 <summary>Release notes</summary>
 <ul>
-<li>Fix reading certain Vaisala CL61 files, in which the time dimension is "time" instead of "profile".</li>
+<li>Fixed reading certain Vaisala CL61 files, in which the time dimension is "time" instead of "profile".</li>
 </ul>
 </details>
 
