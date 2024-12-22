@@ -221,7 +221,7 @@ in the documentation of the particular version.
 <details>
 <summary>Release notes</summary>
 <ul>
-<li>Fixed handling of the time argument.<li>
+<li>Fixed handling of the time argument.</li>
 <li>Fixed backscatter_hist and backscatter_sd_hist units in the metadata and documentation.</li>
 <li>Improvements in the documentation.</li>
 </ul>
