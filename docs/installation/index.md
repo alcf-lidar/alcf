@@ -180,14 +180,19 @@ below](#releases), and run the following commands in the source code directory:
 ```sh
 ./download_cosp
 pipx install . # Replace pipx with pip for installation in Anaconda.
-mkdir -p ~/.local/share/man/man1
-ln -s ~/.local/pipx/venvs/alcf/share/man/man1/alcf*.1 ~/.local/share/man/man1/
 ```
 
 This will download and unpack [ALCF-COSP](https://github.com/alcf-lidar/alcf-cosp)
 (a version of COSP with support for ground-based lidars), and compile and
 install the ALCF. Use this option if you want to customise any parts of the
 ALCF.
+
+If you use pipx < 1.3.0, install the manual pages with:
+
+```sh
+mkdir -p ~/.local/share/man/man1
+ln -s ~/.local/pipx/venvs/alcf/share/man/man1/alcf*.1 ~/.local/share/man/man1/
+```
 
 ### Preparing a source distribution
 
