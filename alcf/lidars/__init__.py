@@ -47,26 +47,32 @@ META = {
 	'.': alcf.META,
 }
 
-from . import chm15k
-from . import cl61
-from . import blview
-from . import cl51
-from . import cl31
-from . import mpl
-from . import mpl2nc
-from . import default
-from . import caliop
+from . import \
+	blview, \
+	caliop, \
+	chm15k, \
+	vaisala, \
+	cl61, \
+	cloudnet, \
+	default, \
+	mpl, \
+	mpl2nc
 
 LIDARS = {
-	'default': default,
-	'chm15k': chm15k,
-	'cl61': cl61,
 	'blview': blview,
-	'cl51': cl51,
-	'cl31': cl31,
-	'mpl': mpl,
-	'mpl2nc': mpl2nc,
-	'minimpl': mpl,
-	'cosp': default,
 	'caliop': caliop,
+	'chm15k': chm15k,
+	'cl31': vaisala,
+	'cl51': vaisala,
+	'cl61': cl61,
+	'cn_cl31': cloudnet,
+	'cn_cl51': cloudnet,
+	'cn_ct25k': cloudnet,
+	'cn_minimpl': cloudnet,
+	'cosp': default,
+	'ct25k': vaisala,
+	'default': default,
+	'minimpl': mpl,
+	'mpl2nc': mpl2nc,
+	'mpl': mpl,
 }

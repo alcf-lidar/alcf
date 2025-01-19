@@ -4,12 +4,6 @@ import datetime as dt
 from alcf import misc
 from alcf.lidars import META
 
-WAVELENGTH = 910 # nm
-CALIBRATION_COEFF = 1.2e-3
-SURFACE_LIDAR = True
-SC_LR = 18.8 # sr. Stratocumulus lidar ratio (O'Connor et al., 2004).
-MAX_RANGE = 15400 # m
-
 VARS = {
 	'backscatter': ['backscatter'],
 }
@@ -25,15 +19,36 @@ DEFAULT_VARS2 = [
 	'level',
 ]
 
-def read(filename, vars,
+def params(type_):
+	return {
+		'wavelength': {
+			'ct25k': 905, # nm
+			'cl31': 910, # nm
+			'cl51': 910, # nm
+		}[type_],
+		'calibration_coeff': {
+			'ct25k': 1.45e-3,
+			'cl31': 1.45e-3,
+			'cl51': 1.2e-3,
+		}[type_],
+		'surface_lidar': True,
+		'sc_lr': 18.8, # sr. Stratocumulus lidar ratio (O'Connor et al., 2004).
+		'max_range': {
+			'ct25k': 7680,
+			'cl31': 7700,
+			'cl51': 15400,
+		}[type_], # m
+	}
+
+def read(type_, filename, vars,
 	altitude=None,
-	calibration_coeff=CALIBRATION_COEFF,
 	fix_cl_range=False,
 	cl_crit_range=6000,
 	tlim=None,
 	keep_vars=[],
 	**kwargs
 ):
+	p = params(type_)
 	sel = None
 	if tlim is not None:
 		d = ds.read(filename, 'time', jd=True)
@@ -70,7 +85,7 @@ def read(filename, vars,
 	if 'backscatter' in vars:
 		factor = 1e-4 if (d['.']['backscatter']['units'] == '1/(sr*km*10000)') \
 			else 1 # Factor of 1e-4 if ARM CL51 format.
-		dx['backscatter'] = d['backscatter']*calibration_coeff*factor
+		dx['backscatter'] = d['backscatter']*p['calibration_coeff']*factor
 		mask = range_ > 6000
 		if fix_cl_range is True:
 			for i in range(n):

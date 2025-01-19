@@ -45,11 +45,13 @@ def run(type_, input_, output, *args, skip=None, **kwargs):
 		lidar_mod = LIDARS.get(type_)
 		if lidar_mod is None:
 			raise ValueError('Invalid type: %s' % type_)
+		params = lidar_mod.params(type_)
 		blim, bres = {
 			532: ([-2.0, 2.0], 0.01),
+			905: ([-1.0, 1.0], 0.005),
 			910: ([-1.0, 1.0], 0.005),
 			1064:([-0.5, 0.5], 0.0025),
-		}.get(lidar_mod.WAVELENGTH, [-2.0, 2.0])
+		}.get(params['wavelength'], ([-2.0, 2.0], 0.01))
 
 		stats.run(lidar_dir, stats_fine_filename,
 			blim=blim,

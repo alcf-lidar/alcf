@@ -4,12 +4,6 @@ import datetime as dt
 from alcf import misc
 from alcf.lidars import META
 
-WAVELENGTH = 532 # nm
-CALIBRATION_COEFF = 3.75e-6
-SURFACE_LIDAR = True
-SC_LR = 16.0 # sr
-MAX_RANGE = 30000 # m
-
 VARS = {
 	'backscatter': ['nrb_copol', 'nrb_crosspol'],
 	'zfull': ['bin_time', 'c'],
@@ -23,7 +17,17 @@ DEFAULT_VARS = [
 	'gps_longitude',
 ]
 
+def params(type_):
+	return {
+		'wavelength': 532, # nm
+		'calibration_coeff': 3.75e-6,
+		'surface_lidar': True,
+		'sc_lr': 16.0, # sr
+		'max_range': 30000, # m
+	}
+
 def read(
+	type_,
 	filename,
 	vars,
 	altitude=None,
@@ -33,6 +37,7 @@ def read(
 	keep_vars=[],
 	**kwargs
 ):
+	p = params(type_)
 	sel = None
 	if tlim is not None:
 		d = ds.read(filename, 'time', jd=True)
@@ -69,7 +74,7 @@ def read(
 			dx['zfull'][i,:] = range_*np.sin(d['elevation_angle'][i]/180.0*np.pi)
 			dx['zfull'][i,:] += altitude[i]
 	if 'backscatter' in vars:
-		dx['backscatter'] = (d['nrb_copol'] + 2.*d['nrb_crosspol'])*CALIBRATION_COEFF
+		dx['backscatter'] = (d['nrb_copol'] + 2.*d['nrb_crosspol'])*p['calibration_coeff']
 	if 'altitude' in vars:
 		dx['altitude'] = altitude
 	if 'lon' in vars:

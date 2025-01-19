@@ -219,6 +219,8 @@ Simulate a Vaisala CL51 instrument from model data in `alcf_merra2_model` previo
 	if lidar is None:
 		raise ValueError('Invalid type: %s' % type_)
 
+	params = lidar.params(type_)
+
 	overlap_flag = OVERLAP.get(overlap)
 	if overlap_flag is None:
 		raise ValueError('Invalid overlap: %s' % overlap)
@@ -230,9 +232,9 @@ Simulate a Vaisala CL51 instrument from model data in `alcf_merra2_model` previo
 		ncolumns=ncolumns,
 		nlevels=nlevels,
 		overlap=overlap_flag,
-		wavelength=lidar.WAVELENGTH,
-		max_range=lidar.MAX_RANGE,
-		surface_lidar=(1 if lidar.SURFACE_LIDAR else 0),
+		wavelength=params['wavelength'],
+		max_range=params['max_range'],
+		surface_lidar=(1 if params['surface_lidar'] else 0),
 	)
 
 	keep_vars_prefixed = ['input_' + var for var in keep_vars]

@@ -3,12 +3,15 @@ import ds_format as ds
 from alcf import misc
 from alcf.lidars import META
 
-WAVELENGTH = 1064 # nm
-CALIBRATION_COEFF = 1.0
-SURFACE_LIDAR = None
-SC_LR = None
+def params(type_):
+	return {
+		'wavelength': 1064, # nm
+		'calibration_coeff': 1,
+		'surface_lidar': None,
+		'sc_lr': None,
+	}
 
-def read(filename, vars,
+def read(type_, filename, vars,
 	altitude=None,
 	time=None,
 	keep_vars=[],
