@@ -22,7 +22,9 @@ DEFAULT_VARS2 = [
 def params(type_):
 	return {
 		'wavelength': {
-			'ct25k': 905, # nm
+			'ct25k': 910, # nm. This should be 905 nm, but for compatibility
+			              # with the supported simulator wavelengths, we set it
+			              # to 910 nm.
 			'cl31': 910, # nm
 			'cl51': 910, # nm
 		}[type_],
