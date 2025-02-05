@@ -5,12 +5,14 @@ alcf-stats -- Calculate cloud occurrence statistics.
 Synopsis
 --------
 
-    alcf stats [<options>] [--] <input> <output>
+    alcf stats [<options>] [--] <input>... <output>
 
 Description
 -----------
 
 Arguments following `--` are treated as literal strings. Use this delimiter if the input or output file names might otherwise be interpreted as non-strings, e.g. purely numerical file names.
+
+Multiple input files or directories can be supplied for a comparison - only time periods present in all inputs are included [experimental]. The output of alcf stats with multiple inputs is not yet supported by alcf plot.
 
 Arguments
 ---------
@@ -31,6 +33,10 @@ Options
 - `filter_exclude: <value> | { <value>... }`: Filter by a mask defined in a NetCDF file, described below under Filter file. If multiple files are supplied, they must all apply for a profile to be excluded.
 - `filter_include: <value> | { <value>... }`: The same as `filter_exclude`, but with time intervals to be included in the result. If both are defined, `filter_include` takes precedence. If multiple files are supplied, they must all apply for a profile to be included.
 - `interp: <value>`: Vertical interpolation method. `area_block` for area-weighting with block interpolation, `area_linear` for area-weighting with linear interpolation or `linear` for simple linear interpolation. Default: `area_linear`.
+- `keep_vars: { <var>... }`: Keep the listed input variables [experimental]. The variable must be numerical and have a time dimension. The input must be stored in daily files, otherwise the results are undefined. Default: `{ }`.
+- `lat_lim: { <from> <to> }`: Latitude limits. Default: `none`.
+- `label: { <value...> }`: Input labels. Default: `none`.
+- `lon_lim: { <from> <to> }`: Longitude limits. Default: `none`.
 - `tlim: { <start> <end> }`: Time limits (see Time format below). Default: `none`.
 - `zlim: { <low> <high> }`: Height limits (m). Default: `{ 0 15000 }`.
 - `zres: <value>`: Height resolution (m). Default: `50`.

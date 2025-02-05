@@ -1,6 +1,6 @@
 .\" generated with Ronn-NG/v0.9.1
 .\" http://github.com/apjanke/ronn-ng/tree/0.9.1
-.TH "ALCF\-AUTO" "1" "May 2024" ""
+.TH "ALCF\-AUTO" "1" "February 2025" ""
 .SH "NAME"
 \fBalcf\-auto\fR \- Peform automatic processing of model or lidar data\.
 .SH "SYNOPSIS"
@@ -127,6 +127,9 @@ CALIPSO/CALIOP (\fBalcf auto model\fR only)\.
 \fBchm15k\fR
 Lufft CHM 15k\.
 .TP
+\fBct25k\fR
+Vaisala CT25K\. IMPORTANT: The simulator currently assumes wavelength of 910 nm instead of the actual instrument wavelength of 905 nm\.
+.TP
 \fBcl31\fR
 Vaisala CL31\.
 .TP
@@ -136,8 +139,29 @@ Vaisala CL51\.
 \fBcl61\fR
 Vaisala CL61\.
 .TP
+\fBcn_chm15k\fR
+Cloudnet Lufft CHM 15k\.
+.TP
+\fBcn_ct25k\fR
+Cloudnet Vaisala CT25K\.
+.TP
+\fBcn_cl31\fR
+Cloudnet Vaisala CL31\.
+.TP
+\fBcn_cl51\fR
+Cloudnet Vaisala CL51\.
+.TP
+\fBcn_cl61\fR
+Cloudnet Vaisala CL61\.
+.TP
+\fBcn_minimpl\fR
+Cloudnet Sigma Space MiniMPL\.
+.TP
 \fBcosp\fR
 COSP simulated lidar\.
+.TP
+\fBdefault\fR
+The same format as the output of \fBalcf lidar\fR\.
 .TP
 \fBminimpl\fR
 Sigma Space MiniMPL (converted via SigmaMPL)\.
