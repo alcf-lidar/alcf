@@ -89,7 +89,7 @@ Lidar types
 - `blview`: Vaisala BL-VIEW L2 product.
 - `caliop`: CALIPSO/CALIOP (`alcf auto model` only).
 - `chm15k`: Lufft CHM 15k.
-- `ct25k`: Vaisala CT25K.
+- `ct25k`: Vaisala CT25K. IMPORTANT: The simulator currently assumes wavelength of 910 nm instead of the actual instrument wavelength of 905 nm.
 - `cl31`: Vaisala CL31.
 - `cl51`: Vaisala CL51.
 - `cl61`: Vaisala CL61.
