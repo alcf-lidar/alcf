@@ -216,12 +216,13 @@ the [Semantic Versioning](https://semver.org). Installation instructions
 have been changing with versions. Please follow the installation instructions
 in the documentation of the particular version.
 
-#### [2.2.1](https://github.com/alcf-lidar/alcf/releases/tag/v2.2.1) (2025-02-05)
+#### [2.3.0](https://github.com/alcf-lidar/alcf/releases/tag/v2.3.0) (2025-02-05)
 
 <details>
 <summary>Release notes</summary>
 <ul>
 <li>Fixed reading of the CHM 15k altitude variable.</li>
+<li>Support for the Cloudnet format.</li>
 </ul>
 </details>
 
