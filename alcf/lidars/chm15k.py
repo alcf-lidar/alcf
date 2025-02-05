@@ -53,7 +53,7 @@ def read(
 		if altitude is not None:
 			dx['altitude'] = np.full(n, altitude, np.float64)
 		else:
-			dx['altitude'] = d['altitude']
+			dx['altitude'] = np.full(n, d['altitude'], np.float64)
 	if 'time' in vars:
 		dx['time'] = d['time']
 	if 'time_bnds' in vars:
@@ -62,7 +62,7 @@ def read(
 	if 'backscatter' in vars:
 		dx['backscatter'] = d['beta_raw']*1e-11*p['calibration_coeff']
 	if 'zfull' in vars:
-		zfull1 = d['range'] + dx['altitude']
+		zfull1 = d['range'] + dx['altitude'][0]
 		dx['zfull'] = np.tile(zfull1, (n, 1))
 	for var in keep_vars:
 		misc.keep_var(var, d, dx)
