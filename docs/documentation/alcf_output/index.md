@@ -36,7 +36,7 @@ time | time | time | days since -4713-11-24 12:00 UTC (`proleptic_gregorian` cal
 time_bnds | time bounds | time, bnds | days since -4713-11-24 12:00 UTC (`proleptic_gregorian` calendar)
 zfull | altitude of model full-levels | time, level | m
 
-### cosp
+### simulate
 
 `alcf simulate` output is a 2-dimensional "curtain" of simulated backscatter
 at a given location over a length of time or along a ship track.
@@ -56,14 +56,15 @@ zfull | height above reference ellipsoid | time, level | m
 
 `alcf lidar` output  is a 2-dimensional "curtain" of observed or simulated
 backscatter at a given location over a length of time or along a ship track.
+Simulated lidar output contains an additional dimension `column`.
 
 Variable | Description | Dimensions | Units
 --- | --- | --- | ---
-backscatter | total attenuated volume backscattering coefficient | time, level | m<sup>-1</sup>.sr<sup>-1</sup>
+backscatter | total attenuated volume backscattering coefficient | time, level, [column] | m<sup>-1</sup>.sr<sup>-1</sup>
 backscatter_sd | total attenuated volume backscattering coefficient standard deviation | time, level | m<sup>-1</sup>.sr<sup>-1</sup>
-cbh | cloud base height | time | m
-cloud_mask | cloud mask | time, level | 1
-lr | lidar ratio | time | sr
+cbh | cloud base height | time, [column] | m
+cloud_mask | cloud mask | time, level, [column] | 1
+lr | lidar ratio | time, [column] | sr
 time | time | time | days since -4713-11-24 12:00 UTC (`proleptic_gregorian` calendar)
 time_bnds | time bounds | time, bnds | days since -4713-11-24 12:00 UTC (`proleptic_gregorian` calendar)
 zfull | altitude of full-levels | time, level | m
@@ -72,18 +73,20 @@ zfull | altitude of full-levels | time, level | m
 
 `alcf stats` output contains histograms and summary statistics calculated
 from a 2-dimensional "curtain" of observed or simulated backscatter.
+Simulated lidar statistics contain an additional dimension `column`.
 
 Variable | Description | Dimensions | Units
 --- | --- | --- | ---
-backscatter_avg | total attenuated volume backscattering coefficient average | zfull | m<sup>-1</sup>.sr<sup>-1</sup>
+backscatter_avg | total attenuated volume backscattering coefficient average | zfull, [column] | m<sup>-1</sup>.sr<sup>-1</sup>
 backscatter_full | total attenuated volume backscattering coefficient | backscatter_full | m<sup>-1</sup>.sr<sup>-1</sup>
-backscatter_hist | total attenuated volume backscattering coefficinet histogram | backscatter_full, zfull | 1
-backscatter_mol_avg | total attenuated molecular volume backscattering coefficient average | zfull | m<sup>-1</sup>.sr<sup>-1</sup>
+backscatter_hist | total attenuated volume backscattering coefficinet histogram | backscatter_full, zfull, [column] | 1
+backscatter_mol_avg | total attenuated molecular volume backscattering coefficient average | zfull, [column] | m<sup>-1</sup>.sr<sup>-1</sup>
 backscatter_sd_full | total attenuated volume backscattering coefficient standard deviation | backscatter_sd_full | m<sup>-1</sup>.sr<sup>-1</sup>
-backscatter_sd_hist | total attenuated volume backscattering coefficient standard deviation histogram | backscatter_sd_full | 1
+backscatter_sd_hist | total attenuated volume backscattering coefficient standard deviation histogram | backscatter_sd_full, [column] | 1
 backscatter_sd_z | total attenuated volume backscattering coefficient standard deviation height above reference ellipsoid | m
-cl | cloud area fraction | zfull | %
-clt | total cloud fraction | | %
-n | number of profiles | | 1
-time_total | total time | | s
+cbh | cloud base height | zfull, [column] | %
+cl | cloud area fraction | zfull, [column] | %
+clt | total cloud fraction | [column] | %
+n | number of profiles | [column] | 1
+time_total | total time | [column] | s
 zfull | altitude of model full-levels | zfull | m
