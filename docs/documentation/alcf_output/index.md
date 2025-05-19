@@ -67,7 +67,7 @@ cloud_mask | cloud mask | time, level, [column] | 1
 lr | lidar ratio | time, [column] | sr
 time | time | time | days since -4713-11-24 12:00 UTC (`proleptic_gregorian` calendar)
 time_bnds | time bounds | time, bnds | days since -4713-11-24 12:00 UTC (`proleptic_gregorian` calendar)
-zfull | altitude of full-levels | time, level | m
+zfull | altitude of full-levels | level | m
 
 ### stats
 
