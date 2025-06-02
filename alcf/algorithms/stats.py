@@ -83,7 +83,7 @@ def init_hist(d, s, var, ndim, x1, x2, res, log=False):
 			np.log(x1 + res) - np.log(x1)
 		))
 	else:
-		s[var+'_half'] = np.arange(x1, x2, res)
+		s[var+'_half'] = np.arange(x1, x2 + res, res)
 	s[var+'_full'] = misc.full(s[var+'_half'])
 	o = len(s[var+'_full'])
 	k = 2 if ndim == 1 else 1
@@ -98,16 +98,20 @@ def init_hist(d, s, var, ndim, x1, x2, res, log=False):
 		'units': '1',
 	}
 
-def init_avg(d, s, var, with_n=False, dtype=np.float64):
+def init_avg(d, s, var, ndim, with_n=False, dtype=np.float64):
 	init_meta(d, s, var, var+'_avg')
+	k = 2 if ndim == 1 else 1
 	s['meta'][var+'_avg'].update({
-		'.dims': s['dims'][1:],
+		'.dims': s['dims'][k:],
 		'long_name': s['meta'][var+'_avg']['long_name'] + ' average',
 	})
-	init_vector(d, s, var+'_avg', dtype=dtype)
+	if ndim == 1:
+		init_scalar(d, s, var+'_avg', dtype=dtype)
+	else:
+		init_vector(d, s, var+'_avg', dtype=dtype)
 	if with_n:
-		s['meta'][var+'_n'].updae({
-			'.dims': s['dims'][2:],
+		s['meta'][var+'_n'].update({
+			'.dims': s['dims'][k:],
 			'long_name': 'number of profiles used to calculate %s_avg' % var,
 			'units': '1',
 		})
@@ -123,6 +127,9 @@ def init(d, s, *,
 	zres,
 	bsd_z,
 	keep_vars,
+	keep_vars_lim,
+	keep_vars_log,
+	keep_vars_res,
 ):
 	s['meta'] = copy.deepcopy(META)
 	n = ds.dim(d, 'time')
@@ -140,13 +147,13 @@ def init(d, s, *,
 	m2 = len(s['zfull2'])
 	s['size2'] = [n, m2, l]
 	s['dims2'] = ['time', 'zfull2', 'column']
-	init_hist(d, s, 'backscatter', 2, blim[0], blim[1] + bres, bres)
+	init_hist(d, s, 'backscatter', 2, blim[0], blim[1], bres)
 	if 'backscatter_sd' in ds.vars(d):
 		init_hist(d, s, 'backscatter_sd', 1, bsd_lim[0], bsd_lim[1], bsd_res,
 			log=bsd_log)
-	init_avg(d, s, 'backscatter')
+	init_avg(d, s, 'backscatter', 2)
 	if 'backscatter_mol' in ds.vars(d):
-		init_avg(d, s, 'backscatter_mol')
+		init_avg(d, s, 'backscatter_mol', 2)
 	init_scalar(d, s, 'n', np.int64)
 	init_scalar(d, s, 'time_total')
 	init_scalar(d, s, 'clt')
@@ -168,20 +175,37 @@ def init(d, s, *,
 			'long_name': 'number of profiles used to calculate %s_avg' % var,
 			'units': '1',
 		}
-		init_avg(d, s, var, with_n=True)
+		init_avg(d, s, var, 1, with_n=True)
+		if var in keep_vars_lim and var in keep_vars_res:
+			init_hist(d, s, var, 1,
+				keep_vars_lim[var][0],
+				keep_vars_lim[var][1],
+				keep_vars_res[var]
+			)
+
+def sel(d, var, time=None, level=None, column=None):
+	dims = ds.dims(d, var)
+	a = []
+	if time is not None and 'time' in dims:
+		a += [time]
+	if level is not None and ('level' in dims or 'zfull' in dims):
+		a += [level]
+	if column is not None and 'column' in dims:
+		a += [column]
+	return d[var][tuple(a)]
 
 def hist(d, s, var, ndim, mask, level=None):
 	if ndim == 1:
 		for k in range(s['size'][2]):
 			s[var+'_hist'][:,k] += np.histogram(
-				d[var][mask[:,k],level,k],
+				sel(d, var, mask[:,k], level, k),
 				bins=s[var+'_half']
 			)[0]
 	else:
 		for j in range(s['size'][1]):
 			for k in range(s['size'][2]):
 				s[var+'_hist'][:,j,k] += np.histogram(
-					d[var][mask[:,k],j,k],
+					sel(d, var, mask[:,k], j, k),
 					bins=s[var+'_half']
 				)[0]
 
@@ -270,6 +294,9 @@ def stats_map(d, s,
 	lon_lim=None,
 	interp=None,
 	keep_vars=[],
+	keep_vars_lim={},
+	keep_vars_log={},
+	keep_vars_res={},
 	**kwargs
 ):
 	n = ds.dim(d, 'time')
@@ -300,6 +327,9 @@ def stats_map(d, s,
 			zres=zres,
 			bsd_z=bsd_z,
 			keep_vars=keep_vars,
+			keep_vars_lim=keep_vars_lim,
+			keep_vars_log=keep_vars_log,
+			keep_vars_res=keep_vars_res,
 		)
 		s['interp'] = interp
 		s['initialized'] = True
@@ -313,6 +343,9 @@ def stats_map(d, s,
 	hist(d, s, 'backscatter', 2, mask)
 	if 'backscatter_sd' in ds.vars(d):
 		hist(d, s, 'backscatter_sd', 1, mask, level=s['backscatter_sd_j'])
+	for var in s['keep_vars']:
+		if var+'_hist' in s:
+			hist(d, s, var, 1, mask)
 
 	for i in range(n):
 		dt = 24*60*60*(d['time_bnds'][i,1] - d['time_bnds'][i,0])
@@ -331,8 +364,8 @@ def stats_map(d, s,
 			s['clt'][k] += np.any(d['cloud_mask'][i,:,k])
 			for var in s['keep_vars']:
 				if not np.any(np.isnan(d[var][i])):
-					s[var+'_avg'][...,k] += d[var][i]
-					s[var+'_n'][var][k] += 1
+					s[var+'_avg'][...,k] += sel(d, var, i, None, k)
+					s[var+'_n'][k] += 1
 
 def reduce_var(s, var, var_n):
 	def interp(x):
@@ -382,6 +415,8 @@ def stats_reduce(s, bsd_z=None, **kwargs):
 	reduce_var(s, 'clt', 'n')
 	for var in s['keep_vars']:
 		reduce_var(s, var+'_avg', var+'_n')
+		if var+'_hist' in s:
+			reduce_var(s, var+'_hist', 'n')
 
 	do = {
 		'backscatter_avg': s['backscatter_avg'],
@@ -402,8 +437,9 @@ def stats_reduce(s, bsd_z=None, **kwargs):
 		do['backscatter_sd_hist'] = s['backscatter_sd_hist']
 		do['backscatter_sd_z'] = s['backscatter_sd_z']
 	for var in s['keep_vars']:
-		do[var+'_avg'] = s[var+'_avg']
-		do[var+'_n'] = s[var+'_n']
+		for suffix in ['avg', 'n', 'full', 'hist']:
+			key = var+'_'+suffix
+			if key in s: do[key] = s[key]
 
 	ds.rename_dim(do, 'zfull2', 'zfull')
 
