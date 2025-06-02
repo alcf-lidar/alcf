@@ -152,11 +152,14 @@ Options
 - `filter_exclude: <value> | { <value>... }`: Filter by a mask defined in a NetCDF file, described below under Filter file. If multiple files are supplied, they must all apply for a profile to be excluded.
 - `filter_include: <value> | { <value>... }`: The same as `filter_exclude`, but with time intervals to be included in the result. If both are defined, `filter_include` takes precedence. If multiple files are supplied, they must all apply for a profile to be included.
 - `interp: <value>`: Vertical interpolation method. `area_block` for area-weighting with block interpolation, `area_linear` for area-weighting with linear interpolation or `linear` for simple linear interpolation. Default: `area_linear`.
-- `keep_vars: { <var>... }`: Keep the listed input variables [experimental]. The variable must be numerical and have a time dimension. The input must be stored in daily files, otherwise the results are undefined. Default: `{ }`.
+- `keep_vars: { <var>... }`: Keep the listed input variables. The variable must be numerical and have a time dimension. The input must be stored in daily files, otherwise the results are undefined. An average of the variable is calculated. If *var*`_lim` and *var*`_res` are defined, a histogram is also calculated. Default: `{ }`.
 - `lat_lim: { <from> <to> }`: Latitude limits. Default: `none`.
 - `label: { <value...> }`: Input labels. Default: `none`.
 - `lon_lim: { <from> <to> }`: Longitude limits. Default: `none`.
 - `tlim: { <start> <end> }`: Time limits (see Time format below). Default: `none`.
+- *var*`_lim: { <start> <end> }`: Limits for a variable *var* in `keep_vars`.
+- *var*`_log: <value>`: Limits for a variable *var* in `keep_vars`. Enable/disable logarithmic scale of a variable *var* in `keep_vars` (`true` or `false`). Default: `false`.
+- *var*`_res: { <start> <end> }`: Limits for a variable *var* in `keep_vars`.
 - `zlim: { <low> <high> }`: Height limits (m). Default: `{ 0 15000 }`.
 - `zres: <value>`: Height resolution (m). Default: `50`.
 
@@ -193,6 +196,17 @@ Calculate statistics from processed lidar data in `alcf_cl51_lidar` and store th
 	if isinstance(clt_res, str):
 		clt_res = Fraction(clt_res)
 
+	keep_vars_lim = {}
+	keep_vars_log = {}
+	keep_vars_res = {}
+	for var in keep_vars:
+		try: keep_vars_lim['input_'+var] = kwargs[var+'_lim']
+		except KeyError: pass
+		try: keep_vars_log['input_'+var] = kwargs[var+'_log']
+		except KeyError: pass
+		try: keep_vars_res['input_'+var] = kwargs[var+'_res']
+		except KeyError: pass
+
 	options = {
 		'tlim': tlim_jd,
 		'blim': np.array(blim, dtype=np.float64)*1e-6,
@@ -209,6 +223,9 @@ Calculate statistics from processed lidar data in `alcf_cl51_lidar` and store th
 		'lat_lim': lat_lim,
 		'lon_lim': lon_lim,
 		'keep_vars': keep_vars_prefixed,
+		'keep_vars_lim': keep_vars_lim,
+		'keep_vars_log': keep_vars_log,
+		'keep_vars_res': keep_vars_res,
 	}
 
 	if filter_exclude is not None:
