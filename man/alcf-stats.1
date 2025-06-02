@@ -1,14 +1,16 @@
 .\" generated with Ronn-NG/v0.9.1
 .\" http://github.com/apjanke/ronn-ng/tree/0.9.1
-.TH "ALCF\-STATS" "1" "May 2024" ""
+.TH "ALCF\-STATS" "1" "February 2025" ""
 .SH "NAME"
 \fBalcf\-stats\fR \- Calculate cloud occurrence statistics\.
 .SH "SYNOPSIS"
 .nf
-alcf stats [<options>] [\-\-] <input> <output>
+alcf stats [<options>] [\-\-] <input>\|\.\|\.\|\. <output>
 .fi
 .SH "DESCRIPTION"
 Arguments following \fB\-\-\fR are treated as literal strings\. Use this delimiter if the input or output file names might otherwise be interpreted as non\-strings, e\.g\. purely numerical file names\.
+.P
+Multiple input files or directories can be supplied for a comparison \- only time periods present in all inputs are included [experimental]\. The output of alcf stats with multiple inputs is not yet supported by alcf plot\.
 .SH "ARGUMENTS"
 .TP
 \fBinput\fR
@@ -47,6 +49,18 @@ The same as \fBfilter_exclude\fR, but with time intervals to be included in the 
 .TP
 \fBinterp: <value>\fR
 Vertical interpolation method\. \fBarea_block\fR for area\-weighting with block interpolation, \fBarea_linear\fR for area\-weighting with linear interpolation or \fBlinear\fR for simple linear interpolation\. Default: \fBarea_linear\fR\.
+.TP
+\fBkeep_vars: { <\|\.\|\.\|\. }\fR
+Keep the listed input variables [experimental]\. The variable must be numerical and have a time dimension\. The input must be stored in daily files, otherwise the results are undefined\. Default: \fB{ }\fR\.
+.TP
+\fBlat_lim: { <from> <to> }\fR
+Latitude limits\. Default: \fBnone\fR\.
+.TP
+\fBlabel: { <value\|\.\|\.\|\.> }\fR
+Input labels\. Default: \fBnone\fR\.
+.TP
+\fBlon_lim: { <from> <to> }\fR
+Longitude limits\. Default: \fBnone\fR\.
 .TP
 \fBtlim: { <start> <end> }\fR
 Time limits (see Time format below)\. Default: \fBnone\fR\.

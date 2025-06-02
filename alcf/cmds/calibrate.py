@@ -76,6 +76,7 @@ Read time periods from `time_periods.txt`, lidar profiles from the directory `li
     alcf calibrate time_periods.txt lidar calibration.txt
 	"""
 	lidar = LIDARS.get(type_)
+	params = lidar.params(type_)
 	tp = read_time_periods(time_periods)
 	files = sorted(os.listdir(input_))
 	lr = []
@@ -91,7 +92,7 @@ Read time periods from `time_periods.txt`, lidar profiles from the directory `li
 		lr.append(d['lr'])
 	lr = np.hstack(lr)
 	lr_median = np.median(lr)
-	calibration_ceoff = lidar.CALIBRATION_COEFF*lr_median/lidar.SC_LR
+	calibration_ceoff = params['calibration_coeff']*lr_median/params['sc_lr']
 	print('-> %s' % output)
 	with open(output, 'w') as f:
 		f.write('lidar: %s wavelength: %d calibration_coeff: %f lr_median: %f\n' % (

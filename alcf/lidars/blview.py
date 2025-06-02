@@ -3,12 +3,6 @@ import ds_format as ds
 from alcf import misc
 from alcf.lidars import META
 
-WAVELENGTH = 910 # nm
-CALIBRATION_COEFF = 1e-9
-SURFACE_LIDAR = True
-SC_LR = 18.8 # sr. Stratocumulus lidar ratio (O'Connor et al., 2004).
-MAX_RANGE = 15400 # m
-
 VARS = {
 	'backscatter': ['profile_data'],
 	'zfull': ['range', 'altitude'],
@@ -19,7 +13,17 @@ DEFAULT_VARS = [
 	'time',
 ]
 
+def params(type_):
+	return {
+		'wavelength': 910, # nm
+		'calibration_coeff': 1e-9,
+		'surface_lidar': True,
+		'sc_lr': 18.8, # sr. Stratocumulus lidar ratio (O'Connor et al., 2004).
+		'max_range': 15400, # m
+	}
+
 def read(
+	type_,
 	filename,
 	vars,
 	altitude=None,
@@ -27,6 +31,7 @@ def read(
 	keep_vars=[],
 	**kwargs
 ):
+	p = params(type_)
 	sel = None
 	if tlim is not None:
 		d = ds.read(filename, 'time')
@@ -62,7 +67,7 @@ def read(
 		dx['zfull'] = (dx['zfull'].T + dx['altitude']).T
 	if 'backscatter' in vars:
 		profile_data = d['profile_data'].astype(np.float64).filled(np.nan)
-		dx['backscatter'] = profile_data*CALIBRATION_COEFF
+		dx['backscatter'] = profile_data*p['calibration_coeff']
 		j = np.max(np.nonzero(np.any(np.isfinite(dx['backscatter']), axis=0)))
 		dx['backscatter'] = dx['backscatter'][:,:(j + 1)]
 		if 'zfull' in vars:

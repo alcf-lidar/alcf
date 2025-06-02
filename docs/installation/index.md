@@ -56,11 +56,16 @@ The instructions below assume that you enter the commands in the terminal.
 
     ```sh
     pipx install alcf
+	```
+
+    Make sure that `$HOME/.local/bin` is in the PATH environment variable.
+
+	If you use pipx < 1.3.0, install the manual pages with:
+
+	```sh
     mkdir -p ~/.local/share/man/man1
     ln -s ~/.local/pipx/venvs/alcf/share/man/man1/alcf*.1 ~/.local/share/man/man1/
     ```
-
-    Make sure that `$HOME/.local/bin` is in the PATH environment variable.
 
 ### Windows
 
@@ -152,6 +157,11 @@ To uninstall ALCF on Linux:
 
 ```sh
 pipx uninstall alcf
+```
+
+If you have installed manual pages manually:
+
+```sh
 rm ~/.local/share/man/man1/alcf*.1
 ```
 
@@ -170,14 +180,19 @@ below](#releases), and run the following commands in the source code directory:
 ```sh
 ./download_cosp
 pipx install . # Replace pipx with pip for installation in Anaconda.
-mkdir -p ~/.local/share/man/man1
-ln -s ~/.local/pipx/venvs/alcf/share/man/man1/alcf*.1 ~/.local/share/man/man1/
 ```
 
 This will download and unpack [ALCF-COSP](https://github.com/alcf-lidar/alcf-cosp)
 (a version of COSP with support for ground-based lidars), and compile and
 install the ALCF. Use this option if you want to customise any parts of the
 ALCF.
+
+If you use pipx < 1.3.0, install the manual pages with:
+
+```sh
+mkdir -p ~/.local/share/man/man1
+ln -s ~/.local/pipx/venvs/alcf/share/man/man1/alcf*.1 ~/.local/share/man/man1/
+```
 
 ### Preparing a source distribution
 
@@ -201,12 +216,42 @@ the [Semantic Versioning](https://semver.org). Installation instructions
 have been changing with versions. Please follow the installation instructions
 in the documentation of the particular version.
 
+#### [2.3.1](https://github.com/alcf-lidar/alcf/releases/tag/v2.3.1) (2025-03-14)
+
+<details>
+<summary>Release notes</summary>
+<ul>
+<li>Fixed a NumPy warning.</li>
+</ul>
+</details>
+
+#### [2.3.0](https://github.com/alcf-lidar/alcf/releases/tag/v2.3.0) (2025-02-05)
+
+<details>
+<summary>Release notes</summary>
+<ul>
+<li>Fixed reading of the CHM 15k altitude variable.</li>
+<li>Support for the Cloudnet format.</li>
+</ul>
+</details>
+
+#### [2.2.0](https://github.com/alcf-lidar/alcf/releases/tag/v2.2.0) (2024-12-22)
+
+<details>
+<summary>Release notes</summary>
+<ul>
+<li>Fixed handling of the time argument.</li>
+<li>Fixed backscatter_hist and backscatter_sd_hist units in the metadata and documentation.</li>
+<li>Improvements in the documentation.</li>
+</ul>
+</details>
+
 #### [2.1.2](https://github.com/alcf-lidar/alcf/releases/tag/v2.1.2) (2024-10-18)
 
 <details>
 <summary>Release notes</summary>
 <ul>
-<li>Fix reading certain Vaisala CL61 files, in which the time dimension is "time" instead of "profile".</li>
+<li>Fixed reading certain Vaisala CL61 files, in which the time dimension is "time" instead of "profile".</li>
 </ul>
 </details>
 

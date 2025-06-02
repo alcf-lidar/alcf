@@ -1,4 +1,4 @@
-Copyright 2019-2024 Peter Kuma, Adrian J. McDonald, Olaf Morgenstern,
+Copyright 2019-2025 Peter Kuma, Adrian J. McDonald, Olaf Morgenstern,
 Richard Querel, Israel Silber and Connor J. Flynn
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of

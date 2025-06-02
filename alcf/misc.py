@@ -93,6 +93,9 @@ def half(xfull):
 	xhalf[-1] = 2.*xfull[-1] - xfull[-2]
 	return xhalf
 
+def full(xhalf):
+	return 0.5*(xhalf[1:] + xhalf[:-1])
+
 def time_bnds(time, step=None, start=None, end=None):
 	n = len(time)
 	if step is None:

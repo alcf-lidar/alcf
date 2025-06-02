@@ -84,10 +84,18 @@ Lidar types
 - `blview`: Vaisala BL-VIEW L2 product.
 - `caliop`: CALIPSO/CALIOP (`alcf auto model` only).
 - `chm15k`: Lufft CHM 15k.
+- `ct25k`: Vaisala CT25K. IMPORTANT: The simulator currently assumes wavelength of 910 nm instead of the actual instrument wavelength of 905 nm.
 - `cl31`: Vaisala CL31.
 - `cl51`: Vaisala CL51.
 - `cl61`: Vaisala CL61.
+- `cn_chm15k`: Cloudnet Lufft CHM 15k.
+- `cn_ct25k`: Cloudnet Vaisala CT25K.
+- `cn_cl31`: Cloudnet Vaisala CL31.
+- `cn_cl51`: Cloudnet Vaisala CL51.
+- `cn_cl61`: Cloudnet Vaisala CL61.
+- `cn_minimpl`: Cloudnet Sigma Space MiniMPL.
 - `cosp`: COSP simulated lidar.
+- `default`: The same format as the output of `alcf lidar`.
 - `minimpl`: Sigma Space MiniMPL (converted via SigmaMPL).
 - `mpl`: Sigma Space MPL (converted via SigmaMPL).
 - `mpl2nc`: Sigma Space MPL and MiniMPL (converted via mpl2nc).

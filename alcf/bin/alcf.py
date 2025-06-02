@@ -21,6 +21,15 @@ def main_wrapper():
 		else:
 			return 'Warning: %s\n%s\n' % (message, 'Use --debug for more information')
 	warnings.simplefilter('always')
+
+	# Restore warning blocking done by NumPy:
+	#
+	# Filter out Cython harmless warnings
+	# https://github.com/numpy/numpy/blob/c31e59993874f0f3b2dfce24df3bd910b44a632d/numpy/__init__.py#L320
+	warnings.filterwarnings('ignore', message='numpy.dtype size changed')
+	warnings.filterwarnings('ignore', message='numpy.ufunc size changed')
+	warnings.filterwarnings('ignore', message='numpy.ndarray size changed')
+
 	warnings.formatwarning = formatwarning
 
 	try:
@@ -31,7 +40,7 @@ def main_wrapper():
 			raise e
 		else:
 			print('Error: ' + str(e), file=sys.stderr)
-			print('Use --debug for more information', file=sys.stderr)	
+			print('Use --debug for more information', file=sys.stderr)
 
 if __name__ == '__main__':
 	main_wrapper()

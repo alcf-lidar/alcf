@@ -57,14 +57,14 @@ def fill_track(d, vars, track):
 	if 'lat' in vars:
 		d['lat'] = np.array([x[1] for x in res])
 
-def read(lidar, input_, vars, *args,
+def read(type_, lidar, input_, vars, *args,
 	altitude=None,
 	lon=None,
 	lat=None,
 	track=None,
 	**kwargs,
 ):
-	d = lidar.read(input_, vars, *args, altitude=altitude, **kwargs)
+	d = lidar.read(type_, input_, vars, *args, altitude=altitude, **kwargs)
 	if d is not None:
 		fill_default(d, 'altitude', altitude, 0)
 		fill_default(d, 'lon', lon, np.nan)
@@ -137,10 +137,17 @@ Types
 
 - `blview`: Vaisala BL-VIEW L2 product.
 - `chm15k`: Lufft CHM 15k.
+- `ct25k`: Vaisala CT25K.
 - `cl31`: Vaisala CL31.
 - `cl51`: Vaisala CL51.
 - `cl61`: Vaisala CL61.
-- `cosp`: COSP simulated lidar, for processing the output of `alcf simulate`.
+- `cn_chm15k`: Cloudnet Lufft CHM 15k.
+- `cn_ct25k`: Cloudnet Vaisala CT25K.
+- `cn_cl31`: Cloudnet Vaisala CL31.
+- `cn_cl51`: Cloudnet Vaisala CL51.
+- `cn_cl61`: Cloudnet Vaisala CL61.
+- `cn_minimpl`: Cloudnet Sigma Space MiniMPL.
+- `cosp`: COSP simulated lidar.
 - `default`: The same format as the output of `alcf lidar`.
 - `minimpl`: Sigma Space MiniMPL (converted via SigmaMPL).
 - `mpl`: Sigma Space MPL (converted via SigmaMPL).
@@ -240,6 +247,8 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 	if lidar is None:
 		raise ValueError('Invalid type: %s' % type_)
 
+	params = lidar.params(type_)
+
 	time1 = None
 	if time is not None:
 		time1 = [None, None]
@@ -279,7 +288,7 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 
 	if calibration_file is not None:
 		c = read_calibration_file(calibration_file)
-		calibration_coeff = c[b'calibration_coeff']/lidar.CALIBRATION_COEFF
+		calibration_coeff = c[b'calibration_coeff']/params['calibration_coeff']
 	else:
 		calibration_coeff = 1.
 
@@ -381,7 +390,7 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 				continue
 			print('<- %s' % file_)
 			try:
-				d = read(lidar, file_, VARIABLES,
+				d = read(type_, lidar, file_, VARIABLES,
 					altitude=altitude,
 					lon=lon,
 					lat=lat,
@@ -403,7 +412,7 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 		dd = process([None], state, **options)
 	else:
 		print('<- %s' % input_)
-		d = read(lidar, input_, VARIABLES,
+		d = read(type_, lidar, input_, VARIABLES,
 			altitude=altitude,
 			lon=lon,
 			lat=lat,

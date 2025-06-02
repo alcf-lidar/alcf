@@ -1,6 +1,6 @@
 .\" generated with Ronn-NG/v0.9.1
 .\" http://github.com/apjanke/ronn-ng/tree/0.9.1
-.TH "ALCF\-SIMULATE" "1" "May 2024" ""
+.TH "ALCF\-SIMULATE" "1" "February 2025" ""
 .SH "NAME"
 \fBalcf\-simulate\fR \- Simulate lidar measurements from model data using COSP\.
 .SH "SYNOPSIS"
@@ -30,6 +30,9 @@ CALIPSO/CALIOP\.
 \fBchm15k\fR
 Lufft CHM 15k\.
 .TP
+\fBct25k\fR
+Vaisala CT25K\. IMPORTANT: The simulator currently assumes wavelength of 910 nm instead of the actual instrument wavelength of 905 nm\.
+.TP
 \fBcl31\fR
 Vaisala CL31\.
 .TP
@@ -39,9 +42,15 @@ Vaisala CL51\.
 \fBcl61\fR
 Vaisala CL61\.
 .TP
-\fBmpl\fR
+\fBminimpl\fR
 Sigma Space MiniMPL\.
+.TP
+\fBmpl\fR
+Sigma Space MPL\.
 .SH "OPTIONS"
+.TP
+\fBkeep_vars: { <\|\.\|\.\|\. }\fR
+Keep the listed input variables\. The variables are expected to be prefixed with \fBinput_\fR in the input\. Default: \fB{ }\fR\.
 .TP
 \fBncolumns: <ncolumns>\fR
 Number of SCOPS subcolumns to generate\. Default: \fB10\fR\.

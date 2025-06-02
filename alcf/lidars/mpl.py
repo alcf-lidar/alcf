@@ -5,12 +5,6 @@ import warnings
 from alcf import misc
 from alcf.lidars import META
 
-WAVELENGTH = 532 # nm
-CALIBRATION_COEFF = 0.375e-5
-SURFACE_LIDAR = True
-SC_LR = 16.0 # sr
-MAX_RANGE = 30000 # m
-
 VARS = {
 	'backscatter': ['copol_nrb', 'crosspol_nrb'],
 	'backscatter_x': ['copol_nrb', 'crosspol_nrb'],
@@ -67,7 +61,17 @@ def convert_time(d, tlim):
 	time_bnds = misc.time_bnds(time, tres, *args)
 	return time, time_bnds, tres
 
+def params(type_):
+	return {
+		'wavelength': 532, # nm
+		'calibration_coeff': 0.375e-5,
+		'surface_lidar': True,
+		'sc_lr': 16.0, # sr
+		'max_range': 30000, # m
+	}
+
 def read(
+	type_,
 	filename,
 	vars,
 	altitude=None,
@@ -77,6 +81,7 @@ def read(
 	keep_vars=[],
 	**kwargs
 ):
+	p = params(type_)
 	sel = None
 	tres = None
 	if tlim is not None:
@@ -116,15 +121,15 @@ def read(
 		for i in range(n):
 			dx['zfull'][i,:] += dx['altitude'][i]
 	if 'backscatter' in vars:
-		dx['backscatter'] = (d['copol_nrb'] + 2.*d['crosspol_nrb'])*CALIBRATION_COEFF
+		dx['backscatter'] = (d['copol_nrb'] + 2.*d['crosspol_nrb'])*p['calibration_coeff']
 	if 'lon' in vars:
 		dx['lon'] = d['longitude']
 	if 'lat' in vars:
 		dx['lat'] = d['latitude']
 	# if 'backscatter_x' in vars:
-	# 	dx['backscatter_x'] = d['copol_nrb']*CALIBRATION_COEFF
+	# 	dx['backscatter_x'] = d['copol_nrb']*p['calibration_coeff']
 	# if 'backscatter_y' in vars:
-	# 	dx['backscatter_y'] = d['crosspol_nrb']*CALIBRATION_COEFF
+	# 	dx['backscatter_y'] = d['crosspol_nrb']*p['calibration_coeff']
 		# 'backscatter_x': {
 		# 	'.dims': ['time', 'level'],
 		# 	'long_name': 'copolarized_attenuated_backscatter_coefficient',
