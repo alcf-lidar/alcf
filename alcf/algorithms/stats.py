@@ -303,7 +303,7 @@ def stats_map(d, s,
 		)
 		s['interp'] = interp
 		s['initialized'] = True
-	
+
 	mask = create_mask(d, filter, filters_exclude, filters_include,
 		tlim, lon_lim, lat_lim)
 
