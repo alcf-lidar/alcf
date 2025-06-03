@@ -111,6 +111,18 @@ META = {
 		'standard_name': 'toa_outgoing_shortwave_flux',
 		'units': 'W m-2',
 	},
+	'input_clivi': {
+		'.dims': ['time'],
+		'long_name': 'ice water path',
+		'standard_name': 'atmosphere_cloud_ice_content',
+		'units': 'kg m-2',
+	},
+	'input_clwvi': {
+		'.dims': ['time'],
+		'long_name': 'condensed water path',
+		'standard_name': 'atmosphere_cloud_condensed_water_content',
+		'units': 'kg m-2',
+	},
 	'.': alcf.META,
 }
 

@@ -313,7 +313,7 @@ def stats_map(d, s,
 			'cbh',
 			'cloud_mask',
 			'lr',
-		] + keep_vars)
+		])
 		s['expanded_column'] = True
 		l = 1
 

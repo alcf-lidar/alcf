@@ -32,6 +32,11 @@ VARS_SURF = [
 	'crr',
 	'lsrr',
 	't2m',
+]
+
+VARS_DAY = [
+	'clwc',
+	'ciwc',
 	'tisr',
 	'tsr',
 	'ttr',
@@ -56,7 +61,7 @@ TRANS_SURF = {
 	'sp': 'ps',
 	'siconc': 'input_sic',
 	't2m': 'input_tas',
-	'tisr': 'input_rsdt',
+	'tisr': 'rsdt',
 	'tsr': 'rsnt',
 	'ttr': 'rlnt',
 }
@@ -111,6 +116,10 @@ def read0(type_, dirname, track, t1, t2,
 				sel={'time': [i], 'valid_time': [i], 'latitude': j, 'longitude': k},
 				jd=True,
 			)
+			d_day = ds.read(filename, VARS_DAY,
+				sel={'latitude': j, 'longitude': k},
+				jd=True,
+			)
 			ds.rename(d, 'valid_time', 'time')
 			#d_alltime = ds.read(filename, req_vars,
 			#	sel={'latitude': j, 'longitude': k},
@@ -120,16 +129,22 @@ def read0(type_, dirname, track, t1, t2,
 			for a, b in trans.items():
 				if a in d.keys():
 					ds.rename(d, a, b)
-			for var in ['rsdt', 'rsnt', 'rlnt']:
-				if var not in d: continue
-				shape = list(d[var].shape)
+				if a in d_day.keys():
+					ds.rename(d_day, a, b)
+			for var in ['rsdt', 'rsnt', 'rlnt', 'clw', 'cli']:
+				if var not in d_day: continue
+				shape = list(d_day[var].shape)
 				shape[0] = 1
-				d[var] = np.mean(d[var], axis=0).reshape(shape)
+				d_day[var] = np.mean(d_day[var], axis=0).reshape(shape)
 			d['lat'] = np.array([d['lat']])
 			d['lon'] = np.array([d['lon']])
 			d['lon'] = d['lon'] % 360
 			d['.']['lat']['.dims'] = ['time']
 			d['.']['lon']['.dims'] = ['time']
+			if type_ == 'surf':
+				d['input_rsdt'] = d_day['rsdt']/3600
+				d['input_rsut'] = -d_day['rsnt']/3600 + d_day['rsdt']/3600
+				d['input_rlut'] = -d_day['rlnt']/3600
 			if type_ == 'plev':
 				order = np.argsort(d['pfull'])[::-1]
 				d['pfull'] = d['pfull'].reshape([1, len(d['pfull'])])
@@ -140,6 +155,14 @@ def read0(type_, dirname, track, t1, t2,
 				d['ta'] = d['ta'][:,order]
 				d['zfull'] = d['zfull'][:,order]
 				d['pfull'] = d['pfull'][:,order]
+				zhalf = misc.half(d['zfull'][0,:])
+				dz = np.diff(zhalf)
+				clivi = np.sum(dz*d_day['cli'][0,:])
+				clwvi = np.sum(dz*d_day['clw'][0,:])
+				d['input_clivi'] = clivi.reshape((1,))
+				d['input_clwvi'] = clwvi.reshape((1,))
+			for var in ['clivi', 'clwvi', 'rsdt', 'rsut', 'rlut']:
+				d['.']['input_'+var] = {'.dims': ['time']}
 			dd.append(d)
 	d = ds.op.merge(dd, 'time')
 	if 'pfull' in d:
@@ -156,14 +179,6 @@ def read0(type_, dirname, track, t1, t2,
 	if 'crr' in d and 'lsrr' in d:
 		d['input_pr'] = d['crr'] + d['lsrr']
 		del d['crr'], d['lsrr']
-	if 'input_rsdt' in d:
-		d['input_rsdt'] /= 3600
-	if 'rsnt' in d and 'input_rsdt' in d:
-		d['input_rsut'] = -d['rsnt']/3600 + d['input_rsdt']
-		del d['rsnt']
-	if 'rlnt' in d:
-		d['input_rlut'] = -d['rlnt']/3600
-		del d['rlnt']
 	return d
 
 def read(dirname, index, track, t1, t2,

@@ -93,6 +93,12 @@ def read(dirname, index, track, t1, t2,
 				d[var] = x[::-1]
 				dims = ['level']
 			ds.dims(d, var, dims)
+		zhalf = misc.half(d['zfull'])
+		dz = np.diff(zhalf)
+		d['input_clivi'] = np.sum(dz*d['cli'])
+		d['input_clwvi'] = np.sum(dz*d['clw'])
+		d['.']['input_clivi'] = {'.dims': []}
+		d['.']['input_clwvi'] = {'.dims': []}
 		dd += [d]
 	d = ds.merge(dd, 'time')
 	d['cl'] = np.full(d['cli'].shape, 100., np.float64)

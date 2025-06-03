@@ -118,6 +118,10 @@ def read(dirname, index, track, t1, t2,
 			pfull = d['PL'][::-1]
 			zfull = d['H'][::-1]
 			ta = d['T'][::-1]
+			zhalf = misc.half(zfull)
+			dz = np.diff(zhalf)
+			clivi = np.sum(dz*cli)
+			clwvi = np.sum(dz*clw)
 			nlev = len(clw)
 			newshape4 = (1, nlev)
 			newshape3 = (1,)
@@ -135,6 +139,8 @@ def read(dirname, index, track, t1, t2,
 				'input_rlut': rlut.reshape(newshape3),
 				'input_rsdt': rsdt.reshape(newshape3),
 				'input_rsut': rsut.reshape(newshape3),
+				'input_clivi': clivi.reshape(newshape3),
+				'input_clwvi': clwvi.reshape(newshape3),
 				'orog': orog.reshape(newshape3),
 				'lat': np.array([lat[j]]),
 				'lon': np.array([lon[k]]),
