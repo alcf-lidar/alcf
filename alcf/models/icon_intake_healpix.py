@@ -17,12 +17,21 @@ VARS = [
 	'pr',
 	'sic',
 	'tas',
+]
+
+VARS_DAILY = [
 	'rlut',
 	'rsdt',
 	'rsut',
+	'cli',
+	'clw',
 ]
 
 STEP = 3/24
+
+def convert_time(time):
+	return aq.from_iso('1970-01-01') + \
+		(np.array(time).astype('datetime64[s]').astype('int'))/(24*60*60)
 
 def index(dirname, warnings=[], recursive=False, njobs=1):
 	import intake
@@ -33,12 +42,13 @@ def index(dirname, warnings=[], recursive=False, njobs=1):
 	obj = getattr(getattr(cat, model), run)
 	ids = obj(time=timestep, zoom=zoom).to_dask()
 	ids_daily = obj(time='P1D', zoom=zoom).to_dask()
-	time = aq.from_iso('1970-01-01') + \
-		(np.array(ids.time).astype('datetime64[s]').astype('int'))/(24*60*60)
+	time = convert_time(ids.time)
+	time_daily = convert_time(ids_daily.time)
 	return {
 		'ids': ids,
-		'ids_daily': ids,
+		'ids_daily': ids_daily,
 		'time': time,
+		'time_daily': time_daily,
 	}
 
 def read(dirname, index, track, t1, t2,
@@ -48,6 +58,7 @@ def read(dirname, index, track, t1, t2,
 	ids = index['ids']
 	ids_daily = index['ids_daily']
 	time = index['time']
+	time_daily = index['time_daily']
 	nest = ids.crs.healpix_order == 'nest'
 	ii = np.nonzero(
 		(time >= t1 - step*0.5) &
@@ -59,7 +70,16 @@ def read(dirname, index, track, t1, t2,
 		lon, lat = track(t)
 		if np.isnan(lon) or np.isnan(lat):
 			continue
+		dt = t - time_daily
+		dt[dt < 0] = np.nan
+		i_daily = np.nanargmin(dt)
+		if dt[i_daily] > 1:
+			raise RuntimeError('No daily data found for time %s' % aq.to_iso(t))
 		j = healpy.ang2pix(ids.crs.healpix_nside, lon, lat,
+			lonlat=True,
+			nest=nest
+		)
+		j_daily = healpy.ang2pix(ids_daily.crs.healpix_nside, lon, lat,
 			lonlat=True,
 			nest=nest
 		)
@@ -73,10 +93,7 @@ def read(dirname, index, track, t1, t2,
 			sel = {'cell': j}
 			if 'time' in ids[var].coords:
 				sel['time'] = i
-			if var in ['rlut', 'rsdt', 'rsut']:
-				x = np.array(ids_daily[var].isel(**sel))
-			else:
-				x = np.array(ids[var].isel(**sel))
+			x = np.array(ids[var].isel(**sel))
 			if var == 'phalf':
 				d['ps'] = x[-1]
 				dims = []
@@ -86,19 +103,28 @@ def read(dirname, index, track, t1, t2,
 			elif var == 'zg':
 				d['zfull'] = x[::-1]
 				dims = ['level']
-			elif var in ['pr', 'sic', 'tas', 'rlut', 'rsdt', 'rsut']:
+			elif var in ['pr', 'sic', 'tas']:
 				d['input_'+var] = x
 				dims = []
 			else:
 				d[var] = x[::-1]
 				dims = ['level']
 			ds.dims(d, var, dims)
+		for var in VARS_DAILY:
+			x = np.array(ids_daily[var].isel(cell=j_daily, time=i_daily))
+			if var in ['rsdt', 'rsut', 'rlut']:
+				d['input_'+var] = x
+				ds.dims(d, 'input_'+var, [])
+			else:
+				d['input_'+var] = x[::-1]
+				ds.dims(d, 'input_'+var, ['level'])
 		zhalf = misc.half(d['zfull'])
 		dz = np.diff(zhalf)
-		d['input_clivi'] = np.sum(dz*d['cli'])
-		d['input_clwvi'] = np.sum(dz*d['clw'])
-		d['.']['input_clivi'] = {'.dims': []}
-		d['.']['input_clwvi'] = {'.dims': []}
+		d['input_clivi'] = np.sum(dz*d['input_cli'])
+		d['input_clwvi'] = np.sum(dz*d['input_clw'])
+		del d['input_cli'], d['input_clw']
+		ds.dims(d, 'input_clivi', [])
+		ds.dims(d, 'input_clwvi', [])
 		dd += [d]
 	d = ds.merge(dd, 'time')
 	d['cl'] = np.full(d['cli'].shape, 100., np.float64)
