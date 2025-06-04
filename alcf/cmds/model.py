@@ -83,7 +83,7 @@ def worker(type_, input_, index, output, track, start, r, *,
 					d[var] = start + (d[var] - t1)
 			d['.'] = META
 			ds.write(output_filename, d)
-			print('-> %s' % output_filename)
+			misc.log_output(output_filename)
 	except Exception as e:
 		if debug: warn(traceback.format_exc())
 		else: warn(str(e))

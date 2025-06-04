@@ -39,7 +39,7 @@ VARS_NCL = [
 STEP = 3/24
 
 def index(dirname, warnings=[], recursive=False, njobs=1):
-	print('<- %s' % dirname)
+	misc.log_input(dirname)
 	return ds.readdir(dirname, ['XTIME'],
 		jd=True,
 		recursive=recursive,
@@ -59,7 +59,7 @@ def read_nc(d_index, track, t1, t2, step):
 		lon0, lat0 = track(time)
 		if np.isnan(lon0) or np.isnan(lat0):
 			return
-		print('<- %s' % d_index['filename'])
+		misc.log_input(d_index['filename'])
 		d = ds.read(d_index['filename'], VARS_NC, sel={'Time': 0})
 		misc.require_vars(d, VARS_NC)
 		lon = np.where(d['XLONG'] < 0, 360 + d['XLONG'], d['XLONG'])
@@ -112,7 +112,7 @@ def read_ncl(d_index, track, t1, t2, step):
 		if np.isnan(lon0) or np.isnan(lat0):
 			return
 		req_vars = VARS_NCL + [dim1, dim2]
-		print('<- %s' % d_index['filename'])
+		misc.log_input(d_index['filename'])
 		d = ds.read(d_index['filename'], req_vars)
 		misc.require_vars(d, req_vars)
 		lon = np.where(d['g5_lon_1'] < 0, 360 + d['g5_lon_1'], d['g5_lon_1'])

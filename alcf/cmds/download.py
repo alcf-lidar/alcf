@@ -172,4 +172,4 @@ Download MERRA-2 data for a ship track `track.nc` and store the output in the di
 					lon1, lon2, lat1, lat2,
 					nocache=nocache)
 				shutil.move(filename, outfile)
-				print('-> %s' % outfile)
+				misc.log_output(outfile)

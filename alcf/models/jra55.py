@@ -47,14 +47,14 @@ def read(dirname, index, track, t1, t2,
 
 	req_vars = ['latitude', 'longitude', 'z']
 	ll_filename = os.path.join(dirname, 'LL125.nc')
-	print('<- %s' % ll_filename)
+	misc.log_input(ll_filename)
 	d_ll = ds.read(ll_filename, req_vars)
 	misc.require_vars(d_ll, req_vars)
 	lat_ll = d_ll['latitude']
 	lon_ll = d_ll['longitude']
 	orog_ll = d_ll['z'][0,:,:]/9.80665
 
-	print('<- %s' % dirname)
+	misc.log_input(dirname)
 	dd_idx = ds.readdir(dirname, VARS_INDEX,
 		jd=True,
 		full=True,
@@ -77,7 +77,7 @@ def read(dirname, index, track, t1, t2,
 				(time >= t1 - step*0.5) &
 				(time < t2 + step*0.5)
 			)[0]
-			print('<- %s' % filename)
+			misc.log_input(filename)
 			for i in ii:
 				t = time[i]
 				lon0, lat0 = track(time[i])

@@ -1,5 +1,6 @@
 import os
 from getpass import getpass
+from alcf import misc
 
 LOGIN_URL = b'https://cds.climate.copernicus.eu/api/v2'
 
@@ -72,7 +73,7 @@ def login(uid=None, key=None, overwrite=False):
 		os.chmod(f.fileno(), 0o600)
 		f.write(b'url: %s\n' % LOGIN_URL)
 		f.write(b'key: %s:%s\n' % (uid.encode('utf-8'), key.encode('utf-8')))
-	print('-> %s' % cdsapirc)
+	misc.log_output(cdsapirc)
 
 def download(filename, product, year, month, day, lon1, lon2, lat1, lat2,
 	nocache=False

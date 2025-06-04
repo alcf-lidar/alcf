@@ -6,6 +6,7 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 import os
 import sys
 import pst
+import logging
 import warnings
 from alcf.cmds import main
 
@@ -31,6 +32,11 @@ def main_wrapper():
 	warnings.filterwarnings('ignore', message='numpy.ndarray size changed')
 
 	warnings.formatwarning = formatwarning
+
+	logging.basicConfig(
+		format='%(message)s',
+		level=logging.DEBUG if 'debug' in kwargs else logging.INFO,
+	)
 
 	try:
 		ret = main.run(*args[1:], **kwargs)

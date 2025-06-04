@@ -1,8 +1,7 @@
 import os
 from getpass import getpass
 import requests
-
-PRODUCTS = ['M2I3NVASM', 'M2I1NXASM', 'M2T1NXFLX', 'M2T1NXRAD']
+from alcf import misc
 
 URS = b'urs.earthdata.nasa.gov'
 
@@ -50,16 +49,16 @@ def login(user=None, password=None, overwrite=False):
 			quote(user.encode('utf-8')),
 			quote(password.encode('utf-8'))
 		))
-	print('-> %s' % netrc)
+	misc.log_output(netrc)
 
 	with open(urs_cookies, 'wb') as f:
 		pass
-	print('-> %s' % urs_cookies)
+	misc.log_output(urs_cookies)
 
 	with open(dodsrc, 'wb') as f:
 		f.write(b'HTTP.COOKIEJAR=%s\n' % os.fsencode(urs_cookies))
 		f.write(b'HTTP.NETRC=%s\n' % os.fsencode(netrc))
-	print('-> %s' % dodsrc)
+	misc.log_output(dodsrc)
 
 def download(output, product, year, month, day, lon1, lon2, lat1, lat2,
 	nocache=False
