@@ -42,8 +42,11 @@ def override_year_in_time(time, year):
 	# year while the new is not, and the time as near the end of the year.
 	return override_year_in_time(time_new, year)
 
-def worker(type_, input_, index, output, track, start, debug, r,
-	override_year=None):
+def worker(type_, input_, index, output, track, start, r, *,
+	debug=False,
+	override_year=None,
+	skip_existing=False,
+):
 	try:
 		if override_year is not None:
 			t1 = override_year_in_time(start, override_year)
@@ -58,6 +61,8 @@ def worker(type_, input_, index, output, track, start, debug, r,
 		model = MODELS[type_]
 		output_filename = os.path.join(output, '%s.nc' % \
 			aq.to_iso(start).replace(':', ''))
+		if skip_existing and os.path.exists(output_filename):
+			return
 		warnings = []
 		d = model.read(input_, index, track_f, t1, t2,
 			warnings=warnings,
@@ -83,16 +88,17 @@ def worker(type_, input_, index, output, track, start, debug, r,
 		if debug: warn(traceback.format_exc())
 		else: warn(str(e))
 
-def run(type_, input_, output,
+def run(type_, input_, output, *,
+	debug=False,
+	njobs=None,
+	override_year=None,
 	point=None,
+	r=False,
+	skip_existing=False,
 	time=None,
 	track=None,
 	track_gap=21600,
-	override_year=None,
 	track_lon_180=False,
-	debug=False,
-	r=False,
-	njobs=None,
 	**kwargs
 ):
 	'''
@@ -128,10 +134,11 @@ Options
 -------
 
 - `njobs: <n>`: Number of parallel jobs. Default: number of CPU cores capped to 16.
-- `-r`: Process the input directory recursively.
-- `--track_lon_180`: Expect track longitude between -180 and 180 degrees. This option is no longer needed as the conversion is automatically. [deprecated]
 - `override_year: <year>`: Override year in the track. Use if comparing observations with a model statistically and the model output does not have a corresponding year available. The observation time is converted to the same time relative to the start of the year in the specified year. Note that if the original year is a leap year and the override year is not, as a consequence of the above 31 December is mapped to 1 January. The output retains the original year as in the track, even though the model data come from the override year. Default: `none`.
+- `-r`: Process the input directory recursively.
+- `--skip-existing`: Skip the generation of existing output files.
 - `track_gap: <interval>`: If the interval is not 0, a track file is supplied, the `time_bnds` variable is not defined in the file and any two adjacent points are separated by more than the specified time interval (seconds), then a gap is assumed to be present between the two data points, instead of interpolating location between the two points. Default: `21600` (6 hours).
+- `--track_lon_180`: Expect track longitude between -180 and 180 degrees. This option is no longer needed as the conversion is automatically. [deprecated]
 
 Types
 -----
@@ -187,8 +194,19 @@ Extract MERRA-2 model data in `M2I3NVASM.5.12.4` at 45 S, 170 E between 1 and 2 
 		for t in tt:
 			if not misc.track_has_seg(d_track, t, t + 1):
 				continue
-			f = ex.submit(worker, type_, input_, index, output, d_track, t,
-				debug, r, override_year)
+			f = ex.submit(
+				worker,
+				type_,
+				input_,
+				index,
+				output,
+				d_track,
+				t,
+				r,
+				debug=debug,
+				override_year=override_year,
+				skip_existing=skip_existing,
+			)
 			fs += [f]
 	for w in warnings:
 		if len(w) == 2:
