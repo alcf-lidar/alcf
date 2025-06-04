@@ -299,7 +299,7 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 		t1 = np.round(t1*86400.)/86400.
 		filename = os.path.join(output, '%s.nc' % aq.to_iso(t1).replace(':', ''))
 		ds.write(filename, d)
-		print('-> %s' % filename)
+		misc.log_output(filename)
 		return []
 
 	def output_stream(dd, state, output_sampling=None, **options):
@@ -388,7 +388,7 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 		for file_ in files:
 			if not os.path.isfile(file_):
 				continue
-			print('<- %s' % file_)
+			misc.log_input(file_)
 			try:
 				d = read(type_, lidar, file_, VARIABLES,
 					altitude=altitude,
@@ -411,7 +411,7 @@ Process Vaisala CL51 data in `cl51_nc` and store the output in `cl51_alcf_lidar`
 				else: warn('%s: %s' % (file_, str(e)))
 		dd = process([None], state, **options)
 	else:
-		print('<- %s' % input_)
+		misc.log_input(input_)
 		d = read(type_, lidar, input_, VARIABLES,
 			altitude=altitude,
 			lon=lon,

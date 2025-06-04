@@ -17,7 +17,7 @@ VARS = [
 STEP = 6/24
 
 def index(dirname, warnings=[], recursive=False, njobs=1):
-	print('<- %s' % dirname)
+	misc.log_input(dirname)
 	dd = ds.readdir(dirname,
 		variables=['time'],
 		jd=True,
@@ -29,7 +29,7 @@ def index(dirname, warnings=[], recursive=False, njobs=1):
 	)
 
 	vgrid_filename = os.path.join(dirname, 'vgrid.nc')
-	print('<- %s' % vgrid_filename)
+	misc.log_input(vgrid_filename)
 	d_g = ds.read(vgrid_filename, [
 		'clon', 'clat'
 	], full=True)
@@ -48,7 +48,7 @@ def read(dirname, index, track, t1, t2,
 	ncells = ds.dim(d_g, 'ncells')
 	vgrid_cache = {}
 
-	print('<- %s' % vgrid_filename)
+	misc.log_input(vgrid_filename)
 	for var in VARS:
 		dd = []
 		for d_idx in dd_idx:
@@ -61,7 +61,7 @@ def read(dirname, index, track, t1, t2,
 				(time >= t1 - step*0.5) &
 				(time < t2 + step*0.5)
 			)[0]
-			print('<- %s' % filename)
+			misc.log_input(filename)
 			for i in ii:
 				lon0, lat0 = track(time[i])
 				if np.isnan(lon0) or np.isnan(lat0):

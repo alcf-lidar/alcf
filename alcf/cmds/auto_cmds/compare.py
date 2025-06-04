@@ -1,5 +1,6 @@
 import os
 from alcf.cmds import lidar, stats, plot
+from alcf import misc
 
 def run(*args, **options):
 	input_ = args[:-1]
@@ -21,10 +22,10 @@ def run(*args, **options):
 	plot_dir = os.path.join(output, 'plot')
 	cloud_occurrence_filename = os.path.join(plot_dir, 'cloud_occurrence.png')
 
-	print('-> %s' % output)
+	misc.log_output(output)
 	try: os.mkdir(output)
 	except OSError: pass
-	print('-> %s' % plot_dir)
+	misc.log_output(plot_dir)
 	try: os.mkdir(plot_dir)
 	except OSError: pass
 	print('! alcf plot cloud_occurrence')

@@ -3,6 +3,7 @@ import ds_format as ds
 import numpy as np
 import aquarius_time as aq
 from alcf.lidars import LIDARS
+from alcf import misc
 
 def read_time_periods(filename):
 	tp = []
@@ -82,7 +83,7 @@ Read time periods from `time_periods.txt`, lidar profiles from the directory `li
 	lr = []
 	for file_ in files:
 		filename = os.path.join(input_, file_)
-		print('<- %s' % filename)
+		misc.log_input(filename)
 		d = ds.read(filename, ['time'])
 		mask = np.zeros(len(d['time']), dtype=bool)
 		for period in tp:
@@ -93,7 +94,7 @@ Read time periods from `time_periods.txt`, lidar profiles from the directory `li
 	lr = np.hstack(lr)
 	lr_median = np.median(lr)
 	calibration_ceoff = params['calibration_coeff']*lr_median/params['sc_lr']
-	print('-> %s' % output)
+	misc.log_output(output)
 	with open(output, 'w') as f:
 		f.write('lidar: %s wavelength: %d calibration_coeff: %f lr_median: %f\n' % (
 			type_,

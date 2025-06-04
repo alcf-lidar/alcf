@@ -634,15 +634,15 @@ Plot backscatter from processed Vaisala CL51 data in `alcf_cl51_lidar` and store
 	if plot_type in ('cbh', 'cloud_occurrence', 'backscatter_sd_hist'):
 		dd = []
 		for file in input_:
-			print('<- %s' % file)
+			misc.log_input(file)
 			dd += [ds.read(file, VARIABLES)]
 		plot(plot_type, dd, output, **opts)
-		print('-> %s' % output)
+		misc.log_output(output)
 	elif plot_type == 'backscatter_hist':
-		print('<- %s' % input_[0])
+		misc.log_input(input_[0])
 		d = ds.read(input_[0], VARIABLES)
 		plot(plot_type, d, output, **opts)
-		print('-> %s' % output)
+		misc.log_output(output)
 	elif plot_type in ('backscatter', 'clw', 'cli', 'clw+cli', 'cl'):
 		for input1 in input_:
 			if os.path.isdir(input1):
@@ -653,7 +653,7 @@ Plot backscatter from processed Vaisala CL51 data in `alcf_cl51_lidar` and store
 						os.path.splitext(file_)[0] + '.png'
 					)
 					try:
-						print('<- %s' % filename)
+						misc.log_input(filename)
 						d = ds.read(filename, VARIABLES)
 					except SystemExit:
 						raise
@@ -664,7 +664,7 @@ Plot backscatter from processed Vaisala CL51 data in `alcf_cl51_lidar` and store
 						else: warn('%s: %s' % (file_, str(e)))
 					try:
 						plot(plot_type, d, output_filename, **opts)
-						print('-> %s' % output_filename)
+						misc.log_output(output_filename)
 					except SystemExit:
 						raise
 					except SystemError:
@@ -675,7 +675,7 @@ Plot backscatter from processed Vaisala CL51 data in `alcf_cl51_lidar` and store
 					finally:
 						plt.close()
 			else:
-				print('<- %s' % input1)
+				misc.log_input(input1)
 				d = ds.read(input1, VARIABLES)
 				try:
 					plot(plot_type, d, output, **opts)

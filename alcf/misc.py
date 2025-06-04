@@ -1,3 +1,4 @@
+import logging
 import copy
 import numpy as np
 import astropy.coordinates
@@ -5,6 +6,12 @@ import astropy.time
 import astropy.units
 import ds_format as ds
 import aquarius_time as aq
+
+def log_input(filename):
+	logging.debug('<- %s' % filename)
+
+def log_output(filename):
+	logging.info('-> %s' % filename)
 
 def parse_time(time):
 	if len(time) != 2:

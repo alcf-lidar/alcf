@@ -151,7 +151,7 @@ def cosp_alcf(config, input_, output, keep_vars=[]):
 		subprocess.call([program, config_filename, input_, output])
 	finally:
 		os.unlink(config_filename)
-	print('<- %s' % output)
+	misc.log_input(output)
 	d = ds.read(output)
 	if len(keep_vars) > 0:
 		di = ds.read(input_, keep_vars)
@@ -160,7 +160,7 @@ def cosp_alcf(config, input_, output, keep_vars=[]):
 			ds.meta(d, var, ds.meta(di, var))
 	d['.']['.'] = alcf.META
 	ds.write(output, d)
-	print('-> %s' % output)
+	misc.log_output(output)
 
 def run(type_, input_, output,
 	keep_vars=[],
@@ -242,7 +242,7 @@ Simulate a Vaisala CL51 instrument from model data in `alcf_merra2_model` previo
 	keep_vars_prefixed = ['input_' + var for var in keep_vars]
 
 	if os.path.isfile(input_):
-		print('<- %s' % input_)
+		misc.log_input(input_)
 		cosp_alcf(config, input_, output,
 			keep_vars=keep_vars_prefixed
 		)
@@ -253,7 +253,7 @@ Simulate a Vaisala CL51 instrument from model data in `alcf_merra2_model` previo
 			output_filename = os.path.join(output, file_)
 			if not os.path.isfile(input_filename):
 				continue
-			print('<- %s' % input_filename)
+			misc.log_input(input_filename)
 			try:
 				d = ds.read(input_filename, VARS)
 				misc.require_vars(d, VARS)

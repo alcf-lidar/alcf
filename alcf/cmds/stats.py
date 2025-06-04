@@ -44,7 +44,7 @@ def create_common_filter(input_):
 	for input1 in input_:
 		dd = []
 		for filename in get_filenames(input1):
-			print('<- %s' % filename)
+			misc.log_input(filename)
 			d = ds.read(filename, ['time_bnds'])
 			dd += [d]
 		d = ds.merge(dd, 'time')
@@ -239,7 +239,7 @@ Calculate statistics from processed lidar data in `alcf_cl51_lidar` and store th
 		state = {}
 		dd1 = []
 		for filename in get_filenames(input1):
-			print('<- %s' % filename)
+			misc.log_input(filename)
 			d = ds.read(filename, vars)
 			dd1 = stats.stream([d], state, **options)
 		dd1 = stats.stream([None], state, **options)
@@ -257,6 +257,6 @@ Calculate statistics from processed lidar data in `alcf_cl51_lidar` and store th
 			'long_name': 'input label',
 		}
 
-	print('-> %s' % output)
+	misc.log_output(output)
 	ds.attrs(do, None, alcf.META)
 	ds.write(output, do)

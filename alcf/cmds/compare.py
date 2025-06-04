@@ -12,7 +12,7 @@ VARIABLES = [
 ]
 
 def read(d):
-	print('<- %s' % d['filename'])
+	misc.log_input(d['filename'])
 	if d is not None:
 		d0 = ds.read(d['filename'], VARIABLES)
 		d.update(d0)
@@ -86,5 +86,5 @@ Arguments
 	state = {}
 	stream(files, state)
 	dd = stream([[None] for i in range(n)], state)
-	print('-> %s' % output)
+	misc.log_output(output)
 	#ds.to_netcdf(output, dd[0])

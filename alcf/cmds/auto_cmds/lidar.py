@@ -1,6 +1,7 @@
 import os
 from alcf.cmds import lidar, stats, plot
 from alcf.lidars import LIDARS
+from alcf import misc
 
 STEPS = ['lidar', 'stats', 'plot']
 
@@ -25,18 +26,18 @@ def run(type_, input_, output, *args, skip=None, **kwargs):
 	else:
 		i = -1
 
-	print('-> %s' % output)
+	misc.log_output(output)
 	try: os.mkdir(output)
 	except OSError: pass
 
 	if i < STEPS.index('lidar'):
-		print('-> %s' % lidar_dir)
+		misc.log_output(lidar_dir)
 		try: os.mkdir(lidar_dir)
 		except OSError: pass
 		print('! alcf lidar')
 		lidar.run(type_, input_, lidar_dir, *args, **kwargs)
 	if i < STEPS.index('stats'):
-		print('-> %s' % stats_dir)
+		misc.log_output(stats_dir)
 		try: os.mkdir(stats_dir)
 		except OSError: pass
 		print('! alcf stats')
@@ -65,10 +66,10 @@ def run(type_, input_, output, *args, skip=None, **kwargs):
 			**kwargs
 		)
 	if i < STEPS.index('plot'):
-		print('-> %s' % plot_dir)
+		misc.log_output(plot_dir)
 		try: os.mkdir(plot_dir)
 		except OSError: pass
-		print('-> %s' % backscatter_dir)
+		misc.log_output(backscatter_dir)
 		try: os.mkdir(backscatter_dir)
 		except OSError: pass
 		print('! alcf plot backscatter')

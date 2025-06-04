@@ -22,7 +22,7 @@ STEP = 2/24
 def read(dirname, index, track, t1, t2,
 	warnings=[], step=STEP, recursive=False):
 
-	print('<- %s' % dirname)
+	misc.log_input(dirname)
 	dd_index = ds.readdir(dirname, VARS_INDEX,
 		jd=True, recursive=recursive)
 	dd = []
@@ -34,7 +34,7 @@ def read(dirname, index, track, t1, t2,
 		lat = d_index['latitude']
 		filename = d_index['filename']
 		ii = np.where((time >= t1 - step*0.5) & (time <= t2 + step*0.5))[0]
-		print('<- %s' % filename)
+		misc.log_input(filename)
 		for i in ii:
 			lon0, lat0 = track(time[i])
 			if np.isnan(lon0) or np.isnan(lat0):
