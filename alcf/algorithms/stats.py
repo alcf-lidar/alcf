@@ -226,7 +226,7 @@ def create_filter_mask(filters, time, l):
 	return filter_mask
 
 def create_mask(d, filter, filters_exclude, filters_include,
-	tlim, lat_lim, lon_lim):
+	tlim, lon_lim, lat_lim):
 
 	n = ds.dim(d, 'time')
 	l = ds.dim(d, 'column')
@@ -238,12 +238,12 @@ def create_mask(d, filter, filters_exclude, filters_include,
 	mask = np.ones(n, bool)
 	if tlim is not None:
 		mask &= (d['time'] >= tlim[0]) & (d['time'] < tlim[1])
-	if lat_lim is not None:
-		mask &= (d['lat'] >= lat_lim[0]) & (d['lat'] < lat_lim[1])
-		mask[~latm] = False
 	if lon_lim is not None:
 		mask &= (d['lon'] >= lon_lim[0]) & (d['lon'] < lon_lim[1])
 		mask[~lonm] = False
+	if lat_lim is not None:
+		mask &= (d['lat'] >= lat_lim[0]) & (d['lat'] < lat_lim[1])
+		mask[~latm] = False
 
 	mask &= np.all(~np.isnan(d['backscatter']), axis=(1, 2))
 	mask = np.tile(mask, [l, 1]).T
@@ -312,7 +312,7 @@ def stats_map(d, s,
 			'cbh',
 			'cloud_mask',
 			'lr',
-		] + keep_vars)
+		])
 		s['expanded_column'] = True
 		l = 1
 
