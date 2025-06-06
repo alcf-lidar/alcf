@@ -35,6 +35,7 @@ VARS_SURF = [
 ]
 
 VARS_DAY = [
+	'z',
 	'clwc',
 	'ciwc',
 	'tisr',
@@ -131,7 +132,7 @@ def read0(type_, dirname, track, t1, t2,
 					ds.rename(d, a, b)
 				if a in d_day.keys():
 					ds.rename(d_day, a, b)
-			for var in ['rsdt', 'rsnt', 'rlnt', 'clw', 'cli']:
+			for var in ['rsdt', 'rsnt', 'rlnt']:
 				if var not in d_day: continue
 				shape = list(d_day[var].shape)
 				shape[0] = 1
@@ -155,12 +156,19 @@ def read0(type_, dirname, track, t1, t2,
 				d['ta'] = d['ta'][:,order]
 				d['zfull'] = d['zfull'][:,order]
 				d['pfull'] = d['pfull'][:,order]
-				zhalf = misc.half(d['zfull'][0,:])
-				dz = np.diff(zhalf)
-				clivi = np.sum(dz*d_day['cli'][0,:])
-				clwvi = np.sum(dz*d_day['clw'][0,:])
-				d['input_clivi'] = clivi.reshape((1,))
-				d['input_clwvi'] = clwvi.reshape((1,))
+				clivi = 0
+				clwvi = 0
+				n = d_day['zfull'].shape[0]
+				for j in range(n):
+					zfull_day = d_day['zfull'][j,order]/9.80665
+					zhalf_day = misc.half(zfull_day)
+					dz = np.diff(zhalf_day)
+					clivi += np.sum(dz*d_day['cli'][j,order])
+					clwvi += np.sum(dz*d_day['clw'][j,order])
+				clivi /= n
+				clwvi /= n
+				d['input_clivi'] = np.array([clivi])
+				d['input_clwvi'] = np.array([clwvi])
 			for var in ['clivi', 'clwvi', 'rsdt', 'rsut', 'rlut']:
 				d['.']['input_'+var] = {'.dims': ['time']}
 			dd.append(d)
