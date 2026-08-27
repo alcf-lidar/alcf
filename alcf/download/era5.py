@@ -2,7 +2,7 @@ import os
 from getpass import getpass
 from alcf import misc
 
-LOGIN_URL = b'https://cds.climate.copernicus.eu/api/v2'
+LOGIN_URL = b'https://cds.climate.copernicus.eu/api'
 
 PRODUCTS = ['surf', 'plev']
 
@@ -35,13 +35,9 @@ PRESSURE_LEVEL = [
 	'975', '1000'
 ]
 
-def login(uid=None, key=None, overwrite=False):
-	if uid is None:
-		uid = input('Copernicus CDS UID: ')
+def login(key=None, overwrite=False):
 	if key is None:
 		key = getpass(prompt='Copernicus CDS API key: ')
-	if type(uid) is not str:
-		uid = str(uid)
 	if type(key) is not str:
 		key = str(key)
 
@@ -59,7 +55,7 @@ def login(uid=None, key=None, overwrite=False):
 		opener=lambda p, f: os.open(p, f, mode=0o600)) as f:
 		os.chmod(f.fileno(), 0o600)
 		f.write(b'url: %s\n' % LOGIN_URL)
-		f.write(b'key: %s:%s\n' % (uid.encode('utf-8'), key.encode('utf-8')))
+		f.write(b'key: %s\n' % key.encode('utf-8'))
 	misc.log_output(cdsapirc)
 
 def download(filename, product, year, month, day, lon1, lon2, lat1, lat2,

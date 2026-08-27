@@ -70,7 +70,6 @@ MERRA-2 login options
 ERA5 login options
 ------------------
 
-- `uid: <value>`: Supply non-interactive UID instead of prompting.
 - `key: <value>`: Supply non-interactive API key instead of prompting.
 
 Model types
