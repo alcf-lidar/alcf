@@ -6,22 +6,22 @@ from alcf.models import META
 from alcf import misc
 import aquarius_time as aq
 
-VARS_INDEX = ['time', 'latitude', 'longitude']
+VARS_INDEX = ['valid_time', 'latitude', 'longitude']
 
 VARS_PLEV = [
-	'time',
+	'valid_time',
 	'clwc',
 	'ciwc',
 	'cc',
 	'latitude',
 	'longitude',
-	'level',
+	'pressure_level',
 	't',
 	'z',
 ]
 
 VARS_SURF = [
-	'time',
+	'valid_time',
 	'sp',
 	'z',
 	'latitude',
@@ -29,17 +29,19 @@ VARS_SURF = [
 ]
 
 TRANS_PLEV = {
+	'valid_time': 'time',
 	'latitude': 'lat',
 	'longitude': 'lon',
 	'z': 'zfull',
 	'cc': 'cl',
-	'level': 'pfull',
+	'pressure_level': 'pfull',
 	'clwc': 'clw',
 	'ciwc': 'cli',
 	't': 'ta',
 }
 
 TRANS_SURF = {
+	'valid_time': 'time',
 	'latitude': 'lat',
 	'longitude': 'lon',
 	'z': 'orog',
@@ -73,7 +75,7 @@ def read0(type_, dirname, track, t1, t2,
 	dd = []
 	for d_idx in dd_idx:
 		misc.require_vars(d_idx, VARS_INDEX)
-		time = d_idx['time']
+		time = d_idx['valid_time']
 		lat = d_idx['latitude']
 		lon = d_idx['longitude']
 		lon = lon % 360
@@ -92,7 +94,7 @@ def read0(type_, dirname, track, t1, t2,
 			j = np.argmin(np.abs(lat - lat0))
 			k = np.argmin(np.abs(lon - lon0))
 			d = ds.read(filename, req_vars,
-				sel={'time': [i], 'latitude': j, 'longitude': k},
+				sel={'valid_time': [i], 'latitude': j, 'longitude': k},
 				jd=True,
 			)
 			misc.require_vars(d, req_vars)
@@ -107,12 +109,6 @@ def read0(type_, dirname, track, t1, t2,
 			if type_ == 'plev':
 				d['pfull'] = d['pfull'].reshape([1, len(d['pfull'])])
 				d['.']['pfull']['.dims'] = ['time', 'level']
-				d['cl'] = d['cl'][:,::-1]
-				d['clw'] = d['clw'][:,::-1]
-				d['cli'] = d['cli'][:,::-1]
-				d['ta'] = d['ta'][:,::-1]
-				d['zfull'] = d['zfull'][:,::-1]
-				d['pfull'] = d['pfull'][:,::-1]
 			dd.append(d)
 	d = ds.op.merge(dd, 'time')
 	if 'pfull' in d:
