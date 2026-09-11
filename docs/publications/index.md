@@ -5,9 +5,11 @@ layout: default
 
 ## Publications
 
-McDonald, A. J., Kuma, P., Panell, M., Petterson, O. Plank, G. E., Rozliaiani, M. A. H., & Whitehead, L. E. (2024). Evaluating Cloud Properties at Scott Base: Comparing Ceilometer Observations with ERA5, JRA55, and MERRA2 Reanalyses Using an Instrument Simulator. *ESS Open Archive*. [https://doi.org/10.22541/essoar.171820795.52152814/v1](https://doi.org/10.22541/essoar.171820795.52152814/v1)
+Kuma, P., Bender, F. A.-M., McDonald, A. J., Alexander, S. P., McFarquhar, G. M., Cassano, J. J., Plank, G. E., Hartery, S., Parsons, S., Garrett, S., Schuddeboom, A., & Possner, A. (2025). Ship-based lidar evaluation of Southern Ocean low clouds in the storm-resolving general circulation model ICON and the ERA5 and MERRA-2 reanalyses. *Journal of Geophysical Research: Atmospheres*, *130*(22), e2024JD043145. [https://doi.org/10.1029/2024JD043145](https://doi.org/10.1029/2024JD043145)
 
-Whitehead, L. E., McDonald, A. J., & Guyot, A. (2023). Supercooled liquid water cloud classification using lidar backscatter peak properties. *EGUsphere*. [https://doi.org/10.5194/egusphere-2023-1085](https://doi.org/10.5194/egusphere-2023-1085)
+McDonald, A. J., Kuma, P., Panell, M., Petterson, O., Plank, G. E., Rozliaiani, M. A. H., & Whitehead, L. E. (2025). Evaluating Cloud Properties at Scott Base: Comparing Ceilometer Observations With ERA5, JRA55, and MERRA2 Reanalyses Using an Instrument Simulator. *Journal of Geophysical Research: Atmospheres*, *130*(2), e2024JD041754. [https://doi.org/10.1029/2024JD041754](https://doi.org/10.1029/2024JD041754)
+
+Whitehead, L. E., McDonald, A. J. & Guyot, A. (2024). Supercooled liquid water cloud classification using lidar backscatter peak properties. *Atmospheric Measurement Techniques*, *17*(19), 5765–5784, [https://doi.org/10.5194/amt-17-5765-2024](https://doi.org/10.5194/amt-17-5765-2024)
 
 Pei, Z., Fiddes, S. L., French, W. J. R., Alexander, S. P., Mallet, M. D., Kuma, P., & McDonald, A. (2023). Assessing the cloud radiative bias at Macquarie Island in the ACCESS-AM2 model. *Atmospheric Chemistry and Physics*, *23*(23), 14691–14714. [https://doi.org/10.5194/acp-23-14691-2023](https://doi.org/10.5194/acp-23-14691-2023)
 
