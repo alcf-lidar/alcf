@@ -216,6 +216,21 @@ the [Semantic Versioning](https://semver.org). Installation instructions
 have been changing with versions. Please follow the installation instructions
 in the documentation of the particular version.
 
+#### [2.4.0](https://github.com/alcf-lidar/alcf/releases/tag/v2.4.0) (2026-09-11)
+
+<details>
+<summary>Release notes</summary>
+<ul>
+<li>alcf model: New --skip-existing option for skipping the generation of existing output files.</li>
+<li>alcf stats: More options for statistics calculation of keep_vars.</li>
+<li>alcf download era5: Updated to the new API.</li>
+<li>alcf model era5: Updated to the new format of ERA5 data files.</li>
+<li>Refactored logging of input and output files. Input files are only logged if --debug is set.</li>
+<li>Refactored statistics calculation.</li>
+<li>Improved documentation.</li>
+</ul>
+</details>
+
 #### [2.3.1](https://github.com/alcf-lidar/alcf/releases/tag/v2.3.1) (2025-03-14)
 
 <details>
