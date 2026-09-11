@@ -71,7 +71,6 @@ setup(
 		'Development Status :: 5 - Production/Stable',
 		'Environment :: Console',
 		'Intended Audience :: Science/Research',
-		'License :: OSI Approved :: MIT License',
 		'Operating System :: POSIX',
 		'Programming Language :: Python :: 3',
 		'Programming Language :: Cython',
